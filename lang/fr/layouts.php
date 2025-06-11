@@ -15,10 +15,10 @@ return [
     'admin' => [
         'sidebar' => [
             'items' => [
-                'app'     => 'App',
-                'index'   => 'Dashboard',
-                'banners' => 'Banners',
-                'users'   => 'Users',
+                'app'     => 'Application',
+                'index'   => 'Tableau de bord',
+                'banners' => 'Bannières',
+                'users'   => 'Utilisateurs',
             ],
         ],
     ],
@@ -26,16 +26,16 @@ return [
     'app' => [
         'sidebar' => [
             'items' => [
-                'admin' => 'Admin',
-                'index' => 'Dashboard',
+                'admin' => 'Administration',
+                'index' => 'Tableau de bord',
             ],
         ],
     ],
 
     'settings' => [
-        'profile'    => 'Profile',
-        'security'   => 'Security',
-        'appearance' => 'Appearance',
+        'profile'    => 'Profil',
+        'security'   => 'Sécurité',
+        'appearance' => 'Apparence',
     ],
 
 ];

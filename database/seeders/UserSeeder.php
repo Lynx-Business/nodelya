@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
                 [
                     'first_name'        => 'super',
                     'last_name'         => 'admin',
-                    'email'             => 'super@admin.com',
+                    'email'             => 'super.admin@lynx.com',
                     'email_verified_at' => now(),
                     'password'          => Hash::make('Password-1234'),
                 ]);
