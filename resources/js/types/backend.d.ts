@@ -1,3 +1,4 @@
+export type AddressData = {};
 export type BannerAdminFormProps = {
     banner?: BannerAdminFormResource;
 };
@@ -60,11 +61,14 @@ export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;
 };
+export type DealScheduleData = {};
+export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
 export type EditProfileSettingsProps = {
     mustVerifyEmail: boolean;
 };
 export type EditSecuritySettingsProps = {};
+export type ExpenseCategoryType = 'general' | 'employee' | 'contractor';
 export type ForgotPasswordProps = {
     status?: string;
 };

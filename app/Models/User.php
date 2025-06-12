@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\Auth\ResetPasswordNotification;
 use App\Traits\BelongsToCreator;
+use App\Traits\HasFullName;
 use App\Traits\HasPolicy;
 use App\Traits\HasRoles;
 use App\Traits\HasTeams;
@@ -11,7 +12,6 @@ use App\Traits\InteractsWithMedia;
 use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,7 +26,7 @@ use Spatie\OneTimePasswords\Models\Concerns\HasOneTimePasswords;
 /**
  * @property int $id
  * @property bool $is_admin
- * @property int $owner_id
+ * @property int|null $owner_id
  * @property int|null $team_id
  * @property string $first_name
  * @property string $last_name
@@ -121,7 +121,11 @@ use Spatie\OneTimePasswords\Models\Concerns\HasOneTimePasswords;
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
     use BelongsToCreator;
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
+    use HasFullName;
     use HasOneTimePasswords;
     use HasPolicy;
     use HasRoles;
@@ -216,29 +220,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function activeMembers(): HasMany
     {
         return $this->members()->withAttributes($this->getDeletedAtColumn(), null);
-    }
-
-    protected function firstName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value): string => ucwords($value),
-            set: fn (string $value) => strtolower($value),
-        );
-    }
-
-    protected function lastName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value): string => ucwords($value),
-            set: fn (string $value) => strtolower($value),
-        );
-    }
-
-    protected function fullName(): Attribute
-    {
-        return Attribute::get(
-            fn (?string $value): string => $value ? ucwords($value) : "{$this->first_name} {$this->last_name}",
-        );
     }
 
     public function routeNotificationForBrevo(?Notification $notification): array|string

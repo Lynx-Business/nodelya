@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Facades\Services;
 use App\Models\Scopes\BelongsToAuthTeam;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,6 +13,10 @@ trait BelongsToTeam
     public static function bootBelongsToTeam(): void
     {
         static::addGlobalScope(BelongsToAuthTeam::class);
+
+        static::creating(function (self $model) {
+            $model->{$model->getTeamIdColumn()} ??= Services::team()->currentId();
+        });
     }
 
     public function initializeBelongsToTeam(): void {}

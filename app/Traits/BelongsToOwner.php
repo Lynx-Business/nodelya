@@ -6,12 +6,17 @@ use App\Models\Scopes\BelongsToAuthOwner;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 trait BelongsToOwner
 {
     public static function bootBelongsToOwner(): void
     {
         static::addGlobalScope(BelongsToAuthOwner::class);
+
+        static::creating(function (self $model) {
+            $model->{$model->getOwnerIdColumn()} ??= Auth::user()?->owner_id;
+        });
     }
 
     public function initializeBelongsToOwner(): void {}

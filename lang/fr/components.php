@@ -53,7 +53,7 @@ return [
             ],
             'input' => [
                 'media' => [
-                    'upload' => 'Téléverser un fichier',
+                    'upload' => 'Ajouter un fichier',
                     'delete' => 'Supprimer le fichier',
                 ],
             ],

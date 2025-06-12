@@ -12,6 +12,22 @@ return [
     |
     */
 
+    'deal' => [
+        'status' => [
+            'created'   => 'créée',
+            'validated' => 'validée',
+            'finished'  => 'terminée',
+        ],
+    ],
+
+    'expense_category' => [
+        'type' => [
+            'general'    => 'budgets généraux',
+            'employee'   => 'salariés',
+            'contractor' => 'sous traitants',
+        ],
+    ],
+
     'permission' => [
         'name' => [
         ],

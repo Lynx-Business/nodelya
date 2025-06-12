@@ -29,14 +29,14 @@ trait HasRoles
     protected function ownerId(): Attribute
     {
         return Attribute::make(
-            get: fn (?int $value): int => $value ?? $this->getKey(),
+            get: fn (?int $value): ?int => $value ?? $this->getKey(),
             set: fn (?int $value) => $value == $this->getKey() ? null : $value,
         );
     }
 
     protected function isOwner(): Attribute
     {
-        return Attribute::get(fn (): bool => $this->owner_id === $this->getKey());
+        return Attribute::get(fn (): bool => $this->owner_id === $this->getKey() || ! $this->owner_id);
     }
 
     protected function isMember(): Attribute

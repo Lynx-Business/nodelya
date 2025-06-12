@@ -5,6 +5,7 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static \App\Services\ConversionService conversion()
  * @method static \App\Services\MediaService media()
  * @method static \App\Services\SettingsService settings()
  * @method static \App\Services\TeamService team()

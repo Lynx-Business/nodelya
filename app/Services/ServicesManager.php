@@ -6,6 +6,13 @@ class ServicesManager
 {
     public function __construct() {}
 
+    protected ?ConversionService $conversion = null;
+
+    public function conversion(): ConversionService
+    {
+        return $this->conversion ??= app(ConversionService::class);
+    }
+
     protected ?MediaService $media = null;
 
     public function media(): MediaService
