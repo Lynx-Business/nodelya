@@ -26,8 +26,9 @@ return [
     'app' => [
         'sidebar' => [
             'items' => [
-                'admin' => 'Administration',
-                'index' => 'Tableau de bord',
+                'admin'  => 'Administration',
+                'index'  => 'Tableau de bord',
+                'client' => 'Client',
             ],
         ],
     ],

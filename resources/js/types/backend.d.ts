@@ -117,6 +117,37 @@ export type BannerOneOrManyRequest = {
     banner?: number;
     ids?: Array<number>;
 };
+export type ClientIndexProps = {
+    clients?: {
+        data: Array<ClientIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+};
+export type ClientIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    is_enabled?: boolean;
+};
+export type ClientIndexResource = {
+    id: number;
+    name: string;
+};
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;

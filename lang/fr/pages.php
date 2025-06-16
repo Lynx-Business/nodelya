@@ -191,6 +191,13 @@ return [
                 'description' => 'Mettez à jour les informations du membre',
             ],
         ],
+
+    ],
+
+    'clients' => [
+        'index' => [
+            'title' => 'Clients',
+        ],
     ],
 
 ];

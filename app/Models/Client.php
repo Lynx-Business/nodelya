@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Data\Address\AddressData;
 use App\Traits\BelongsToTeam;
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,7 +36,7 @@ class Client extends Model
     use BelongsToTeam;
 
     /** @use HasFactory<\Database\Factories\ClientFactory> */
-    use HasFactory;
+    use HasFactory, Searchable;
 
     /**
      * The attributes that are mass assignable.

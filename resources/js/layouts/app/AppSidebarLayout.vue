@@ -8,7 +8,7 @@ import { useAuth, useRouterComputed } from '@/composables';
 import type { BreadcrumbItemType, NavItem } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { LayoutGridIcon, MonitorCogIcon } from 'lucide-vue-next';
+import { LayoutGridIcon, MonitorCogIcon, UsersIcon } from 'lucide-vue-next';
 
 type Props = {
     breadcrumbs?: BreadcrumbItemType[];
@@ -31,6 +31,12 @@ const items = useRouterComputed((): NavItem[] => [
         href: route('index'),
         icon: LayoutGridIcon,
         isActive: route().current('index'),
+    },
+    {
+        title: trans('layouts.app.sidebar.items.client'),
+        href: route('clients.index'),
+        icon: UsersIcon,
+        isActive: route().current('clients.index'),
     },
 ]);
 </script>

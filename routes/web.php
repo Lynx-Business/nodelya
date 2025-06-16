@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountingPeriod\AccountingPeriodController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
+use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
 use App\Http\Controllers\MediaController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\Team\TeamFirstController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
+use App\Models\Client;
 use App\Models\ExpenseCategory;
 use App\Models\ProjectDepartment;
 use App\Models\Team;
@@ -120,6 +122,9 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
         });
     });
 
+    Route::prefix('/clients')->name('clients.')->controller(ClientController::class)->group(function () {
+        Route::get('/', 'index')->name('index')->can('viewAny', Client::class);
+    });
 });
 
 require __DIR__.'/admin.php';
