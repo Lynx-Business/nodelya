@@ -148,10 +148,10 @@ const isEnabledFilter = computed<CheckboxCheckedState>({
                 <FormContent class="flex items-center justify-between">
                     <DataTableRowsActions />
                     <Button as-child>
-                        <InertiaLink :href="route('admin.banners.create')">
+                        <InertiaLink :href="route('clients.create')">
                             <CirclePlusIcon />
                             <CapitalizeText>
-                                {{ $t('pages.banners.admin.create.title') }}
+                                {{ $t('pages.clients.create.title') }}
                             </CapitalizeText>
                         </InertiaLink>
                     </Button>

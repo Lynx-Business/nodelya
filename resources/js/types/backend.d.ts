@@ -58,7 +58,14 @@ export type AccountingPeriodOneOrManyRequest = {
     accounting_period?: number;
     ids?: Array<number>;
 };
-export type AddressData = {};
+export type AddressData = {
+    address: string;
+    address_complement?: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+};
 export type BannerAdminFormProps = {
     banner?: BannerAdminFormResource;
 };
@@ -116,6 +123,19 @@ export type BannerAppResource = {
 export type BannerOneOrManyRequest = {
     banner?: number;
     ids?: Array<number>;
+};
+export type ClientFormProps = {
+    client?: ClientFormResource;
+};
+export type ClientFormRequest = {
+    client?: any;
+    name: string;
+    address: AddressData;
+};
+export type ClientFormResource = {
+    id: number;
+    name: string;
+    address: AddressData;
 };
 export type ClientIndexProps = {
     clients?: {

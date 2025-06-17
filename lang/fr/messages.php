@@ -98,6 +98,15 @@ return [
         ],
     ],
 
+    'clients' => [
+        'store' => [
+            'success' => 'Client créé avec succès',
+        ],
+        'update' => [
+            'success' => 'Client mis à jour avec succès',
+        ],
+    ],
+
     'settings' => [
         'password' => [
             'update' => [

@@ -51,6 +51,32 @@ return [
             ],
         ],
     ],
+    'client' => [
+        'name' => [
+            'one'  => 'client',
+            'many' => 'clients',
+        ],
+        'fields' => [
+
+            'name' => 'nom',
+
+        ],
+    ],
+
+    'address' => [
+        'name' => [
+            'one'  => 'adresse',
+            'many' => 'adresses',
+        ],
+        'fields' => [
+            'address'            => 'adresse',
+            'address_complement' => 'complément d\'adresse',
+            'city'               => 'ville',
+            'state'              => 'état',
+            'postal_code'        => 'code postal',
+            'country'            => 'pays',
+        ],
+    ],
 
     'media' => [
         'fields' => [

@@ -198,6 +198,9 @@ return [
         'index' => [
             'title' => 'Clients',
         ],
+        'create' => [
+            'title' => 'Créer un client',
+        ],
     ],
 
 ];

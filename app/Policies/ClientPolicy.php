@@ -19,31 +19,31 @@ class ClientPolicy
 
     public function view(User $user, Client $client): bool
     {
-        return false;
+        return true;
     }
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     public function update(User $user, Client $client): bool
     {
-        return false;
+        return true;
     }
 
     public function trash(User $user, Client $client): bool
     {
-        return false;
+        return true;
     }
 
     public function restore(User $user, Client $client): bool
     {
-        return false;
+        return true;
     }
 
     public function delete(User $user, Client $client): bool
     {
-        return false;
+        return true;
     }
 }

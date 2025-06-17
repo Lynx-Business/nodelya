@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Data\Client\Form\ClientFormProps;
+use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
 use App\Data\Client\Index\ClientIndexRequest;
 use App\Data\Client\Index\ClientIndexResource;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Services\ToastService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Inertia\Inertia;
@@ -15,7 +18,11 @@ use Spatie\LaravelData\PaginatedDataCollection;
 
 class ClientController extends Controller
 {
-    /**
+    public function __construct(
+        protected ToastService $toastService,
+    ) {}
+
+    /**`
      * Display a listing of the resource.
      */
     public function index(ClientIndexRequest $data)
@@ -43,15 +50,20 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('client/Create', ClientFormProps::from([]));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ClientFormRequest $data)
     {
-        //
+        /** @var ?Banner $banner */
+        $banner = Client::create($data->toArray());
+
+        $this->toastService->successOrError->execute($banner != null, __('messages.clients.store.success'));
+
+        return to_route('client.index');
     }
 
     /**

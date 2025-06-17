@@ -124,6 +124,8 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
 
     Route::prefix('/clients')->name('clients.')->controller(ClientController::class)->group(function () {
         Route::get('/', 'index')->name('index')->can('viewAny', Client::class);
+        Route::get('/create', 'create')->name('create')->can('create', Client::class);
+        Route::post('/create', 'store')->name('store')->can('create', Client::class);
     });
 });
 

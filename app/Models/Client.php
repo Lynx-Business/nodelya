@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Client search(?string $q)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client whereCreatedAt($value)
