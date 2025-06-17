@@ -12,10 +12,6 @@ return [
     |
     */
 
-    'admin' => [
-        'title' => 'Tableau de bord',
-    ],
-
     'auth' => [
         'confirm_password' => [
             'title'       => 'Confirmez votre mot de passe',
@@ -71,8 +67,15 @@ return [
         ],
     ],
 
-    'index' => [
-        'title' => 'Tableau de bord',
+    'dashboard' => [
+        'admin' => [
+            'index' => [
+                'title' => 'Tableau de bord',
+            ],
+        ],
+        'index' => [
+            'title' => 'Tableau de bord',
+        ],
     ],
 
     'settings' => [

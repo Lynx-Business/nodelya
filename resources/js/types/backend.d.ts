@@ -61,6 +61,8 @@ export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;
 };
+export type DashboardAdminIndexProps = {};
+export type DashboardIndexProps = {};
 export type DealScheduleData = {};
 export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
