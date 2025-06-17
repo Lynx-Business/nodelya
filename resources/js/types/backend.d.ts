@@ -106,6 +106,61 @@ export type PermissionName = {
     name: string;
     value: string;
 };
+export type ProjectDepartmentFormProps = {
+    team: TeamListResource;
+    projectDepartment?: ProjectDepartmentFormResource;
+};
+export type ProjectDepartmentFormRequest = {
+    name: string;
+};
+export type ProjectDepartmentFormResource = {
+    id: number;
+    name: string;
+};
+export type ProjectDepartmentIndexProps = {
+    request: ProjectDepartmentIndexRequest;
+    team: TeamListResource;
+    projectDepartments?: {
+        data: Array<ProjectDepartmentIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type ProjectDepartmentIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type ProjectDepartmentIndexResource = {
+    id: number;
+    name: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+    deleted_at?: string;
+};
+export type ProjectDepartmentOneOrManyRequest = {
+    project_department?: number;
+    ids?: Array<number>;
+};
 export type RegisterProps = {};
 export type RegisterRequest = {
     first_name: string;
@@ -323,7 +378,7 @@ export type UserResource = {
     is_admin: boolean;
     is_owner: boolean;
     is_member: boolean;
-    avatar?: MediaResource;
+    avatar?: MediaResource | null;
     teams?: Array<TeamListResource>;
 };
 export type VerifyEmailProps = {};

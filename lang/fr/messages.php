@@ -33,6 +33,30 @@ return [
         ],
     ],
 
+    'project_departments' => [
+        'store' => [
+            'success' => 'Direction de projets créée avec succès',
+        ],
+        'update' => [
+            'success' => 'Direction de projets mise à jour avec succès',
+        ],
+        'select' => [
+            'success' => 'Direction de projets changée avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver cette direction de projets ?|Êtes-vous sûr de vouloir archiver ces directions de projets ?',
+            'success' => 'Direction de projets archivée avec succès|Directions de projets archivées avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer cette direction de projets ?|Êtes-vous sûr de vouloir restaurer ces directions de projets ?',
+            'success' => 'Direction de projets restaurée avec succès|Directions de projets restaurées avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer cette direction de projets ?|Êtes-vous sûr de vouloir supprimer ces directions de projets ?',
+            'success' => 'Direction de projets supprimée avec succès|Directions de projets supprimées avec succès',
+        ],
+    ],
+
     'settings' => [
         'password' => [
             'update' => [

@@ -38,4 +38,12 @@ return [
         'appearance' => 'Apparence',
     ],
 
+    'teams' => [
+        'form' => [
+            'edit'                => 'Détails',
+            'project_departments' => 'Directions de projets',
+            'expense_categories'  => 'Catégories de dépenses',
+        ],
+    ],
+
 ];

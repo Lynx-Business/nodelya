@@ -134,6 +134,19 @@ return [
             'title'       => 'Détails de la société',
             'description' => 'Mettez à jour les détails de la société',
         ],
+        'project_departments' => [
+            'index' => [
+                'title' => 'Directions de projets',
+            ],
+            'create' => [
+                'title'       => 'Nouvelle direction de projets',
+                'description' => 'Créez une nouvelle direction de projets pour organiser vos affaires',
+            ],
+            'edit' => [
+                'title'       => 'Détails de direction de projets',
+                'description' => 'Mettez à jour les détails de la direction de projets',
+            ],
+        ],
     ],
 
     'users' => [

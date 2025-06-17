@@ -20,6 +20,13 @@ class ServicesManager
         return $this->media ??= app(MediaService::class);
     }
 
+    protected ?ProjectDepartmentService $projectDepartment = null;
+
+    public function projectDepartment(): ProjectDepartmentService
+    {
+        return $this->projectDepartment ??= app(ProjectDepartmentService::class);
+    }
+
     protected ?SettingsService $settings = null;
 
     public function settings(): SettingsService

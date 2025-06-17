@@ -11,6 +11,7 @@ use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 
@@ -98,6 +99,11 @@ class Team extends Model
         static::created(function (Team $team) {
             Services::team()->forTeam($team, fn () => Auth::user()?->assignRole(RoleName::OWNER));
         });
+    }
+
+    public function projectDepartments(): HasMany
+    {
+        return $this->hasMany(ProjectDepartment::class)->whereBelongsToAnyTeam();
     }
 
     public function users(): MorphToMany
