@@ -31,6 +31,18 @@ return [
         ],
     ],
 
+    'project_department' => [
+        'name' => [
+            'one'  => 'direction de projets',
+            'many' => 'directions de projets',
+        ],
+        'fields' => [
+            'deleted_at' => 'archivée le',
+            'is_trashed' => 'est archivée',
+            'name'       => 'nom',
+        ],
+    ],
+
     'permission' => [
         'name' => [
             'one'  => 'permission',

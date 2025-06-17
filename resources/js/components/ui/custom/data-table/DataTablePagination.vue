@@ -20,7 +20,7 @@ const perPage = defineModel<number | undefined>('perPage', {
 
 <template>
     <div class="flex gap-4" v-if="pagination">
-        <div class="text-muted-foreground flex-1 text-sm">
+        <div class="text-muted-foreground flex-1 text-sm" v-if="rows.length">
             {{
                 $t('components.ui.custom.data_table.selected', {
                     selected: selectedRows.length.toString(),
@@ -30,7 +30,7 @@ const perPage = defineModel<number | undefined>('perPage', {
         </div>
         <div class="ml-auto flex flex-wrap justify-end gap-y-2 max-sm:w-min">
             <div class="flex items-center gap-x-2">
-                <CapitalizeText class="text-sm font-medium">
+                <CapitalizeText class="text-sm font-medium text-nowrap">
                     {{ $t('components.ui.custom.data_table.rows_per_page') }}
                 </CapitalizeText>
                 <Select v-model.number="perPage">

@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\ProjectDepartment;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 class ProjectDepartmentPolicy
 {
@@ -14,36 +15,97 @@ class ProjectDepartmentPolicy
 
     public function viewAny(User $user): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        return $user->is_owner;
     }
 
     public function view(User $user, ProjectDepartment $projectDepartment): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($projectDepartment->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 
     public function create(User $user): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        return $user->is_owner;
     }
 
     public function update(User $user, ProjectDepartment $projectDepartment): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($projectDepartment->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
+    }
+
+    public function select(User $user, ProjectDepartment $projectDepartment): bool
+    {
+        return $user->hasTeam($projectDepartment->team_id);
     }
 
     public function trash(User $user, ProjectDepartment $projectDepartment): bool
     {
-        return false;
+        if ($projectDepartment->is_trashed) {
+            return false;
+        }
+
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($projectDepartment->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 
     public function restore(User $user, ProjectDepartment $projectDepartment): bool
     {
-        return false;
+        if (! $projectDepartment->is_trashed) {
+            return false;
+        }
+
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($projectDepartment->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 
     public function delete(User $user, ProjectDepartment $projectDepartment): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($projectDepartment->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 }

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\ProjectDepartment\ProjectDepartmentController;
 use App\Http\Controllers\Settings\AppearanceSettingsController;
 use App\Http\Controllers\Settings\PasswordSettingsController;
 use App\Http\Controllers\Settings\ProfileSettingsController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Settings\SecuritySettingsController;
 use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\Team\TeamFirstController;
 use App\Http\Controllers\User\UserMemberController;
+use App\Models\ProjectDepartment;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +29,7 @@ Route::middleware(['auth', 'auth.no_team'])->group(function () {
 
 Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->group(function () {
 
-    Route::get('/', fn () => inertia('Index'))->name('index');
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
 
     Route::prefix('/banners')->name('banners.')->group(function () {
         Route::patch('/{banner}/dismiss', [BannerDissmissController::class, 'update'])->name('dismiss');
@@ -62,7 +65,20 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
         Route::delete('/trash/{team?}', 'trash')->name('trash');
         Route::patch('/restore/{team?}', 'restore')->name('restore');
         Route::delete('/delete/{team?}', 'destroy')->name('delete');
+
+        Route::prefix('/edit/{team}/project-departments')->name('project-departments.')->controller(ProjectDepartmentController::class)->scopeBindings()->group(function () {
+            Route::get('/', 'index')->name('index')->can('viewAny', ProjectDepartment::class);
+            Route::get('/create', 'create')->name('create')->can('create', ProjectDepartment::class);
+            Route::post('/create', 'store')->name('store')->can('create', ProjectDepartment::class);
+            Route::get('/edit/{projectDepartment}', 'edit')->name('edit')->withTrashed()->can('view', 'projectDepartment');
+            Route::put('/edit/{projectDepartment}', 'update')->name('update')->withTrashed()->can('update', 'projectDepartment');
+            Route::delete('/trash/{projectDepartment?}', 'trash')->name('trash');
+            Route::patch('/restore/{projectDepartment?}', 'restore')->name('restore');
+            Route::delete('/delete/{projectDepartment?}', 'destroy')->name('delete');
+        });
+
     });
+
     Route::name('users.')->group(function () {
         Route::prefix('/members')->name('members.')->controller(UserMemberController::class)->group(function () {
             Route::get('/', 'index')->name('index')->can('viewAny', User::class);
@@ -75,6 +91,7 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
             Route::delete('/delete/{member?}', 'destroy')->name('delete');
         });
     });
+
 });
 
 require __DIR__.'/admin.php';

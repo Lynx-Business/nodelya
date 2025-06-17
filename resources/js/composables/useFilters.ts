@@ -4,6 +4,7 @@ import { InertiaForm, useForm } from '@inertiajs/vue3';
 import { toReactive, useDebounceFn, useSessionStorage } from '@vueuse/core';
 import { isEqual } from 'es-toolkit';
 import { computed, nextTick, watch, WatchOptions } from 'vue';
+import { useObjectOmit } from './useObjectOmit';
 
 type FiltersParams<TForm extends FormDataType> = {
     [K in keyof TForm]: NonNullable<TForm[K]>;
@@ -81,7 +82,9 @@ export function useFilters<TForm extends FormDataType>(
 
         options.onReload?.(keys);
 
-        router.visit(route(currentRoute), {
+        const currentParams = useObjectOmit(route().params, Object.keys(transform(form.data())));
+
+        router.visit(route(currentRoute, currentParams.value), {
             data: params.value,
             preserveScroll: true,
             preserveState: true,

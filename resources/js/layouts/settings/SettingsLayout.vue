@@ -68,7 +68,7 @@ const sidebarNavItems = useRouterComputed((): NavItem[] => [
 
                 <Separator class="md:hidden" />
 
-                <div class="flex-1 md:max-w-2xl">
+                <div class="flex-1">
                     <section class="max-w-xl space-y-8">
                         <slot />
                     </section>

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\BelongsToTeam;
+use App\Traits\HasPolicy;
+use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
  * @property-read mixed $is_trashable
  * @property bool $is_trashed
  * @property-read \App\Models\Team $team
@@ -24,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment search(?string $q)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectDepartment whereDeletedAt($value)
@@ -43,6 +51,8 @@ class ProjectDepartment extends Model
     /** @use HasFactory<\Database\Factories\ProjectDepartmentFactory> */
     use HasFactory;
 
+    use HasPolicy;
+    use Searchable;
     use Trashable;
 
     /**
@@ -52,6 +62,15 @@ class ProjectDepartment extends Model
      */
     protected $fillable = [
         'team_id',
+        'name',
+    ];
+
+    /**
+     * The attributes that are searchable.
+     *
+     * @var list<string>
+     */
+    protected $searchable = [
         'name',
     ];
 

@@ -8,6 +8,8 @@ export * from './useFormatter';
 export * from './useIsDesktop';
 export * from './useLayout';
 export * from './useLocale';
+export * from './useObjectOmit';
+export * from './useObjectPick';
 export * from './usePageProp';
 export * from './usePagination';
 export * from './useParser';
