@@ -28,13 +28,12 @@ class ClientFormRequest extends Data
     public static function attributes(): array
     {
         return [
-            'name'                => __('models.client.fields.name'),
-            'address.line1'       => __('models.address.fields.line1'),
-            'address.line2'       => __('models.address.fields.line2'),
-            'address.city'        => __('models.address.fields.city'),
-            'address.state'       => __('models.address.fields.state'),
-            'address.postal_code' => __('models.address.fields.postal_code'),
-            'address.country'     => __('models.address.fields.country'),
+            'name'                       => __('models.client.fields.name'),
+            'address.address'            => __('models.address.fields.address'),
+            'address.address_complement' => __('models.address.fields.address_complement'),
+            'address.city'               => __('models.address.fields.city'),
+            'address.postal_code'        => __('models.address.fields.postal_code'),
+            'address.country'            => __('models.address.fields.country'),
 
         ];
     }

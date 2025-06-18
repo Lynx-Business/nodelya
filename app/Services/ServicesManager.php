@@ -68,4 +68,11 @@ class ServicesManager
     {
         return $this->user ??= app(UserService::class);
     }
+
+    protected ?ClientService $client = null;
+
+    public function client(): ClientService
+    {
+        return $this->client ??= app(ClientService::class);
+    }
 }

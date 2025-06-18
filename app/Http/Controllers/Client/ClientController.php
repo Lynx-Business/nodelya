@@ -7,6 +7,7 @@ use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
 use App\Data\Client\Index\ClientIndexRequest;
 use App\Data\Client\Index\ClientIndexResource;
+use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Services\ToastService;
@@ -58,12 +59,18 @@ class ClientController extends Controller
      */
     public function store(ClientFormRequest $data)
     {
-        /** @var ?Banner $banner */
-        $banner = Client::create($data->toArray());
+        /** @var ?Client $client */
+        $client = Services::client()->createOrUpdateClient->execute($data);
 
-        $this->toastService->successOrError->execute($banner != null, __('messages.clients.store.success'));
+        if (is_null($client)) {
+            Services::toast()->error->execute();
 
-        return to_route('client.index');
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.users.members.store.success'));
+
+        return to_route('clients.index');
     }
 
     /**

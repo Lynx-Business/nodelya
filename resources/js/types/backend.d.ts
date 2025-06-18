@@ -62,7 +62,6 @@ export type AddressData = {
     address: string;
     address_complement?: string;
     city: string;
-    state: string;
     postal_code: string;
     country: string;
 };

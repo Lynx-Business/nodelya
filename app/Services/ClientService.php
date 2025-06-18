@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Actions\User\Member\CreateOrUpdateMemberUser;
+use App\Actions\Client\CreateOrUpdateClient;
 use App\Actions\User\SelectUserTeam;
 
 class ClientService
 {
     public function __construct(
-        public CreateOrUpdateMemberUser $createOrUpdateMember,
+        public CreateOrUpdateClient $createOrUpdateClient,
         public SelectUserTeam $selectTeam,
     ) {}
 }

@@ -4,13 +4,13 @@ import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
 import { useLayout } from '@/composables';
 import { useClientForm } from '@/composables/forms/clients/useClientForm';
-import { AdminLayout } from '@/layouts';
+import { AppLayout } from '@/layouts';
 import { ClientFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 
 defineOptions({
-    layout: useLayout(AdminLayout, () => ({
+    layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
                 title: trans('pages.clients.index.title'),
@@ -28,7 +28,7 @@ defineProps<ClientFormProps>();
 const form = useClientForm();
 
 function submit() {
-    form.post(route('admin.banners.store'));
+    form.post(route('clients.store'));
 }
 </script>
 

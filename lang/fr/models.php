@@ -72,9 +72,9 @@ return [
             'address'            => 'adresse',
             'address_complement' => 'complément d\'adresse',
             'city'               => 'ville',
-            'state'              => 'état',
-            'postal_code'        => 'code postal',
-            'country'            => 'pays',
+
+            'postal_code' => 'code postal',
+            'country'     => 'pays',
         ],
     ],
 

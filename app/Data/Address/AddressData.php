@@ -15,7 +15,6 @@ class AddressData extends Data
         public string $address,
         public ?string $address_complement,
         public string $city,
-        public string $state,
         public string $postal_code,
         public string $country,
     ) {}
@@ -26,7 +25,6 @@ class AddressData extends Data
             'address'            => __('models.address.fields.address'),
             'address_complement' => __('models.address.fields.address_complement'),
             'city'               => __('models.address.fields.city'),
-            'state'              => __('models.address.fields.state'),
             'postal_code'        => __('models.address.fields.postal_code'),
             'country'            => __('models.address.fields.country'),
         ];
@@ -38,7 +36,6 @@ class AddressData extends Data
             'address'            => ['required', 'string', 'max:255'],
             'address_complement' => ['nullable', 'string', 'max:255'],
             'city'               => ['required', 'string', 'max:255'],
-            'state'              => ['required', 'string', 'max:100'],
             'postal_code'        => ['required', 'string', 'max:20'],
             'country'            => ['required', 'string', 'max:100'],
         ];
