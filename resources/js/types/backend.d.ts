@@ -1,3 +1,63 @@
+export type AccountingPeriodFormProps = {
+    team: TeamListResource;
+    accountingPeriod?: AccountingPeriodFormResource;
+};
+export type AccountingPeriodFormRequest = {
+    starts_at: string;
+    ends_at: string;
+};
+export type AccountingPeriodFormResource = {
+    id: number;
+    label: string;
+    starts_at: string;
+    ends_at: string;
+};
+export type AccountingPeriodIndexProps = {
+    request: AccountingPeriodIndexRequest;
+    team: TeamListResource;
+    accountingPeriods?: {
+        data: Array<AccountingPeriodIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type AccountingPeriodIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type AccountingPeriodIndexResource = {
+    id: number;
+    label: string;
+    starts_at: string;
+    ends_at: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+    deleted_at?: string;
+};
+export type AccountingPeriodOneOrManyRequest = {
+    accounting_period?: number;
+    ids?: Array<number>;
+};
 export type AddressData = {};
 export type BannerAdminFormProps = {
     banner?: BannerAdminFormResource;

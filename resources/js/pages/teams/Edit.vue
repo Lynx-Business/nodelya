@@ -46,7 +46,7 @@ function submit() {
                 </CardDescription>
             </CardHeader>
             <CardContent class="sm:flex">
-                <TeamForm />
+                <TeamForm autofocus />
             </CardContent>
             <CardFooter>
                 <FormSubmitButton />

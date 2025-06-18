@@ -8,7 +8,7 @@ import { AppLayout } from '@/layouts';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { NotebookPenIcon, SquarePenIcon } from 'lucide-vue-next';
+import { CalendarRangeIcon, NotebookPenIcon, SquarePenIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -31,6 +31,12 @@ const sidebarNavItems = useRouterComputed((): NavItem[] => [
         href: route('teams.edit', { team: route().params.team }),
         icon: SquarePenIcon,
         isActive: route().current('teams.edit'),
+    },
+    {
+        title: trans('layouts.teams.form.accounting_periods'),
+        href: route('teams.accounting-periods.index', { team: route().params.team }),
+        icon: CalendarRangeIcon,
+        isActive: route().current('teams.accounting-periods.*'),
     },
     {
         title: trans('layouts.teams.form.project_departments'),

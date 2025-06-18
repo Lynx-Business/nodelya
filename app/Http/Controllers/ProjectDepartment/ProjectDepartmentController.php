@@ -17,6 +17,7 @@ use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -58,7 +59,13 @@ class ProjectDepartmentController extends Controller
     {
         $projectDepartment = Services::projectDepartment()->createOrUpdate->execute($data);
 
-        Services::toast()->successOrError->execute($projectDepartment != null, __('messages.project_departments.store.success'));
+        if ($projectDepartment == null) {
+            Services::toast()->error->execute();
+
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.project_departments.store.success'));
 
         return to_route('teams.project-departments.index', $team);
     }
@@ -80,7 +87,13 @@ class ProjectDepartmentController extends Controller
     {
         $projectDepartment = Services::projectDepartment()->createOrUpdate->execute($data);
 
-        Services::toast()->successOrError->execute($projectDepartment != null, __('messages.project_departments.update.success'));
+        if ($projectDepartment == null) {
+            Services::toast()->error->execute();
+
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.project_departments.update.success'));
 
         return to_route('teams.project-departments.index', $team);
     }
@@ -96,10 +109,10 @@ class ProjectDepartmentController extends Controller
                 ->each->delete();
             DB::commit();
             Services::toast()->success->execute(trans_choice('messages.project_departments.trash.success', $count));
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage(), $th->getTrace());
             DB::rollBack();
             Services::toast()->error->execute();
-        } finally {
         }
 
         return back();
@@ -117,10 +130,10 @@ class ProjectDepartmentController extends Controller
                 ->each->restore();
             DB::commit();
             Services::toast()->success->execute(trans_choice('messages.project_departments.restore.success', $count));
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage(), $th->getTrace());
             DB::rollBack();
             Services::toast()->error->execute();
-        } finally {
         }
 
         return back();
@@ -138,10 +151,10 @@ class ProjectDepartmentController extends Controller
                 ->each->forceDelete();
             DB::commit();
             Services::toast()->success->execute(trans_choice('messages.project_departments.delete.success', $count));
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage(), $th->getTrace());
             DB::rollBack();
             Services::toast()->error->execute();
-        } finally {
         }
 
         return back();

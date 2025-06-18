@@ -134,6 +134,19 @@ return [
             'title'       => 'Détails de la société',
             'description' => 'Mettez à jour les détails de la société',
         ],
+        'accounting_periods' => [
+            'index' => [
+                'title' => 'Années fiscales',
+            ],
+            'create' => [
+                'title'       => 'Nouvelle année fiscale',
+                'description' => 'Créez une nouvelle année fiscale pour gérer vos affaires',
+            ],
+            'edit' => [
+                'title'       => 'Détails de année fiscale',
+                'description' => 'Mettez à jour les détails de la année fiscale',
+            ],
+        ],
         'project_departments' => [
             'index' => [
                 'title' => 'Directions de projets',

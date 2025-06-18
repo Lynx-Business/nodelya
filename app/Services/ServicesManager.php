@@ -6,6 +6,13 @@ class ServicesManager
 {
     public function __construct() {}
 
+    protected ?AccountingPeriodService $accountingPeriod = null;
+
+    public function accountingPeriod(): AccountingPeriodService
+    {
+        return $this->accountingPeriod ??= app(AccountingPeriodService::class);
+    }
+
     protected ?ConversionService $conversion = null;
 
     public function conversion(): ConversionService

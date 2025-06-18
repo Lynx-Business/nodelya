@@ -41,6 +41,7 @@ return [
     'teams' => [
         'form' => [
             'edit'                => 'Détails',
+            'accounting_periods'  => 'Années fiscales',
             'project_departments' => 'Directions de projets',
             'expense_categories'  => 'Catégories de dépenses',
         ],

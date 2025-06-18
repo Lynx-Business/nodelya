@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AccountingPeriod> $accountingPeriods
+ * @property-read int|null $accounting_periods_count
  * @property-read bool $can_delete
  * @property-read bool $can_restore
  * @property-read bool $can_trash
@@ -94,6 +96,11 @@ class Team extends Model
     }
 
     public static function booted(): void {}
+
+    public function accountingPeriods(): HasMany
+    {
+        return $this->hasMany(AccountingPeriod::class)->whereBelongsToAnyTeam();
+    }
 
     public function projectDepartments(): HasMany
     {
