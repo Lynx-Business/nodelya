@@ -8,10 +8,12 @@ use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
 use App\Data\Client\Index\ClientIndexRequest;
 use App\Data\Client\Index\ClientIndexResource;
+use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Services\ToastService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -31,10 +33,12 @@ class ClientController extends Controller
     {
 
         return Inertia::render('client/Index', ClientIndexProps::from([
+            'request' => $data,
             'clients' => Lazy::inertia(
                 fn () => ClientIndexResource::collect(
                     Client::query()
                         ->search($data->q)
+                        ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->paginate(
                             perPage: $data->per_page ?? Config::integer('default.per_page'),
@@ -44,6 +48,8 @@ class ClientController extends Controller
                     PaginatedDataCollection::class,
                 ),
             ),
+
+            'trashed_filters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));
     }
 
@@ -114,12 +120,12 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function trash(ClientOneOrManyRequest $data)
+    public function trash(ClientOneOrManyRequest $data, Client $client)
     {
         try {
             DB::beginTransaction();
             $count = Client::query()
-                ->when($data->client, fn ($q) => $q->where('id', $data->client))
+                ->when($data->client, fn ($q) => $q->where('id', $data->client->id))
                 ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->delete();
@@ -136,13 +142,13 @@ class ClientController extends Controller
     /**
      * Restore the specified resource from trash.
      */
-    public function restore(ClientOneOrManyRequest $data)
+    public function restore(ClientOneOrManyRequest $data, Client $client)
     {
         try {
             DB::beginTransaction();
             $count = Client::query()
                 ->onlyTrashed()
-                ->when($data->client, fn ($q) => $q->where('id', $data->client))
+                ->when($data->client, fn ($q) => $q->where('id', $data->client->id))
                 ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->restore();

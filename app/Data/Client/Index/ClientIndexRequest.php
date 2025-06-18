@@ -2,6 +2,7 @@
 
 namespace App\Data\Client\Index;
 
+use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
@@ -17,7 +18,7 @@ class ClientIndexRequest extends Data
         public ?int $per_page = null,
         public string $sort_by = 'id',
         public string $sort_direction = 'desc',
-        public ?bool $is_enabled = null,
+        public ?TrashedFilter $trashed = null,
     ) {}
 
     public static function attributes(): array
@@ -28,7 +29,7 @@ class ClientIndexRequest extends Data
             'per_page'       => __('per_page'),
             'sort_by'        => __('sort_by'),
             'sort_direction' => __('sort_direction'),
-            'is_enabled'     => __('models.banner.fields.is_enabled'),
+            'trashed'        => __('models.user.fields.is_trashed'),
         ];
     }
 

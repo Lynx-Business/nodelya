@@ -137,6 +137,7 @@ export type ClientFormResource = {
     address: AddressData;
 };
 export type ClientIndexProps = {
+    request: ClientIndexRequest;
     clients?: {
         data: Array<ClientIndexResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
@@ -154,6 +155,7 @@ export type ClientIndexProps = {
             total: number;
         };
     };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
 };
 export type ClientIndexRequest = {
     q?: string;
@@ -161,7 +163,7 @@ export type ClientIndexRequest = {
     per_page?: number;
     sort_by: string;
     sort_direction: string;
-    is_enabled?: boolean;
+    trashed?: TrashedFilter;
 };
 export type ClientIndexResource = {
     id: number;

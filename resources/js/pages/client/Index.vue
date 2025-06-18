@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
     DataTableBody,
@@ -31,8 +31,7 @@ import type { ClientIndexProps, ClientIndexRequest, ClientIndexResource, ClientO
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
 import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
-import { CheckboxCheckedState } from 'reka-ui';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -177,8 +176,9 @@ const filters = useFilters<ClientIndexRequest>(
         q: route().params.q ?? '',
         page: props.clients?.meta.current_page,
         per_page: props.clients?.meta.per_page,
-        sort_by: route().params.sort_by,
-        sort_direction: route().params.sort_direction,
+        sort_by: props.request.sort_by,
+        sort_direction: props.request.sort_direction,
+        trashed: props.request.trashed,
     },
     {
         only: ['clients'],
@@ -193,13 +193,6 @@ const filters = useFilters<ClientIndexRequest>(
         },
     },
 );
-
-const isEnabledFilter = computed<CheckboxCheckedState>({
-    get: () => filters.is_enabled ?? 'indeterminate',
-    set: (value) => {
-        filters.is_enabled = value === 'indeterminate' ? undefined : value;
-    },
-});
 </script>
 
 <template>
@@ -218,18 +211,22 @@ const isEnabledFilter = computed<CheckboxCheckedState>({
             >
                 <FormContent class="flex items-center">
                     <TextInput v-model="filters.q" type="search" />
-                    <FiltersSheet :filters :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']">
+                    <FiltersSheet
+                        :filters
+                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
+                        :data="['trashed_filters']"
+                    >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
                             <FormField>
                                 <FormLabel>
-                                    <FormControl>
-                                        <Checkbox v-model="isEnabledFilter" />
-                                    </FormControl>
                                     <CapitalizeText>
-                                        {{ $t('models.banner.fields.is_enabled') }}
+                                        {{ $t('trashed') }}
                                     </CapitalizeText>
                                 </FormLabel>
+                                <FormControl>
+                                    <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                </FormControl>
                             </FormField>
                         </FiltersSheetContent>
                     </FiltersSheet>
