@@ -64,7 +64,7 @@ const rowActions: DataTableRowAction<ClientIndexResource>[] = [
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
-        href: (banner) => route('admin.banners.edit', { banner }),
+        href: (client) => route('clients.edit', { client }),
     },
     {
         type: 'callback',

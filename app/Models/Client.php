@@ -37,7 +37,9 @@ class Client extends Model
     use BelongsToTeam;
 
     /** @use HasFactory<\Database\Factories\ClientFactory> */
-    use HasFactory, Searchable;
+    use HasFactory;
+
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.

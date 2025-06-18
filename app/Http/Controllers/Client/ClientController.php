@@ -11,7 +11,6 @@ use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Services\ToastService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
@@ -60,7 +59,7 @@ class ClientController extends Controller
     public function store(ClientFormRequest $data)
     {
         /** @var ?Client $client */
-        $client = Services::client()->createOrUpdateClient->execute($data);
+        $client = Services::client()->createOrUpdate->execute($data);
 
         if (is_null($client)) {
             Services::toast()->error->execute();
@@ -68,7 +67,7 @@ class ClientController extends Controller
             return back();
         }
 
-        Services::toast()->success->execute(__('messages.users.members.store.success'));
+        Services::toast()->success->execute(__('messages.clients.store.success'));
 
         return to_route('clients.index');
     }
@@ -84,17 +83,30 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Client $client)
     {
-        //
+        return Inertia::render('client/Edit', ClientFormProps::from([
+            'client' => $client,
+        ]));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ClientFormRequest $data, Client $client)
     {
-        //
+        /** @var ?Client $client */
+        $newClient = Services::client()->createOrUpdate->execute($data);
+
+        if (is_null($newClient)) {
+            Services::toast()->error->execute();
+
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.clients.update.success'));
+
+        return to_route('clients.index');
     }
 
     /**

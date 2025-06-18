@@ -41,7 +41,12 @@ class ClientFormRequest extends Data
     public static function rules(ValidationContext $context): array
     {
         return [
-            //
+            'name'                       => ['required', 'string', 'max:255'],
+            'address.address'            => ['required', 'string', 'max:255'],
+            'address.address_complement' => ['nullable', 'string', 'max:255'],
+            'address.city'               => ['required', 'string', 'max:255'],
+            'address.postal_code'        => ['required', 'string', 'max:20'],
+            'address.country'            => ['required', 'string', 'max:100'],
         ];
     }
 }

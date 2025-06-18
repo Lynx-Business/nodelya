@@ -201,6 +201,9 @@ return [
         'create' => [
             'title' => 'Créer un client',
         ],
+        'update' => [
+            'title' => 'Mettre à jour un client',
+        ],
     ],
 
 ];
