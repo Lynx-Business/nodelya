@@ -14,6 +14,27 @@ return [
 
     'error' => "Une erreur s'est produite",
 
+    'accounting_periods' => [
+        'store' => [
+            'success' => 'Année fiscale créée avec succès',
+        ],
+        'update' => [
+            'success' => 'Année fiscale mise à jour avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver cette année fiscale ?|Êtes-vous sûr de vouloir archiver ces années fiscales ?',
+            'success' => 'Année fiscale archivée avec succès|Années fiscales archivées avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer cette année fiscale ?|Êtes-vous sûr de vouloir restaurer ces années fiscales ?',
+            'success' => 'Année fiscale restaurée avec succès|Années fiscales restaurées avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer cette année fiscale ?|Êtes-vous sûr de vouloir supprimer ces années fiscales ?',
+            'success' => 'Année fiscale supprimée avec succès|Années fiscales supprimées avec succès',
+        ],
+    ],
+
     'banners' => [
         'store' => [
             'success' => 'Bannière créée avec succès',
@@ -39,9 +60,6 @@ return [
         ],
         'update' => [
             'success' => 'Direction de projets mise à jour avec succès',
-        ],
-        'select' => [
-            'success' => 'Direction de projets changée avec succès',
         ],
         'trash' => [
             'confirm' => 'Êtes-vous sûr de vouloir archiver cette direction de projets ?|Êtes-vous sûr de vouloir archiver ces directions de projets ?',

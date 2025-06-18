@@ -163,7 +163,11 @@ return [
     |
     */
 
-    'custom' => [],
+    'custom' => [
+        'accounting_period' => [
+            'overlap' => 'Le champ :attribute chevauche une autre période',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

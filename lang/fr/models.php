@@ -12,6 +12,18 @@ return [
     |
     */
 
+    'accounting_period' => [
+        'name' => [
+            'one'  => 'année fiscale',
+            'many' => 'années fiscales',
+        ],
+        'fields' => [
+            'label'     => 'période',
+            'starts_at' => 'date de debut',
+            'ends_at'   => 'date de fin',
+        ],
+    ],
+
     'banner' => [
         'name' => [
             'one'  => 'bannière',
@@ -27,7 +39,6 @@ return [
 
     'media' => [
         'fields' => [
-
         ],
     ],
 

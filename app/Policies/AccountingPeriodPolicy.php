@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\AccountingPeriod;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 class AccountingPeriodPolicy
 {
@@ -14,36 +15,97 @@ class AccountingPeriodPolicy
 
     public function viewAny(User $user): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        return $user->is_owner;
     }
 
     public function view(User $user, AccountingPeriod $accountingPeriod): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($accountingPeriod->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 
     public function create(User $user): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        return $user->is_owner;
     }
 
     public function update(User $user, AccountingPeriod $accountingPeriod): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($accountingPeriod->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
+    }
+
+    public function select(User $user, AccountingPeriod $accountingPeriod): bool
+    {
+        return $user->hasTeam($accountingPeriod->team_id);
     }
 
     public function trash(User $user, AccountingPeriod $accountingPeriod): bool
     {
-        return false;
+        if ($accountingPeriod->is_trashed) {
+            return false;
+        }
+
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($accountingPeriod->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 
     public function restore(User $user, AccountingPeriod $accountingPeriod): bool
     {
-        return false;
+        if (! $accountingPeriod->is_trashed) {
+            return false;
+        }
+
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($accountingPeriod->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 
     public function delete(User $user, AccountingPeriod $accountingPeriod): bool
     {
-        return false;
+        if ($user->is_admin && Route::is('admin.*')) {
+            return true;
+        }
+
+        if (! $user->hasTeam($accountingPeriod->team_id)) {
+            return false;
+        }
+
+        return $user->is_owner;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountingPeriod\AccountingPeriodController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Settings\SecuritySettingsController;
 use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\Team\TeamFirstController;
 use App\Http\Controllers\User\UserMemberController;
+use App\Models\AccountingPeriod;
 use App\Models\ProjectDepartment;
 use App\Models\Team;
 use App\Models\User;
@@ -65,6 +67,17 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
         Route::delete('/trash/{team?}', 'trash')->name('trash');
         Route::patch('/restore/{team?}', 'restore')->name('restore');
         Route::delete('/delete/{team?}', 'destroy')->name('delete');
+
+        Route::prefix('/edit/{team}/accounting-periods')->name('accounting-periods.')->controller(AccountingPeriodController::class)->scopeBindings()->group(function () {
+            Route::get('/', 'index')->name('index')->can('viewAny', AccountingPeriod::class);
+            Route::get('/create', 'create')->name('create')->can('create', AccountingPeriod::class);
+            Route::post('/create', 'store')->name('store')->can('create', AccountingPeriod::class);
+            Route::get('/edit/{accountingPeriod}', 'edit')->name('edit')->withTrashed()->can('view', 'accountingPeriod');
+            Route::put('/edit/{accountingPeriod}', 'update')->name('update')->withTrashed()->can('update', 'accountingPeriod');
+            Route::delete('/trash/{accountingPeriod?}', 'trash')->name('trash');
+            Route::patch('/restore/{accountingPeriod?}', 'restore')->name('restore');
+            Route::delete('/delete/{accountingPeriod?}', 'destroy')->name('delete');
+        });
 
         Route::prefix('/edit/{team}/project-departments')->name('project-departments.')->controller(ProjectDepartmentController::class)->scopeBindings()->group(function () {
             Route::get('/', 'index')->name('index')->can('viewAny', ProjectDepartment::class);

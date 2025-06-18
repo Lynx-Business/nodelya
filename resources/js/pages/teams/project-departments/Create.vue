@@ -62,7 +62,7 @@ function submit() {
                 </SectionDescription>
             </SectionHeader>
             <SectionContent class="sm:flex">
-                <ProjectDepartmentForm />
+                <ProjectDepartmentForm autofocus />
             </SectionContent>
             <SectionFooter>
                 <FormSubmitButton />
