@@ -27,10 +27,10 @@ import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
-import type { BannerOneOrManyRequest, ClientIndexProps, ClientIndexRequest, ClientIndexResource } from '@/types';
+import type { ClientIndexProps, ClientIndexRequest, ClientIndexResource, ClientOneOrManyRequest } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
-import { CirclePlusIcon, PencilIcon, ToggleRightIcon, Trash2Icon } from 'lucide-vue-next';
+import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
 import { CheckboxCheckedState } from 'reka-ui';
 import { computed, ref } from 'vue';
 
@@ -52,11 +52,61 @@ const alert = useAlert();
 const selectedRows = ref<ClientIndexResource[]>([]);
 const rowsActions: DataTableRowsAction<ClientIndexResource>[] = [
     {
-        label: trans('enable'),
-        icon: ToggleRightIcon,
-        callback: (items) => {
-            console.log('items => ', items);
-        },
+        label: trans('trash'),
+        icon: ArchiveIcon,
+        disabled: (items) => items.some((client) => !client.can_trash),
+        callback: (items) =>
+            alert({
+                variant: 'warning',
+                description: transChoice('messages.clients.trash.confirm', items.length),
+                callback: () =>
+                    router.delete<ClientOneOrManyRequest>(route('clients.trash'), {
+                        data: { ids: items.map(({ id }) => id) },
+                        only: ['clients'],
+                        onSuccess: () => {
+                            selectedRows.value = [];
+                        },
+                    }),
+            }),
+    },
+    {
+        label: trans('restore'),
+        icon: ArchiveRestoreIcon,
+        disabled: (items) => items.some((client) => !client.can_restore),
+        callback: (items) =>
+            alert({
+                variant: 'success',
+                description: transChoice('messages.clients.restore.confirm', items.length),
+                callback: () =>
+                    router.patch<ClientOneOrManyRequest>(
+                        route('clients.restore'),
+                        { ids: items.map(({ id }) => id) },
+                        {
+                            only: ['clients'],
+                            onSuccess: () => {
+                                selectedRows.value = [];
+                            },
+                        },
+                    ),
+            }),
+    },
+    {
+        label: trans('delete'),
+        icon: Trash2Icon,
+        disabled: (items) => items.some((client) => !client.can_delete),
+        callback: (items) =>
+            alert({
+                variant: 'destructive',
+                description: transChoice('messages.clients.delete.confirm', items.length),
+                callback: () =>
+                    router.delete<ClientOneOrManyRequest>(route('clients.delete'), {
+                        data: { ids: items.map(({ id }) => id) },
+                        only: ['clients'],
+                        onSuccess: () => {
+                            selectedRows.value = [];
+                        },
+                    }),
+            }),
     },
 ];
 const rowActions: DataTableRowAction<ClientIndexResource>[] = [
@@ -67,16 +117,55 @@ const rowActions: DataTableRowAction<ClientIndexResource>[] = [
         href: (client) => route('clients.edit', { client }),
     },
     {
+        type: 'href',
+        label: trans('view'),
+        icon: EyeIcon,
+        hidden: (user) => user.can_update,
+        disabled: (user) => !user.can_view,
+        href: (client) => route('clients.edit', { client }),
+    },
+    {
+        type: 'callback',
+        label: trans('trash'),
+        icon: ArchiveIcon,
+        disabled: (client) => !client.can_trash,
+        callback: (client) =>
+            alert({
+                variant: 'warning',
+                description: transChoice('messages.clients.trash.confirm', 1),
+                callback: () =>
+                    router.delete<ClientOneOrManyRequest>(route('clients.trash', { client }), {
+                        only: ['clients'],
+                    }),
+            }),
+    },
+    {
+        type: 'callback',
+        label: trans('restore'),
+        icon: ArchiveRestoreIcon,
+        disabled: (client) => !client.can_restore,
+        callback: (client) =>
+            alert({
+                variant: 'success',
+                description: transChoice('messages.clients.restore.confirm', 1),
+                callback: () =>
+                    router.patch<ClientOneOrManyRequest>(route('clients.restore', { client }), undefined, {
+                        only: ['clients'],
+                    }),
+            }),
+    },
+    {
         type: 'callback',
         label: trans('delete'),
         icon: Trash2Icon,
-        callback: (banner) =>
+        disabled: (client) => !client.can_delete,
+        callback: (client) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.banners.delete.confirm', 1),
+                description: transChoice('messages.clients.delete.confirm', 1),
                 callback: () =>
-                    router.delete<BannerOneOrManyRequest>(route('admin.banners.delete', { banner }), {
-                        only: ['banners'],
+                    router.delete<ClientOneOrManyRequest>(route('clients.delete', { client }), {
+                        only: ['clients'],
                     }),
             }),
     },

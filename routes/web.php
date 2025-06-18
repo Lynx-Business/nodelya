@@ -130,7 +130,9 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
         Route::get('/edit/{client}', 'edit')->name('edit')->can('view', 'client');
         Route::put('/edit/{client}', 'update')->name('update')->can('update', 'client');
 
-        // Route::delete('/delete/{client?}', 'destroy')->name('delete');
+        Route::delete('/trash/{client?}', 'trash')->name('trash');
+        Route::patch('/restore/{client?}', 'restore')->name('restore');
+        Route::delete('/delete/{client?}', 'destroy')->name('delete');
     });
 });
 

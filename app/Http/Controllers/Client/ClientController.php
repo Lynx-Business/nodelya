@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Data\Client\ClientOneOrManyRequest;
 use App\Data\Client\Form\ClientFormProps;
 use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Services\ToastService;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -112,8 +114,68 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function trash(ClientOneOrManyRequest $data)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $count = Client::query()
+                ->when($data->client, fn ($q) => $q->where('id', $data->client))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->delete();
+            DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.clients.trash.success', $count));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
+    }
+
+    /**
+     * Restore the specified resource from trash.
+     */
+    public function restore(ClientOneOrManyRequest $data)
+    {
+        try {
+            DB::beginTransaction();
+            $count = Client::query()
+                ->onlyTrashed()
+                ->when($data->client, fn ($q) => $q->where('id', $data->client))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->restore();
+            DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.clients.restore.success', $count));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
+    }
+
+    /**
+     * Permanently delete the specified resource from storage.
+     */
+    public function destroy(ClientOneOrManyRequest $data, Client $client)
+    {
+        try {
+            DB::beginTransaction();
+            $count = Client::query()
+                ->withTrashed()
+                ->when($data->client, fn ($q) => $q->where('id', $data->client->id))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->forceDelete();
+            DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.clients.delete.success', $count));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
     }
 }

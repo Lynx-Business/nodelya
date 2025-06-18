@@ -105,6 +105,18 @@ return [
         'update' => [
             'success' => 'Client mis à jour avec succès',
         ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver ce client ?|Êtes-vous sûr de vouloir archiver ces clients ?',
+            'success' => 'Client archivé avec succès|Clients archivés avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer ce client ?|Êtes-vous sûr de vouloir restaurer ces clients ?',
+            'success' => 'Client restauré avec succès|Clients restaurés avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer ce client ?|Êtes-vous sûr de vouloir supprimer ces clients ?',
+            'success' => 'Client supprimé avec succès|Clients supprimés avec succès',
+        ],
     ],
 
     'settings' => [
