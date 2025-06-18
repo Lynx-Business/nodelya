@@ -163,10 +163,7 @@ const isEnabledFilter = computed<CheckboxCheckedState>({
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
                             <DataTableSortableHead value="name">
-                                {{ $t('models.banner.fields.name') }}
-                            </DataTableSortableHead>
-                            <DataTableSortableHead value="is_enabled">
-                                {{ $t('models.banner.fields.is_enabled') }}
+                                {{ $t('models.client.fields.name') }}
                             </DataTableSortableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
@@ -174,16 +171,15 @@ const isEnabledFilter = computed<CheckboxCheckedState>({
                         </DataTableRow>
                     </DataTableHeader>
                     <DataTableBody>
-                        <DataTableRow v-for="banner in rows" :key="banner.id" :item="banner">
+                        <DataTableRow v-for="client in rows" :key="client.id" :item="client">
                             <DataTableCell>
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
                                 <CapitalizeText>
-                                    {{ banner.name }}
+                                    {{ client.name }}
                                 </CapitalizeText>
                             </DataTableCell>
-                            <DataTableCell> here </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />
                             </DataTableCell>

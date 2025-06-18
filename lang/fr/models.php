@@ -57,9 +57,7 @@ return [
             'many' => 'clients',
         ],
         'fields' => [
-
             'name' => 'nom',
-
         ],
     ],
 
@@ -72,9 +70,8 @@ return [
             'address'            => 'adresse',
             'address_complement' => 'complément d\'adresse',
             'city'               => 'ville',
-
-            'postal_code' => 'code postal',
-            'country'     => 'pays',
+            'postal_code'        => 'code postal',
+            'country'            => 'pays',
         ],
     ],
 
