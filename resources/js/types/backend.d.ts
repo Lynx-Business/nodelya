@@ -166,6 +166,15 @@ export type ClientIndexRequest = {
 export type ClientIndexResource = {
     id: number;
     name: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+};
+export type ClientOneOrManyRequest = {
+    client?: any;
+    ids?: Array<number>;
 };
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
@@ -272,10 +281,7 @@ export type PermissionListResource = {
     name: string;
     display_name: string;
 };
-export type PermissionName = {
-    name: string;
-    value: string;
-};
+export type PermissionName = 'client';
 export type ProjectDepartmentFormProps = {
     team: TeamListResource;
     projectDepartment?: ProjectDepartmentFormResource;
