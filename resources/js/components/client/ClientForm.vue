@@ -16,7 +16,6 @@ const { form } = injectFormContext<ClientFormData>();
 
 <template>
     <FormContent class="sm:grid-cols-2">
-        <!-- Nom du client -->
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
@@ -29,7 +28,6 @@ const { form } = injectFormContext<ClientFormData>();
             <FormError :message="form.errors.name" />
         </FormField>
 
-        <!-- Adresse -->
         <div class="col-span-full grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField class="col-span-full" required>
                 <FormLabel>
