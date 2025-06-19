@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Badge } from '@/components/ui/badge';
+import TrashedBadge from '@/components/trash/TrashedBadge.vue';
 import { Button } from '@/components/ui/button';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
@@ -16,7 +16,6 @@ import {
     DataTableRowActions,
     DataTableRowCheckbox,
     DataTableRowsAction,
-    DataTableRowsActions,
     DataTableRowsCheckbox,
     DataTableSortableHead,
 } from '@/components/ui/custom/data-table';
@@ -216,7 +215,7 @@ const format = useFormatter();
 <template>
     <Head :title="$t('pages.teams.accounting_periods.index.title')" />
 
-    <Section class="w-full">
+    <Section class="w-full p-0!">
         <SectionContent class="px-0!">
             <DataTable
                 v-slot="{ rows }"
@@ -250,8 +249,7 @@ const format = useFormatter();
                     </FiltersSheet>
                 </FormContent>
                 <FormContent class="flex items-center justify-between">
-                    <DataTableRowsActions />
-                    <Button as-child>
+                    <Button class="ml-auto" as-child>
                         <InertiaLink :href="route('teams.accounting-periods.create', { team })">
                             <CirclePlusIcon />
                             <CapitalizeText class="max-sm:hidden">
@@ -303,9 +301,7 @@ const format = useFormatter();
                                 {{ format.date(accountingPeriod.ends_at) }}
                             </DataTableCell>
                             <DataTableCell v-if="filters.trashed">
-                                <Badge v-if="accountingPeriod.deleted_at" variant="destructive">
-                                    {{ format.date(accountingPeriod.deleted_at) }}
-                                </Badge>
+                                <TrashedBadge :item="accountingPeriod" />
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

@@ -11,6 +11,5 @@ export * from './useLocale';
 export * from './useObjectOmit';
 export * from './useObjectPick';
 export * from './usePageProp';
-export * from './usePagination';
 export * from './useParser';
 export * from './useRouterComputed';

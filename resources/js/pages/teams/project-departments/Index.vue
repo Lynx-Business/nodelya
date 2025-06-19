@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Badge } from '@/components/ui/badge';
+import TrashedBadge from '@/components/trash/TrashedBadge.vue';
 import { Button } from '@/components/ui/button';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
@@ -16,7 +16,6 @@ import {
     DataTableRowActions,
     DataTableRowCheckbox,
     DataTableRowsAction,
-    DataTableRowsActions,
     DataTableRowsCheckbox,
     DataTableSortableHead,
 } from '@/components/ui/custom/data-table';
@@ -26,7 +25,7 @@ import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useFormatter, useLayout } from '@/composables';
+import { useAlert, useFilters, useLayout } from '@/composables';
 import { TeamsFormLayout } from '@/layouts';
 import {
     ProjectDepartmentIndexProps,
@@ -209,14 +208,12 @@ const filters = useFilters<ProjectDepartmentIndexRequest>(
         },
     },
 );
-
-const format = useFormatter();
 </script>
 
 <template>
     <Head :title="$t('pages.teams.project_departments.index.title')" />
 
-    <Section class="w-full">
+    <Section class="w-full p-0!">
         <SectionContent class="px-0!">
             <DataTable
                 v-slot="{ rows }"
@@ -250,8 +247,7 @@ const format = useFormatter();
                     </FiltersSheet>
                 </FormContent>
                 <FormContent class="flex items-center justify-between">
-                    <DataTableRowsActions />
-                    <Button as-child>
+                    <Button class="ml-auto" as-child>
                         <InertiaLink :href="route('teams.project-departments.create', { team })">
                             <CirclePlusIcon />
                             <CapitalizeText class="max-sm:hidden">
@@ -291,9 +287,7 @@ const format = useFormatter();
                                 {{ projectDepartment.name }}
                             </DataTableCell>
                             <DataTableCell v-if="filters.trashed">
-                                <Badge v-if="projectDepartment.deleted_at" variant="destructive">
-                                    {{ format.date(projectDepartment.deleted_at) }}
-                                </Badge>
+                                <TrashedBadge :item="projectDepartment" />
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />
