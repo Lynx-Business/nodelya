@@ -21,7 +21,7 @@ class ClientOneOrManyRequest extends Data
 
         #[FromRouteParameter('client')]
         #[ExcludeWith('ids')]
-        public ?Client $client = null,
+        public ?int $client = null,
 
         #[Min(1)]
         #[RequiredWithout('client')]

@@ -175,7 +175,7 @@ export type ClientIndexResource = {
     can_delete: boolean;
 };
 export type ClientOneOrManyRequest = {
-    client?: any;
+    client?: number;
     ids?: Array<number>;
 };
 export type ConfirmPasswordProps = {};

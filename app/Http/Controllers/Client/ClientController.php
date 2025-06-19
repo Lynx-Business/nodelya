@@ -120,12 +120,12 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function trash(ClientOneOrManyRequest $data, Client $client)
+    public function trash(ClientOneOrManyRequest $data)
     {
         try {
             DB::beginTransaction();
             $count = Client::query()
-                ->when($data->client, fn ($q) => $q->where('id', $data->client->id))
+                ->when($data->client, fn ($q) => $q->where('id', $data->client))
                 ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->delete();
@@ -142,13 +142,13 @@ class ClientController extends Controller
     /**
      * Restore the specified resource from trash.
      */
-    public function restore(ClientOneOrManyRequest $data, Client $client)
+    public function restore(ClientOneOrManyRequest $data)
     {
         try {
             DB::beginTransaction();
             $count = Client::query()
                 ->onlyTrashed()
-                ->when($data->client, fn ($q) => $q->where('id', $data->client->id))
+                ->when($data->client, fn ($q) => $q->where('id', $data->client))
                 ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->restore();
@@ -165,13 +165,13 @@ class ClientController extends Controller
     /**
      * Permanently delete the specified resource from storage.
      */
-    public function destroy(ClientOneOrManyRequest $data, Client $client)
+    public function destroy(ClientOneOrManyRequest $data)
     {
         try {
             DB::beginTransaction();
             $count = Client::query()
                 ->withTrashed()
-                ->when($data->client, fn ($q) => $q->where('id', $data->client->id))
+                ->when($data->client, fn ($q) => $q->where('id', $data->client))
                 ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->forceDelete();
