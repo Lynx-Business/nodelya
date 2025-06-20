@@ -18,13 +18,11 @@ return [
             'many' => 'adresses',
         ],
         'fields' => [
-            'line_1'      => 'ligne 1',
-            'line_2'      => 'ligne 2',
-            'postal_code' => 'code postal',
-            'city'        => 'ville',
-            'country'     => 'pays',
-            'lat'         => 'latitude',
-            'lng'         => 'longitude',
+            'address'            => 'adresse',
+            'address_complement' => 'complément d\'adresse',
+            'city'               => 'ville',
+            'postal_code'        => 'code postal',
+            'country'            => 'pays',
         ],
     ],
 

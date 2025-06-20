@@ -61,20 +61,6 @@ return [
         ],
     ],
 
-    'address' => [
-        'name' => [
-            'one'  => 'adresse',
-            'many' => 'adresses',
-        ],
-        'fields' => [
-            'address'            => 'adresse',
-            'address_complement' => 'complément d\'adresse',
-            'city'               => 'ville',
-            'postal_code'        => 'code postal',
-            'country'            => 'pays',
-        ],
-    ],
-
     'media' => [
         'fields' => [
         ],

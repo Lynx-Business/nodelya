@@ -27,11 +27,11 @@ class AddressData extends Data
     public static function attributes(): array
     {
         return [
-            'address'            => __('models.address.fields.address'),
-            'address_complement' => __('models.address.fields.address_complement'),
-            'city'               => __('models.address.fields.city'),
-            'postal_code'        => __('models.address.fields.postal_code'),
-            'country'            => __('models.address.fields.country'),
+            'address'            => __('data.address.fields.address'),
+            'address_complement' => __('data.address.fields.address_complement'),
+            'city'               => __('data.address.fields.city'),
+            'postal_code'        => __('data.address.fields.postal_code'),
+            'country'            => __('data.address.fields.country'),
         ];
     }
 }
