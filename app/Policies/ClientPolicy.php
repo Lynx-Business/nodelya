@@ -26,7 +26,7 @@ class ClientPolicy
 
     public function view(User $user, Client $client): bool
     {
-        return $client->team_id === $user->team_id;
+        return $client->isSameTeam($user->team_id);
     }
 
     public function create(User $user): bool
@@ -36,7 +36,7 @@ class ClientPolicy
 
     public function update(User $user, Client $client): bool
     {
-        return $client->team_id === $user->team_id;
+        return $client->isSameTeam($user->team_id);
     }
 
     public function trash(User $user, Client $client): bool
@@ -50,7 +50,7 @@ class ClientPolicy
             return true;
         }
 
-        if ($client->team_id !== $user->team_id) {
+        if (! $client->isSameTeam($user->team_id)) {
             return false;
         }
 
@@ -68,7 +68,7 @@ class ClientPolicy
             return true;
         }
 
-        if ($client->team_id !== $user->team_id) {
+        if (! $client->isSameTeam($user->team_id)) {
             return false;
         }
 
@@ -81,7 +81,7 @@ class ClientPolicy
             return true;
         }
 
-        if ($client->team_id !== $user->team_id) {
+        if (! $client->isSameTeam($user->team_id)) {
             return false;
         }
 
