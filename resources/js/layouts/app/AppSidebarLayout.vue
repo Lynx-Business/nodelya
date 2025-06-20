@@ -36,7 +36,7 @@ const items = useRouterComputed((): NavItem[] => [
         title: trans('layouts.app.sidebar.items.client'),
         href: route('clients.index'),
         icon: UsersIcon,
-        isActive: route().current('clients.index'),
+        isActive: route().current('clients.*'),
     },
 ]);
 </script>
