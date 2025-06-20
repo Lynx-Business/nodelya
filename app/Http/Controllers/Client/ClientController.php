@@ -12,7 +12,6 @@ use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
-use App\Services\ToastService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +21,6 @@ use Spatie\LaravelData\PaginatedDataCollection;
 
 class ClientController extends Controller
 {
-    public function __construct(
-        protected ToastService $toastService,
-    ) {}
-
     /**`
      * Display a listing of the resource.
      */
