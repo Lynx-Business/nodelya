@@ -12,4 +12,6 @@ enum PermissionName: string
     {
         return __("enums.permission.name.{$this->value}");
     }
+
+    case CLIENT = 'client';
 }

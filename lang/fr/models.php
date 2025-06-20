@@ -51,6 +51,15 @@ return [
             ],
         ],
     ],
+    'client' => [
+        'name' => [
+            'one'  => 'client',
+            'many' => 'clients',
+        ],
+        'fields' => [
+            'name' => 'nom',
+        ],
+    ],
 
     'media' => [
         'fields' => [
