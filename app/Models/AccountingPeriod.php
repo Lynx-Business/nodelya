@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon $ends_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read bool $can_delete
  * @property-read bool $can_restore
  * @property-read bool $can_trash
@@ -37,7 +36,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod search(?string $q)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereStartsAt($value)
