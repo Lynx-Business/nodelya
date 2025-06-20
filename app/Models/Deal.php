@@ -35,7 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property float $amount
  * @property-read \App\Models\User $client
- * @property-read mixed $is_trashable
+ * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read \App\Models\ProjectDepartment $projectDepartment
  * @property-read mixed $revenue

@@ -9,7 +9,7 @@ import {
     SectionHeader,
     SectionTitle,
 } from '@/components/ui/custom/section';
-import { useAccountingPeriodForm, useLayout } from '@/composables';
+import { useAccountingPeriodForm, useLayout, usePageProp } from '@/composables';
 import { AppLayout } from '@/layouts';
 import { AccountingPeriodFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -23,7 +23,7 @@ defineOptions({
                 href: route('teams.index'),
             },
             {
-                title: route().params.team,
+                title: usePageProp<string>('team.name', route().params.team).value,
                 href: route('teams.edit', { team: route().params.team }),
             },
             {

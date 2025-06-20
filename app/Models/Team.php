@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property-read bool $can_update
  * @property-read bool $can_view
  * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCategory> $expenseCategories
+ * @property-read int|null $expense_categories_count
  * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectDepartment> $projectDepartments
@@ -100,6 +102,11 @@ class Team extends Model
     public function accountingPeriods(): HasMany
     {
         return $this->hasMany(AccountingPeriod::class)->whereBelongsToAnyTeam();
+    }
+
+    public function expenseCategories(): HasMany
+    {
+        return $this->hasMany(ExpenseCategory::class)->whereBelongsToAnyTeam();
     }
 
     public function projectDepartments(): HasMany

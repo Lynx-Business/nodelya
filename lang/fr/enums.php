@@ -20,7 +20,7 @@ return [
         ],
     ],
 
-    'expense_category' => [
+    'expense' => [
         'type' => [
             'general'    => 'budgets généraux',
             'employee'   => 'salariés',

@@ -20,6 +20,13 @@ class ServicesManager
         return $this->conversion ??= app(ConversionService::class);
     }
 
+    protected ?ExpenseService $expense = null;
+
+    public function expense(): ExpenseService
+    {
+        return $this->expense ??= app(ExpenseService::class);
+    }
+
     protected ?MediaService $media = null;
 
     public function media(): MediaService

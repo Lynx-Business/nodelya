@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Data\AccountingPeriod;
+namespace App\Data\Expense\Category;
 
-use App\Models\AccountingPeriod;
+use App\Enums\Expense\ExpenseType;
+use App\Models\ExpenseCategory;
 use App\Models\Team;
 use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Validation\Rule;
@@ -17,15 +18,15 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[MergeValidationRules]
-class AccountingPeriodOneOrManyRequest extends Data
+class ExpenseCategoryOneOrManyRequest extends Data
 {
     public function __construct(
-        #[FromRouteParameter('accountingPeriod')]
+        #[FromRouteParameter('expenseCategory')]
         #[ExcludeWith('ids')]
-        public ?int $accounting_period = null,
+        public ?int $expense_category = null,
 
         #[Min(1)]
-        #[RequiredWithout('accountingPeriod')]
+        #[RequiredWithout('expenseCategory')]
         /** @var array<int> */
         public ?array $ids = null,
     ) {}
@@ -33,21 +34,28 @@ class AccountingPeriodOneOrManyRequest extends Data
     public static function attributes(): array
     {
         return [
-            'accounting_period' => __('models.accounting_period.name.one'),
-            'ids'               => __('models.accounting_period.name.many'),
+            'expense_category' => __('models.expense.category.name.one'),
+            'ids'              => __('models.expense.category.name.many'),
         ];
     }
 
-    public static function rules(ValidationContext $context, #[RouteParameter('team') ] Team $team): array
-    {
-        $model = app(AccountingPeriod::class);
+    public static function rules(
+        ValidationContext $context,
+        #[RouteParameter('team')]
+        Team $team,
+
+        #[RouteParameter('expenseType')]
+        ExpenseType $expenseType,
+    ): array {
+        $model = app(ExpenseCategory::class);
 
         return [
             'ids.*' => [
                 'integer',
                 'distinct',
                 Rule::exists($model->getTable(), $model->getKeyName())
-                    ->where($model->getQualifiedTeamIdColumn(), $team->getKey()),
+                    ->where($model->getQualifiedTeamIdColumn(), $team->getKey())
+                    ->where('type', $expenseType),
             ],
         ];
     }

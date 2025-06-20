@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Enums\Expense\Category;
+namespace App\Enums\Expense;
 
 use App\Traits\Enums\Labels;
 
-enum ExpenseCategoryType: string
+enum ExpenseType: string
 {
     use Labels;
 
@@ -14,6 +14,6 @@ enum ExpenseCategoryType: string
 
     public function label(): string
     {
-        return __("enums.expense_category.type.{$this->value}");
+        return __("enums.expense.type.{$this->value}");
     }
 }

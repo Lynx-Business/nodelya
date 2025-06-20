@@ -37,6 +37,21 @@ return [
         ],
     ],
 
+    'expense' => [
+        'category' => [
+            'name' => [
+                'one'  => 'catégorie de dépenses',
+                'many' => 'catégories de dépenses',
+            ],
+            'fields' => [
+                'deleted_at' => 'archivée le',
+                'is_trashed' => 'est archivée',
+                'type'       => 'type',
+                'name'       => 'nom',
+            ],
+        ],
+    ],
+
     'media' => [
         'fields' => [
         ],

@@ -160,6 +160,21 @@ return [
                 'description' => 'Mettez à jour les détails de la direction de projets',
             ],
         ],
+        'expenses' => [
+            'categories' => [
+                'index' => [
+                    'title' => 'Catégories de dépenses',
+                ],
+                'create' => [
+                    'title'       => 'Nouvelle catégorie de dépenses',
+                    'description' => 'Créez une nouvelle catégorie de dépenses pour organiser vos affaires',
+                ],
+                'edit' => [
+                    'title'       => 'Détails de catégorie de dépenses',
+                    'description' => 'Mettez à jour les détails de la catégorie de dépenses',
+                ],
+            ],
+        ],
     ],
 
     'users' => [

@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\ExpenseCategory|null $expenseCategory
  * @property-read \App\Models\ExpenseSubCategory|null $expenseSubCategory
- * @property-read mixed $is_trashable
+ * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read \App\Models\Team $team
  *

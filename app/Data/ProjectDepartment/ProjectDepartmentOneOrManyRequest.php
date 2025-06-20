@@ -33,8 +33,8 @@ class ProjectDepartmentOneOrManyRequest extends Data
     public static function attributes(): array
     {
         return [
-            'project_department' => __('models.project_departments.name.one'),
-            'ids'                => __('models.project_departments.name.many'),
+            'project_department' => __('models.project_department.name.one'),
+            'ids'                => __('models.project_department.name.many'),
         ];
     }
 
@@ -43,7 +43,12 @@ class ProjectDepartmentOneOrManyRequest extends Data
         $model = app(ProjectDepartment::class);
 
         return [
-            'ids.*' => ['integer', 'distinct', Rule::exists($model->getTable(), $model->getKeyName())->where($model->getQualifiedTeamIdColumn(), $team->getKey())],
+            'ids.*' => [
+                'integer',
+                'distinct',
+                Rule::exists($model->getTable(), $model->getKeyName())
+                    ->where($model->getQualifiedTeamIdColumn(), $team->getKey()),
+            ],
         ];
     }
 }

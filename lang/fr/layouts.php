@@ -43,7 +43,7 @@ return [
             'edit'                => 'Détails',
             'accounting_periods'  => 'Années fiscales',
             'project_departments' => 'Directions de projets',
-            'expense_categories'  => 'Catégories de dépenses',
+            'expenses'            => 'Dépenses',
         ],
     ],
 
