@@ -29,7 +29,7 @@ class ClientIndexRequest extends Data
             'per_page'       => __('per_page'),
             'sort_by'        => __('sort_by'),
             'sort_direction' => __('sort_direction'),
-            'trashed'        => __('models.user.fields.is_trashed'),
+            'trashed'        => __('trashed'),
         ];
     }
 
