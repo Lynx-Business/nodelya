@@ -2,7 +2,7 @@
 import TeamForm from '@/components/team/TeamForm.vue';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
-import { useLayout, useTeamForm } from '@/composables';
+import { useLayout, usePageProp, useTeamForm } from '@/composables';
 import { TeamsFormLayout } from '@/layouts';
 import { TeamFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -16,7 +16,7 @@ defineOptions({
                 href: route('teams.index'),
             },
             {
-                title: route().params.team,
+                title: usePageProp<string>('team.name', route().params.team).value,
                 href: route('teams.edit', { team: route().params.team }),
             },
         ],

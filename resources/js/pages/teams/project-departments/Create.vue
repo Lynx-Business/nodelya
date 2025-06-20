@@ -9,7 +9,7 @@ import {
     SectionHeader,
     SectionTitle,
 } from '@/components/ui/custom/section';
-import { useLayout, useProjectDepartmentForm } from '@/composables';
+import { useLayout, usePageProp, useProjectDepartmentForm } from '@/composables';
 import { AppLayout } from '@/layouts';
 import { ProjectDepartmentFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -23,7 +23,7 @@ defineOptions({
                 href: route('teams.index'),
             },
             {
-                title: route().params.team,
+                title: usePageProp<string>('team.name', route().params.team).value,
                 href: route('teams.edit', { team: route().params.team }),
             },
             {

@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
- * @property-read mixed $is_trashable
+ * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read string $label
  * @property-read \App\Models\Team $team

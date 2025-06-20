@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Expense\Category\ExpenseCategoryType;
+use App\Enums\Expense\ExpenseType;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,7 +20,7 @@ class ExpenseCategoryFactory extends Factory
     {
         return [
             'team_id' => Team::factory(),
-            'type'    => fake()->randomElement(ExpenseCategoryType::cases()),
+            'type'    => fake()->randomElement(ExpenseType::cases()),
             'name'    => fake()->companySuffix(),
         ];
     }

@@ -130,7 +130,67 @@ export type EditProfileSettingsProps = {
     mustVerifyEmail: boolean;
 };
 export type EditSecuritySettingsProps = {};
-export type ExpenseCategoryType = 'general' | 'employee' | 'contractor';
+export type ExpenseCategoryFormProps = {
+    team: TeamListResource;
+    expenseType: ExpenseType;
+    expenseCategory?: ExpenseCategoryFormResource;
+};
+export type ExpenseCategoryFormRequest = {
+    name: string;
+};
+export type ExpenseCategoryFormResource = {
+    id: number;
+    type: ExpenseType;
+    name: string;
+};
+export type ExpenseCategoryIndexProps = {
+    request: ExpenseCategoryIndexRequest;
+    team: TeamListResource;
+    expenseTypes?: Array<{ value: ExpenseType; label: string }>;
+    expenseType: ExpenseType;
+    expenseCategories?: {
+        data: Array<ExpenseCategoryIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type ExpenseCategoryIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type ExpenseCategoryIndexResource = {
+    id: number;
+    type: ExpenseType;
+    name: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+    deleted_at?: string;
+};
+export type ExpenseCategoryOneOrManyRequest = {
+    expense_category?: number;
+    ids?: Array<number>;
+};
+export type ExpenseType = 'general' | 'employee' | 'contractor';
 export type ForgotPasswordProps = {
     status?: string;
 };

@@ -54,6 +54,29 @@ return [
         ],
     ],
 
+    'expense' => [
+        'categories' => [
+            'store' => [
+                'success' => 'Catégorie de dépenses créée avec succès',
+            ],
+            'update' => [
+                'success' => 'Catégorie de dépenses mise à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver cette catégorie de dépenses ?|Êtes-vous sûr de vouloir archiver ces catégories de dépenses ?',
+                'success' => 'Catégorie de dépenses archivée avec succès|Catégories de dépenses archivées avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer cette catégorie de dépenses ?|Êtes-vous sûr de vouloir restaurer ces catégories de dépenses ?',
+                'success' => 'Catégorie de dépenses restaurée avec succès|Catégories de dépenses restaurées avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer cette catégorie de dépenses ?|Êtes-vous sûr de vouloir supprimer ces catégories de dépenses ?',
+                'success' => 'Catégorie de dépenses supprimée avec succès|Catégories de dépenses supprimées avec succès',
+            ],
+        ],
+    ],
+
     'project_departments' => [
         'store' => [
             'success' => 'Direction de projets créée avec succès',

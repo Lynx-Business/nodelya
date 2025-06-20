@@ -33,8 +33,8 @@ class AccountingPeriodOneOrManyRequest extends Data
     public static function attributes(): array
     {
         return [
-            'accounting_period' => __('models.accounting_periods.name.one'),
-            'ids'               => __('models.accounting_periods.name.many'),
+            'accounting_period' => __('models.accounting_period.name.one'),
+            'ids'               => __('models.accounting_period.name.many'),
         ];
     }
 
@@ -43,7 +43,12 @@ class AccountingPeriodOneOrManyRequest extends Data
         $model = app(AccountingPeriod::class);
 
         return [
-            'ids.*' => ['integer', 'distinct', Rule::exists($model->getTable(), $model->getKeyName())->where($model->getQualifiedTeamIdColumn(), $team->getKey())],
+            'ids.*' => [
+                'integer',
+                'distinct',
+                Rule::exists($model->getTable(), $model->getKeyName())
+                    ->where($model->getQualifiedTeamIdColumn(), $team->getKey()),
+            ],
         ];
     }
 }
