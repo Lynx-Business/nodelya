@@ -54,7 +54,7 @@ class ClientPolicy
             return false;
         }
 
-        return $user->is_owner && $user->hasPermissionTo(PermissionName::CLIENT->value);
+        return $user->is_owner;
     }
 
     public function restore(User $user, Client $client): bool
@@ -72,7 +72,7 @@ class ClientPolicy
             return false;
         }
 
-        return $user->is_owner && $user->hasPermissionTo(PermissionName::CLIENT->value);
+        return $user->is_owner;
     }
 
     public function delete(User $user, Client $client): bool
@@ -85,6 +85,6 @@ class ClientPolicy
             return false;
         }
 
-        return $user->is_owner && $user->hasPermissionTo(PermissionName::CLIENT->value);
+        return $user->is_owner;
     }
 }
