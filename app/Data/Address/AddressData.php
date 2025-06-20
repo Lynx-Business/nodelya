@@ -3,8 +3,8 @@
 namespace App\Data\Address;
 
 use Spatie\LaravelData\Attributes\MergeValidationRules;
+use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -12,10 +12,15 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class AddressData extends Data
 {
     public function __construct(
+        #[Max(255)]
         public string $address,
+        #[Max(255)]
         public ?string $address_complement,
+        #[Max(255)]
         public string $city,
+        #[Max(20)]
         public string $postal_code,
+        #[Max(100)]
         public string $country,
     ) {}
 
@@ -27,17 +32,6 @@ class AddressData extends Data
             'city'               => __('models.address.fields.city'),
             'postal_code'        => __('models.address.fields.postal_code'),
             'country'            => __('models.address.fields.country'),
-        ];
-    }
-
-    public static function rules(ValidationContext $context): array
-    {
-        return [
-            'address'            => ['required', 'string', 'max:255'],
-            'address_complement' => ['nullable', 'string', 'max:255'],
-            'city'               => ['required', 'string', 'max:255'],
-            'postal_code'        => ['required', 'string', 'max:20'],
-            'country'            => ['required', 'string', 'max:100'],
         ];
     }
 }

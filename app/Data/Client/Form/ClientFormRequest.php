@@ -7,8 +7,8 @@ use App\Models\Client;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Hidden;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
+use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -20,6 +20,7 @@ class ClientFormRequest extends Data
         #[FromRouteParameter('client')]
         public ?Client $client,
 
+        #[Max(255)]
         public string $name,
 
         public AddressData $address,
@@ -35,18 +36,6 @@ class ClientFormRequest extends Data
             'address.postal_code'        => __('models.address.fields.postal_code'),
             'address.country'            => __('models.address.fields.country'),
 
-        ];
-    }
-
-    public static function rules(ValidationContext $context): array
-    {
-        return [
-            'name'                       => ['required', 'string', 'max:255'],
-            'address.address'            => ['required', 'string', 'max:255'],
-            'address.address_complement' => ['nullable', 'string', 'max:255'],
-            'address.city'               => ['required', 'string', 'max:255'],
-            'address.postal_code'        => ['required', 'string', 'max:20'],
-            'address.country'            => ['required', 'string', 'max:100'],
         ];
     }
 }
