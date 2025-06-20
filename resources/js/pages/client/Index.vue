@@ -15,7 +15,6 @@ import {
     DataTableRowActions,
     DataTableRowCheckbox,
     DataTableRowsAction,
-    DataTableRowsActions,
     DataTableRowsCheckbox,
     DataTableSortableHead,
 } from '@/components/ui/custom/data-table';
@@ -49,6 +48,7 @@ const props = defineProps<ClientIndexProps>();
 const alert = useAlert();
 
 const selectedRows = ref<ClientIndexResource[]>([]);
+
 const rowsActions: DataTableRowsAction<ClientIndexResource>[] = [
     {
         label: trans('trash'),
@@ -232,7 +232,6 @@ const filters = useFilters<ClientIndexRequest>(
                     </FiltersSheet>
                 </FormContent>
                 <FormContent class="flex items-center justify-between">
-                    <DataTableRowsActions />
                     <Button as-child>
                         <InertiaLink :href="route('clients.create')">
                             <CirclePlusIcon />

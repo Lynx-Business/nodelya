@@ -283,6 +283,7 @@ export type PermissionListResource = {
     name: string;
     display_name: string;
 };
+export type PermissionName = 'client';
 export type ProjectDepartmentFormProps = {
     team: TeamListResource;
     projectDepartment?: ProjectDepartmentFormResource;
@@ -457,7 +458,7 @@ export type UserListResource = {
 export type UserMemberFormProps = {
     user?: UserMemberFormResource;
     teams?: Array<TeamListResource>;
-    permissions?: Array<{ value: any; label: string }>;
+    permissions?: Array<{ value: PermissionName; label: string }>;
 };
 export type UserMemberFormRequest = {
     first_name: string;
@@ -487,7 +488,7 @@ export type UserMemberFormResource = {
 };
 export type UserMemberFormTeamPermissionData = {
     team_id: number;
-    permission: any;
+    permission: PermissionName;
     can_update?: boolean;
 };
 export type UserMemberFormTeamRoleData = {
