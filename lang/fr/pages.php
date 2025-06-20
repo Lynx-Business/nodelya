@@ -174,6 +174,19 @@ return [
                     'description' => 'Mettez à jour les détails de la catégorie de dépenses',
                 ],
             ],
+            'sub_categories' => [
+                'index' => [
+                    'title' => 'Sous-catégories de dépenses',
+                ],
+                'create' => [
+                    'title'       => 'Nouvelle sous-catégorie de dépenses',
+                    'description' => 'Créez une nouvelle sous-catégorie de dépenses pour organiser vos affaires',
+                ],
+                'edit' => [
+                    'title'       => 'Détails de sous-catégorie de dépenses',
+                    'description' => 'Mettez à jour les détails de la sous-catégorie de dépenses',
+                ],
+            ],
         ],
     ],
 

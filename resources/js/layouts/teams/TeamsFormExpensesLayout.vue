@@ -6,7 +6,7 @@ import { Enum, ExpenseType, type NavItem } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { computed } from 'vue';
 
-type ExpenseModel = 'category';
+type ExpenseModel = 'category' | 'sub-category';
 type Props = {
     model: ExpenseModel;
 };
@@ -14,6 +14,8 @@ const props = defineProps<Props>();
 
 function plural(model: ExpenseModel): string {
     switch (model) {
+        case 'sub-category':
+            return 'sub-categories';
         case 'category':
         default:
             return 'categories';
