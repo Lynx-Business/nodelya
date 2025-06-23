@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Deal\CommercialDealController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
 use App\Http\Controllers\Expense\Item\ExpenseItemController;
 use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
+use App\Models\Deal;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
@@ -167,6 +169,19 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::delete('/trash/{client?}', 'trash')->name('trash');
         Route::patch('/restore/{client?}', 'restore')->name('restore');
         Route::delete('/delete/{client?}', 'destroy')->name('delete');
+    });
+
+    Route::prefix('/commercial-deals')->name('commercial.deals.')->controller(CommercialDealController::class)->group(function () {
+        Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
+        Route::get('/create', 'create')->name('create')->can('create', Deal::class);
+        Route::post('/create', 'store')->name('store')->can('create', Deal::class);
+
+        Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+        Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
+
+        Route::delete('/trash/{deal?}', 'trash')->name('trash');
+        Route::patch('/restore/{deal?}', 'restore')->name('restore');
+        Route::delete('/delete/{deal?}', 'destroy')->name('delete');
     });
 });
 
