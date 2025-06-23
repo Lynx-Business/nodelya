@@ -58,7 +58,13 @@ export type AccountingPeriodOneOrManyRequest = {
     accounting_period?: number;
     ids?: Array<number>;
 };
-export type AddressData = {};
+export type AddressData = {
+    address: string;
+    address_complement?: string;
+    city: string;
+    postal_code: string;
+    country: string;
+};
 export type BannerAdminFormProps = {
     banner?: BannerAdminFormResource;
 };
@@ -115,6 +121,61 @@ export type BannerAppResource = {
 };
 export type BannerOneOrManyRequest = {
     banner?: number;
+    ids?: Array<number>;
+};
+export type ClientFormProps = {
+    client?: ClientFormResource;
+};
+export type ClientFormRequest = {
+    client?: any;
+    name: string;
+    address: AddressData;
+};
+export type ClientFormResource = {
+    id: number;
+    name: string;
+    address: AddressData;
+};
+export type ClientIndexProps = {
+    request: ClientIndexRequest;
+    clients?: {
+        data: Array<ClientIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type ClientIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type ClientIndexResource = {
+    id: number;
+    name: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+};
+export type ClientOneOrManyRequest = {
+    client?: number;
     ids?: Array<number>;
 };
 export type ConfirmPasswordProps = {};
@@ -222,10 +283,7 @@ export type PermissionListResource = {
     name: string;
     display_name: string;
 };
-export type PermissionName = {
-    name: string;
-    value: string;
-};
+export type PermissionName = 'client';
 export type ProjectDepartmentFormProps = {
     team: TeamListResource;
     projectDepartment?: ProjectDepartmentFormResource;
