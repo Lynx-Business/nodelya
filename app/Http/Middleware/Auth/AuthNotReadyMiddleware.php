@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthNoTeamMiddleware
+class AuthNotReadyMiddleware
 {
     /**
      * Handle an incoming request.
@@ -26,15 +26,19 @@ class AuthNoTeamMiddleware
             ? $user->team
             : $user->teams->first();
 
-        if ($team) {
-            if (! $user->team) {
-                // Select the first available team
-                Services::user()->selectTeam->execute($user, $team);
-            }
-
-            return to_route('index');
+        if (! $team) {
+            return $next($request);
         }
 
-        return $next($request);
+        if (! $user->team) {
+            // Select the first available team
+            Services::user()->selectTeam->execute($user, $team);
+        }
+
+        if ($team->accountingPeriods()->doesntExist()) {
+            return $next($request);
+        }
+
+        return to_route('index');
     }
 }

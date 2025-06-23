@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AccountingPeriod\AccountingPeriodController;
+use App\Http\Controllers\Auth\Setup\AuthSetupNotReadyController;
+use App\Http\Controllers\Auth\Setup\AuthSetupStepOneController;
+use App\Http\Controllers\Auth\Setup\AuthSetupStepTwoController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
@@ -14,7 +17,6 @@ use App\Http\Controllers\Settings\PasswordSettingsController;
 use App\Http\Controllers\Settings\ProfileSettingsController;
 use App\Http\Controllers\Settings\SecuritySettingsController;
 use App\Http\Controllers\Team\TeamController;
-use App\Http\Controllers\Team\TeamFirstController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
@@ -27,15 +29,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/verification/code', [VerifyEmailController::class, 'code'])->name('verification.code')->middleware(['auth']);
 
-Route::middleware(['auth', 'auth.no_team'])->group(function () {
-    Route::prefix('/teams/first')->name('teams.first.')->controller(TeamFirstController::class)->group(function () {
-        Route::get('/required', 'required')->name('required');
-        Route::get('/create', 'create')->name('create')->middleware(['auth.owner']);
-        Route::post('/create', 'store')->name('store')->middleware(['auth.owner']);
+Route::middleware(['auth', 'auth.not_ready', 'auth.include'])->group(function () {
+    Route::prefix('/setup')->name('auth.setup.')->group(function () {
+        Route::get('/not-ready', [AuthSetupNotReadyController::class, 'index'])->name('not-ready');
+        Route::middleware(['auth.owner'])->group(function () {
+            Route::prefix('/1')->name('step-one.')->controller(AuthSetupStepOneController::class)->group(function () {
+                Route::get('', 'edit')->name('edit');
+                Route::post('', 'update')->name('update');
+            });
+            Route::prefix('/2')->name('step-two.')->controller(AuthSetupStepTwoController::class)->group(function () {
+                Route::get('', 'edit')->name('edit');
+                Route::post('', 'update')->name('update');
+            });
+        });
     });
 });
 
-Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->group(function () {
+Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('index');
 

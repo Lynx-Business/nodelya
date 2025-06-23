@@ -4,10 +4,13 @@ namespace App\Data\AccountingPeriod\Form;
 
 use App\Models\AccountingPeriod;
 use App\Models\Team;
+use App\Models\User;
 use Carbon\Carbon;
 use Closure;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\LaravelData\Attributes\FromAuthenticatedUserProperty;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Attributes\Validation\After;
@@ -24,6 +27,7 @@ class AccountingPeriodFormRequest extends Data
 {
     public function __construct(
         #[Hidden]
+        #[FromAuthenticatedUserProperty]
         #[FromRouteParameter('team')]
         public Team $team,
 
@@ -48,14 +52,20 @@ class AccountingPeriodFormRequest extends Data
 
     public static function rules(
         ValidationContext $context,
+
+        #[CurrentUser]
+        User $user,
+
         #[RouteParameter('team')]
-        Team $team,
+        ?Team $team,
 
         #[RouteParameter('accountingPeriod')]
         ?AccountingPeriod $accountingPeriod,
     ): array {
         $startsAt = data_get($context->payload, 'starts_at');
         $endsAt = data_get($context->payload, 'ends_at');
+
+        $team ??= $user->team;
 
         return [
             'starts_at' => [

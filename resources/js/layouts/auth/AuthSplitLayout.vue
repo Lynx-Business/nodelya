@@ -8,10 +8,11 @@ const page = usePage();
 const name = page.props.name;
 
 type Props = {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
 };
 defineProps<Props>();
+
 useAutofocus();
 </script>
 

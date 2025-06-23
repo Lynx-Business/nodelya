@@ -21,9 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'banner.include' => \App\Http\Middleware\IncludeBanner::class,
             'auth.include'   => \App\Http\Middleware\Auth\AuthIncludeMiddleware::class,
+            'auth.not_ready' => \App\Http\Middleware\Auth\AuthNotReadyMiddleware::class,
             'auth.owner'     => \App\Http\Middleware\Auth\AuthOwnerMiddleware::class,
-            'auth.team'      => \App\Http\Middleware\Auth\AuthTeamMiddleware::class,
-            'auth.no_team'   => \App\Http\Middleware\Auth\AuthNoTeamMiddleware::class,
+            'auth.setup'     => \App\Http\Middleware\Auth\AuthSetupMiddleware::class,
         ]);
         $middleware->web(append: [
             \App\Http\Middleware\HandleLocale::class,

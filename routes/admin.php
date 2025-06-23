@@ -4,7 +4,7 @@ use App\Http\Controllers\Banner\BannerAdminController;
 use App\Http\Controllers\Dashboard\DashboardAdminController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/admin')->name('admin.')->middleware(['auth', 'auth.team', 'auth.include'])->group(function () {
+Route::prefix('/admin')->name('admin.')->middleware(['auth', 'auth.setup', 'auth.include'])->group(function () {
 
     Route::get('/', [DashboardAdminController::class, 'index'])->name('index');
 

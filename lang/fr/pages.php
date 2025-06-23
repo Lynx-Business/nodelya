@@ -49,6 +49,21 @@ return [
             'resend_email' => "Renvoyer l'e-mail de vérification",
             'not_you'      => "Ce n'est pas vous ?",
         ],
+        'setup' => [
+            'not_ready' => [
+                'title'       => 'Compte non configuré',
+                'description' => "Votre compte n'a pas encore été configuré, veuillez contacter votre administrateur pour commencer",
+                'not_you'     => "Ce n'est pas vous ?",
+            ],
+            'step_one' => [
+                'title'       => 'Société',
+                'description' => 'Créez votre première société',
+            ],
+            'step_two' => [
+                'title'       => 'Année fiscale',
+                'description' => 'Saisissez la période fiscale pour votre société',
+            ],
+        ],
     ],
 
     'banners' => [
@@ -112,17 +127,6 @@ return [
     ],
 
     'teams' => [
-        'first' => [
-            'required' => [
-                'title'       => 'Compte non configuré',
-                'description' => "Votre compte n'a pas encore été configuré, veuillez contacter votre administrateur pour commencer",
-                'not_you'     => "Ce n'est pas vous ?",
-            ],
-            'create' => [
-                'title'       => 'Créer une société',
-                'description' => "Créez votre première société pour commencer à utiliser l'application",
-            ],
-        ],
         'index' => [
             'title' => 'Sociétés',
         ],

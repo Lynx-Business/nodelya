@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthTeamMiddleware
+class AuthSetupMiddleware
 {
     /**
      * Handle an incoming request.
@@ -32,15 +32,15 @@ class AuthTeamMiddleware
             $user->update(['team_id' => null]);
 
             return $user->can('create', Team::class)
-                ? to_route('teams.first.create')
-                : to_route('teams.first.required');
+                ? to_route('auth.setup.step-one.edit')
+                : to_route('auth.setup.not-ready');
         }
 
         // Select the first available team
         Services::user()->selectTeam->execute($user, $team);
         if (Route::is('teams.*')) {
             /** @var int $routeTeam */
-            $routeTeam = (int) ($request->team ?? 0);
+            $routeTeam = $request->integer('team');
             if ($routeTeam > 0 && $user->is_owner && $user->hasTeam($routeTeam)) {
                 // If the user is accessing their configuration set to current route team
                 $team = $routeTeam;
