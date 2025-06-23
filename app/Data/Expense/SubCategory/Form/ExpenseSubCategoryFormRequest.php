@@ -35,6 +35,7 @@ class ExpenseSubCategoryFormRequest extends Data
     public static function attributes(): array
     {
         return [
+            'name' => __('models.expense.sub_category.fields.expense_category'),
             'name' => __('models.expense.sub_category.fields.name'),
         ];
     }
