@@ -42,19 +42,20 @@ class ExpenseSubCategoryFormRequest extends Data
 
     public static function rules(
         ValidationContext $context,
+
         #[RouteParameter('team')]
         Team $team,
 
         #[RouteParameter('expenseType')]
         ExpenseType $expenseType,
     ): array {
-        $model = app(ExpenseCategory::class);
+        $expenseCategory = app(ExpenseCategory::class);
 
         return [
             'expense_category_id' => [
                 'integer',
-                Rule::exists($model->getTable(), $model->getKeyName())
-                    ->where($model->getQualifiedTeamIdColumn(), $team->getKey())
+                Rule::exists($expenseCategory->getTable(), $expenseCategory->getKeyName())
+                    ->where($expenseCategory->getQualifiedTeamIdColumn(), $team->getKey())
                     ->where('type', $expenseType),
             ],
         ];

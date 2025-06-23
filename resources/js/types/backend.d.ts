@@ -276,6 +276,7 @@ export type ExpenseSubCategoryIndexProps = {
     team: TeamListResource;
     expenseTypes?: Array<{ value: ExpenseType; label: string }>;
     expenseType: ExpenseType;
+    expenseCategories?: Array<ExpenseCategoryListResource>;
     expenseSubCategories?: {
         data: Array<ExpenseSubCategoryIndexResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
@@ -296,12 +297,14 @@ export type ExpenseSubCategoryIndexProps = {
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
 };
 export type ExpenseSubCategoryIndexRequest = {
+    expense_categories?: Array<ExpenseCategoryListResource>;
     q?: string;
     page?: number;
     per_page?: number;
     sort_by: string;
     sort_direction: string;
     trashed?: TrashedFilter;
+    expense_category_ids?: Array<number>;
 };
 export type ExpenseSubCategoryIndexResource = {
     id: number;

@@ -3,11 +3,13 @@
 namespace App\Data\Expense\SubCategory\Index;
 
 use App\Attributes\EnumArrayOf;
+use App\Data\Expense\Category\ExpenseCategoryListResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\LaravelData\Resource;
@@ -26,6 +28,10 @@ class ExpenseSubCategoryIndexProps extends Resource
         public Lazy|array $expenseTypes,
 
         public ExpenseType $expenseType,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(ExpenseCategoryListResource::class)]
+        public Lazy|DataCollection $expenseCategories,
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ExpenseSubCategoryIndexResource::class)]

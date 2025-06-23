@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TrashedBadge from '@/components/trash/TrashedBadge.vue';
 import { Button } from '@/components/ui/button';
-import { EnumCombobox } from '@/components/ui/custom/combobox';
+import { EnumCombobox, InertiaCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
     DataTableBody,
@@ -25,7 +25,7 @@ import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useLayout, useLayouts } from '@/composables';
+import { useAlert, useFilters, useLayout, useLayouts, useObjectOmit } from '@/composables';
 import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
     ExpenseSubCategoryIndexProps,
@@ -230,6 +230,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
         sort_by: props.request.sort_by,
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
+        expense_categories: props.request.expense_categories,
     },
     {
         only: ['expenseSubCategories'],
@@ -241,6 +242,12 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
             if (!keys.includes('page')) {
                 filters.page = 1;
             }
+        },
+        transform(data) {
+            return {
+                ...useObjectOmit(data, 'expense_categories').value,
+                expense_category_ids: data.expense_categories?.map(({ id }) => id),
+            };
         },
     },
 );
@@ -277,6 +284,22 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                                 </FormLabel>
                                 <FormControl>
                                     <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                </FormControl>
+                            </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.expense.category.name.many') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <InertiaCombobox
+                                        v-model="filters.expense_categories"
+                                        multiple
+                                        by="id"
+                                        label="name"
+                                        data="expenseCategories"
+                                    />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>
