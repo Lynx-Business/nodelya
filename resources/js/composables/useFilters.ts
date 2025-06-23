@@ -82,7 +82,7 @@ export function useFilters<TForm extends FormDataType>(
 
         options.onReload?.(keys);
 
-        const currentParams = useObjectOmit(route().params, Object.keys(transform(form.data())));
+        const currentParams = useObjectOmit(route().params, ...Object.keys(transform(form.data())));
 
         router.visit(route(currentRoute, currentParams.value), {
             data: params.value,

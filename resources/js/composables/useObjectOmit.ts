@@ -2,7 +2,7 @@ import { computed, ComputedRef, MaybeRefOrGetter } from 'vue';
 
 export function useObjectOmit<T extends Record<string, any>, K extends keyof T>(
     obj: MaybeRefOrGetter<T>,
-    keys: K[],
+    ...keys: K[]
 ): ComputedRef<Omit<T, K>> {
     return computed(
         () =>

@@ -2,7 +2,7 @@ import { computed, ComputedRef } from 'vue';
 
 export function useObjectPick<T extends Record<string, any>, K extends keyof T>(
     obj: T,
-    keys: K[],
+    ...keys: K[]
 ): ComputedRef<Pick<T, K>> {
     return computed(
         () =>
