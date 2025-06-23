@@ -60,6 +60,12 @@ const items = useRouterComputed((): NavItem[] => [
         icon: UsersIcon,
         isActive: route().current('clients.*'),
     },
+    {
+        title: trans('layouts.app.sidebar.items.commercial-deals'),
+        href: route('commercial.deals.index'),
+        icon: UsersIcon,
+        isActive: route().current('commercial.deals.*'),
+    },
 ]);
 </script>
 

@@ -149,6 +149,29 @@ return [
         ],
     ],
 
+    'commercial_deal' => [
+        'name' => [
+            'one'  => 'affaire',
+            'many' => 'affaires',
+        ],
+        'fields' => [
+            'amount_in_cents'       => 'montant en centimes',
+            'code'                  => 'code',
+            'client_id'             => 'client',
+            'duration_in_months'    => 'durée en mois',
+            'ends_at'               => 'date de fin',
+            'name'                  => 'nom',
+            'ordered_at'            => 'date de commande',
+            'project_department_id' => 'direction de projets',
+            'reference'             => 'référence',
+            'schedule'              => 'planning',
+            'starts_at'             => 'date de début',
+            'status'                => 'statut',
+            'success_rate'          => 'taux de réussite',
+            'team_id'               => 'société',
+        ],
+    ],
+
     'media' => [
         'fields' => [
         ],

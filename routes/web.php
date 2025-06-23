@@ -12,6 +12,7 @@ use App\Http\Controllers\Contractor\ContractorEndsAtController;
 use App\Http\Controllers\Contractor\Expense\Budget\ContractorExpenseBudgetController;
 use App\Http\Controllers\Contractor\Expense\Charge\ContractorExpenseChargeController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Deal\CommercialDealController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\Employee\EmployeeEndsAtController;
 use App\Http\Controllers\Employee\Expense\Budget\EmployeeExpenseBudgetController;
@@ -32,6 +33,7 @@ use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
 use App\Models\Contractor;
+use App\Models\Deal;
 use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
@@ -280,6 +282,19 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::delete('/trash/{client?}', 'trash')->name('trash');
         Route::patch('/restore/{client?}', 'restore')->name('restore');
         Route::delete('/delete/{client?}', 'destroy')->name('delete');
+    });
+
+    Route::prefix('/commercial-deals')->name('commercial.deals.')->controller(CommercialDealController::class)->group(function () {
+        Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
+        Route::get('/create', 'create')->name('create')->can('create', Deal::class);
+        Route::post('/create', 'store')->name('store')->can('create', Deal::class);
+
+        Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+        Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
+
+        Route::delete('/trash/{deal?}', 'trash')->name('trash');
+        Route::patch('/restore/{deal?}', 'restore')->name('restore');
+        Route::delete('/delete/{deal?}', 'destroy')->name('delete');
     });
 });
 

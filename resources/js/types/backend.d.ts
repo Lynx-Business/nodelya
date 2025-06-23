@@ -172,6 +172,44 @@ export type ClientOneOrManyRequest = {
     client?: number;
     ids?: Array<number>;
 };
+export type CommercialDealIndexProps = {
+    request: CommercialDealIndexRequest;
+    commercial_deals?: {
+        data: Array<CommercialDealIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type CommercialDealIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type CommercialDealIndexResource = {
+    id: number;
+    name: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+};
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;

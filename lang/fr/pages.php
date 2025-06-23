@@ -308,4 +308,18 @@ return [
         ],
     ],
 
+    'commercial_deals' => [
+        'index' => [
+            'title' => 'Affaires commerciales',
+        ],
+
+        'create' => [
+            'title'       => 'Créer une affaire commerciale',
+            'description' => 'Créez une nouvelle affaire commerciale pour gérer vos transactions',
+        ],
+        'edit' => [
+            'title'       => 'Mettre à jour une affaire commerciale',
+            'description' => 'Modifiez les détails d\'une affaire commerciale existante',
+        ],
+    ],
 ];

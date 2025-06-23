@@ -8,6 +8,7 @@ use App\Facades\Services;
 use App\Traits\BelongsToClient;
 use App\Traits\BelongsToProjectDepartment;
 use App\Traits\BelongsToTeam;
+use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,12 +42,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read mixed $revenue
  * @property-read \App\Models\Team $team
  *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal commercial()
  * @method static \Database\Factories\DealFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal search(?string $q)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereAmountInCents($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereBelongsToClient(\App\Models\Client|int $client)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereBelongsToProjectDepartment(\App\Models\ProjectDepartment|int $projectDepartment)
@@ -83,6 +86,7 @@ class Deal extends Model
     /** @use HasFactory<\Database\Factories\DealFactory> */
     use HasFactory;
 
+    use Searchable;
     use Trashable;
 
     /**
@@ -147,5 +151,10 @@ class Deal extends Model
 
                 return Services::conversion()->centsToPrice($this->amount_in_cents * ($this->success_rate / 100));
             });
+    }
+
+    public function scopeCommercial($query)
+    {
+        return $query->where('status', DealStatus::CREATED);
     }
 }
