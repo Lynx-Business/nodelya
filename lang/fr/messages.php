@@ -75,6 +75,26 @@ return [
                 'success' => 'Catégorie de dépenses supprimée avec succès|Catégories de dépenses supprimées avec succès',
             ],
         ],
+        'sub_categories' => [
+            'store' => [
+                'success' => 'Sous-catégorie de dépenses créée avec succès',
+            ],
+            'update' => [
+                'success' => 'Sous-catégorie de dépenses mise à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver cette sous-catégorie de dépenses ?|Êtes-vous sûr de vouloir archiver ces sous-catégories de dépenses ?',
+                'success' => 'Sous-catégorie de dépenses archivée avec succès|Sous-catégories de dépenses archivées avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer cette sous-catégorie de dépenses ?|Êtes-vous sûr de vouloir restaurer ces sous-catégories de dépenses ?',
+                'success' => 'Sous-catégorie de dépenses restaurée avec succès|Sous-catégories de dépenses restaurées avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer cette sous-catégorie de dépenses ?|Êtes-vous sûr de vouloir supprimer ces sous-catégories de dépenses ?',
+                'success' => 'Sous-catégorie de dépenses supprimée avec succès|Sous-catégories de dépenses supprimées avec succès',
+            ],
+        ],
     ],
 
     'project_departments' => [

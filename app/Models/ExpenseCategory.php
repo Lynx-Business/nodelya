@@ -76,6 +76,15 @@ class ExpenseCategory extends Model
     ];
 
     /**
+     * The attributes that are searchable.
+     *
+     * @var list<string>
+     */
+    protected $searchable = [
+        'name',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
