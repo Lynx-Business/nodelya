@@ -247,8 +247,80 @@ export type ExpenseCategoryIndexResource = {
     can_delete: boolean;
     deleted_at?: string;
 };
+export type ExpenseCategoryListResource = {
+    id: number;
+    type: ExpenseType;
+    name: string;
+};
 export type ExpenseCategoryOneOrManyRequest = {
     expense_category?: number;
+    ids?: Array<number>;
+};
+export type ExpenseSubCategoryFormProps = {
+    team: TeamListResource;
+    expenseType: ExpenseType;
+    expenseCategories?: Array<ExpenseCategoryListResource>;
+    expenseSubCategory?: ExpenseSubCategoryFormResource;
+};
+export type ExpenseSubCategoryFormRequest = {
+    expense_category_id: number;
+    name: string;
+};
+export type ExpenseSubCategoryFormResource = {
+    id: number;
+    expense_category: ExpenseCategoryListResource;
+    name: string;
+};
+export type ExpenseSubCategoryIndexProps = {
+    request: ExpenseSubCategoryIndexRequest;
+    team: TeamListResource;
+    expenseTypes?: Array<{ value: ExpenseType; label: string }>;
+    expenseType: ExpenseType;
+    expenseSubCategories?: {
+        data: Array<ExpenseSubCategoryIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type ExpenseSubCategoryIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type ExpenseSubCategoryIndexResource = {
+    id: number;
+    expense_category: ExpenseCategoryListResource;
+    name: string;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+    deleted_at?: string;
+};
+export type ExpenseSubCategoryListResource = {
+    id: number;
+    type: ExpenseType;
+    name: string;
+};
+export type ExpenseSubCategoryOneOrManyRequest = {
+    expense_sub_category?: number;
     ids?: Array<number>;
 };
 export type ExpenseType = 'general' | 'employee' | 'contractor';

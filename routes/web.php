@@ -6,6 +6,7 @@ use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
+use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProjectDepartment\ProjectDepartmentController;
 use App\Http\Controllers\Settings\AppearanceSettingsController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseSubCategory;
 use App\Models\ProjectDepartment;
 use App\Models\Team;
 use App\Models\User;
@@ -104,6 +106,16 @@ Route::middleware(['auth', 'auth.team', 'auth.include', 'banner.include'])->grou
                 Route::delete('/trash/{expenseCategory?}', 'trash')->name('trash');
                 Route::patch('/restore/{expenseCategory?}', 'restore')->name('restore');
                 Route::delete('/delete/{expenseCategory?}', 'destroy')->name('delete');
+            });
+            Route::prefix('/sub-categories')->name('sub-categories.')->controller(ExpenseSubCategoryController::class)->group(function () {
+                Route::get('/', 'index')->name('index')->can('viewAny', ExpenseSubCategory::class);
+                Route::get('/create', 'create')->name('create')->can('create', ExpenseSubCategory::class);
+                Route::post('/create', 'store')->name('store')->can('create', ExpenseSubCategory::class);
+                Route::get('/edit/{expenseSubCategory}', 'edit')->name('edit')->withTrashed()->can('view', 'expenseSubCategory');
+                Route::put('/edit/{expenseSubCategory}', 'update')->name('update')->withTrashed()->can('update', 'expenseSubCategory');
+                Route::delete('/trash/{expenseSubCategory?}', 'trash')->name('trash');
+                Route::patch('/restore/{expenseSubCategory?}', 'restore')->name('restore');
+                Route::delete('/delete/{expenseSubCategory?}', 'destroy')->name('delete');
             });
         });
 

@@ -143,8 +143,8 @@ return [
                 'description' => 'Créez une nouvelle année fiscale pour gérer vos affaires',
             ],
             'edit' => [
-                'title'       => 'Détails de année fiscale',
-                'description' => 'Mettez à jour les détails de la année fiscale',
+                'title'       => "Détails de l'année fiscale",
+                'description' => "Mettez à jour les détails de l'année fiscale",
             ],
         ],
         'project_departments' => [
@@ -172,6 +172,19 @@ return [
                 'edit' => [
                     'title'       => 'Détails de catégorie de dépenses',
                     'description' => 'Mettez à jour les détails de la catégorie de dépenses',
+                ],
+            ],
+            'sub_categories' => [
+                'index' => [
+                    'title' => 'Sous-catégories de dépenses',
+                ],
+                'create' => [
+                    'title'       => 'Nouvelle sous-catégorie de dépenses',
+                    'description' => 'Créez une nouvelle sous-catégorie de dépenses pour organiser vos affaires',
+                ],
+                'edit' => [
+                    'title'       => 'Détails de sous-catégorie de dépenses',
+                    'description' => 'Mettez à jour les détails de la sous-catégorie de dépenses',
                 ],
             ],
         ],
