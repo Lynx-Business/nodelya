@@ -709,7 +709,7 @@ export type UserResource = {
     is_admin: boolean;
     is_owner: boolean;
     is_member: boolean;
-    avatar?: MediaResource | null;
+    avatar?: MediaResource;
     teams?: Array<TeamListResource>;
 };
 export type VerifyEmailProps = {};
