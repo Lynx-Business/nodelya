@@ -57,11 +57,6 @@ class ProjectDepartmentPolicy
         return $user->is_owner;
     }
 
-    public function select(User $user, ProjectDepartment $projectDepartment): bool
-    {
-        return $user->hasTeam($projectDepartment->team_id);
-    }
-
     public function trash(User $user, ProjectDepartment $projectDepartment): bool
     {
         if ($projectDepartment->is_trashed) {

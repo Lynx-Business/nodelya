@@ -50,6 +50,19 @@ return [
                 'name'       => 'nom',
             ],
         ],
+        'item' => [
+            'name' => [
+                'one'  => 'poste de dépenses',
+                'many' => 'postes de dépenses',
+            ],
+            'fields' => [
+                'deleted_at'           => 'archivée le',
+                'is_trashed'           => 'est archivée',
+                'expense_category'     => 'catégorie',
+                'expense_sub_category' => 'sous-catégorie',
+                'name'                 => 'nom',
+            ],
+        ],
         'sub_category' => [
             'name' => [
                 'one'  => 'sous-catégorie de dépenses',

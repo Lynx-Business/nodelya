@@ -178,6 +178,19 @@ return [
                     'description' => 'Mettez à jour les détails de la catégorie de dépenses',
                 ],
             ],
+            'items' => [
+                'index' => [
+                    'title' => 'Postes de dépenses',
+                ],
+                'create' => [
+                    'title'       => 'Nouvelle poste de dépenses',
+                    'description' => 'Créez un nouveau poste de dépenses pour organiser vos affaires',
+                ],
+                'edit' => [
+                    'title'       => 'Détails de poste de dépenses',
+                    'description' => 'Mettez à jour les détails du poste de dépenses',
+                ],
+            ],
             'sub_categories' => [
                 'index' => [
                     'title' => 'Sous-catégories de dépenses',

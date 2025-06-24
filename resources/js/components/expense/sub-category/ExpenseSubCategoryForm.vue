@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { InertiaCombobox } from '@/components/ui/custom/combobox';
+import ExpenseCategoryCombobox from '@/components/expense/category/ExpenseCategoryCombobox.vue';
 import {
     FormContent,
     FormControl,
@@ -27,7 +27,7 @@ const { form } = injectFormContext<ExpenseSubCategoryFormData>();
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <InertiaCombobox v-model="form.expense_category" data="expenseCategories" by="id" label="name" />
+                <ExpenseCategoryCombobox v-model="form.expense_category" :autofocus />
             </FormControl>
             <FormError :message="form.errors.expense_category_id" />
         </FormField>

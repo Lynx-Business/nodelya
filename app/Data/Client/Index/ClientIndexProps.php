@@ -23,6 +23,6 @@ class ClientIndexProps extends Resource
 
         #[AutoInertiaLazy]
         #[EnumArrayOf(TrashedFilter::class)]
-        public Lazy|array $trashed_filters,
+        public Lazy|array $trashedFilters,
     ) {}
 }

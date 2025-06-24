@@ -48,7 +48,7 @@ class ExpenseCategoryController extends Controller
                     PaginatedDataCollection::class,
                 ),
             ),
-            'trashed_filters' => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));
     }
 

@@ -1,31 +1,23 @@
 <?php
 
-namespace App\Data\Expense\SubCategory\Index;
+namespace App\Data\Expense\Item\Form;
 
-use App\Attributes\EnumArrayOf;
 use App\Data\Expense\Category\ExpenseCategoryListResource;
+use App\Data\Expense\SubCategory\ExpenseSubCategoryListResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
-use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
-use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class ExpenseSubCategoryIndexProps extends Resource
+class ExpenseItemFormProps extends Resource
 {
     public function __construct(
-        public ExpenseSubCategoryIndexRequest $request,
-
         public TeamListResource $team,
-
-        #[AutoInertiaLazy]
-        #[EnumArrayOf(ExpenseType::class)]
-        public Lazy|array $expenseTypes,
 
         public ExpenseType $expenseType,
 
@@ -34,11 +26,9 @@ class ExpenseSubCategoryIndexProps extends Resource
         public Lazy|DataCollection $expenseCategories,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseSubCategoryIndexResource::class)]
-        public Lazy|PaginatedDataCollection $expenseSubCategories,
+        #[DataCollectionOf(ExpenseSubCategoryListResource::class)]
+        public Lazy|DataCollection $expenseSubCategories,
 
-        #[AutoInertiaLazy]
-        #[EnumArrayOf(TrashedFilter::class)]
-        public Lazy|array $trashedFilters,
+        public ?ExpenseItemFormResource $expenseItem,
     ) {}
 }

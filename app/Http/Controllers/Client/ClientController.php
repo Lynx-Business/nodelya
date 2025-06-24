@@ -44,7 +44,7 @@ class ClientController extends Controller
                 ),
             ),
 
-            'trashed_filters' => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));
     }
 

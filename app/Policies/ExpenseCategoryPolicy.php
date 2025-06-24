@@ -57,11 +57,6 @@ class ExpenseCategoryPolicy
         return $user->is_owner;
     }
 
-    public function select(User $user, ExpenseCategory $expenseCategory): bool
-    {
-        return $user->hasTeam($expenseCategory->team_id);
-    }
-
     public function trash(User $user, ExpenseCategory $expenseCategory): bool
     {
         if ($expenseCategory->is_trashed) {

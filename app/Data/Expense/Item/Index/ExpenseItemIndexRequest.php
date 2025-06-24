@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Data\Expense\SubCategory\Index;
+namespace App\Data\Expense\Item\Index;
 
 use App\Data\Expense\Category\ExpenseCategoryListResource;
+use App\Data\Expense\SubCategory\ExpenseSubCategoryListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseSubCategory;
 use App\Models\Team;
 use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Validation\Rule;
@@ -19,11 +21,15 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[MergeValidationRules]
-class ExpenseSubCategoryIndexRequest extends Data
+class ExpenseItemIndexRequest extends Data
 {
     #[Computed]
     #[DataCollectionOf(ExpenseCategoryListResource::class)]
     public ?DataCollection $expense_categories;
+
+    #[Computed]
+    #[DataCollectionOf(ExpenseSubCategoryListResource::class)]
+    public ?DataCollection $expense_sub_categories;
 
     public function __construct(
         public ?string $q = null,
@@ -35,6 +41,9 @@ class ExpenseSubCategoryIndexRequest extends Data
 
         /** @var array<int> $expense_category_ids */
         public ?array $expense_category_ids = null,
+
+        /** @var array<int> $expense_sub_category_ids */
+        public ?array $expense_sub_category_ids = null,
     ) {
         if ($expense_category_ids) {
             $this->expense_categories = ExpenseCategoryListResource::collect(
@@ -43,18 +52,26 @@ class ExpenseSubCategoryIndexRequest extends Data
                     ->get(),
                 DataCollection::class);
         }
+        if ($expense_sub_category_ids) {
+            $this->expense_sub_categories = ExpenseSubCategoryListResource::collect(
+                ExpenseSubCategory::query()
+                    ->whereIntegerInRaw('id', $expense_sub_category_ids)
+                    ->get(),
+                DataCollection::class);
+        }
     }
 
     public static function attributes(): array
     {
         return [
-            'q'                    => __('query'),
-            'page'                 => __('page'),
-            'per_page'             => __('per_page'),
-            'sort_by'              => __('sort_by'),
-            'sort_direction'       => __('sort_direction'),
-            'trashed'              => __('trashed'),
-            'expense_category_ids' => __('models.expense.category.name.many'),
+            'q'                        => __('query'),
+            'page'                     => __('page'),
+            'per_page'                 => __('per_page'),
+            'sort_by'                  => __('sort_by'),
+            'sort_direction'           => __('sort_direction'),
+            'trashed'                  => __('trashed'),
+            'expense_category_ids'     => __('models.expense.category.name.many'),
+            'expense_sub_category_ids' => __('models.expense.sub_category.name.many'),
         ];
     }
 
@@ -68,6 +85,7 @@ class ExpenseSubCategoryIndexRequest extends Data
         ExpenseType $expenseType,
     ): array {
         $expenseCategory = app(ExpenseCategory::class);
+        $expenseSubCategory = app(ExpenseSubCategory::class);
 
         return [
             'expense_category_ids.*' => [
@@ -75,6 +93,11 @@ class ExpenseSubCategoryIndexRequest extends Data
                 Rule::exists($expenseCategory->getTable(), $expenseCategory->getKeyName())
                     ->where($expenseCategory->getQualifiedTeamIdColumn(), $team->getKey())
                     ->where('type', $expenseType),
+            ],
+            'expense_sub_category_ids.*' => [
+                'integer',
+                Rule::exists($expenseSubCategory->getTable(), $expenseSubCategory->getKeyName())
+                    ->where($expenseSubCategory->getQualifiedTeamIdColumn(), $team->getKey()),
             ],
         ];
     }

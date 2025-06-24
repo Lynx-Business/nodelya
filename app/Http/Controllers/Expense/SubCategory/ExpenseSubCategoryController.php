@@ -47,8 +47,8 @@ class ExpenseSubCategoryController extends Controller
                     ExpenseSubCategory::query()
                         ->whereType($expenseType)
                         ->search($data->q)
-                        ->when($data->expense_category_ids, fn (Builder $q) => $q->whereIntegerInRaw('expense_category_id', $data->expense_category_ids))
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
+                        ->when($data->expense_category_ids, fn (Builder $q) => $q->whereIntegerInRaw('expense_category_id', $data->expense_category_ids))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with([
                             'expenseCategory',
@@ -61,7 +61,7 @@ class ExpenseSubCategoryController extends Controller
                     PaginatedDataCollection::class,
                 ),
             ),
-            'trashed_filters' => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));
     }
 

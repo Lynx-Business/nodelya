@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Data\Expense\SubCategory\Index;
+namespace App\Data\Expense\Item\Index;
 
 use App\Attributes\EnumArrayOf;
 use App\Data\Expense\Category\ExpenseCategoryListResource;
+use App\Data\Expense\SubCategory\ExpenseSubCategoryListResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
@@ -16,10 +17,10 @@ use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class ExpenseSubCategoryIndexProps extends Resource
+class ExpenseItemIndexProps extends Resource
 {
     public function __construct(
-        public ExpenseSubCategoryIndexRequest $request,
+        public ExpenseItemIndexRequest $request,
 
         public TeamListResource $team,
 
@@ -30,12 +31,16 @@ class ExpenseSubCategoryIndexProps extends Resource
         public ExpenseType $expenseType,
 
         #[AutoInertiaLazy]
+        #[DataCollectionOf(ExpenseItemIndexResource::class)]
+        public Lazy|PaginatedDataCollection $expenseItems,
+
+        #[AutoInertiaLazy]
         #[DataCollectionOf(ExpenseCategoryListResource::class)]
         public Lazy|DataCollection $expenseCategories,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseSubCategoryIndexResource::class)]
-        public Lazy|PaginatedDataCollection $expenseSubCategories,
+        #[DataCollectionOf(ExpenseSubCategoryListResource::class)]
+        public Lazy|DataCollection $expenseSubCategories,
 
         #[AutoInertiaLazy]
         #[EnumArrayOf(TrashedFilter::class)]

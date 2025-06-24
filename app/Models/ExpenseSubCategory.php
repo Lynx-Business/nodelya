@@ -86,6 +86,7 @@ class ExpenseSubCategory extends Model
      * @var list<string>
      */
     protected $searchable = [
+        'expenseCategory.name',
         'name',
     ];
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ExpenseCategoryCombobox from '@/components/expense/category/ExpenseCategoryCombobox.vue';
+import ExpenseSubCategoryCombobox from '@/components/expense/sub-category/ExpenseSubCategoryCombobox.vue';
 import TrashedBadge from '@/components/trash/TrashedBadge.vue';
 import TrashedFilterCombobox from '@/components/trash/TrashedFilterCombobox.vue';
 import { Button } from '@/components/ui/button';
@@ -29,10 +30,10 @@ import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useLayout, useLayouts, useObjectOmit } from '@/composables';
 import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
-    ExpenseSubCategoryIndexProps,
-    ExpenseSubCategoryIndexRequest,
-    ExpenseSubCategoryIndexResource,
-    ExpenseSubCategoryOneOrManyRequest,
+    ExpenseItemIndexProps,
+    ExpenseItemIndexRequest,
+    ExpenseItemIndexResource,
+    ExpenseItemOneOrManyRequest,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
@@ -43,34 +44,31 @@ defineOptions({
     layout: useLayouts([
         useLayout(TeamsFormLayout, () => ({})),
         useLayout(TeamsFormExpensesLayout, () => ({
-            model: 'sub-category' as const,
+            model: 'item' as const,
         })),
     ]),
 });
 
-const props = defineProps<ExpenseSubCategoryIndexProps>();
+const props = defineProps<ExpenseItemIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ExpenseSubCategoryIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<ExpenseSubCategoryIndexResource>[] = [
+const selectedRows = ref<ExpenseItemIndexResource[]>([]);
+const rowsActions: DataTableRowsAction<ExpenseItemIndexResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
-        disabled: (items) => items.some((expenseSubCategory) => !expenseSubCategory.can_trash),
+        disabled: (items) => items.some((expenseItem) => !expenseItem.can_trash),
         callback: (items) =>
             alert({
                 variant: 'warning',
-                description: transChoice('messages.expense.sub_categories.trash.confirm', items.length),
+                description: transChoice('messages.expense.items.trash.confirm', items.length),
                 callback: () =>
-                    router.delete<ExpenseSubCategoryOneOrManyRequest>(
-                        route('teams.expenses.sub-categories.trash', {
-                            team: props.team,
-                            expenseType: props.expenseType,
-                        }),
+                    router.delete<ExpenseItemOneOrManyRequest>(
+                        route('teams.expenses.items.trash', { team: props.team, expenseType: props.expenseType }),
                         {
                             data: { ids: items.map(({ id }) => id) },
-                            only: ['expenseSubCategories'],
+                            only: ['expenseItems'],
                             onSuccess: () => {
                                 selectedRows.value = [];
                             },
@@ -81,20 +79,20 @@ const rowsActions: DataTableRowsAction<ExpenseSubCategoryIndexResource>[] = [
     {
         label: trans('restore'),
         icon: ArchiveRestoreIcon,
-        disabled: (items) => items.some((expenseSubCategory) => !expenseSubCategory.can_restore),
+        disabled: (items) => items.some((expenseItem) => !expenseItem.can_restore),
         callback: (items) =>
             alert({
                 variant: 'success',
-                description: transChoice('messages.expense.sub_categories.restore.confirm', items.length),
+                description: transChoice('messages.expense.items.restore.confirm', items.length),
                 callback: () =>
-                    router.patch<ExpenseSubCategoryOneOrManyRequest>(
-                        route('teams.expenses.sub-categories.restore', {
+                    router.patch<ExpenseItemOneOrManyRequest>(
+                        route('teams.expenses.items.restore', {
                             team: props.team,
                             expenseType: props.expenseType,
                         }),
                         { ids: items.map(({ id }) => id) },
                         {
-                            only: ['expenseSubCategories'],
+                            only: ['expenseItems'],
                             onSuccess: () => {
                                 selectedRows.value = [];
                             },
@@ -105,20 +103,17 @@ const rowsActions: DataTableRowsAction<ExpenseSubCategoryIndexResource>[] = [
     {
         label: trans('delete'),
         icon: Trash2Icon,
-        disabled: (items) => items.some((expenseSubCategory) => !expenseSubCategory.can_delete),
+        disabled: (items) => items.some((expenseItem) => !expenseItem.can_delete),
         callback: (items) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.expense.sub_categories.delete.confirm', items.length),
+                description: transChoice('messages.expense.items.delete.confirm', items.length),
                 callback: () =>
-                    router.delete<ExpenseSubCategoryOneOrManyRequest>(
-                        route('teams.expenses.sub-categories.delete', {
-                            team: props.team,
-                            expenseType: props.expenseType,
-                        }),
+                    router.delete<ExpenseItemOneOrManyRequest>(
+                        route('teams.expenses.items.delete', { team: props.team, expenseType: props.expenseType }),
                         {
                             data: { ids: items.map(({ id }) => id) },
-                            only: ['expenseSubCategories'],
+                            only: ['expenseItems'],
                             onSuccess: () => {
                                 selectedRows.value = [];
                             },
@@ -127,50 +122,50 @@ const rowsActions: DataTableRowsAction<ExpenseSubCategoryIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ExpenseSubCategoryIndexResource>[] = [
+const rowActions: DataTableRowAction<ExpenseItemIndexResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (expenseSubCategory) => expenseSubCategory.can_update,
-        disabled: (expenseSubCategory) => !expenseSubCategory.can_view,
-        href: (expenseSubCategory) =>
-            route('teams.expenses.sub-categories.edit', {
+        hidden: (expenseItem) => expenseItem.can_update,
+        disabled: (expenseItem) => !expenseItem.can_view,
+        href: (expenseItem) =>
+            route('teams.expenses.items.edit', {
                 team: props.team,
                 expenseType: props.expenseType,
-                expenseSubCategory,
+                expenseItem,
             }),
     },
     {
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
-        disabled: (expenseSubCategory) => !expenseSubCategory.can_update,
-        href: (expenseSubCategory) =>
-            route('teams.expenses.sub-categories.edit', {
+        disabled: (expenseItem) => !expenseItem.can_update,
+        href: (expenseItem) =>
+            route('teams.expenses.items.edit', {
                 team: props.team,
                 expenseType: props.expenseType,
-                expenseSubCategory,
+                expenseItem,
             }),
     },
     {
         type: 'callback',
         label: trans('trash'),
         icon: ArchiveIcon,
-        disabled: (expenseSubCategory) => !expenseSubCategory.can_trash,
-        callback: (expenseSubCategory) =>
+        disabled: (expenseItem) => !expenseItem.can_trash,
+        callback: (expenseItem) =>
             alert({
                 variant: 'warning',
-                description: transChoice('messages.expense.sub_categories.trash.confirm', 1),
+                description: transChoice('messages.expense.items.trash.confirm', 1),
                 callback: () =>
-                    router.delete<ExpenseSubCategoryOneOrManyRequest>(
-                        route('teams.expenses.sub-categories.trash', {
+                    router.delete<ExpenseItemOneOrManyRequest>(
+                        route('teams.expenses.items.trash', {
                             team: props.team,
                             expenseType: props.expenseType,
-                            expenseSubCategory,
+                            expenseItem,
                         }),
                         {
-                            only: ['expenseSubCategories'],
+                            only: ['expenseItems'],
                         },
                     ),
             }),
@@ -179,21 +174,21 @@ const rowActions: DataTableRowAction<ExpenseSubCategoryIndexResource>[] = [
         type: 'callback',
         label: trans('restore'),
         icon: ArchiveRestoreIcon,
-        disabled: (expenseSubCategory) => !expenseSubCategory.can_restore,
-        callback: (expenseSubCategory) =>
+        disabled: (expenseItem) => !expenseItem.can_restore,
+        callback: (expenseItem) =>
             alert({
                 variant: 'success',
-                description: transChoice('messages.expense.sub_categories.restore.confirm', 1),
+                description: transChoice('messages.expense.items.restore.confirm', 1),
                 callback: () =>
-                    router.patch<ExpenseSubCategoryOneOrManyRequest>(
-                        route('teams.expenses.sub-categories.restore', {
+                    router.patch<ExpenseItemOneOrManyRequest>(
+                        route('teams.expenses.items.restore', {
                             team: props.team,
                             expenseType: props.expenseType,
-                            expenseSubCategory,
+                            expenseItem,
                         }),
                         undefined,
                         {
-                            only: ['expenseSubCategories'],
+                            only: ['expenseItems'],
                         },
                     ),
             }),
@@ -202,39 +197,40 @@ const rowActions: DataTableRowAction<ExpenseSubCategoryIndexResource>[] = [
         type: 'callback',
         label: trans('delete'),
         icon: Trash2Icon,
-        disabled: (expenseSubCategory) => !expenseSubCategory.can_delete,
-        callback: (expenseSubCategory) =>
+        disabled: (expenseItem) => !expenseItem.can_delete,
+        callback: (expenseItem) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.expense.sub_categories.delete.confirm', 1),
+                description: transChoice('messages.expense.items.delete.confirm', 1),
                 callback: () =>
-                    router.delete<ExpenseSubCategoryOneOrManyRequest>(
-                        route('teams.expenses.sub-categories.delete', {
+                    router.delete<ExpenseItemOneOrManyRequest>(
+                        route('teams.expenses.items.delete', {
                             team: props.team,
                             expenseType: props.expenseType,
-                            expenseSubCategory,
+                            expenseItem,
                         }),
                         {
-                            only: ['expenseSubCategories'],
+                            only: ['expenseItems'],
                         },
                     ),
             }),
     },
 ];
 
-const filters = useFilters<ExpenseSubCategoryIndexRequest>(
-    route('teams.expenses.sub-categories.index', { team: props.team, expenseType: props.expenseType }),
+const filters = useFilters<ExpenseItemIndexRequest>(
+    route('teams.expenses.items.index', { team: props.team, expenseType: props.expenseType }),
     {
         q: props.request.q ?? '',
-        page: props.request.page ?? props.expenseSubCategories?.meta.current_page,
-        per_page: props.request.per_page ?? props.expenseSubCategories?.meta.per_page,
+        page: props.request.page ?? props.expenseItems?.meta.current_page,
+        per_page: props.request.per_page ?? props.expenseItems?.meta.per_page,
         sort_by: props.request.sort_by,
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
-        expense_categories: props.request.expense_categories,
+        expense_categories: props.request.expense_categories ?? [],
+        expense_sub_categories: props.request.expense_sub_categories ?? [],
     },
     {
-        only: ['expenseSubCategories'],
+        only: ['expenseItems'],
         immediate: true,
         debounceReload(keys) {
             return !keys.includes('page') && !keys.includes('per_page');
@@ -246,8 +242,9 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
         },
         transform(data) {
             return {
-                ...useObjectOmit(data, 'expense_categories').value,
+                ...useObjectOmit(data, 'expense_categories', 'expense_sub_categories').value,
                 expense_category_ids: data.expense_categories?.map(({ id }) => id),
+                expense_sub_category_ids: data.expense_sub_categories?.map(({ id }) => id),
             };
         },
     },
@@ -255,7 +252,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
 </script>
 
 <template>
-    <Head :title="$t('pages.teams.expenses.sub_categories.index.title')" />
+    <Head :title="$t('pages.teams.expenses.items.index.title')" />
 
     <Section class="w-full p-0!">
         <SectionContent class="px-0!">
@@ -264,7 +261,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                 v-model:selected-rows="selectedRows"
                 v-model:sort-by="filters.sort_by"
                 v-model:sort-direction="filters.sort_direction"
-                :data="expenseSubCategories"
+                :data="expenseItems"
                 :rows-actions
                 :row-actions
             >
@@ -273,7 +270,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                     <FiltersSheet
                         :filters
                         :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
-                        :data="['trashedFilters']"
+                        :data="['trashedFilters', 'expenseCategories', 'expenseSubCategories']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
@@ -297,15 +294,25 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                                     <ExpenseCategoryCombobox v-model="filters.expense_categories" multiple />
                                 </FormControl>
                             </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.expense.sub_category.name.many') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <ExpenseSubCategoryCombobox v-model="filters.expense_sub_categories" multiple />
+                                </FormControl>
+                            </FormField>
                         </FiltersSheetContent>
                     </FiltersSheet>
                 </FormContent>
                 <FormContent class="flex items-center justify-between">
                     <Button class="ml-auto" as-child>
-                        <InertiaLink :href="route('teams.expenses.sub-categories.create', { team, expenseType })">
+                        <InertiaLink :href="route('teams.expenses.items.create', { team, expenseType })">
                             <CirclePlusIcon />
                             <CapitalizeText class="max-sm:hidden">
-                                {{ $t('pages.teams.expenses.sub_categories.create.title') }}
+                                {{ $t('pages.teams.expenses.items.create.title') }}
                             </CapitalizeText>
                         </InertiaLink>
                     </Button>
@@ -316,14 +323,17 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                             <DataTableHead>
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
-                            <DataTableSortableHead value="name">
-                                {{ $t('models.expense.sub_category.fields.expense_category') }}
+                            <DataTableSortableHead value="expense_category.name">
+                                {{ $t('models.expense.category.name.one') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="expense_sub_category.name">
+                                {{ $t('models.expense.sub_category.name.one') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">
-                                {{ $t('models.expense.sub_category.fields.name') }}
+                                {{ $t('models.expense.item.fields.name') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead v-if="filters.trashed" value="deleted_at">
-                                {{ $t('models.expense.sub_category.fields.deleted_at') }}
+                                {{ $t('models.expense.item.fields.deleted_at') }}
                             </DataTableSortableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
@@ -332,22 +342,25 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                     </DataTableHeader>
                     <DataTableBody>
                         <DataTableRow
-                            v-for="expenseSubCategory in rows"
-                            :key="expenseSubCategory.id"
-                            :item="expenseSubCategory"
-                            :class="{ 'bg-destructive/5': expenseSubCategory.deleted_at }"
+                            v-for="expenseItem in rows"
+                            :key="expenseItem.id"
+                            :item="expenseItem"
+                            :class="{ 'bg-destructive/5': expenseItem.deleted_at }"
                         >
                             <DataTableCell>
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseSubCategory.expense_category.name }}
+                                {{ expenseItem.expense_category.name }}
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseSubCategory.name }}
+                                {{ expenseItem.expense_sub_category?.name }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ expenseItem.name }}
                             </DataTableCell>
                             <DataTableCell v-if="filters.trashed">
-                                <TrashedBadge :item="expenseSubCategory" />
+                                <TrashedBadge :item="expenseItem" />
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

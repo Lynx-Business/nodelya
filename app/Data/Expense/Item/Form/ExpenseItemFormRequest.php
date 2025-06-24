@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Data\Expense\SubCategory\Form;
+namespace App\Data\Expense\Item\Form;
 
 use App\Enums\Expense\ExpenseType;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
 use App\Models\Team;
 use Illuminate\Container\Attributes\RouteParameter;
@@ -17,7 +18,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[MergeValidationRules]
-class ExpenseSubCategoryFormRequest extends Data
+class ExpenseItemFormRequest extends Data
 {
     public function __construct(
         #[Hidden]
@@ -25,10 +26,12 @@ class ExpenseSubCategoryFormRequest extends Data
         public Team $team,
 
         #[Hidden]
-        #[FromRouteParameter('expenseSubCategory')]
-        public ?ExpenseSubCategory $expense_sub_category,
+        #[FromRouteParameter('expenseItem')]
+        public ?ExpenseItem $expense_item,
 
         public int $expense_category_id,
+
+        public ?int $expense_sub_category_id,
 
         public string $name,
     ) {}
@@ -36,8 +39,9 @@ class ExpenseSubCategoryFormRequest extends Data
     public static function attributes(): array
     {
         return [
-            'expense_category_id' => __('models.expense.category.name.one'),
-            'name'                => __('models.expense.sub_category.fields.name'),
+            'expense_category_id'     => __('models.expense.category.name.one'),
+            'expense_sub_category_id' => __('models.expense.sub_category.name.one'),
+            'name'                    => __('models.expense.item.fields.name'),
         ];
     }
 
@@ -51,6 +55,7 @@ class ExpenseSubCategoryFormRequest extends Data
         ExpenseType $expenseType,
     ): array {
         $expenseCategory = app(ExpenseCategory::class);
+        $expenseSubCategory = app(ExpenseSubCategory::class);
 
         return [
             'expense_category_id' => [
@@ -58,6 +63,12 @@ class ExpenseSubCategoryFormRequest extends Data
                 Rule::exists($expenseCategory->getTable(), $expenseCategory->getKeyName())
                     ->where($expenseCategory->getQualifiedTeamIdColumn(), $team->getKey())
                     ->where('type', $expenseType),
+            ],
+            'expense_sub_category_id' => [
+                'integer',
+                Rule::exists($expenseSubCategory->getTable(), $expenseSubCategory->getKeyName())
+                    ->where($expenseSubCategory->getQualifiedTeamIdColumn(), $team->getKey())
+                    ->where($expenseSubCategory->getQualifiedExpenseCategoryIdColumn(), data_get($context->payload, 'expense_category_id')),
             ],
         ];
     }
