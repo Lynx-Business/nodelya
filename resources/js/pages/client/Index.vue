@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import TrashedFilterCombobox from '@/components/trash/TrashedFilterCombobox.vue';
 import { Button } from '@/components/ui/button';
-import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
     DataTableBody,
@@ -214,7 +214,7 @@ const filters = useFilters<ClientIndexRequest>(
                     <FiltersSheet
                         :filters
                         :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
-                        :data="['trashed_filters']"
+                        :data="['trashedFilters']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
@@ -225,7 +225,7 @@ const filters = useFilters<ClientIndexRequest>(
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
-                                    <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                    <TrashedFilterCombobox v-model="filters.trashed" />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>
