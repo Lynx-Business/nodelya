@@ -54,7 +54,6 @@ class ExpenseSubCategoryIndexRequest extends Data
             'sort_by'              => __('sort_by'),
             'sort_direction'       => __('sort_direction'),
             'trashed'              => __('trashed'),
-            'trashed'              => __('trashed'),
             'expense_category_ids' => __('models.expense.category.name.many'),
         ];
     }

@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property-read \App\Models\User|null $creator
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCategory> $expenseCategories
  * @property-read int|null $expense_categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseItem> $expenseItems
+ * @property-read int|null $expense_items_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseSubCategory> $expenseSubCategories
  * @property-read int|null $expense_sub_categories_count
  * @property-read true $is_trashable
@@ -109,6 +111,11 @@ class Team extends Model
     public function expenseCategories(): HasMany
     {
         return $this->hasMany(ExpenseCategory::class)->whereBelongsToAnyTeam();
+    }
+
+    public function expenseItems(): HasMany
+    {
+        return $this->hasMany(ExpenseItem::class)->whereBelongsToAnyTeam();
     }
 
     public function expenseSubCategories(): HasMany

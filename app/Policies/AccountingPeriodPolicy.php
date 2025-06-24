@@ -57,11 +57,6 @@ class AccountingPeriodPolicy
         return $user->is_owner;
     }
 
-    public function select(User $user, AccountingPeriod $accountingPeriod): bool
-    {
-        return $user->hasTeam($accountingPeriod->team_id);
-    }
-
     public function trash(User $user, AccountingPeriod $accountingPeriod): bool
     {
         if ($accountingPeriod->is_trashed) {

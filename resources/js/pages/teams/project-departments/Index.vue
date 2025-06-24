@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TrashedBadge from '@/components/trash/TrashedBadge.vue';
+import TrashedFilterCombobox from '@/components/trash/TrashedFilterCombobox.vue';
 import { Button } from '@/components/ui/button';
-import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
     DataTableBody,
@@ -229,7 +229,7 @@ const filters = useFilters<ProjectDepartmentIndexRequest>(
                     <FiltersSheet
                         :filters
                         :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
-                        :data="['trashed_filters']"
+                        :data="['trashedFilters']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
@@ -240,7 +240,7 @@ const filters = useFilters<ProjectDepartmentIndexRequest>(
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
-                                    <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                    <TrashedFilterCombobox v-model="filters.trashed" />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>

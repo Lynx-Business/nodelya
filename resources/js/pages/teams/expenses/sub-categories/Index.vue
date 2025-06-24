@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import ExpenseCategoryCombobox from '@/components/expense/category/ExpenseCategoryCombobox.vue';
 import TrashedBadge from '@/components/trash/TrashedBadge.vue';
+import TrashedFilterCombobox from '@/components/trash/TrashedFilterCombobox.vue';
 import { Button } from '@/components/ui/button';
-import { EnumCombobox, InertiaCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
     DataTableBody,
@@ -272,7 +273,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                     <FiltersSheet
                         :filters
                         :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
-                        :data="['trashed_filters']"
+                        :data="['trashedFilters']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
@@ -283,7 +284,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
-                                    <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                    <TrashedFilterCombobox v-model="filters.trashed" />
                                 </FormControl>
                             </FormField>
                             <FormField>
@@ -293,13 +294,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
-                                    <InertiaCombobox
-                                        v-model="filters.expense_categories"
-                                        multiple
-                                        by="id"
-                                        label="name"
-                                        data="expenseCategories"
-                                    />
+                                    <ExpenseCategoryCombobox v-model="filters.expense_categories" multiple />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>

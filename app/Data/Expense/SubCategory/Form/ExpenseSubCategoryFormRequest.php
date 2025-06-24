@@ -29,14 +29,15 @@ class ExpenseSubCategoryFormRequest extends Data
         public ?ExpenseSubCategory $expense_sub_category,
 
         public int $expense_category_id,
+
         public string $name,
     ) {}
 
     public static function attributes(): array
     {
         return [
-            'name' => __('models.expense.sub_category.fields.expense_category'),
-            'name' => __('models.expense.sub_category.fields.name'),
+            'expense_category_id' => __('models.expense.category.name.one'),
+            'name'                => __('models.expense.sub_category.fields.name'),
         ];
     }
 

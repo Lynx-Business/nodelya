@@ -75,6 +75,26 @@ return [
                 'success' => 'Catégorie de dépenses supprimée avec succès|Catégories de dépenses supprimées avec succès',
             ],
         ],
+        'items' => [
+            'store' => [
+                'success' => 'Poste de dépenses créé avec succès',
+            ],
+            'update' => [
+                'success' => 'Poste de dépenses mis à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver ce poste de dépenses ?|Êtes-vous sûr de vouloir archiver ces postes de dépenses ?',
+                'success' => 'Poste de dépenses archivé avec succès|Postes de dépenses archivés avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer ce poste de dépenses ?|Êtes-vous sûr de vouloir restaurer ces postes de dépenses ?',
+                'success' => 'Poste de dépenses restauré avec succès|Postes de dépenses restaurés avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer ce poste de dépenses ?|Êtes-vous sûr de vouloir supprimer ces postes de dépenses ?',
+                'success' => 'Poste de dépenses supprimé avec succès|Postes de dépenses supprimés avec succès',
+            ],
+        ],
         'sub_categories' => [
             'store' => [
                 'success' => 'Sous-catégorie de dépenses créée avec succès',

@@ -9,6 +9,7 @@ use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
+use App\Http\Controllers\Expense\Item\ExpenseItemController;
 use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProjectDepartment\ProjectDepartmentController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
 use App\Models\ProjectDepartment;
 use App\Models\Team;
@@ -116,6 +118,16 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
                 Route::delete('/trash/{expenseCategory?}', 'trash')->name('trash');
                 Route::patch('/restore/{expenseCategory?}', 'restore')->name('restore');
                 Route::delete('/delete/{expenseCategory?}', 'destroy')->name('delete');
+            });
+            Route::prefix('/items')->name('items.')->controller(ExpenseItemController::class)->group(function () {
+                Route::get('/', 'index')->name('index')->can('viewAny', ExpenseItem::class);
+                Route::get('/create', 'create')->name('create')->can('create', ExpenseItem::class);
+                Route::post('/create', 'store')->name('store')->can('create', ExpenseItem::class);
+                Route::get('/edit/{expenseItem}', 'edit')->name('edit')->withTrashed()->can('view', 'expenseItem');
+                Route::put('/edit/{expenseItem}', 'update')->name('update')->withTrashed()->can('update', 'expenseItem');
+                Route::delete('/trash/{expenseItem?}', 'trash')->name('trash');
+                Route::patch('/restore/{expenseItem?}', 'restore')->name('restore');
+                Route::delete('/delete/{expenseItem?}', 'destroy')->name('delete');
             });
             Route::prefix('/sub-categories')->name('sub-categories.')->controller(ExpenseSubCategoryController::class)->group(function () {
                 Route::get('/', 'index')->name('index')->can('viewAny', ExpenseSubCategory::class);

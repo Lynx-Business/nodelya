@@ -6,7 +6,7 @@ import { Enum, ExpenseType, type NavItem } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { computed } from 'vue';
 
-type ExpenseModel = 'category' | 'sub-category';
+type ExpenseModel = 'category' | 'item' | 'sub-category';
 type Props = {
     model: ExpenseModel;
 };
@@ -16,6 +16,8 @@ function plural(model: ExpenseModel): string {
     switch (model) {
         case 'sub-category':
             return 'sub-categories';
+        case 'item':
+            return 'items';
         case 'category':
         default:
             return 'categories';
@@ -41,7 +43,7 @@ const typeTabs = useRouterComputed((): NavItem[] =>
     }),
 );
 
-const models = computed((): ExpenseModel[] => ['category', 'sub-category']);
+const models = computed((): ExpenseModel[] => ['category', 'sub-category', 'item']);
 const modelTabs = useRouterComputed((): NavItem[] =>
     models.value.map((model) => {
         const href = route(`teams.expenses.${plural(model)}.index`, {
