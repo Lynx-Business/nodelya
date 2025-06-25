@@ -2,30 +2,23 @@
 
 namespace App\Data\Deal;
 
-use Spatie\LaravelData\Attributes\MergeValidationRules;
+use Spatie\LaravelData\Attributes\MapInputName;
+use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Support\Validation\ValidationContext;
+use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-#[MergeValidationRules]
+#[MapInputName(SnakeCaseMapper::class)]
+#[MapOutputName(SnakeCaseMapper::class)]
 class DealScheduleData extends Data
 {
+    /**
+     * @param  array<string, YearScheduleData>  $years
+     */
     public function __construct(
-        //
+
+        /** @var \App\Data\YearScheduleData[] */
+        public array $years,
     ) {}
-
-    public static function attributes(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function rules(ValidationContext $context): array
-    {
-        return [
-            //
-        ];
-    }
 }

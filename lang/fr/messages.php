@@ -241,6 +241,27 @@ return [
         ],
     ],
 
+    'commercial_deals' => [
+        'store' => [
+            'success' => 'Affaire commerciale créée avec succès',
+        ],
+        'update' => [
+            'success' => 'Affaire commerciale mise à jour avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver cette affaire commerciale ?|Êtes-vous sûr de vouloir archiver ces affaires commerciales ?',
+            'success' => 'Affaire commerciale archivée avec succès|Affaires commerciales archivées avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer cette affaire commerciale ?|Êtes-vous sûr de vouloir restaurer ces affaires commerciales ?',
+            'success' => 'Affaire commerciale restaurée avec succès|Affaires commerciales restaurées avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer cette affaire commerciale ?|Êtes-vous sûr de vouloir supprimer ces affaires commerciales ?',
+            'success' => 'Affaire commerciale supprimée avec succès|Affaires commerciales supprimées avec succès',
+        ],
+    ],
+
     'settings' => [
         'password' => [
             'update' => [
