@@ -92,7 +92,7 @@ return [
             'many' => 'affaires',
         ],
         'fields' => [
-            'amount_in_cents'       => 'montant en centimes',
+            'amount'                => 'montant',
             'code'                  => 'code',
             'client_id'             => 'client',
             'duration_in_months'    => 'durée en mois',

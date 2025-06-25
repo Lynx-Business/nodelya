@@ -178,6 +178,21 @@ export type ClientOneOrManyRequest = {
     client?: number;
     ids?: Array<number>;
 };
+export type CommercialDealFormProps = {
+    deal?: any;
+};
+export type CommercialDealFormRequest = {
+    deal?: any;
+    name: string;
+    amount: number;
+    code?: string;
+    reference?: string;
+    success_rate: number;
+    ordered_at: string;
+    duration_in_months: number;
+    starts_at: string;
+    schedule?: Array<any>;
+};
 export type CommercialDealIndexProps = {
     request: CommercialDealIndexRequest;
     commercial_deals?: {
@@ -222,7 +237,9 @@ export type ConfirmPasswordRequest = {
 };
 export type DashboardAdminIndexProps = {};
 export type DashboardIndexProps = {};
-export type DealScheduleData = {};
+export type DealScheduleData = {
+    years: { [key: string]: YearScheduleData };
+};
 export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
 export type EditProfileSettingsProps = {
@@ -556,6 +573,12 @@ export type RoleListResource = {
     display_name: string;
 };
 export type RoleName = 'tester' | 'owner' | 'member' | 'editor';
+export type ScheduleItemData = {
+    date: string;
+    amount: number;
+    status: string;
+    title: string;
+};
 export type TeamFormProps = {
     team?: TeamFormResource;
 };
@@ -767,4 +790,7 @@ export type UserResource = {
 export type VerifyEmailProps = {};
 export type VerifyEmailRequest = {
     code: string;
+};
+export type YearScheduleData = {
+    data: Array<ScheduleItemData>;
 };

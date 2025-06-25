@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Deal;
 
+use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
+use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
 use App\Enums\Trashed\TrashedFilter;
+use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
 use Illuminate\Http\Request;
@@ -45,17 +48,31 @@ class CommercialDealController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        //
+        return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([]));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CommercialDealFormRequest $data)
     {
-        //
+        /** @var ?Deal $deal */
+        $deal = Services::commercialDeal()->createOrUpdate->execute($data);
+
+        if (is_null($deal)) {
+            Services::toast()->error->execute();
+
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.commercial_deals.store.success'));
+
+        return to_route('commercial.deals.index');
     }
 
     /**

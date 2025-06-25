@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read bool $can_delete
  * @property-read bool $can_restore
  * @property-read bool $can_trash
@@ -42,7 +41,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory search(?string $q)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseCategory whereTeamId($value)
