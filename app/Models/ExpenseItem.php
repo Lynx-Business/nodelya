@@ -23,6 +23,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
  * @property-read \App\Models\ExpenseCategory $expenseCategory
  * @property-read \App\Models\ExpenseSubCategory|null $expenseSubCategory
  * @property-read true $is_trashable
