@@ -30,18 +30,10 @@ class ExpenseSubCategoryController extends Controller
     public function index(Team $team, ExpenseType $expenseType, ExpenseSubCategoryIndexRequest $data)
     {
         return Inertia::render('teams/expenses/sub-categories/Index', ExpenseSubCategoryIndexProps::from([
-            'request'           => $data,
-            'team'              => TeamListResource::from($team),
-            'expenseTypes'      => Lazy::closure(fn () => ExpenseType::labels()),
-            'expenseType'       => $expenseType,
-            'expenseCategories' => Lazy::inertia(
-                fn () => ExpenseCategoryListResource::collect(
-                    ExpenseCategory::query()
-                        ->whereType($expenseType)
-                        ->orderBy('name')
-                        ->get(),
-                ),
-            ),
+            'request'              => $data,
+            'team'                 => TeamListResource::from($team),
+            'expenseTypes'         => Lazy::closure(fn () => ExpenseType::labels()),
+            'expenseType'          => $expenseType,
             'expenseSubCategories' => Lazy::inertia(
                 fn () => ExpenseSubCategoryIndexResource::collect(
                     ExpenseSubCategory::query()
@@ -61,7 +53,15 @@ class ExpenseSubCategoryController extends Controller
                     PaginatedDataCollection::class,
                 ),
             ),
-            'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'trashedFilters'    => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'expenseCategories' => Lazy::inertia(
+                fn () => ExpenseCategoryListResource::collect(
+                    ExpenseCategory::query()
+                        ->whereType($expenseType)
+                        ->orderBy('name')
+                        ->get(),
+                ),
+            ),
         ]));
     }
 

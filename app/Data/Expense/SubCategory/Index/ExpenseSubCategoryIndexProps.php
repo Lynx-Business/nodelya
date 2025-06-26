@@ -30,15 +30,15 @@ class ExpenseSubCategoryIndexProps extends Resource
         public ExpenseType $expenseType,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseCategoryListResource::class)]
-        public Lazy|DataCollection $expenseCategories,
-
-        #[AutoInertiaLazy]
         #[DataCollectionOf(ExpenseSubCategoryIndexResource::class)]
         public Lazy|PaginatedDataCollection $expenseSubCategories,
 
         #[AutoInertiaLazy]
         #[EnumArrayOf(TrashedFilter::class)]
         public Lazy|array $trashedFilters,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(ExpenseCategoryListResource::class)]
+        public Lazy|DataCollection $expenseCategories,
     ) {}
 }

@@ -274,7 +274,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                     <FiltersSheet
                         :filters
                         :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
-                        :data="['trashedFilters']"
+                        :data="['trashedFilters', 'expenseCategories']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>

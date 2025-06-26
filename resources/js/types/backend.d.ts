@@ -354,7 +354,6 @@ export type ExpenseSubCategoryIndexProps = {
     team: TeamListResource;
     expenseTypes?: Array<{ value: ExpenseType; label: string }>;
     expenseType: ExpenseType;
-    expenseCategories?: Array<ExpenseCategoryListResource>;
     expenseSubCategories?: {
         data: Array<ExpenseSubCategoryIndexResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
@@ -373,6 +372,7 @@ export type ExpenseSubCategoryIndexProps = {
         };
     };
     trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    expenseCategories?: Array<ExpenseCategoryListResource>;
 };
 export type ExpenseSubCategoryIndexRequest = {
     expense_categories?: Array<ExpenseCategoryListResource>;
