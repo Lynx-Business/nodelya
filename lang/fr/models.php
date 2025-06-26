@@ -132,6 +132,8 @@ return [
             'deleted_at' => 'archivée le',
             'is_trashed' => 'est archivée',
             'name'       => 'nom',
+            'logo'       => 'logo',
+            'settings'   => 'paramètres',
         ],
     ],
 

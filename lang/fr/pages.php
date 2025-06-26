@@ -57,11 +57,11 @@ return [
             ],
             'step_one' => [
                 'title'       => 'Société',
-                'description' => 'Créez votre première société',
+                'description' => 'Créez votre première société pour organiser vos affaires',
             ],
             'step_two' => [
                 'title'       => 'Année fiscale',
-                'description' => 'Saisissez la période fiscale pour votre société',
+                'description' => 'Saisissez la période fiscale pour démarrer vos activités',
             ],
         ],
     ],

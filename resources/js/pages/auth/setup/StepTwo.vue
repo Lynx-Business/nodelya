@@ -2,7 +2,7 @@
 import AccountingPeriodForm from '@/components/accounting-period/AccountingPeriodForm.vue';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter } from '@/components/ui/custom/section';
-import { useAccountingPeriodForm, useAuth, useLayout } from '@/composables';
+import { useAccountingPeriodForm, useLayout } from '@/composables';
 import { AuthSetupLayout } from '@/layouts';
 import { Head } from '@inertiajs/vue3';
 
@@ -12,7 +12,6 @@ defineOptions({
     })),
 });
 
-const { team } = useAuth();
 const form = useAccountingPeriodForm();
 
 function submit() {

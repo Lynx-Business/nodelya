@@ -1,5 +1,6 @@
-import { useComputedForm, useObjectOmit } from '@/composables';
+import { useComputedForm } from '@/composables';
 import { ExpenseItemFormRequest, ExpenseItemFormResource } from '@/types';
+import { reactiveOmit } from '@vueuse/core';
 
 export function useExpenseItemForm(expenseItem?: Partial<ExpenseItemFormResource>) {
     const form = useComputedForm({
@@ -18,7 +19,7 @@ export type ExpenseItemFormData = ReturnType<ExpenseItemForm['data']>;
 
 export function transformExpenseItemForm(data: ExpenseItemFormData): ExpenseItemFormRequest {
     return {
-        ...useObjectOmit(data, 'expense_category', 'expense_sub_category').value,
+        ...reactiveOmit(data, 'expense_category', 'expense_sub_category'),
         expense_category_id: data.expense_category!.id,
         expense_sub_category_id: data.expense_sub_category?.id,
     };

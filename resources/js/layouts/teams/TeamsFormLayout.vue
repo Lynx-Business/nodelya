@@ -64,7 +64,7 @@ const sidebarNavItems = useRouterComputed((): NavItem[] =>
         <SectionContent>
             <div class="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                 <aside class="min-w-48">
-                    <ResponsiveTabs :tabs="sidebarNavItems" orientation="vertical">
+                    <ResponsiveTabs :tabs="sidebarNavItems" orientation="vertical" variant="ghost">
                         <ResponsiveTabsTrigger align="start" />
                     </ResponsiveTabs>
                 </aside>

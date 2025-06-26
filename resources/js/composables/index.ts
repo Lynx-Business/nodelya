@@ -1,5 +1,6 @@
 export * from './forms';
 export * from './useAlert';
+export * from './useAppearance';
 export * from './useArrayWrap';
 export * from './useAuth';
 export * from './useAutofocus';
@@ -9,8 +10,6 @@ export * from './useFormatter';
 export * from './useIsDesktop';
 export * from './useLayout';
 export * from './useLocale';
-export * from './useObjectOmit';
-export * from './useObjectPick';
 export * from './usePageProp';
 export * from './useParser';
 export * from './useRouterComputed';

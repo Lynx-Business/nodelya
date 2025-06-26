@@ -430,6 +430,7 @@ export type MediaResource = {
     id: number;
     uuid: string;
     url: string;
+    custom_properties?: Record<string, any>;
 };
 export type PermissionListResource = {
     id: number;
@@ -522,11 +523,15 @@ export type TeamFormProps = {
 };
 export type TeamFormRequest = {
     name: string;
+    logo?: string;
+    settings?: TeamSettingsData;
 };
 export type TeamFormResource = {
     id: number;
     creator_id: number;
+    logo?: MediaResource;
     name: string;
+    settings?: TeamSettingsData;
     can_view: boolean;
     can_update: boolean;
     can_trash: boolean;
@@ -565,6 +570,7 @@ export type TeamIndexRequest = {
 export type TeamIndexResource = {
     id: number;
     creator_id: number;
+    logo?: MediaResource;
     name: string;
     can_view: boolean;
     can_update: boolean;
@@ -576,11 +582,19 @@ export type TeamIndexResource = {
 export type TeamListResource = {
     id: number;
     name: string;
+    logo?: MediaResource;
 };
 export type TeamOneOrManyRequest = {
     team?: number;
     ids?: Array<number>;
 };
+export type TeamResource = {
+    id: number;
+    name: string;
+    logo?: MediaResource;
+    settings?: TeamSettingsData;
+};
+export type TeamSettingsData = {};
 export type ToastMessagesData = {
     info?: string;
     success?: string;
