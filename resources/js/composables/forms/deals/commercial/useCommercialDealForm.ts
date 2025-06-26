@@ -1,16 +1,29 @@
 import { useComputedForm } from '@/composables';
+import { CommercialDealFormRequest, CommercialDealFormResource } from '@/types';
 
 export function useCommercialDealForm(deal?: CommercialDealFormResource) {
+    const initialSchedule =
+        deal?.schedule?.years?.flatMap((yearData) =>
+            yearData.data.map((item) => ({
+                date: item.date,
+                amount: item.amount,
+                status: item.status,
+                title: item.title,
+            })),
+        ) || [];
+
     const form = useComputedForm({
         name: deal?.name || '',
-        amount: deal?.amount || 0,
+        amount_in_cents: deal?.amount_in_cents || 0,
+        client_id: deal?.client_id,
         code: deal?.code || '',
         reference: deal?.reference || '',
         success_rate: deal?.success_rate || 50,
         ordered_at: deal?.ordered_at || '',
         duration_in_months: deal?.duration_in_months || 12,
         starts_at: deal?.starts_at || '',
-        schedule: deal?.schedule || [],
+        schedule: deal?.schedule,
+        schedule_data: initialSchedule,
     });
 
     form.transform(transformDealForm);
@@ -21,26 +34,8 @@ export function useCommercialDealForm(deal?: CommercialDealFormResource) {
 export type DealForm = ReturnType<typeof useCommercialDealForm>;
 export type DealFormData = ReturnType<DealForm['data']>;
 
-function transformDealForm(data: DealFormData): CommercialDealFormResource {
-    const scheduleData: Record<string, any> = {};
-
-    data.schedule.forEach((item: any) => {
-        const year = item.date.split('-')[0];
-        if (!scheduleData[year]) {
-            scheduleData[year] = { data: [] };
-        }
-
-        scheduleData[year].data.push({
-            date: item.date,
-            amount: item.amount,
-            status: item.status || 'pending',
-            title: item.title || 'Échéance',
-        });
-    });
-
+function transformDealForm(data: DealFormData): CommercialDealFormRequest {
     return {
         ...data,
-        schedule: scheduleData,
-        amount_in_cents: data.amount * 100, // Conversion en cents
     };
 }

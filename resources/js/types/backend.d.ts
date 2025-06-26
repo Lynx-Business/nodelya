@@ -168,24 +168,44 @@ export type ClientIndexResource = {
     can_restore: boolean;
     can_delete: boolean;
 };
+export type ClientListResource = {
+    id: number;
+    name: string;
+};
 export type ClientOneOrManyRequest = {
     client?: number;
     ids?: Array<number>;
 };
 export type CommercialDealFormProps = {
-    deal?: any;
+    deal?: CommercialDealFormResource;
+    clients?: Array<ClientListResource>;
 };
 export type CommercialDealFormRequest = {
     deal?: any;
     name: string;
-    amount: number;
+    amount_in_cents: number;
+    code: string;
+    reference?: string;
+    success_rate: number;
+    ordered_at: string;
+    duration_in_months?: number;
+    starts_at?: string;
+    schedule_data?: Array<ScheduleItemData>;
+    schedule?: Array<YearScheduleData>;
+};
+export type CommercialDealFormResource = {
+    id: number;
+    name: string;
+    amount_in_cents: number;
+    client_id: number;
     code?: string;
     reference?: string;
     success_rate: number;
     ordered_at: string;
     duration_in_months: number;
     starts_at: string;
-    schedule?: Array<any>;
+    schedule: DealScheduleData;
+    schedule_data?: Array<any>;
 };
 export type CommercialDealIndexProps = {
     request: CommercialDealIndexRequest;
@@ -368,7 +388,7 @@ export type ContractorResource = {
 export type DashboardAdminIndexProps = {};
 export type DashboardIndexProps = {};
 export type DealScheduleData = {
-    years: { [key: string]: YearScheduleData };
+    years: Array<YearScheduleData>;
 };
 export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
@@ -1193,5 +1213,6 @@ export type VerifyEmailRequest = {
     code: string;
 };
 export type YearScheduleData = {
+    year: string;
     data: Array<ScheduleItemData>;
 };

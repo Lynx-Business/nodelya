@@ -3,7 +3,6 @@
 namespace App\Actions\Deal\Commercial;
 
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
-use App\Data\Deal\DealScheduleData;
 use App\Models\Deal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,10 +19,7 @@ class CreateOrUpdateCommercialDeal
         try {
             $deal = $data->deal;
 
-            $scheduleData = DealScheduleData::from($data->schedule);
-
-            $dealData = $data->except('deal')->toArray();
-            $dealData['schedule'] = $scheduleData;
+            $dealData = $data->except('deal', 'schedule_data')->toArray();
 
             if (! $deal?->exists) {
                 $deal = Deal::create($dealData);

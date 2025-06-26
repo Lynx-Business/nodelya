@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Data\Deal\DealScheduleData;
+use App\Data\Deal\YearScheduleData;
 use App\Enums\Deal\DealStatus;
 use App\Facades\Services;
 use App\Traits\BelongsToClient;
@@ -13,11 +13,12 @@ use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\LaravelData\DataCollection;
 
 /**
  * @property int $id
  * @property int $team_id
- * @property int $project_department_id
+ * @property int|null $project_department_id
  * @property int $client_id
  * @property int|null $deal_id
  * @property string $name
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Models\User $client
  * @property-read true $is_trashable
  * @property bool $is_trashed
- * @property-read \App\Models\ProjectDepartment $projectDepartment
+ * @property-read \App\Models\ProjectDepartment|null $projectDepartment
  * @property-read mixed $revenue
  * @property-read \App\Models\Team $team
  *
@@ -122,7 +123,8 @@ class Deal extends Model
             'ordered_at' => 'date',
             'starts_at'  => 'date',
             'ends_at'    => 'date',
-            'schedule'   => DealScheduleData::class,
+            'schedule'   => DataCollection::class.':'.YearScheduleData::class.',nullable',
+
         ];
     }
 
