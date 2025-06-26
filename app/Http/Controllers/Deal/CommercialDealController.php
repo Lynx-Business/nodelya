@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Deal;
 
+use App\Data\Client\ClientListResource;
 use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
@@ -10,7 +11,9 @@ use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\Deal;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Inertia\Inertia;
@@ -24,13 +27,14 @@ class CommercialDealController extends Controller
      */
     public function index(CommercialDealIndexRequest $data)
     {
+
         return Inertia::render('deal/commercial/Index', CommercialDealIndexProps::from([
             'request'          => $data,
             'commercial_deals' => Lazy::inertia(
                 fn () => CommercialDealIndexResource::collect(
                     Deal::query()
                         ->search($data->q)
-                        // ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
+                        ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->paginate(
                             perPage: $data->per_page ?? Config::integer('default.per_page'),
@@ -53,7 +57,10 @@ class CommercialDealController extends Controller
      */
     public function create()
     {
-        return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([]));
+
+        return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([
+            'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+        ]));
     }
 
     /**

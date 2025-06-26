@@ -12,7 +12,8 @@ class CommercialDealFormResource extends Resource
     public function __construct(
         public int $id,
         public string $name,
-        public float $amount,
+        public float $amount_in_cents,
+        public int $client_id,
         public ?string $code,
         public ?string $reference,
         public int $success_rate,
@@ -20,5 +21,6 @@ class CommercialDealFormResource extends Resource
         public int $duration_in_months,
         public string $starts_at,
         public DealScheduleData $schedule,
+        public ?array $schedule_data,
     ) {}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Data\Deal;
 
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -13,7 +14,9 @@ class YearScheduleData extends Data
      */
     public function __construct(
 
-        /** @var \App\Data\ScheduleItemData[] */
+        public string $year,
+
+        #[DataCollectionOf(ScheduleItemData::class)]
         public array $data,
     ) {}
 }

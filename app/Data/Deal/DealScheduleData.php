@@ -2,6 +2,7 @@
 
 namespace App\Data\Deal;
 
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
@@ -18,7 +19,7 @@ class DealScheduleData extends Data
      */
     public function __construct(
 
-        /** @var \App\Data\YearScheduleData[] */
+        #[DataCollectionOf(YearScheduleData::class)]
         public array $years,
     ) {}
 }
