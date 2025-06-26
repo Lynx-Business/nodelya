@@ -27,7 +27,7 @@ import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useLayout, useLayouts, useObjectOmit } from '@/composables';
+import { useAlert, useFilters, useLayout, useLayouts } from '@/composables';
 import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
     ExpenseItemIndexProps,
@@ -36,6 +36,7 @@ import {
     ExpenseItemOneOrManyRequest,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
+import { reactiveOmit } from '@vueuse/core';
 import { trans, transChoice } from 'laravel-vue-i18n';
 import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -242,7 +243,7 @@ const filters = useFilters<ExpenseItemIndexRequest>(
         },
         transform(data) {
             return {
-                ...useObjectOmit(data, 'expense_categories', 'expense_sub_categories').value,
+                ...reactiveOmit(data, 'expense_categories', 'expense_sub_categories'),
                 expense_category_ids: data.expense_categories?.map(({ id }) => id),
                 expense_sub_category_ids: data.expense_sub_categories?.map(({ id }) => id),
             };
