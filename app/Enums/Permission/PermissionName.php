@@ -14,4 +14,5 @@ enum PermissionName: string
     }
 
     case CLIENT = 'client';
+    case DEAL = 'deal';
 }
