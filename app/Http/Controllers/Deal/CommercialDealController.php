@@ -33,7 +33,7 @@ class CommercialDealController extends Controller
             'request'          => $data,
             'commercial_deals' => Lazy::inertia(
                 fn () => CommercialDealIndexResource::collect(
-                    Deal::query()
+                    Deal::commercial()
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
                         ->orderBy($data->sort_by, $data->sort_direction)
