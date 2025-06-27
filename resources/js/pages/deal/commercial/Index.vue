@@ -62,7 +62,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
                 callback: () =>
                     router.delete(route('commercial.deals.trash'), {
                         data: { ids: items.map(({ id }) => id) },
-                        only: ['Commercial_deals'],
+                        only: ['commercial_deals'],
                         onSuccess: () => {
                             selectedRows.value = [];
                         },
@@ -82,7 +82,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
                         route('commercial.deals.restore'),
                         { ids: items.map(({ id }) => id) },
                         {
-                            only: ['Commercial_deals'],
+                            only: ['commercial_deals'],
                             onSuccess: () => {
                                 selectedRows.value = [];
                             },
@@ -101,7 +101,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
                 callback: () =>
                     router.delete(route('commercial.deals.delete'), {
                         data: { ids: items.map(({ id }) => id) },
-                        only: ['Commercial_deals'],
+                        only: ['commercial_deals'],
                         onSuccess: () => {
                             selectedRows.value = [];
                         },
@@ -134,7 +134,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
                 description: transChoice('messages.Commercial_deals.trash.confirm', 1),
                 callback: () =>
                     router.delete(route('commercial.deals.trash', { deal }), {
-                        only: ['Commercial_deals'],
+                        only: ['commercial_deals'],
                     }),
             }),
     },
@@ -149,7 +149,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
                 description: transChoice('messages.Commercial_deals.restore.confirm', 1),
                 callback: () =>
                     router.patch(route('commercial.deals.restore', { deal }), undefined, {
-                        only: ['Commercial_deals'],
+                        only: ['commercial_deals'],
                     }),
             }),
     },
@@ -164,7 +164,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
                 description: transChoice('messages.Commercial_deals.delete.confirm', 1),
                 callback: () =>
                     router.delete(route('commercial.deals.delete', { deal }), {
-                        only: ['Commercial_deals'],
+                        only: ['commercial_deals'],
                     }),
             }),
     },
@@ -181,7 +181,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
         trashed: props.request.trashed,
     },
     {
-        only: ['Commercial_deals'],
+        only: ['commercial_deals'],
         immediate: true,
         debounceReload(keys) {
             return !keys.includes('page') && !keys.includes('per_page');
@@ -206,8 +206,8 @@ const filters = useFilters<CommercialDealIndexRequest>(
                 v-model:sort-by="filters.sort_by"
                 v-model:sort-direction="filters.sort_direction"
                 :data="commercial_deals"
-                :rows-actions="rowsActions"
-                :row-actions="rowActions"
+                :rows-actions
+                :row-actions
             >
                 <FormContent class="flex items-center">
                     <TextInput v-model="filters.q" type="search" />

@@ -8,6 +8,7 @@ use App\Facades\Services;
 use App\Traits\BelongsToClient;
 use App\Traits\BelongsToProjectDepartment;
 use App\Traits\BelongsToTeam;
+use App\Traits\HasPolicy;
 use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -31,7 +32,7 @@ use Spatie\LaravelData\DataCollection;
  * @property int $duration_in_months
  * @property \Illuminate\Support\Carbon $starts_at
  * @property \Illuminate\Support\Carbon|null $ends_at
- * @property \Spatie\LaravelData\Contracts\BaseData $schedule
+ * @property \Spatie\LaravelData\DataCollection $schedule
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -87,6 +88,7 @@ class Deal extends Model
     /** @use HasFactory<\Database\Factories\DealFactory> */
     use HasFactory;
 
+    use HasPolicy;
     use Searchable;
     use Trashable;
 
