@@ -9,14 +9,18 @@ use App\Data\Deal\Commercial\Form\CommercialDealFormResource;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
+use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
 use App\Data\Deal\CommercialDealOneOrManyRequest;
+use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Deal;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -182,5 +186,59 @@ class CommercialDealController extends Controller
         }
 
         return back();
+    }
+
+    public function validateDeal(Deal $deal)
+    {
+
+        $reference = $this->generateReference($deal);
+
+        return Inertia::render('deal/commercial/Validate', CommercialDealValidateProps::from([
+            'deal'      => $deal,
+            'reference' => $reference,
+        ]));
+    }
+
+    public function processValidation(Request $request, Deal $deal)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        DB::transaction(function () use ($request, $deal) {
+
+            $deal->update([
+                'amount_in_cents' => Services::conversion()->priceToCents($request->amount),
+                'reference'       => $request->reference,
+                'status'          => DealStatus::VALIDATED,
+            ]);
+        });
+
+        Services::toast()->success->execute(__('messages.commercial_deals.validate.success'));
+
+        return to_route('commercial.deals.index');
+    }
+
+    private function generateReference(Deal $deal): string
+    {
+        $year = now()->format('Y');
+        $parentIndicator = '';
+
+        if ($deal->deal_id) {
+            $parentDeal = Deal::find($deal->deal_id);
+            $parentIndicator = $parentDeal ? '.'.$parentDeal->id : '';
+        }
+
+        $lastReference = Deal::where('reference', 'like', $year.'N.%')
+            ->orderBy('reference', 'desc')
+            ->value('reference');
+
+        $increment = 1;
+        if ($lastReference) {
+            preg_match('/'.$year.'N\.(\d+)/', $lastReference, $matches);
+            $increment = (int) ($matches[1] ?? 0) + 1;
+        }
+
+        return sprintf('%sN.%d%s', $year, $increment, $parentIndicator);
     }
 }

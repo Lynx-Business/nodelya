@@ -37,6 +37,11 @@ use Spatie\LaravelData\DataCollection;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property float $amount
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
  * @property-read \App\Models\User $client
  * @property-read true $is_trashable
  * @property bool $is_trashed
