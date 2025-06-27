@@ -46,4 +46,24 @@ class Role extends SpatieRole
             fn (): string => RoleName::tryFrom($this->name)?->label() ?? $this->name,
         );
     }
+
+    public static function tester(): static
+    {
+        return static::findByName(RoleName::TESTER->value);
+    }
+
+    public static function owner(): static
+    {
+        return static::findByName(RoleName::OWNER->value);
+    }
+
+    public static function member(): static
+    {
+        return static::findByName(RoleName::MEMBER->value);
+    }
+
+    public static function editor(): static
+    {
+        return static::findByName(RoleName::EDITOR->value);
+    }
 }

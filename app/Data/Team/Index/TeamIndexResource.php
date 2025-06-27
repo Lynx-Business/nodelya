@@ -12,7 +12,7 @@ class TeamIndexResource extends Resource
 {
     public function __construct(
         public int $id,
-        public int $creator_id,
+        public ?int $creator_id,
         public ?MediaResource $logo,
         public string $name,
         public bool $can_view,

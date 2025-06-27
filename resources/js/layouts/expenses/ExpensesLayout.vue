@@ -2,43 +2,39 @@
 import { ResponsiveTabs, ResponsiveTabsTrigger } from '@/components/ui/custom/responsive-tabs';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { Separator } from '@/components/ui/separator';
-import { useLayout, useRouterComputed } from '@/composables';
+import { clearSessionFilters, useLayout, useRouterComputed } from '@/composables';
 import { AppLayout } from '@/layouts';
-import { type NavItem } from '@/types';
+import { NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { PaletteIcon, ShieldPlusIcon, UserIcon } from 'lucide-vue-next';
+import { BanknoteIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.settings.title'),
-                href: route('settings.index'),
+                title: trans('pages.expenses.index.title'),
+                href: route('expenses.budgets.index'),
             },
         ],
     })),
 });
 
-const sidebarNavItems = useRouterComputed((): NavItem[] => [
-    {
-        title: trans('layouts.settings.profile'),
-        href: route('settings.profile.edit'),
-        icon: UserIcon,
-        isActive: route().current('settings.profile.edit'),
-    },
-    {
-        title: trans('layouts.settings.security'),
-        href: route('settings.security.edit'),
-        icon: ShieldPlusIcon,
-        isActive: route().current('settings.security.edit'),
-    },
-    {
-        title: trans('layouts.settings.appearance'),
-        href: route('settings.appearance.edit'),
-        icon: PaletteIcon,
-        isActive: route().current('settings.appearance.edit'),
-    },
-]);
+const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
+    [
+        {
+            title: trans('layouts.expenses.budgets'),
+            href: route('expenses.budgets.index'),
+            icon: BanknoteIcon,
+            isActive: route().current('expenses.budgets.*'),
+        },
+    ].map((item) =>
+        Object.assign(item, {
+            options: {
+                onBefore: () => clearSessionFilters(item.href),
+            },
+        }),
+    ),
+);
 </script>
 
 <template>
@@ -54,7 +50,7 @@ const sidebarNavItems = useRouterComputed((): NavItem[] => [
                 <Separator class="md:hidden" />
 
                 <div class="flex-1">
-                    <section class="max-w-xl space-y-8">
+                    <section class="space-y-8 *:not-[.w-full]:max-w-xl">
                         <slot />
                     </section>
                 </div>

@@ -191,6 +191,62 @@ export type EditProfileSettingsProps = {
     mustVerifyEmail: boolean;
 };
 export type EditSecuritySettingsProps = {};
+export type ExpenseBudgetIndexProps = {
+    request: ExpenseBudgetIndexRequest;
+    expenseBudgets?: {
+        data: Array<ExpenseBudgetResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type ExpenseBudgetIndexRequest = {
+    expense_categories?: Array<ExpenseCategoryResource>;
+    expense_sub_categories?: Array<ExpenseSubCategoryResource>;
+    expense_items?: Array<ExpenseItemResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+    expense_category_ids?: null | Array<number>;
+    expense_sub_category_ids?: null | Array<number>;
+    expense_item_ids?: null | Array<number>;
+};
+export type ExpenseBudgetOneOrManyRequest = {
+    expense_budget?: number;
+    ids?: Array<number>;
+};
+export type ExpenseBudgetResource = {
+    id: number;
+    amount: number;
+    starts_at: string;
+    ends_at: string;
+    expense_item_id?: number;
+    deleted_at?: string | null;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    expense_item?: ExpenseItemResource;
+};
 export type ExpenseCategoryFormProps = {
     team: TeamListResource;
     expenseType: ExpenseType;
@@ -255,6 +311,18 @@ export type ExpenseCategoryListResource = {
 export type ExpenseCategoryOneOrManyRequest = {
     expense_category?: number;
     ids?: Array<number>;
+};
+export type ExpenseCategoryResource = {
+    id: number;
+    type: ExpenseType;
+    name: string;
+    deleted_at?: string | null;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    expense_sub_categories?: Array<ExpenseCategoryResource>;
 };
 export type ExpenseItemFormProps = {
     team: TeamListResource;
@@ -334,6 +402,21 @@ export type ExpenseItemOneOrManyRequest = {
     expense_item?: number;
     ids?: Array<number>;
 };
+export type ExpenseItemResource = {
+    id: number;
+    expense_category_id: number;
+    expense_sub_category_id: number;
+    name: string;
+    deleted_at?: string | null;
+    type?: ExpenseType;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    expense_category?: ExpenseCategoryResource;
+    expense_sub_category?: ExpenseSubCategoryResource | null;
+};
 export type ExpenseSubCategoryFormProps = {
     team: TeamListResource;
     expenseType: ExpenseType;
@@ -404,6 +487,19 @@ export type ExpenseSubCategoryOneOrManyRequest = {
     expense_sub_category?: number;
     ids?: Array<number>;
 };
+export type ExpenseSubCategoryResource = {
+    id: number;
+    name: string;
+    deleted_at?: string | null;
+    type?: ExpenseType;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    expense_category?: ExpenseCategoryResource;
+    expense_items?: Array<ExpenseItemResource>;
+};
 export type ExpenseType = 'general' | 'employee' | 'contractor';
 export type ForgotPasswordProps = {
     status?: string;
@@ -437,7 +533,7 @@ export type PermissionListResource = {
     name: string;
     display_name: string;
 };
-export type PermissionName = 'client';
+export type PermissionName = 'client' | 'expenses';
 export type ProjectDepartmentFormProps = {
     team: TeamListResource;
     projectDepartment?: ProjectDepartmentFormResource;
@@ -528,7 +624,7 @@ export type TeamFormRequest = {
 };
 export type TeamFormResource = {
     id: number;
-    creator_id: number;
+    creator_id?: number;
     logo?: MediaResource;
     name: string;
     settings?: TeamSettingsData;
@@ -569,7 +665,7 @@ export type TeamIndexRequest = {
 };
 export type TeamIndexResource = {
     id: number;
-    creator_id: number;
+    creator_id?: number;
     logo?: MediaResource;
     name: string;
     can_view: boolean;
@@ -615,6 +711,7 @@ export type UpdateProfileSettingsRequest = {
     avatar?: string;
 };
 export type UserAbilitiesResource = {
+    expenses: { budgets: { view_any: boolean; create: boolean } };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
 };

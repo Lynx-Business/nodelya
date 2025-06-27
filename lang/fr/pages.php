@@ -93,6 +93,15 @@ return [
         ],
     ],
 
+    'expenses' => [
+        'title'   => 'Dépenses',
+        'budgets' => [
+            'index' => [
+                'title' => 'Budgets',
+            ],
+        ],
+    ],
+
     'settings' => [
         'title'   => 'Paramètres',
         'profile' => [

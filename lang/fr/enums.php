@@ -23,13 +23,15 @@ return [
     'expense' => [
         'type' => [
             'general'    => 'budgets généraux',
-            'employee'   => 'salariés',
-            'contractor' => 'sous traitants',
+            'employee'   => 'ressources humaines',
+            'contractor' => 'sous traitance',
         ],
     ],
 
     'permission' => [
         'name' => [
+            'client'   => 'clients',
+            'expenses' => 'dépenses',
         ],
     ],
 

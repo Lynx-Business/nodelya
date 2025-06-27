@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -28,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseBudget> $expenseBudgets
+ * @property-read int|null $expense_budgets_count
  * @property-read \App\Models\ExpenseCategory $expenseCategory
  * @property-read \App\Models\ExpenseSubCategory|null $expenseSubCategory
  * @property-read true $is_trashable
@@ -108,6 +111,11 @@ class ExpenseItem extends Model
     public function expenseSubCategory(): BelongsTo
     {
         return $this->belongsTo(ExpenseSubCategory::class);
+    }
+
+    public function expenseBudgets(): HasMany
+    {
+        return $this->hasMany(ExpenseBudget::class);
     }
 
     protected function type(): Attribute

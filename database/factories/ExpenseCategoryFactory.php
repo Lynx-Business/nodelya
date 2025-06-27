@@ -21,7 +21,7 @@ class ExpenseCategoryFactory extends Factory
         return [
             'team_id' => Team::factory(),
             'type'    => fake()->randomElement(ExpenseType::cases()),
-            'name'    => fake()->companySuffix(),
+            'name'    => fake()->company(),
         ];
     }
 }

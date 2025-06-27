@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Expense\Budget\ExpenseBudgetController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
 use App\Http\Controllers\Expense\Item\ExpenseItemController;
 use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
+use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
@@ -53,6 +55,19 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
 
     Route::prefix('/banners')->name('banners.')->group(function () {
         Route::patch('/{banner}/dismiss', [BannerDissmissController::class, 'update'])->name('dismiss');
+    });
+
+    Route::prefix('/expenses')->name('expenses.')->group(function () {
+        Route::prefix('/budgets')->name('budgets.')->controller(ExpenseBudgetController::class)->group(function () {
+            Route::get('/', 'index')->name('index')->can('viewAny', ExpenseBudget::class);
+            Route::get('/create', 'create')->name('create')->can('viewAny', ExpenseBudget::class);
+            Route::post('/create', 'store')->name('store')->can('viewAny', ExpenseBudget::class);
+            Route::get('/edit/{expenseBudget}', 'edit')->name('edit')->withTrashed()->can('update', 'expenseBudget');
+            Route::put('/edit/{expenseBudget}', 'update')->name('update')->withTrashed()->can('update', 'expenseBudget');
+            Route::delete('/trash/{expenseBudget?}', 'trash')->name('trash');
+            Route::patch('/restore/{expenseBudget?}', 'restore')->name('restore');
+            Route::delete('/delete/{expenseBudget?}', 'destroy')->name('delete');
+        });
     });
 
     Route::prefix('/media')->name('media.')->controller(MediaController::class)->group(function () {

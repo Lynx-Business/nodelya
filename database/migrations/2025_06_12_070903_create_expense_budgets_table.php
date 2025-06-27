@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('expense_budgets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('item_id')->constrained('expense_items');
+            $table->foreignId('expense_item_id')->constrained();
             $table->nullableMorphs('model');
             $table->unsignedBigInteger('amount_in_cents');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
