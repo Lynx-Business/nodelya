@@ -42,8 +42,11 @@ class CommercialDealFormRequest extends Data
 
         public ?string $starts_at,
 
+        public int $client_id,
+
+        #[Min(1)]
         #[DataCollectionOf(ScheduleItemData::class)]
-        public ?array $schedule_data,
+        public array $schedule_data,
 
         #[DataCollectionOf(YearScheduleData::class)]
         public ?DataCollection $schedule = null,
@@ -56,7 +59,16 @@ class CommercialDealFormRequest extends Data
     public static function attributes(): array
     {
         return [
-            'name' => __('models.deal.fields.name'),
+            'name'               => __('models.commercial_deal.fields.name'),
+            'amount_in_cents'    => __('models.commercial_deal.fields.amount'),
+            'code'               => __('models.commercial_deal.fields.code'),
+            'reference'          => __('models.commercial_deal.fields.reference'),
+            'success_rate'       => __('models.commercial_deal.fields.success_rate'),
+            'ordered_at'         => __('models.commercial_deal.fields.ordered_at'),
+            'duration_in_months' => __('models.commercial_deal.fields.duration_in_months'),
+            'starts_at'          => __('models.commercial_deal.fields.starts_at'),
+            'client_id'          => __('models.commercial_deal.fields.client_id'),
+            'schedule_data'      => __('models.commercial_deal.fields.schedule'),
         ];
     }
 
