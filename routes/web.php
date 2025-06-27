@@ -295,6 +295,9 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::delete('/trash/{deal?}', 'trash')->name('trash');
         Route::patch('/restore/{deal?}', 'restore')->name('restore');
         Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+
+        Route::get('/validate/{deal}', 'validateDeal')->name('validate');
+        Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
     });
 });
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import CommercialDealForm from '@/components/deal/commercial/CommercialDealForm.vue';
+import { Button } from '@/components/ui/button';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
+import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
 import { useCommercialDealForm, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
@@ -38,8 +40,15 @@ function submit() {
     <Form :form @submit="submit()">
         <Section>
             <SectionHeader>
-                <SectionTitle>
-                    {{ $t('pages.commercial_deals.edit.title') }}
+                <SectionTitle class="flex items-center justify-between gap-4">
+                    <span>
+                        {{ $t('pages.commercial_deals.edit.title') }}
+                    </span>
+                    <Button class="text-right">
+                        <InertiaLink method="get" :href="route('commercial.deals.validate', { deal: deal! })">
+                            Passer l’affaire au statut validé
+                        </InertiaLink>
+                    </Button>
                 </SectionTitle>
             </SectionHeader>
             <SectionContent class="sm:flex">

@@ -249,6 +249,10 @@ export type CommercialDealOneOrManyRequest = {
     deal?: number;
     ids?: Array<number>;
 };
+export type CommercialDealValidateProps = {
+    deal: any;
+    reference: string;
+};
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;
