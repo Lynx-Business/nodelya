@@ -246,6 +246,10 @@ export type CommercialDealIndexResource = {
     can_restore: boolean;
     can_delete: boolean;
 };
+export type CommercialDealOneOrManyRequest = {
+    deal?: number;
+    ids?: Array<number>;
+};
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;
@@ -906,6 +910,7 @@ export type PermissionResource = {
     name: string;
     display_name: string;
 };
+export type PermissionName = 'client' | 'expenses' | 'deal';
 export type ProjectDepartmentFormProps = {
     team: TeamListResource;
     projectDepartment?: ProjectDepartmentResource;

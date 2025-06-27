@@ -8,6 +8,7 @@ use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
+use App\Data\Deal\CommercialDealOneOrManyRequest;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -106,11 +107,65 @@ class CommercialDealController extends Controller
         //
     }
 
+    public function trash(CommercialDealOneOrManyRequest $data)
+    {
+        try {
+            \DB::beginTransaction();
+            $count = Deal::query()
+                ->when($data->deal, fn ($q) => $q->where('id', $data->deal))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->delete();
+            \DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.commercial_deals.trash.success', $count));
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
+    }
+
+    public function restore(CommercialDealOneOrManyRequest $data)
+    {
+        try {
+            \DB::beginTransaction();
+            $count = Deal::query()
+                ->onlyTrashed()
+                ->when($data->deal, fn ($q) => $q->where('id', $data->deal))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->restore();
+            \DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.commercial_deals.restore.success', $count));
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(CommercialDealOneOrManyRequest $data)
     {
-        //
+        try {
+            \DB::beginTransaction();
+            $count = Deal::query()
+                ->withTrashed()
+                ->when($data->deal, fn ($q) => $q->where('id', $data->deal))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->forceDelete();
+            \DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.commercial_deals.delete.success', $count));
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
     }
 }
