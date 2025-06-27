@@ -190,7 +190,8 @@ export type CommercialDealFormRequest = {
     ordered_at: string;
     duration_in_months?: number;
     starts_at?: string;
-    schedule_data?: Array<ScheduleItemData>;
+    client_id: number;
+    schedule_data: Array<ScheduleItemData>;
     schedule?: Array<YearScheduleData>;
 };
 export type CommercialDealFormResource = {

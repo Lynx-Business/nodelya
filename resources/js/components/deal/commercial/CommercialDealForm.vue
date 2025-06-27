@@ -9,10 +9,10 @@ import {
     FormLabel,
     injectFormContext,
 } from '@/components/ui/custom/form';
-import { TextInput } from '@/components/ui/custom/input';
+import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DealFormData, usePageProp } from '@/composables';
+import { CommercialDealFormData, usePageProp } from '@/composables';
 import { ClientListResource } from '@/types';
 import { WhenVisible } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -20,7 +20,7 @@ import { ref } from 'vue';
 const clients = usePageProp<ClientListResource[]>('clients', []);
 console.log('clients', clients);
 
-const { form } = injectFormContext<DealFormData>();
+const { form } = injectFormContext<CommercialDealFormData>();
 const newScheduleItem = ref({ date: '', amount: 0 });
 
 function addScheduleItem() {
@@ -36,6 +36,10 @@ function addScheduleItem() {
 
 function removeScheduleItem(index: number) {
     form.schedule_data.splice(index, 1);
+}
+function getScheduleError(index: number, field: string) {
+    const key = `schedule_data.${index}.${field}`;
+    return (form.errors as Record<string, string>)[key] || '';
 }
 </script>
 
@@ -60,7 +64,7 @@ function removeScheduleItem(index: number) {
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <TextInput v-model="form.amount_in_cents" />
+                <PriceInput v-model="form.amount_in_cents" :min="0" />
             </FormControl>
             <FormError :message="form.errors.amount_in_cents" />
         </FormField>
@@ -72,7 +76,7 @@ function removeScheduleItem(index: number) {
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <TextInput v-model="form.duration_in_months" />
+                <NumberInput v-model="form.duration_in_months" />
             </FormControl>
             <FormError :message="form.errors.duration_in_months" />
         </FormField>
@@ -108,12 +112,12 @@ function removeScheduleItem(index: number) {
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <TextInput v-model="form.success_rate" />
+                <NumberInput v-model="form.success_rate" />
             </FormControl>
             <FormError :message="form.errors.success_rate" />
         </FormField>
 
-        <FormField>
+        <FormField required>
             <FormLabel>
                 <CapitalizeText>
                     {{ $t('models.commercial_deal.fields.code') }}
@@ -125,7 +129,7 @@ function removeScheduleItem(index: number) {
             <FormError :message="form.errors.code" />
         </FormField>
 
-        <FormField>
+        <FormField required>
             <FormLabel>
                 <CapitalizeText>
                     {{ $t('models.commercial_deal.fields.reference') }}
@@ -138,7 +142,7 @@ function removeScheduleItem(index: number) {
         </FormField>
 
         <WhenVisible data="clients">
-            <FormField>
+            <FormField required>
                 <FormLabel>
                     <CapitalizeText>
                         {{ $t('models.commercial_deal.fields.client_id') }}
@@ -158,11 +162,15 @@ function removeScheduleItem(index: number) {
                         </SelectItem>
                     </SelectContent>
                 </Select>
+                <FormError :message="form.errors.client_id" />
             </FormField>
         </WhenVisible>
 
         <div class="col-span-full mt-6">
             <h3 class="mb-4 text-lg font-medium">Échéancier</h3>
+            <FormField>
+                <FormError class="mb-4" :message="form.errors.schedule_data" />
+            </FormField>
 
             <div class="mb-4 flex gap-2">
                 <FormField>
@@ -172,7 +180,7 @@ function removeScheduleItem(index: number) {
                 </FormField>
                 <FormField>
                     <FormControl>
-                        <TextInput v-model="newScheduleItem.amount" />
+                        <PriceInput v-model="newScheduleItem.amount" />
                     </FormControl>
                 </FormField>
                 <Button @click="addScheduleItem"> Ajouter </Button>
@@ -184,15 +192,17 @@ function removeScheduleItem(index: number) {
                     v-for="(item, index) in form.schedule_data"
                     :key="index"
                 >
-                    <FormField>
+                    <FormField required>
                         <FormControl>
                             <DatePicker v-model="item.date" />
                         </FormControl>
+                        <FormError :message="getScheduleError(index, 'date')" />
                     </FormField>
-                    <FormField>
+                    <FormField required>
                         <FormControl>
-                            <TextInput v-model="item.amount" />
+                            <PriceInput v-model="item.amount" />
                         </FormControl>
+                        <FormError class="mt-1" :message="getScheduleError(index, 'amount')" />
                     </FormField>
                     <Button variant="destructive" @click="removeScheduleItem(index)"> Retirer </Button>
                 </div>

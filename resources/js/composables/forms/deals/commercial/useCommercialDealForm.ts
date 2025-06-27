@@ -15,7 +15,7 @@ export function useCommercialDealForm(deal?: CommercialDealFormResource) {
     const form = useComputedForm({
         name: deal?.name || '',
         amount_in_cents: deal?.amount_in_cents || 0,
-        client_id: deal?.client_id,
+        client_id: deal?.client_id ?? 0,
         code: deal?.code || '',
         reference: deal?.reference || '',
         success_rate: deal?.success_rate || 50,
@@ -31,11 +31,12 @@ export function useCommercialDealForm(deal?: CommercialDealFormResource) {
     return form;
 }
 
-export type DealForm = ReturnType<typeof useCommercialDealForm>;
-export type DealFormData = ReturnType<DealForm['data']>;
+export type CommercialDealForm = ReturnType<typeof useCommercialDealForm>;
+export type CommercialDealFormData = ReturnType<CommercialDealForm['data']>;
 
-function transformDealForm(data: DealFormData): CommercialDealFormRequest {
+function transformDealForm(data: CommercialDealFormData): CommercialDealFormRequest {
     return {
         ...data,
+        schedule: Array.isArray(data.schedule) ? data.schedule : undefined,
     };
 }
