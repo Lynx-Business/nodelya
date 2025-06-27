@@ -2,7 +2,9 @@
 
 namespace App\Data\Deal\Commercial\Form;
 
-use App\Data\Deal\DealScheduleData;
+use App\Data\Deal\YearScheduleData;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -20,7 +22,7 @@ class CommercialDealFormResource extends Resource
         public string $ordered_at,
         public int $duration_in_months,
         public string $starts_at,
-        public DealScheduleData $schedule,
-        public ?array $schedule_data,
+        #[DataCollectionOf(YearScheduleData::class)]
+        public DataCollection $schedule,
     ) {}
 }

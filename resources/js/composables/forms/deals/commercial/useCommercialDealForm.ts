@@ -3,7 +3,7 @@ import { CommercialDealFormRequest, CommercialDealFormResource } from '@/types';
 
 export function useCommercialDealForm(deal?: CommercialDealFormResource) {
     const initialSchedule =
-        deal?.schedule?.years?.flatMap((yearData) =>
+        deal?.schedule?.flatMap((yearData) =>
             yearData.data.map((item) => ({
                 date: item.date,
                 amount: item.amount,

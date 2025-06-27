@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Deal;
 use App\Data\Client\ClientListResource;
 use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
+use App\Data\Deal\Commercial\Form\CommercialDealFormResource;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
@@ -15,7 +16,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Deal;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
@@ -94,17 +94,32 @@ class CommercialDealController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Deal $deal)
     {
-        //
+
+        return Inertia::render('deal/commercial/Edit', CommercialDealFormProps::from([
+            'deal'    => CommercialDealFormResource::from($deal),
+            'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+        ]));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CommercialDealFormRequest $data, Deal $deal)
     {
-        //
+        /** @var ?Deal $deal */
+        $newClient = Services::commercialDeal()->createOrUpdate->execute($data);
+
+        if (is_null($newClient)) {
+            Services::toast()->error->execute();
+
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.commercial_deals.update.success'));
+
+        return to_route('commercial.deals.index');
     }
 
     public function trash(CommercialDealOneOrManyRequest $data)

@@ -205,8 +205,7 @@ export type CommercialDealFormResource = {
     ordered_at: string;
     duration_in_months: number;
     starts_at: string;
-    schedule: DealScheduleData;
-    schedule_data?: Array<any>;
+    schedule: Array<YearScheduleData>;
 };
 export type CommercialDealIndexProps = {
     request: CommercialDealIndexRequest;
