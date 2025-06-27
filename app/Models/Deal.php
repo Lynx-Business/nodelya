@@ -125,7 +125,7 @@ class Deal extends Model
             'ordered_at' => 'date',
             'starts_at'  => 'date',
             'ends_at'    => 'date',
-            'schedule'   => DataCollection::class.':'.YearScheduleData::class.',nullable',
+            'schedule'   => DataCollection::class.':'.YearScheduleData::class,
 
         ];
     }
