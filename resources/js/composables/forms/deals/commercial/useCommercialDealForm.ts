@@ -18,7 +18,6 @@ export function useCommercialDealForm(deal?: CommercialDealFormResource) {
         parent: deal?.parent,
         client: deal?.client,
         code: deal?.code || '',
-        reference: deal?.reference || '',
         success_rate: deal?.success_rate || 50,
         ordered_at: deal?.ordered_at || '',
         duration_in_months: deal?.duration_in_months || 12,

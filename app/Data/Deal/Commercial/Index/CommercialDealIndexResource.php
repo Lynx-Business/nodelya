@@ -2,6 +2,7 @@
 
 namespace App\Data\Deal\Commercial\Index;
 
+use App\Models\Client;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -11,6 +12,10 @@ class CommercialDealIndexResource extends Resource
     public function __construct(
         public int $id,
         public string $name,
+        public float $amount,
+        public string $code,
+        public int $success_rate,
+        public ?Client $client,
         public bool $can_view,
         public bool $can_update,
         public bool $can_trash,

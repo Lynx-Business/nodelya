@@ -24,7 +24,7 @@ import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useLayout } from '@/composables';
+import { useAlert, useFilters, useFormatter, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
 import { CommercialDealIndexProps, CommercialDealIndexRequest, CommercialDealIndexResource } from '@/types';
 
@@ -45,7 +45,9 @@ defineOptions({
 });
 
 const props = defineProps<CommercialDealIndexProps>();
+console.log('commercial_deals => ', props.commercial_deals?.data);
 
+const format = useFormatter();
 const alert = useAlert();
 
 const selectedRows = ref<CommercialDealIndexResource[]>([]);
@@ -247,8 +249,20 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableHead>
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
+                            <DataTableSortableHead value="client">
+                                {{ $t('models.commercial_deal.fields.client_id') }}
+                            </DataTableSortableHead>
                             <DataTableSortableHead value="name">
                                 {{ $t('models.commercial_deal.fields.name') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="amount">
+                                {{ $t('models.commercial_deal.fields.amount') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="code">
+                                {{ $t('models.commercial_deal.fields.code') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="amount">
+                                {{ $t('models.commercial_deal.fields.total_sales') }}
                             </DataTableSortableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
@@ -262,8 +276,22 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             </DataTableCell>
                             <DataTableCell>
                                 <CapitalizeText>
+                                    {{ deal?.client?.name }}
+                                </CapitalizeText>
+                            </DataTableCell>
+                            <DataTableCell>
+                                <CapitalizeText>
                                     {{ deal.name }}
                                 </CapitalizeText>
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ format.price(deal.amount) }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ deal.code }}
+                            </DataTableCell>
+                            <DataTableCell class="bg-gray-300/30">
+                                {{ format.price((deal.amount * deal.success_rate) / 100) }}
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

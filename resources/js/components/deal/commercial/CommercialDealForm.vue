@@ -129,18 +129,6 @@ function getScheduleError(index: number, field: string) {
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.reference') }}
-                </CapitalizeText>
-            </FormLabel>
-            <FormControl>
-                <TextInput v-model="form.reference" />
-            </FormControl>
-            <FormError :message="form.errors.reference" />
-        </FormField>
-
-        <FormField required>
-            <FormLabel>
-                <CapitalizeText>
                     {{ $t('models.commercial_deal.fields.client_id') }}
                 </CapitalizeText>
             </FormLabel>

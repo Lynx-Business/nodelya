@@ -242,6 +242,10 @@ export type CommercialDealIndexRequest = {
 export type CommercialDealIndexResource = {
     id: number;
     name: string;
+    amount: number;
+    code: string;
+    success_rate: number;
+    client?: any;
     can_view: boolean;
     can_update: boolean;
     can_trash: boolean;

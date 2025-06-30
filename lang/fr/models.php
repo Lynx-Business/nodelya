@@ -156,7 +156,7 @@ return [
         ],
         'fields' => [
             'amount'                => 'montant',
-            'code'                  => 'code',
+            'code'                  => 'Codification',
             'client_id'             => 'client',
             'duration_in_months'    => 'durée en mois',
             'ends_at'               => 'date de fin',
@@ -170,6 +170,7 @@ return [
             'success_rate'          => 'taux de réussite',
             'team_id'               => 'société',
             'deal_id'               => 'Associer à une autre affaire commerciale',
+            'total_sales'           => 'Totaux CA',
         ],
     ],
 
