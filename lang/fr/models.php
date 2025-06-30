@@ -169,6 +169,7 @@ return [
             'status'                => 'statut',
             'success_rate'          => 'taux de réussite',
             'team_id'               => 'société',
+            'deal_id'               => 'Associer à une autre affaire commerciale',
         ],
     ],
 

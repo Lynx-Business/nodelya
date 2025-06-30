@@ -3,6 +3,7 @@
 namespace App\Data\Deal\Commercial\Form;
 
 use App\Data\Client\ClientListResource;
+use App\Data\Deal\DealListResource;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
@@ -19,5 +20,9 @@ class CommercialDealFormProps extends Resource
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientListResource::class)]
         public Lazy|DataCollection $clients,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(DealListResource::class)]
+        public Lazy|DataCollection $deals,
     ) {}
 }

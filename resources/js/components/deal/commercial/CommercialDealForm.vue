@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ClientCombobox from '@/components/client/ClientCombobox.vue';
+import DealCombobox from '@/components/deal/common/DealCombobox.vue';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
@@ -149,6 +150,17 @@ function getScheduleError(index: number, field: string) {
 
             <ClientCombobox v-model="form.client" />
             <FormError :message="form.errors.client_id" />
+        </FormField>
+
+        <FormField>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.commercial_deal.fields.deal_id') }}
+                </CapitalizeText>
+            </FormLabel>
+
+            <DealCombobox v-model="form.parent" />
+            <FormError :message="form.errors.deal_id" />
         </FormField>
 
         <div class="col-span-full mt-6">

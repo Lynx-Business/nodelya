@@ -179,6 +179,7 @@ export type ClientOneOrManyRequest = {
 export type CommercialDealFormProps = {
     deal?: CommercialDealFormResource;
     clients?: Array<ClientListResource>;
+    deals?: Array<DealListResource>;
 };
 export type CommercialDealFormRequest = {
     deal?: any;
@@ -191,6 +192,7 @@ export type CommercialDealFormRequest = {
     duration_in_months?: number;
     starts_at?: string;
     client_id: number;
+    deal_id?: number;
     schedule_data: Array<ScheduleItemData>;
     schedule?: Array<YearScheduleData>;
 };
@@ -205,6 +207,7 @@ export type CommercialDealFormResource = {
     duration_in_months: number;
     starts_at: string;
     client: ClientListResource;
+    parent?: DealListResource;
     schedule: Array<YearScheduleData>;
 };
 export type CommercialDealIndexProps = {
@@ -395,6 +398,10 @@ export type ContractorResource = {
 };
 export type DashboardAdminIndexProps = {};
 export type DashboardIndexProps = {};
+export type DealListResource = {
+    id: number;
+    name: string;
+};
 export type DealScheduleData = {
     years: Array<YearScheduleData>;
 };

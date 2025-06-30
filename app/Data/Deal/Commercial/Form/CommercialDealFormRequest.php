@@ -44,6 +44,8 @@ class CommercialDealFormRequest extends Data
 
         public int $client_id,
 
+        public ?int $deal_id,
+
         #[Min(1)]
         #[DataCollectionOf(ScheduleItemData::class)]
         public array $schedule_data,
@@ -68,6 +70,7 @@ class CommercialDealFormRequest extends Data
             'duration_in_months' => __('models.commercial_deal.fields.duration_in_months'),
             'starts_at'          => __('models.commercial_deal.fields.starts_at'),
             'client_id'          => __('models.commercial_deal.fields.client_id'),
+            'deal_id'            => __('models.commercial_deal.fields.deal_id'),
             'schedule_data'      => __('models.commercial_deal.fields.schedule'),
         ];
     }

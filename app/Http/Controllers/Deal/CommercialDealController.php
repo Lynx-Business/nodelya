@@ -11,6 +11,7 @@ use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
 use App\Data\Deal\CommercialDealOneOrManyRequest;
+use App\Data\Deal\DealListResource;
 use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
@@ -65,6 +66,7 @@ class CommercialDealController extends Controller
 
         return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([
             'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'deals'   => Lazy::inertia(fn () => DealListResource::collect(Deal::all())),
         ]));
     }
 
@@ -103,9 +105,10 @@ class CommercialDealController extends Controller
 
         return Inertia::render('deal/commercial/Edit', CommercialDealFormProps::from([
             'deal' => CommercialDealFormResource::from(
-                $deal->load('client'),
+                $deal->load('client', 'parent'),
             ),
             'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'deals'   => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
         ]));
     }
 

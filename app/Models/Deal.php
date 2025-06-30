@@ -106,6 +106,7 @@ class Deal extends Model
         'team_id',
         'project_department_id',
         'client_id',
+        'deal_id',
         'name',
         'status',
         'amount_in_cents',
@@ -138,6 +139,11 @@ class Deal extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Deal::class, 'deal_id');
     }
 
     public static function booted(): void

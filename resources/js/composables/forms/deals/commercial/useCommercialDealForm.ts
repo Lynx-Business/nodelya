@@ -15,6 +15,7 @@ export function useCommercialDealForm(deal?: CommercialDealFormResource) {
     const form = useComputedForm({
         name: deal?.name || '',
         amount: deal?.amount,
+        parent: deal?.parent,
         client: deal?.client,
         code: deal?.code || '',
         reference: deal?.reference || '',
@@ -38,6 +39,8 @@ function transformDealForm(data: CommercialDealFormData): CommercialDealFormRequ
     return {
         ...data,
         client_id: data.client?.id!,
+        deal_id: data.parent?.id,
+        deal: undefined,
         amount: data.amount!,
         schedule: Array.isArray(data.schedule) ? data.schedule : undefined,
     };
