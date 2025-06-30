@@ -14,6 +14,7 @@ import {
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { CommercialDealFormData } from '@/composables';
+import { PlusIcon, XIcon } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 const { form } = injectFormContext<CommercialDealFormData>();
@@ -165,7 +166,7 @@ function getScheduleError(index: number, field: string) {
                 <FormError class="mb-4" :message="form.errors.schedule_data" />
             </FormField>
 
-            <div class="mb-4 flex gap-2">
+            <div class="mb-4 flex items-center gap-2">
                 <FormField>
                     <FormControl>
                         <DatePicker v-model="newScheduleItem.date" />
@@ -176,7 +177,9 @@ function getScheduleError(index: number, field: string) {
                         <PriceInput v-model="newScheduleItem.amount" />
                     </FormControl>
                 </FormField>
-                <Button @click="addScheduleItem"> Ajouter </Button>
+                <Button @click="addScheduleItem" variant="ghost" size="icon">
+                    <PlusIcon class="cursor-pointer" />
+                </Button>
             </div>
 
             <div class="overflow-hidden rounded-lg border">
@@ -197,7 +200,10 @@ function getScheduleError(index: number, field: string) {
                         </FormControl>
                         <FormError class="mt-1" :message="getScheduleError(index, 'amount')" />
                     </FormField>
-                    <Button variant="destructive" @click="removeScheduleItem(index)"> Retirer </Button>
+
+                    <Button @click="removeScheduleItem(index)" variant="ghost" size="icon">
+                        <XIcon class="bg-red text-red-500" />
+                    </Button>
                 </div>
             </div>
         </div>
