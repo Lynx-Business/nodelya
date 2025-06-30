@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
@@ -11,10 +12,8 @@ import {
 } from '@/components/ui/custom/form';
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CommercialDealFormData, usePageProp } from '@/composables';
 import { ClientListResource } from '@/types';
-import { WhenVisible } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const clients = usePageProp<ClientListResource[]>('clients', []);
@@ -44,7 +43,7 @@ function getScheduleError(index: number, field: string) {
 </script>
 
 <template>
-    <FormContent class="sm:grid-cols-2">
+    <FormContent class="sm:grid-cols-3">
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
@@ -141,30 +140,16 @@ function getScheduleError(index: number, field: string) {
             <FormError :message="form.errors.reference" />
         </FormField>
 
-        <WhenVisible data="clients">
-            <FormField required>
-                <FormLabel>
-                    <CapitalizeText>
-                        {{ $t('models.commercial_deal.fields.client_id') }}
-                    </CapitalizeText>
-                </FormLabel>
-                <Select v-model="form.client_id">
-                    <SelectTrigger class="w-full">
-                        <SelectValue>
-                            <template v-if="form.client_id">
-                                {{ clients.find((c) => c.id === form.client_id)?.name || '' }}
-                            </template>
-                        </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem v-for="client in clients" :key="client.id" :value="client.id">
-                            {{ client.name }}
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
-                <FormError :message="form.errors.client_id" />
-            </FormField>
-        </WhenVisible>
+        <FormField required>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.commercial_deal.fields.client_id') }}
+                </CapitalizeText>
+            </FormLabel>
+
+            <ClientCombobox v-model="form.client" />
+            <FormError :message="form.errors.client_id" />
+        </FormField>
 
         <div class="col-span-full mt-6">
             <h3 class="mb-4 text-lg font-medium">Échéancier</h3>

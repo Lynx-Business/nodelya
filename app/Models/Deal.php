@@ -132,8 +132,12 @@ class Deal extends Model
             'starts_at'  => 'date',
             'ends_at'    => 'date',
             'schedule'   => DataCollection::class.':'.YearScheduleData::class,
-
         ];
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public static function booted(): void

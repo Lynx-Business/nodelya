@@ -15,7 +15,7 @@ export function useCommercialDealForm(deal?: CommercialDealFormResource) {
     const form = useComputedForm({
         name: deal?.name || '',
         amount: deal?.amount,
-        client_id: deal?.client_id ?? 0,
+        client: deal?.client,
         code: deal?.code || '',
         reference: deal?.reference || '',
         success_rate: deal?.success_rate || 50,
@@ -37,6 +37,7 @@ export type CommercialDealFormData = ReturnType<CommercialDealForm['data']>;
 function transformDealForm(data: CommercialDealFormData): CommercialDealFormRequest {
     return {
         ...data,
+        client_id: data.client?.id!,
         amount: data.amount!,
         schedule: Array.isArray(data.schedule) ? data.schedule : undefined,
     };

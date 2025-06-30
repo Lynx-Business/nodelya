@@ -102,7 +102,11 @@ class CommercialDealController extends Controller
     {
 
         return Inertia::render('deal/commercial/Edit', CommercialDealFormProps::from([
-            'deal'    => CommercialDealFormResource::from($deal),
+            'deal' => CommercialDealFormResource::from([
+                ...$deal->toArray(),
+                'amount' => $deal->amount,
+                'client' => ClientListResource::from($deal->client), // Transformez le client
+            ]),
             'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
         ]));
     }

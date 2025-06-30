@@ -198,13 +198,13 @@ export type CommercialDealFormResource = {
     id: number;
     name: string;
     amount: number;
-    client_id: number;
     code?: string;
     reference?: string;
     success_rate: number;
     ordered_at: string;
     duration_in_months: number;
     starts_at: string;
+    client: ClientListResource;
     schedule: Array<YearScheduleData>;
 };
 export type CommercialDealIndexProps = {
