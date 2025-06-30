@@ -116,6 +116,7 @@ class Deal extends Model
         'duration_in_months',
         'starts_at',
         'schedule',
+        'amount',
     ];
 
     /**

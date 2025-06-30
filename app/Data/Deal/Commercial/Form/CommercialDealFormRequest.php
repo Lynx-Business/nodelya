@@ -27,7 +27,7 @@ class CommercialDealFormRequest extends Data
         #[Max(255)]
         public string $name,
 
-        public float $amount_in_cents,
+        public float $amount,
 
         public string $code,
 

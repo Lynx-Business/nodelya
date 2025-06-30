@@ -64,9 +64,9 @@ function getScheduleError(index: number, field: string) {
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <PriceInput v-model="form.amount_in_cents" :min="0" />
+                <PriceInput v-model="form.amount" :min="0" />
             </FormControl>
-            <FormError :message="form.errors.amount_in_cents" />
+            <FormError :message="form.errors.amount" />
         </FormField>
 
         <FormField required>

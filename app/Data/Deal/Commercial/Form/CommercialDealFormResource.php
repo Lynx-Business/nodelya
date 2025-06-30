@@ -14,7 +14,7 @@ class CommercialDealFormResource extends Resource
     public function __construct(
         public int $id,
         public string $name,
-        public float $amount_in_cents,
+        public float $amount,
         public int $client_id,
         public ?string $code,
         public ?string $reference,

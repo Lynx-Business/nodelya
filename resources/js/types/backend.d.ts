@@ -183,7 +183,7 @@ export type CommercialDealFormProps = {
 export type CommercialDealFormRequest = {
     deal?: any;
     name: string;
-    amount_in_cents: number;
+    amount: number;
     code: string;
     reference?: string;
     success_rate: number;
@@ -197,7 +197,7 @@ export type CommercialDealFormRequest = {
 export type CommercialDealFormResource = {
     id: number;
     name: string;
-    amount_in_cents: number;
+    amount: number;
     client_id: number;
     code?: string;
     reference?: string;
