@@ -18,7 +18,7 @@ defineOptions({
                 href: route('commercial.deals.index'),
             },
             {
-                title: trans('pages.commercial_deals.create.title'),
+                title: trans('pages.commercial_deals.edit.title'),
                 href: route('commercial.deals.edit', { deal: route().params.deal }),
             },
         ],
