@@ -248,6 +248,9 @@ return [
         'update' => [
             'success' => 'Affaire commerciale mise à jour avec succès',
         ],
+        'validate' => [
+            'success' => 'Affaire commerciale a été bien validée.',
+        ],
         'trash' => [
             'confirm' => 'Êtes-vous sûr de vouloir archiver cette affaire commerciale ?|Êtes-vous sûr de vouloir archiver ces affaires commerciales ?',
             'success' => 'Affaire commerciale archivée avec succès|Affaires commerciales archivées avec succès',

@@ -42,9 +42,10 @@ use Spatie\LaravelData\DataCollection;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
- * @property-read \App\Models\User $client
+ * @property-read \App\Models\Client $client
  * @property-read true $is_trashable
  * @property bool $is_trashed
+ * @property-read Deal|null $parent
  * @property-read \App\Models\ProjectDepartment|null $projectDepartment
  * @property-read mixed $revenue
  * @property-read \App\Models\Team $team

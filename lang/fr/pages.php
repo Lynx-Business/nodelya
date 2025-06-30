@@ -321,5 +321,10 @@ return [
             'title'       => 'Mettre à jour une affaire commerciale',
             'description' => 'Modifiez les détails d\'une affaire commerciale existante',
         ],
+
+        'validate' => [
+            'title' => 'Validation de l’affaire :name',
+            'save'  => 'Valider l’affaire',
+        ],
     ],
 ];

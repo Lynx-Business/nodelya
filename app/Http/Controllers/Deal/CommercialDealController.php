@@ -10,6 +10,7 @@ use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
+use App\Data\Deal\Commercial\Validate\CommercialDealValidateRequest;
 use App\Data\Deal\CommercialDealOneOrManyRequest;
 use App\Data\Deal\DealListResource;
 use App\Enums\Deal\DealStatus;
@@ -19,7 +20,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Deal;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -55,9 +55,6 @@ class CommercialDealController extends Controller
         ]));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     /**
      * Show the form for creating a new resource.
      */
@@ -195,27 +192,23 @@ class CommercialDealController extends Controller
 
     public function validateDeal(Deal $deal)
     {
-
         $reference = $this->generateReference($deal);
 
         return Inertia::render('deal/commercial/Validate', CommercialDealValidateProps::from([
-            'deal'      => $deal,
+            'deal'      => DealListResource::from($deal),
             'reference' => $reference,
         ]));
     }
 
-    public function processValidation(Request $request, Deal $deal)
+    public function processValidation(CommercialDealValidateRequest $data, Deal $deal)
     {
-        $request->validate([
-            'amount' => 'required|numeric|min:0',
-        ]);
 
-        DB::transaction(function () use ($request, $deal) {
+        DB::transaction(function () use ($data, $deal) {
 
             $deal->update([
-                'amount_in_cents' => Services::conversion()->priceToCents($request->amount),
-                'reference'       => $request->reference,
-                'status'          => DealStatus::VALIDATED,
+                'amount'    => $data->amount,
+                'reference' => $data->reference,
+                'status'    => DealStatus::VALIDATED,
             ]);
         });
 
@@ -227,23 +220,24 @@ class CommercialDealController extends Controller
     private function generateReference(Deal $deal): string
     {
         $year = now()->format('Y');
-        $parentIndicator = '';
+        $letter = '';
 
         if ($deal->deal_id) {
-            $parentDeal = Deal::find($deal->deal_id);
-            $parentIndicator = $parentDeal ? '.'.$parentDeal->id : '';
+            $parentDeal = Deal::findOrFail($deal->deal_id);
+
+            $childCount = Deal::where('deal_id', $parentDeal->id)
+                ->whereNotNull('reference')
+                ->count();
+
+            while ($childCount > 0) {
+                $remainder = ($childCount - 1) % 26;
+                $letter = chr(65 + $remainder).$letter;
+                $childCount = intval(($childCount - 1) / 26);
+            }
         }
 
-        $lastReference = Deal::where('reference', 'like', $year.'N.%')
-            ->orderBy('reference', 'desc')
-            ->value('reference');
+        $increment = Deal::count();
 
-        $increment = 1;
-        if ($lastReference) {
-            preg_match('/'.$year.'N\.(\d+)/', $lastReference, $matches);
-            $increment = (int) ($matches[1] ?? 0) + 1;
-        }
-
-        return sprintf('%sN.%d%s', $year, $increment, $parentIndicator);
+        return sprintf('%sN%d%s', $year, $increment, $letter ? $letter : '');
     }
 }

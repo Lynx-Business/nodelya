@@ -253,7 +253,11 @@ export type CommercialDealOneOrManyRequest = {
     ids?: Array<number>;
 };
 export type CommercialDealValidateProps = {
-    deal: any;
+    deal: DealListResource;
+    reference: string;
+};
+export type CommercialDealValidateRequest = {
+    amount: number;
     reference: string;
 };
 export type ConfirmPasswordProps = {};
@@ -401,6 +405,7 @@ export type DashboardIndexProps = {};
 export type DealListResource = {
     id: number;
     name: string;
+    amount: number;
 };
 export type DealScheduleData = {
     years: Array<YearScheduleData>;

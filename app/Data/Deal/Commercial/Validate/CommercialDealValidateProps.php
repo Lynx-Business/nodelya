@@ -2,7 +2,7 @@
 
 namespace App\Data\Deal\Commercial\Validate;
 
-use App\Models\Deal;
+use App\Data\Deal\DealListResource;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -11,7 +11,7 @@ class CommercialDealValidateProps extends Resource
 {
     public function __construct(
 
-        public Deal $deal,
+        public DealListResource $deal,
 
         public string $reference,
     ) {}

@@ -1,9 +1,9 @@
 import { useComputedForm } from '@/composables';
-import { CommercialDealFormResource } from '@/types';
+import { DealListResource } from '@/types';
 
-export function useCommercialDealValidateFrom(deal?: CommercialDealFormResource, reference?: string) {
+export function useCommercialDealValidateFrom(deal?: DealListResource, reference?: string) {
     const form = useComputedForm({
-        amount: deal?.amount_in_cents || 0,
+        amount: deal?.amount || 0,
         reference: reference || '',
     });
 

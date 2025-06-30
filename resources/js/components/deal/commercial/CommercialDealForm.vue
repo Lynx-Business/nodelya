@@ -13,12 +13,8 @@ import {
 } from '@/components/ui/custom/form';
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { CommercialDealFormData, usePageProp } from '@/composables';
-import { ClientListResource } from '@/types';
+import { CommercialDealFormData } from '@/composables';
 import { ref } from 'vue';
-
-const clients = usePageProp<ClientListResource[]>('clients', []);
-console.log('clients', clients);
 
 const { form } = injectFormContext<CommercialDealFormData>();
 const newScheduleItem = ref({ date: '', amount: 0 });

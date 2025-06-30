@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
-import {
-    FormContent,
-    FormControl,
-    FormError,
-    FormField,
-    FormLabel,
-    injectFormContext,
-} from '@/components/ui/custom/form';
-import { PriceInput, TextInput } from '@/components/ui/custom/input';
-import { CommercialDealValidateFormData, useLayout } from '@/composables';
+import CommercialDealValidate from '@/components/deal/commercial/CommercialDealValidate.vue';
+import { Form, FormSubmitButton } from '@/components/ui/custom/form';
+import { Section, SectionContent, SectionFooter, SectionHeader } from '@/components/ui/custom/section';
+import { CapitalizeText } from '@/components/ui/custom/typography';
+import { useCommercialDealValidateFrom, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
 import type { CommercialDealValidateProps } from '@/types';
+import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
+import { SaveIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -22,7 +18,11 @@ defineOptions({
                 href: route('commercial.deals.index'),
             },
             {
-                title: trans('pages.commercial_deals.create.title'),
+                title: trans('pages.commercial_deals.edit.title'),
+                href: route('commercial.deals.edit', { deal: route().params.deal }),
+            },
+            {
+                title: route().params.deal,
                 href: route('commercial.deals.edit', { deal: route().params.deal }),
             },
         ],
@@ -30,35 +30,34 @@ defineOptions({
 });
 
 const props = defineProps<CommercialDealValidateProps>();
+const form = useCommercialDealValidateFrom(props.deal, props.reference);
 
-const { form } = injectFormContext<CommercialDealValidateFormData>();
-
-const submit = () => {
+function submit() {
     form.post(route('commercial.deals.validate.process', { deal: props.deal.id }));
-};
+}
 </script>
 
 <template>
-    <form @submit.prevent="submit">
-        <FormContent class="sm:grid-cols-2">
-            <FormField>
-                <FormLabel>Référence de commande</FormLabel>
-                <FormControl>
-                    <TextInput :model-value="form.reference" disabled />
-                </FormControl>
-            </FormField>
+    <Head :title="$t('pages.commercial_deals.validate.title', { name: props.deal.name })" />
 
-            <FormField required>
-                <FormLabel>Montant validé</FormLabel>
-                <FormControl>
-                    <PriceInput v-model="form.amount" />
-                </FormControl>
-                <FormError :message="form.errors.amount" />
-            </FormField>
-
-            <div class="col-span-full">
-                <Button type="submit" :disabled="form.processing"> Valider l'affaire </Button>
-            </div>
-        </FormContent>
-    </form>
+    <Form :form @submit="submit()">
+        <Section>
+            <SectionHeader>
+                <SectionTitle>
+                    {{ $t('pages.commercial_deals.validate.title', { name: props.deal.name }) }}
+                </SectionTitle>
+            </SectionHeader>
+            <SectionContent class="sm:flex">
+                <CommercialDealValidate />
+            </SectionContent>
+            <SectionFooter>
+                <FormSubmitButton>
+                    <SaveIcon />
+                    <CapitalizeText>
+                        {{ $t('pages.commercial_deals.validate.save') }}
+                    </CapitalizeText>
+                </FormSubmitButton>
+            </SectionFooter>
+        </Section>
+    </Form>
 </template>
