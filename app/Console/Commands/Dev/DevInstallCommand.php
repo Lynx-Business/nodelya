@@ -2,7 +2,17 @@
 
 namespace App\Console\Commands\Dev;
 
+use App\Enums\Expense\ExpenseType;
+use App\Enums\Role\RoleName;
+use App\Facades\Services;
+use App\Models\AccountingPeriod;
 use App\Models\Banner;
+use App\Models\ExpenseBudget;
+use App\Models\ExpenseCategory;
+use App\Models\ExpenseItem;
+use App\Models\ExpenseSubCategory;
+use App\Models\ProjectDepartment;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -72,11 +82,56 @@ class DevInstallCommand extends Command
             Banner::factory()
                 ->count($count)
                 ->create();
-            User::factory()
+
+            $users = User::factory()
                 ->count($count)
-                ->withoutTeam()
                 ->sequence(fn (Sequence $sequence) => ['email' => "owner-{$sequence->index}@app.com"])
                 ->create();
+
+            /** @var User $user */
+            foreach ($users as $user) {
+                Services::team()->forTeam(
+                    $user->team,
+                    function (Team $team) use ($count, $user) {
+                        $team->update([
+                            'creator_id' => $user->id,
+                        ]);
+                        $user->assignRole(RoleName::OWNER);
+
+                        AccountingPeriod::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->create();
+                        ProjectDepartment::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->create();
+
+                        $categories = ExpenseCategory::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->create([
+                                'type' => ExpenseType::GENERAL,
+                            ]);
+                        foreach ($categories as $category) {
+                            ExpenseSubCategory::factory()
+                                ->count(2)
+                                ->recycle($team)
+                                ->recycle($category)
+                                ->has(
+                                    ExpenseItem::factory()
+                                        ->count(2)
+                                        ->recycle($team)
+                                        ->has(
+                                            ExpenseBudget::factory()
+                                                ->count(2)
+                                                ->recycle($team),
+                                        ),
+                                )->create();
+                        }
+                    },
+                );
+            }
         }
 
         return self::SUCCESS;

@@ -93,6 +93,23 @@ return [
         ],
     ],
 
+    'expenses' => [
+        'title'   => 'Budgets',
+        'budgets' => [
+            'index' => [
+                'title' => 'Budgets',
+            ],
+            'create' => [
+                'title'       => 'Nouveau budget',
+                'description' => 'Créez un nouveau budget',
+            ],
+            'edit' => [
+                'title'       => 'Détails de budget',
+                'description' => 'Mettez à jour les détails du budget',
+            ],
+        ],
+    ],
+
     'settings' => [
         'title'   => 'Paramètres',
         'profile' => [

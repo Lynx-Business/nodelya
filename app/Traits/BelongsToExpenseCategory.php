@@ -24,7 +24,7 @@ trait BelongsToExpenseCategory
 
     public function expenseCategory(): BelongsTo
     {
-        return $this->belongsTo(ExpenseCategory::class, $this->getExpenseCategoryIdColumn());
+        return $this->belongsTo(ExpenseCategory::class, $this->getExpenseCategoryIdColumn())->withTrashed();
     }
 
     public function scopeWhereBelongsToExpenseCategory(Builder $query, ExpenseCategory|int $expenseCategory): Builder

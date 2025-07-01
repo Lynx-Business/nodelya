@@ -6,6 +6,7 @@ use App\Data\Team\TeamResource;
 use App\Data\User\UserAbilitiesResource;
 use App\Data\User\UserResource;
 use App\Facades\Services;
+use App\Models\Team;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +41,7 @@ class AuthIncludeMiddleware
             'auth' => [
                 'user'      => UserResource::from($user),
                 'abilities' => UserAbilitiesResource::from($user),
-                'team'      => TeamResource::from(Services::team()->current()),
+                'team'      => value(fn (?Team $value) => $value ? TeamResource::from($value) : null, Services::team()->current()),
             ],
         ]);
 

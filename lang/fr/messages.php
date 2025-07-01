@@ -55,6 +55,26 @@ return [
     ],
 
     'expense' => [
+        'budgets' => [
+            'store' => [
+                'success' => 'Budget créé avec succès',
+            ],
+            'update' => [
+                'success' => 'Budget mis à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver ce budget ?|Êtes-vous sûr de vouloir archiver ces budgets ?',
+                'success' => 'Budget archivé avec succès|Budgets archivés avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer ce budget ?|Êtes-vous sûr de vouloir restaurer ces budgets ?',
+                'success' => 'Budget restauré avec succès|Budgets restaurés avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer ce budget ?|Êtes-vous sûr de vouloir supprimer ces budgets ?',
+                'success' => 'Budget supprimé avec succès|Budgets supprimés avec succès',
+            ],
+        ],
         'categories' => [
             'store' => [
                 'success' => 'Catégorie de dépenses créée avec succès',

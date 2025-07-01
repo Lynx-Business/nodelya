@@ -2,7 +2,8 @@
 
 namespace App\Data\Expense\SubCategory\Form;
 
-use App\Data\Expense\Category\ExpenseCategoryListResource;
+use App\Data\Expense\Category\ExpenseCategoryResource;
+use App\Data\Expense\SubCategory\ExpenseSubCategoryResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
@@ -21,9 +22,9 @@ class ExpenseSubCategoryFormProps extends Resource
         public ExpenseType $expenseType,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseCategoryListResource::class)]
+        #[DataCollectionOf(ExpenseCategoryResource::class)]
         public Lazy|DataCollection $expenseCategories,
 
-        public ?ExpenseSubCategoryFormResource $expenseSubCategory,
+        public ?ExpenseSubCategoryResource $expenseSubCategory,
     ) {}
 }

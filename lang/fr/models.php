@@ -38,6 +38,21 @@ return [
     ],
 
     'expense' => [
+        'budget' => [
+            'name' => [
+                'one'  => 'budget',
+                'many' => 'budgets',
+            ],
+            'fields' => [
+                'amount'       => 'montant',
+                'deleted_at'   => 'archivé le',
+                'ends_at'      => 'fin',
+                'expense_item' => 'poste',
+                'is_trashed'   => 'est archivé',
+                'starts_at'    => 'début',
+                'type'         => 'type',
+            ],
+        ],
         'category' => [
             'name' => [
                 'one'  => 'catégorie de dépenses',

@@ -31,8 +31,8 @@ import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
     ExpenseSubCategoryIndexProps,
     ExpenseSubCategoryIndexRequest,
-    ExpenseSubCategoryIndexResource,
     ExpenseSubCategoryOneOrManyRequest,
+    ExpenseSubCategoryResource,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -53,8 +53,8 @@ const props = defineProps<ExpenseSubCategoryIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ExpenseSubCategoryIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<ExpenseSubCategoryIndexResource>[] = [
+const selectedRows = ref<ExpenseSubCategoryResource[]>([]);
+const rowsActions: DataTableRowsAction<ExpenseSubCategoryResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -128,12 +128,12 @@ const rowsActions: DataTableRowsAction<ExpenseSubCategoryIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ExpenseSubCategoryIndexResource>[] = [
+const rowActions: DataTableRowAction<ExpenseSubCategoryResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (expenseSubCategory) => expenseSubCategory.can_update,
+        hidden: (expenseSubCategory) => expenseSubCategory.can_update ?? false,
         disabled: (expenseSubCategory) => !expenseSubCategory.can_view,
         href: (expenseSubCategory) =>
             route('teams.expenses.sub-categories.edit', {
@@ -342,7 +342,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseSubCategory.expense_category.name }}
+                                {{ expenseSubCategory.expense_category?.name }}
                             </DataTableCell>
                             <DataTableCell>
                                 {{ expenseSubCategory.name }}

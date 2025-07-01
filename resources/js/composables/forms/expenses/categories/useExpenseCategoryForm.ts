@@ -1,7 +1,7 @@
 import { useComputedForm } from '@/composables';
-import { ExpenseCategoryFormRequest, ExpenseCategoryFormResource } from '@/types';
+import { ExpenseCategoryFormRequest, ExpenseCategoryResource } from '@/types';
 
-export function useExpenseCategoryForm(expenseCategory?: Partial<ExpenseCategoryFormResource>) {
+export function useExpenseCategoryForm(expenseCategory?: Partial<ExpenseCategoryResource>) {
     const form = useComputedForm({
         type: expenseCategory?.type ?? 'general',
         name: expenseCategory?.name ?? '',

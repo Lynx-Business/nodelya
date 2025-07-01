@@ -32,8 +32,8 @@ import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
     ExpenseItemIndexProps,
     ExpenseItemIndexRequest,
-    ExpenseItemIndexResource,
     ExpenseItemOneOrManyRequest,
+    ExpenseItemResource,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -54,8 +54,8 @@ const props = defineProps<ExpenseItemIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ExpenseItemIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<ExpenseItemIndexResource>[] = [
+const selectedRows = ref<ExpenseItemResource[]>([]);
+const rowsActions: DataTableRowsAction<ExpenseItemResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -123,12 +123,12 @@ const rowsActions: DataTableRowsAction<ExpenseItemIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ExpenseItemIndexResource>[] = [
+const rowActions: DataTableRowAction<ExpenseItemResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (expenseItem) => expenseItem.can_update,
+        hidden: (expenseItem) => expenseItem.can_update ?? false,
         disabled: (expenseItem) => !expenseItem.can_view,
         href: (expenseItem) =>
             route('teams.expenses.items.edit', {
@@ -352,7 +352,7 @@ const filters = useFilters<ExpenseItemIndexRequest>(
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseItem.expense_category.name }}
+                                {{ expenseItem.expense_category?.name }}
                             </DataTableCell>
                             <DataTableCell>
                                 {{ expenseItem.expense_sub_category?.name }}

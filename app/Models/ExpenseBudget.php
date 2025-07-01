@@ -2,18 +2,24 @@
 
 namespace App\Models;
 
+use App\Enums\Expense\ExpenseType;
 use App\Facades\Services;
 use App\Traits\BelongsToExpenseItem;
 use App\Traits\BelongsToTeam;
+use App\Traits\HasPolicy;
+use App\Traits\Searchable;
+use App\Traits\Trashable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * @property int $id
  * @property int $team_id
- * @property int $item_id
+ * @property int $expense_item_id
  * @property string|null $model_type
  * @property int|null $model_id
  * @property int $amount_in_cents
@@ -21,27 +27,43 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property \Illuminate\Support\Carbon $ends_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property float $amount
- * @property-read \App\Models\ExpenseItem|null $expenseItem
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
+ * @property-read \App\Models\ExpenseItem $expenseItem
+ * @property-read true $is_trashable
+ * @property bool $is_trashed
  * @property-read Model|\Eloquent|null $model
  * @property-read \App\Models\Team $team
+ * @property-read ExpenseType $type
  *
  * @method static \Database\Factories\ExpenseBudgetFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereAmountInCents($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereBelongsToExpenseItem(\App\Models\ExpenseItem|int $expenseItem)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereBelongsToTeam(\App\Models\Team|int $team)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereEndsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereItemId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereModelId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereModelType($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereStartsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereTeamId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|ExpenseBudget whereUpdatedAt($value)
+ * @method static Builder<static>|ExpenseBudget filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
+ * @method static Builder<static>|ExpenseBudget newModelQuery()
+ * @method static Builder<static>|ExpenseBudget newQuery()
+ * @method static Builder<static>|ExpenseBudget onlyTrashed()
+ * @method static Builder<static>|ExpenseBudget query()
+ * @method static Builder<static>|ExpenseBudget search(?string $q)
+ * @method static Builder<static>|ExpenseBudget whereAmountInCents($value)
+ * @method static Builder<static>|ExpenseBudget whereBelongsToExpenseItem(\App\Models\ExpenseItem|int $expenseItem)
+ * @method static Builder<static>|ExpenseBudget whereBelongsToTeam(\App\Models\Team|int $team)
+ * @method static Builder<static>|ExpenseBudget whereCreatedAt($value)
+ * @method static Builder<static>|ExpenseBudget whereDeletedAt($value)
+ * @method static Builder<static>|ExpenseBudget whereEndsAt($value)
+ * @method static Builder<static>|ExpenseBudget whereExpenseItemId($value)
+ * @method static Builder<static>|ExpenseBudget whereId($value)
+ * @method static Builder<static>|ExpenseBudget whereModelId($value)
+ * @method static Builder<static>|ExpenseBudget whereModelType($value)
+ * @method static Builder<static>|ExpenseBudget whereStartsAt($value)
+ * @method static Builder<static>|ExpenseBudget whereTeamId($value)
+ * @method static Builder<static>|ExpenseBudget whereType(\App\Enums\Expense\ExpenseType $type)
+ * @method static Builder<static>|ExpenseBudget whereUpdatedAt($value)
+ * @method static Builder<static>|ExpenseBudget withTrashed()
+ * @method static Builder<static>|ExpenseBudget withoutTrashed()
  *
  * @mixin \Eloquent
  */
@@ -52,6 +74,10 @@ class ExpenseBudget extends Model
 
     /** @use HasFactory<\Database\Factories\ExpenseBudgetFactory> */
     use HasFactory;
+
+    use HasPolicy;
+    use Searchable;
+    use Trashable;
 
     /**
      * The attributes that are mass assignable.
@@ -69,6 +95,17 @@ class ExpenseBudget extends Model
     ];
 
     /**
+     * The attributes that are searchable.
+     *
+     * @var list<string>
+     */
+    protected $searchable = [
+        'expenseItem.expenseCategory.name',
+        'expenseItem.expenseSubCategory.name',
+        'expenseItem.name',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -76,8 +113,8 @@ class ExpenseBudget extends Model
     protected function casts(): array
     {
         return [
-            'starts_at' => 'date',
-            'ends_at'   => 'date',
+            'starts_at' => 'datetime',
+            'ends_at'   => 'datetime',
         ];
     }
 
@@ -91,6 +128,24 @@ class ExpenseBudget extends Model
         return Attribute::make(
             get: fn ($value, array $attributes): float => Services::conversion()->centsToPrice(data_get($attributes, 'amount_in_cents')),
             set: fn (?float $value) => ['amount_in_cents' => Services::conversion()->priceToCents($value)],
+        );
+    }
+
+    protected function type(): Attribute
+    {
+        return Attribute::get(fn (): ExpenseType => ExpenseType::fromMorphType($this->model_type));
+    }
+
+    public function scopeWhereType(Builder $query, ExpenseType $type): Builder
+    {
+        return $query->where(
+            'model_type',
+            match ($type) {
+                ExpenseType::CONTRACTOR => Relation::getMorphAlias(Contractor::class),
+                ExpenseType::EMPLOYEE   => Relation::getMorphAlias(Employee::class),
+                ExpenseType::GENERAL    => null,
+                default                 => null,
+            },
         );
     }
 }

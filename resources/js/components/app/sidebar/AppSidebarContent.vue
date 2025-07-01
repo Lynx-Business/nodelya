@@ -44,11 +44,11 @@ const expanded = computed(() => isMobile.value || state.value === 'expanded');
             </SidebarGroupLabel>
             <SidebarMenu>
                 <template v-for="item in items.filter((item) => !item.hidden)" :key="item.title">
-                    <component v-if="item.items" :is="expanded ? Collapsible : DropdownMenu">
+                    <component v-if="item.items" :is="expanded ? Collapsible : DropdownMenu" :default-open="expanded">
                         <SidebarMenuItem>
                             <component as-child :is="expanded ? CollapsibleTrigger : DropdownMenuTrigger">
                                 <SidebarMenuButton
-                                    :is-active="item.items.some((subItem) => subItem.isActive)"
+                                    :is-active="!expanded && item.items.some((subItem) => subItem.isActive)"
                                     :tooltip="item.title"
                                 >
                                     <component :is="item.icon" />
@@ -89,9 +89,12 @@ const expanded = computed(() => isMobile.value || state.value === 'expanded');
                                     <DropdownMenuItem
                                         v-for="subItem in item.items.filter((item) => !item.hidden)"
                                         :key="subItem.title"
-                                        @click="clearSessionFilters(subItem.href)"
+                                        as-child
                                     >
-                                        <InertiaLink :href="subItem.href">
+                                        <InertiaLink
+                                            :href="subItem.href"
+                                            :onBefore="() => clearSessionFilters(subItem.href)"
+                                        >
                                             <component :is="subItem.icon" />
                                             <CapitalizeText>
                                                 {{ subItem.title }}
@@ -102,9 +105,9 @@ const expanded = computed(() => isMobile.value || state.value === 'expanded');
                             </DropdownMenuContent>
                         </SidebarMenuItem>
                     </component>
-                    <SidebarMenuItem v-else-if="item.href" @click="clearSessionFilters(item.href)">
+                    <SidebarMenuItem v-else-if="item.href">
                         <SidebarMenuButton as-child :is-active="item.isActive" :tooltip="item.title">
-                            <InertiaLink :href="item.href">
+                            <InertiaLink :href="item.href" :onBefore="() => clearSessionFilters(item.href)">
                                 <component :is="item.icon" />
                                 <span>{{ item.title }}</span>
                             </InertiaLink>

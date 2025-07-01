@@ -30,8 +30,8 @@ import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
     ExpenseCategoryIndexProps,
     ExpenseCategoryIndexRequest,
-    ExpenseCategoryIndexResource,
     ExpenseCategoryOneOrManyRequest,
+    ExpenseCategoryResource,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
@@ -51,8 +51,8 @@ const props = defineProps<ExpenseCategoryIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ExpenseCategoryIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<ExpenseCategoryIndexResource>[] = [
+const selectedRows = ref<ExpenseCategoryResource[]>([]);
+const rowsActions: DataTableRowsAction<ExpenseCategoryResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -120,12 +120,12 @@ const rowsActions: DataTableRowsAction<ExpenseCategoryIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ExpenseCategoryIndexResource>[] = [
+const rowActions: DataTableRowAction<ExpenseCategoryResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (expenseCategory) => expenseCategory.can_update,
+        hidden: (expenseCategory) => expenseCategory.can_update ?? false,
         disabled: (expenseCategory) => !expenseCategory.can_view,
         href: (expenseCategory) =>
             route('teams.expenses.categories.edit', {

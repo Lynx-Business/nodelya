@@ -3,8 +3,9 @@
 namespace App\Data\Expense\Item\Index;
 
 use App\Attributes\EnumArrayOf;
-use App\Data\Expense\Category\ExpenseCategoryListResource;
-use App\Data\Expense\SubCategory\ExpenseSubCategoryListResource;
+use App\Data\Expense\Category\ExpenseCategoryResource;
+use App\Data\Expense\Item\ExpenseItemResource;
+use App\Data\Expense\SubCategory\ExpenseSubCategoryResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
@@ -31,19 +32,19 @@ class ExpenseItemIndexProps extends Resource
         public ExpenseType $expenseType,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseItemIndexResource::class)]
+        #[DataCollectionOf(ExpenseItemResource::class)]
         public Lazy|PaginatedDataCollection $expenseItems,
-
-        #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseCategoryListResource::class)]
-        public Lazy|DataCollection $expenseCategories,
-
-        #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseSubCategoryListResource::class)]
-        public Lazy|DataCollection $expenseSubCategories,
 
         #[AutoInertiaLazy]
         #[EnumArrayOf(TrashedFilter::class)]
         public Lazy|array $trashedFilters,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(ExpenseCategoryResource::class)]
+        public Lazy|DataCollection $expenseCategories,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(ExpenseSubCategoryResource::class)]
+        public Lazy|DataCollection $expenseSubCategories,
     ) {}
 }
