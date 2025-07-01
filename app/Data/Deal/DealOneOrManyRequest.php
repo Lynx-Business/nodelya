@@ -15,7 +15,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[MergeValidationRules]
-class CommercialDealOneOrManyRequest extends Data
+class DealOneOrManyRequest extends Data
 {
     public function __construct(
 

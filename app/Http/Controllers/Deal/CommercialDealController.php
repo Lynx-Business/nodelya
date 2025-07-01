@@ -11,8 +11,8 @@ use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateRequest;
-use App\Data\Deal\CommercialDealOneOrManyRequest;
 use App\Data\Deal\DealListResource;
+use App\Data\Deal\DealOneOrManyRequest;
 use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
@@ -129,7 +129,7 @@ class CommercialDealController extends Controller
         return to_route('commercial.deals.index');
     }
 
-    public function trash(CommercialDealOneOrManyRequest $data)
+    public function trash(DealOneOrManyRequest $data)
     {
         try {
             \DB::beginTransaction();
@@ -148,7 +148,7 @@ class CommercialDealController extends Controller
         return back();
     }
 
-    public function restore(CommercialDealOneOrManyRequest $data)
+    public function restore(DealOneOrManyRequest $data)
     {
         try {
             \DB::beginTransaction();
@@ -171,7 +171,7 @@ class CommercialDealController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CommercialDealOneOrManyRequest $data)
+    public function destroy(DealOneOrManyRequest $data)
     {
         try {
             \DB::beginTransaction();
@@ -215,7 +215,7 @@ class CommercialDealController extends Controller
 
         Services::toast()->success->execute(__('messages.commercial_deals.validate.success'));
 
-        return to_route('commercial.deals.index');
+        return to_route('billing.deals.index');
     }
 
     private function generateReference(Deal $deal): string

@@ -10,6 +10,7 @@ use App\Data\Deal\Billing\Index\BillingDealIndexProps;
 use App\Data\Deal\Billing\Index\BillingDealIndexRequest;
 use App\Data\Deal\Billing\Index\BillingDealIndexResource;
 use App\Data\Deal\DealListResource;
+use App\Data\Deal\DealOneOrManyRequest;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -80,5 +81,67 @@ class BillingDealController extends Controller
         Services::toast()->success->execute(__('messages.billing_deals.update.success'));
 
         return to_route('billing.deals.index');
+    }
+
+    public function trash(DealOneOrManyRequest $data)
+    {
+        try {
+            \DB::beginTransaction();
+            $count = Deal::query()
+                ->when($data->deal, fn ($q) => $q->where('id', $data->deal))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->delete();
+            \DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.billing_deals.trash.success', $count));
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
+    }
+
+    public function restore(DealOneOrManyRequest $data)
+    {
+        try {
+            \DB::beginTransaction();
+            $count = Deal::query()
+                ->onlyTrashed()
+                ->when($data->deal, fn ($q) => $q->where('id', $data->deal))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->restore();
+            \DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.billing_deals.restore.success', $count));
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(DealOneOrManyRequest $data)
+    {
+        try {
+            \DB::beginTransaction();
+            $count = Deal::query()
+                ->withTrashed()
+                ->when($data->deal, fn ($q) => $q->where('id', $data->deal))
+                ->when($data->ids, fn ($q) => $q->whereIntegerInRaw('id', $data->ids))
+                ->get()
+                ->each->forceDelete();
+            \DB::commit();
+            Services::toast()->success->execute(trans_choice('messages.billing_deals.delete.success', $count));
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            Services::toast()->error->execute();
+        }
+
+        return back();
     }
 }

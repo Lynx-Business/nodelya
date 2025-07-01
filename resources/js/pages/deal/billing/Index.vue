@@ -43,7 +43,6 @@ defineOptions({
 });
 
 const props = defineProps<BillingDealIndexProps>();
-console.log('commercial_deals => ', props.billing_deals?.data);
 
 const format = useFormatter();
 const alert = useAlert();
@@ -62,7 +61,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
                 callback: () =>
                     router.delete(route('billing.deals.trash'), {
                         data: { ids: items.map(({ id }) => id) },
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                         onSuccess: () => {
                             selectedRows.value = [];
                         },
@@ -82,7 +81,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
                         route('billing.deals.restore'),
                         { ids: items.map(({ id }) => id) },
                         {
-                            only: ['commercial_deals'],
+                            only: ['billing_deals'],
                             onSuccess: () => {
                                 selectedRows.value = [];
                             },
@@ -101,7 +100,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
                 callback: () =>
                     router.delete(route('billing.deals.delete'), {
                         data: { ids: items.map(({ id }) => id) },
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                         onSuccess: () => {
                             selectedRows.value = [];
                         },
@@ -134,7 +133,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
                 description: transChoice('messages.billing_deals.trash.confirm', 1),
                 callback: () =>
                     router.delete(route('billing.deals.trash', { deal }), {
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                     }),
             }),
     },
@@ -149,7 +148,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
                 description: transChoice('messages.billing_deals.restore.confirm', 1),
                 callback: () =>
                     router.patch(route('billing.deals.restore', { deal }), undefined, {
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                     }),
             }),
     },
@@ -164,7 +163,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
                 description: transChoice('messages.billing_deals.delete.confirm', 1),
                 callback: () =>
                     router.delete(route('billing.deals.delete', { deal }), {
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                     }),
             }),
     },

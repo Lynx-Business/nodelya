@@ -13,11 +13,11 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.billing_deals.index.title'),
-                href: route('commercial.deals.index'),
+                href: route('billing.deals.index'),
             },
             {
                 title: trans('pages.billing_deals.edit.title'),
-                href: route('commercial.deals.edit', { deal: route().params.deal }),
+                href: route('billing.deals.edit', { deal: route().params.deal }),
             },
         ],
     })),
