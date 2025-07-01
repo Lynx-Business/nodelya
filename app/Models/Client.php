@@ -70,6 +70,16 @@ class Client extends Model
     ];
 
     /**
+     * The attributes that are searchable.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'name',
+        'address',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
