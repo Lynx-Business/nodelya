@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import BillingDealForm from '@/components/deal/commercial/BillingDealForm.vue';
+import BillingDealForm from '@/components/deal/Billing/BillingDealForm.vue';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
 import { useBillingDealForm, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
-import type { BillingDealFormProps } from '@/types';
+import { BillingDealFormProps } from '@/types';
+
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 

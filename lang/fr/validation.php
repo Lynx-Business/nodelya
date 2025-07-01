@@ -167,6 +167,7 @@ return [
         'accounting_period' => [
             'overlap' => 'Le champ :attribute chevauche une autre période',
         ],
+        'schedule_total_exceeds' => 'La somme des montants de l\'échéancier :total dépasse le montant principal :principal.',
     ],
 
     /*

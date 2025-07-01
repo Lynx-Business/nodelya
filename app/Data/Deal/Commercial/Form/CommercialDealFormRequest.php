@@ -97,4 +97,21 @@ class CommercialDealFormRequest extends Data
 
         return new DataCollection(YearScheduleData::class, $years);
     }
+
+    public static function rules(): array
+    {
+        return [
+            'schedule_data' => ['array', 'min:1', function ($attribute, $value, $fail) {
+                $principalAmount = request()->input('amount');
+                $totalSchedule = collect($value)->sum('amount');
+
+                if ($totalSchedule > $principalAmount) {
+                    $fail(__('validation.custom.schedule_total_exceeds', [
+                        'total'     => $totalSchedule,
+                        'principal' => $principalAmount,
+                    ]));
+                }
+            }],
+        ];
+    }
 }

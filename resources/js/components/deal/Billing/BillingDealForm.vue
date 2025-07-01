@@ -13,14 +13,35 @@ import {
 } from '@/components/ui/custom/form';
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { BillingDealFormData } from '@/composables';
+import { BillingDealFormData, useFormatter } from '@/composables';
+import { trans } from 'laravel-vue-i18n';
 import { PlusIcon, XIcon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const { form } = injectFormContext<BillingDealFormData>();
 const newScheduleItem = ref({ date: '', amount: 0 });
+const format = useFormatter();
+
+const totalScheduleAmount = computed(() => {
+    return (
+        form.schedule_data.reduce((sum: any, item: any) => sum + (item.amount || 0), 0) + newScheduleItem.value.amount
+    );
+});
+
+const scheduleTotalError = computed(() => {
+    if (totalScheduleAmount.value > (form?.amount ?? 0)) {
+        return trans('validation.custom.schedule_total_exceeds', {
+            total: format.price(totalScheduleAmount.value),
+            principal: format.price(form?.amount ?? 0),
+        });
+    }
+    return null;
+});
 
 function addScheduleItem() {
+    if (totalScheduleAmount.value + newScheduleItem.value.amount > (form?.amount ?? 0)) {
+        return;
+    }
     if (newScheduleItem.value.date && newScheduleItem.value.amount > 0) {
         form.schedule_data.push({
             ...newScheduleItem.value,
@@ -150,7 +171,10 @@ function getScheduleError(index: number, field: string) {
 
         <div class="col-span-full mt-6">
             <h3 class="mb-4 text-lg font-medium">Échéancier</h3>
-            <FormField>
+            <div v-if="scheduleTotalError" class="mb-4 text-sm text-red-500">
+                {{ scheduleTotalError }}
+            </div>
+            <FormField v-else>
                 <FormError class="mb-4" :message="form.errors.schedule_data" />
             </FormField>
 
@@ -193,6 +217,11 @@ function getScheduleError(index: number, field: string) {
                         <XIcon class="bg-red text-red-500" />
                     </Button>
                 </div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between">
+                <span>Total échéancier: {{ totalScheduleAmount }}</span>
+                <span>Montant principal: {{ form.amount }}</span>
             </div>
         </div>
     </FormContent>
