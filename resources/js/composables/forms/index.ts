@@ -2,6 +2,7 @@ export * from './accounting-periods/useAccountingPeriodForm';
 export * from './banners/useBannerAdminForm';
 export * from './clients/useClientForm';
 export * from './contractors';
+export * from './deals/billing/useBillingDealForm';
 export * from './deals/commercial/useCommercialDealForm';
 export * from './deals/commercial/useCommercialDealValidateFrom';
 export * from './employees';

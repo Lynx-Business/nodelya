@@ -327,4 +327,14 @@ return [
             'save'  => 'Valider l’affaire',
         ],
     ],
+
+    'billing_deals' => [
+        'index' => [
+            'title' => 'Factures',
+        ],
+        'edit' => [
+            'title'       => 'Mettre à jour une facture',
+            'description' => 'Modifiez les détails d\'une facture existante',
+        ],
+    ],
 ];

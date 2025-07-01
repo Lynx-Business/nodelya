@@ -50,6 +50,7 @@ use Spatie\LaravelData\DataCollection;
  * @property-read mixed $revenue
  * @property-read \App\Models\Team $team
  *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal billing()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal commercial()
  * @method static \Database\Factories\DealFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
@@ -189,5 +190,10 @@ class Deal extends Model
     public function scopeCommercial($query)
     {
         return $query->where('status', DealStatus::CREATED);
+    }
+
+    public function scopeBilling($query)
+    {
+        return $query->where('status', DealStatus::VALIDATED);
     }
 }

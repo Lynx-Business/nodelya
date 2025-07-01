@@ -265,6 +265,24 @@ return [
         ],
     ],
 
+    'billing_deals' => [
+        'update' => [
+            'success' => 'Facture mise à jour avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver cette facture ?|Êtes-vous sûr de vouloir archiver ces factures ?',
+            'success' => 'Facture archivée avec succès|Factures archivées avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer cette facture ?|Êtes-vous sûr de vouloir restaurer ces factures ?',
+            'success' => 'Facture restaurée avec succès|Factures restaurées avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer cette facture ?|Êtes-vous sûr de vouloir supprimer ces factures ?',
+            'success' => 'Facture supprimée avec succès|Factures supprimées avec succès',
+        ],
+    ],
+
     'settings' => [
         'password' => [
             'update' => [

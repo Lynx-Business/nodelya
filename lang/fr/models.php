@@ -173,6 +173,30 @@ return [
             'total_sales'           => 'Totaux CA',
         ],
     ],
+    'billing_deals' => [
+        'name' => [
+            'one'  => 'facture',
+            'many' => 'factures',
+        ],
+        'fields' => [
+            'amount'                => 'montant',
+            'code'                  => 'Codification',
+            'client_id'             => 'client',
+            'duration_in_months'    => 'durée en mois',
+            'ends_at'               => 'date de fin',
+            'name'                  => 'nom',
+            'ordered_at'            => 'date de commande',
+            'project_department_id' => 'direction de projets',
+            'reference'             => 'référence',
+            'schedule'              => 'planning',
+            'starts_at'             => 'date de début',
+            'status'                => 'statut',
+            'success_rate'          => 'taux de réussite',
+            'team_id'               => 'société',
+            'deal_id'               => 'Associer à une autre affaire commerciale',
+            'total_sales'           => 'Totaux CA',
+        ],
+    ],
 
     'media' => [
         'fields' => [

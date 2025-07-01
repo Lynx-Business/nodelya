@@ -12,6 +12,7 @@ use App\Http\Controllers\Contractor\ContractorEndsAtController;
 use App\Http\Controllers\Contractor\Expense\Budget\ContractorExpenseBudgetController;
 use App\Http\Controllers\Contractor\Expense\Charge\ContractorExpenseChargeController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Deal\BillingDealController;
 use App\Http\Controllers\Deal\CommercialDealController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\Employee\EmployeeEndsAtController;
@@ -288,6 +289,20 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
         Route::get('/create', 'create')->name('create')->can('create', Deal::class);
         Route::post('/create', 'store')->name('store')->can('create', Deal::class);
+
+        Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+        Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
+
+        Route::delete('/trash/{deal?}', 'trash')->name('trash');
+        Route::patch('/restore/{deal?}', 'restore')->name('restore');
+        Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+
+        Route::get('/validate/{deal}', 'validateDeal')->name('validate');
+        Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
+    });
+
+    Route::prefix('/billing-deals')->name('billing.deals.')->controller(BillingDealController::class)->group(function () {
+        Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
 
         Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
         Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
