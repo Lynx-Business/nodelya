@@ -95,6 +95,26 @@ return [
                 'success' => 'Catégorie de dépenses supprimée avec succès|Catégories de dépenses supprimées avec succès',
             ],
         ],
+        'charges' => [
+            'store' => [
+                'success' => 'Frais ponctuel créé avec succès',
+            ],
+            'update' => [
+                'success' => 'Frais ponctuel mis à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver ce frais ponctuel ?|Êtes-vous sûr de vouloir archiver ces frais ponctuels ?',
+                'success' => 'Frais ponctuel archivé avec succès|Frais ponctuels archivés avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer ce frais ponctuel ?|Êtes-vous sûr de vouloir restaurer ces frais ponctuels ?',
+                'success' => 'Frais ponctuel restauré avec succès|Frais ponctuels restaurés avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer ce frais ponctuel ?|Êtes-vous sûr de vouloir supprimer ces frais ponctuels ?',
+                'success' => 'Frais ponctuel supprimé avec succès|Frais ponctuels supprimés avec succès',
+            ],
+        ],
         'items' => [
             'store' => [
                 'success' => 'Poste de dépenses créé avec succès',

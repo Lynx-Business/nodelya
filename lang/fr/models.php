@@ -65,6 +65,20 @@ return [
                 'name'       => 'nom',
             ],
         ],
+        'charge' => [
+            'name' => [
+                'one'  => 'frais ponctuel',
+                'many' => 'frais ponctuels',
+            ],
+            'fields' => [
+                'amount'       => 'montant',
+                'charged_at'   => 'date',
+                'deleted_at'   => 'archivé le',
+                'expense_item' => 'poste',
+                'is_trashed'   => 'est archivé',
+                'type'         => 'type',
+            ],
+        ],
         'item' => [
             'name' => [
                 'one'  => 'poste de dépenses',

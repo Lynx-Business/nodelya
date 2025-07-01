@@ -224,10 +224,10 @@ export type ExpenseBudgetIndexProps = {
             total: number;
         };
     };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
-    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
 };
 export type ExpenseBudgetIndexRequest = {
     expense_categories?: Array<ExpenseCategoryResource>;
@@ -317,6 +317,75 @@ export type ExpenseCategoryResource = {
     can_restore?: boolean;
     can_delete?: boolean;
     expense_sub_categories?: Array<ExpenseSubCategoryResource>;
+};
+export type ExpenseChargeFormProps = {
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    expenseCharge?: ExpenseChargeResource;
+};
+export type ExpenseChargeFormRequest = {
+    model_type?: string;
+    model_id?: number;
+    expense_item_id: number;
+    amount: number;
+    charged_at: string;
+};
+export type ExpenseChargeIndexProps = {
+    request: ExpenseChargeIndexRequest;
+    expenseCharges?: {
+        data: Array<ExpenseChargeResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+};
+export type ExpenseChargeIndexRequest = {
+    expense_categories?: Array<ExpenseCategoryResource>;
+    expense_sub_categories?: Array<ExpenseSubCategoryResource>;
+    expense_items?: Array<ExpenseItemResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+    expense_category_ids?: null | Array<number>;
+    expense_sub_category_ids?: null | Array<number>;
+    expense_item_ids?: null | Array<number>;
+};
+export type ExpenseChargeOneOrManyRequest = {
+    expense_charge?: number;
+    ids?: Array<number>;
+};
+export type ExpenseChargeResource = {
+    id: number;
+    amount: number;
+    charged_at: string;
+    expense_item_id: number;
+    deleted_at?: string;
+    type?: ExpenseType;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    expense_item?: ExpenseItemResource;
 };
 export type ExpenseItemFormProps = {
     team: TeamListResource;
@@ -661,7 +730,7 @@ export type UpdateProfileSettingsRequest = {
     avatar?: string;
 };
 export type UserAbilitiesResource = {
-    expenses: { budgets: { view_any: boolean; create: boolean } };
+    expenses: { budgets: { view_any: boolean; create: boolean }; charges: { view_any: boolean; create: boolean } };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
 };

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Data\Expense\Budget\Index;
+namespace App\Data\Expense\Charge\Index;
 
 use App\Attributes\EnumArrayOf;
-use App\Data\Expense\Budget\ExpenseBudgetResource;
 use App\Data\Expense\Category\ExpenseCategoryResource;
+use App\Data\Expense\Charge\ExpenseChargeResource;
 use App\Data\Expense\Item\ExpenseItemResource;
 use App\Data\Expense\SubCategory\ExpenseSubCategoryResource;
 use App\Enums\Trashed\TrashedFilter;
@@ -17,14 +17,14 @@ use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class ExpenseBudgetIndexProps extends Resource
+class ExpenseChargeIndexProps extends Resource
 {
     public function __construct(
-        public ExpenseBudgetIndexRequest $request,
+        public ExpenseChargeIndexRequest $request,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ExpenseBudgetResource::class)]
-        public Lazy|PaginatedDataCollection $expenseBudgets,
+        #[DataCollectionOf(ExpenseChargeResource::class)]
+        public Lazy|PaginatedDataCollection $expenseCharges,
 
         #[AutoInertiaLazy]
         #[EnumArrayOf(TrashedFilter::class)]

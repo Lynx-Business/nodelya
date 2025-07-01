@@ -133,6 +133,11 @@ class Team extends Model implements HasMedia
         return $this->hasMany(ExpenseCategory::class)->whereBelongsToAnyTeam();
     }
 
+    public function expenseCharges(): HasMany
+    {
+        return $this->hasMany(ExpenseCharge::class)->whereBelongsToAnyTeam();
+    }
+
     public function expenseItems(): HasMany
     {
         return $this->hasMany(ExpenseItem::class)->whereBelongsToAnyTeam();

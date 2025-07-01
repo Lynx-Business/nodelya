@@ -10,6 +10,7 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Expense\Budget\ExpenseBudgetController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
+use App\Http\Controllers\Expense\Charge\ExpenseChargeController;
 use App\Http\Controllers\Expense\Item\ExpenseItemController;
 use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
 use App\Http\Controllers\MediaController;
@@ -24,6 +25,7 @@ use App\Models\AccountingPeriod;
 use App\Models\Client;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseCharge;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
 use App\Models\ProjectDepartment;
@@ -67,6 +69,16 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::delete('/trash/{expenseBudget?}', 'trash')->name('trash');
             Route::patch('/restore/{expenseBudget?}', 'restore')->name('restore');
             Route::delete('/delete/{expenseBudget?}', 'destroy')->name('delete');
+        });
+        Route::prefix('/charges')->name('charges.')->controller(ExpenseChargeController::class)->group(function () {
+            Route::get('/', 'index')->name('index')->can('viewAny', ExpenseCharge::class);
+            Route::get('/create', 'create')->name('create')->can('viewAny', ExpenseCharge::class);
+            Route::post('/create', 'store')->name('store')->can('viewAny', ExpenseCharge::class);
+            Route::get('/edit/{expenseCharge}', 'edit')->name('edit')->withTrashed()->can('update', 'expenseCharge');
+            Route::put('/edit/{expenseCharge}', 'update')->name('update')->withTrashed()->can('update', 'expenseCharge');
+            Route::delete('/trash/{expenseCharge?}', 'trash')->name('trash');
+            Route::patch('/restore/{expenseCharge?}', 'restore')->name('restore');
+            Route::delete('/delete/{expenseCharge?}', 'destroy')->name('delete');
         });
     });
 

@@ -9,6 +9,7 @@ use App\Models\AccountingPeriod;
 use App\Models\Banner;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
+use App\Models\ExpenseCharge;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
 use App\Models\ProjectDepartment;
@@ -124,6 +125,11 @@ class DevInstallCommand extends Command
                                         ->recycle($team)
                                         ->has(
                                             ExpenseBudget::factory()
+                                                ->count(2)
+                                                ->recycle($team),
+                                        )
+                                        ->has(
+                                            ExpenseCharge::factory()
                                                 ->count(2)
                                                 ->recycle($team),
                                         ),

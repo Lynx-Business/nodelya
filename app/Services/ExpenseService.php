@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Actions\Expense\Budget\CreateOrUpdateExpenseBudget;
 use App\Actions\Expense\Category\CreateOrUpdateExpenseCategory;
+use App\Actions\Expense\Charge\CreateOrUpdateExpenseCharge;
 use App\Actions\Expense\Item\CreateOrUpdateExpenseItem;
 use App\Actions\Expense\SubCategory\CreateOrUpdateExpenseSubCategory;
 use App\Data\Expense\Category\ExpenseCategoryResource;
@@ -19,6 +20,7 @@ class ExpenseService
     public function __construct(
         public CreateOrUpdateExpenseBudget $createOrUpdateBudget,
         public CreateOrUpdateExpenseCategory $createOrUpdateCategory,
+        public CreateOrUpdateExpenseCharge $createOrUpdateCharge,
         public CreateOrUpdateExpenseItem $createOrUpdateItem,
         public CreateOrUpdateExpenseSubCategory $createOrUpdateSubCategory,
     ) {}

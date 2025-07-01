@@ -13,7 +13,9 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.expenses.title'),
-                href: route('expenses.budgets.index'),
+                href: route().current('expenses.budgets.*')
+                    ? route('expenses.budgets.index')
+                    : route('expenses.charges.index'),
             },
         ],
     })),
@@ -26,6 +28,12 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             href: route('expenses.budgets.index'),
             icon: BanknoteIcon,
             isActive: route().current('expenses.budgets.*'),
+        },
+        {
+            title: trans('layouts.expenses.charges'),
+            href: route('expenses.charges.index'),
+            icon: BanknoteIcon,
+            isActive: route().current('expenses.charges.*'),
         },
     ].map((item) =>
         Object.assign(item, {

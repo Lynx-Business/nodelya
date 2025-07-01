@@ -97,7 +97,7 @@ return [
         'title'   => 'Budgets',
         'budgets' => [
             'index' => [
-                'title' => 'Budgets',
+                'title' => 'Budgets généraux',
             ],
             'create' => [
                 'title'       => 'Nouveau budget',
@@ -106,6 +106,19 @@ return [
             'edit' => [
                 'title'       => 'Détails de budget',
                 'description' => 'Mettez à jour les détails du budget',
+            ],
+        ],
+        'charges' => [
+            'index' => [
+                'title' => 'Frais ponctuels',
+            ],
+            'create' => [
+                'title'       => 'Nouveau frais ponctuel',
+                'description' => 'Créez un nouveau frais ponctuel',
+            ],
+            'edit' => [
+                'title'       => 'Détails de frais ponctuel',
+                'description' => 'Mettez à jour les détails du frais ponctuel',
             ],
         ],
     ],

@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseBudget> $expenseBudgets
  * @property-read int|null $expense_budgets_count
  * @property-read \App\Models\ExpenseCategory $expenseCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCharge> $expenseCharges
+ * @property-read int|null $expense_charges_count
  * @property-read \App\Models\ExpenseSubCategory|null $expenseSubCategory
  * @property-read true $is_trashable
  * @property bool $is_trashed
@@ -108,14 +110,19 @@ class ExpenseItem extends Model
         ];
     }
 
-    public function expenseSubCategory(): BelongsTo
-    {
-        return $this->belongsTo(ExpenseSubCategory::class);
-    }
-
     public function expenseBudgets(): HasMany
     {
         return $this->hasMany(ExpenseBudget::class);
+    }
+
+    public function expenseCharges(): HasMany
+    {
+        return $this->hasMany(ExpenseCharge::class);
+    }
+
+    public function expenseSubCategory(): BelongsTo
+    {
+        return $this->belongsTo(ExpenseSubCategory::class);
     }
 
     protected function type(): Attribute
