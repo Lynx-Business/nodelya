@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Expense\Category;
 
 use App\Data\Expense\Category\ExpenseCategoryOneOrManyRequest;
+use App\Data\Expense\Category\ExpenseCategoryResource;
 use App\Data\Expense\Category\Form\ExpenseCategoryFormProps;
 use App\Data\Expense\Category\Form\ExpenseCategoryFormRequest;
 use App\Data\Expense\Category\Index\ExpenseCategoryIndexProps;
 use App\Data\Expense\Category\Index\ExpenseCategoryIndexRequest;
-use App\Data\Expense\Category\Index\ExpenseCategoryIndexResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
@@ -33,7 +33,7 @@ class ExpenseCategoryController extends Controller
             'expenseTypes'      => Lazy::closure(fn () => ExpenseType::labels()),
             'expenseType'       => $expenseType,
             'expenseCategories' => Lazy::inertia(
-                fn () => ExpenseCategoryIndexResource::collect(
+                fn () => ExpenseCategoryResource::collect(
                     ExpenseCategory::query()
                         ->whereBelongsToTeam($team)
                         ->whereType($expenseType)
@@ -46,7 +46,7 @@ class ExpenseCategoryController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
-                ),
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
             'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));

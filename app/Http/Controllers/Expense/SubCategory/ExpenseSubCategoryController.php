@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Expense\SubCategory;
 
-use App\Data\Expense\Category\ExpenseCategoryListResource;
 use App\Data\Expense\SubCategory\ExpenseSubCategoryOneOrManyRequest;
+use App\Data\Expense\SubCategory\ExpenseSubCategoryResource;
 use App\Data\Expense\SubCategory\Form\ExpenseSubCategoryFormProps;
 use App\Data\Expense\SubCategory\Form\ExpenseSubCategoryFormRequest;
 use App\Data\Expense\SubCategory\Index\ExpenseSubCategoryIndexProps;
 use App\Data\Expense\SubCategory\Index\ExpenseSubCategoryIndexRequest;
-use App\Data\Expense\SubCategory\Index\ExpenseSubCategoryIndexResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
-use App\Models\ExpenseCategory;
 use App\Models\ExpenseSubCategory;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,20 +28,12 @@ class ExpenseSubCategoryController extends Controller
     public function index(Team $team, ExpenseType $expenseType, ExpenseSubCategoryIndexRequest $data)
     {
         return Inertia::render('teams/expenses/sub-categories/Index', ExpenseSubCategoryIndexProps::from([
-            'request'           => $data,
-            'team'              => TeamListResource::from($team),
-            'expenseTypes'      => Lazy::closure(fn () => ExpenseType::labels()),
-            'expenseType'       => $expenseType,
-            'expenseCategories' => Lazy::inertia(
-                fn () => ExpenseCategoryListResource::collect(
-                    ExpenseCategory::query()
-                        ->whereType($expenseType)
-                        ->orderBy('name')
-                        ->get(),
-                ),
-            ),
+            'request'              => $data,
+            'team'                 => TeamListResource::from($team),
+            'expenseTypes'         => Lazy::closure(fn () => ExpenseType::labels()),
+            'expenseType'          => $expenseType,
             'expenseSubCategories' => Lazy::inertia(
-                fn () => ExpenseSubCategoryIndexResource::collect(
+                fn () => ExpenseSubCategoryResource::collect(
                     ExpenseSubCategory::query()
                         ->whereType($expenseType)
                         ->search($data->q)
@@ -59,9 +49,15 @@ class ExpenseSubCategoryController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
+            ),
+            'trashedFilters'    => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'expenseCategories' => Lazy::inertia(
+                fn () => Services::expense()->categoriesList(
+                    fn (Builder $q) => $q
+                        ->whereType($expenseType),
                 ),
             ),
-            'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));
     }
 
@@ -71,11 +67,9 @@ class ExpenseSubCategoryController extends Controller
             'team'              => $team,
             'expenseType'       => $expenseType,
             'expenseCategories' => Lazy::inertia(
-                fn () => ExpenseCategoryListResource::collect(
-                    ExpenseCategory::query()
-                        ->whereType($expenseType)
-                        ->orderBy('name')
-                        ->get(),
+                fn () => Services::expense()->categoriesList(
+                    fn (Builder $q) => $q
+                        ->whereType($expenseType),
                 ),
             ),
         ]));
@@ -110,11 +104,9 @@ class ExpenseSubCategoryController extends Controller
             'team'              => $team,
             'expenseType'       => $expenseType,
             'expenseCategories' => Lazy::inertia(
-                fn () => ExpenseCategoryListResource::collect(
-                    ExpenseCategory::query()
-                        ->whereType($expenseType)
-                        ->orderBy('name')
-                        ->get(),
+                fn () => Services::expense()->categoriesList(
+                    fn (Builder $q) => $q
+                        ->whereType($expenseType),
                 ),
             ),
             'expenseSubCategory' => $expenseSubCategory->load([

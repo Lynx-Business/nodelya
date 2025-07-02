@@ -55,6 +55,26 @@ return [
     ],
 
     'expense' => [
+        'budgets' => [
+            'store' => [
+                'success' => 'Budget créé avec succès',
+            ],
+            'update' => [
+                'success' => 'Budget mis à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver ce budget ?|Êtes-vous sûr de vouloir archiver ces budgets ?',
+                'success' => 'Budget archivé avec succès|Budgets archivés avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer ce budget ?|Êtes-vous sûr de vouloir restaurer ces budgets ?',
+                'success' => 'Budget restauré avec succès|Budgets restaurés avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer ce budget ?|Êtes-vous sûr de vouloir supprimer ces budgets ?',
+                'success' => 'Budget supprimé avec succès|Budgets supprimés avec succès',
+            ],
+        ],
         'categories' => [
             'store' => [
                 'success' => 'Catégorie de dépenses créée avec succès',
@@ -73,6 +93,26 @@ return [
             'delete' => [
                 'confirm' => 'Êtes-vous sûr de vouloir supprimer cette catégorie de dépenses ?|Êtes-vous sûr de vouloir supprimer ces catégories de dépenses ?',
                 'success' => 'Catégorie de dépenses supprimée avec succès|Catégories de dépenses supprimées avec succès',
+            ],
+        ],
+        'charges' => [
+            'store' => [
+                'success' => 'Frais ponctuel créé avec succès',
+            ],
+            'update' => [
+                'success' => 'Frais ponctuel mis à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver ce frais ponctuel ?|Êtes-vous sûr de vouloir archiver ces frais ponctuels ?',
+                'success' => 'Frais ponctuel archivé avec succès|Frais ponctuels archivés avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer ce frais ponctuel ?|Êtes-vous sûr de vouloir restaurer ces frais ponctuels ?',
+                'success' => 'Frais ponctuel restauré avec succès|Frais ponctuels restaurés avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer ce frais ponctuel ?|Êtes-vous sûr de vouloir supprimer ces frais ponctuels ?',
+                'success' => 'Frais ponctuel supprimé avec succès|Frais ponctuels supprimés avec succès',
             ],
         ],
         'items' => [

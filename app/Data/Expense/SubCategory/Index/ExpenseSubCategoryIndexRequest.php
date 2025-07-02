@@ -2,7 +2,7 @@
 
 namespace App\Data\Expense\SubCategory\Index;
 
-use App\Data\Expense\Category\ExpenseCategoryListResource;
+use App\Data\Expense\Category\ExpenseCategoryResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
 use App\Models\ExpenseCategory;
@@ -22,7 +22,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class ExpenseSubCategoryIndexRequest extends Data
 {
     #[Computed]
-    #[DataCollectionOf(ExpenseCategoryListResource::class)]
+    #[DataCollectionOf(ExpenseCategoryResource::class)]
     public ?DataCollection $expense_categories;
 
     public function __construct(
@@ -37,11 +37,12 @@ class ExpenseSubCategoryIndexRequest extends Data
         public ?array $expense_category_ids = null,
     ) {
         if ($expense_category_ids) {
-            $this->expense_categories = ExpenseCategoryListResource::collect(
+            $this->expense_categories = ExpenseCategoryResource::collect(
                 ExpenseCategory::query()
                     ->whereIntegerInRaw('id', $expense_category_ids)
                     ->get(),
-                DataCollection::class);
+                DataCollection::class,
+            );
         }
     }
 

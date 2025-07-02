@@ -93,6 +93,35 @@ return [
         ],
     ],
 
+    'expenses' => [
+        'budgets' => [
+            'index' => [
+                'title' => 'Budgets généraux',
+            ],
+            'create' => [
+                'title'       => 'Nouveau budget',
+                'description' => 'Créez un nouveau budget',
+            ],
+            'edit' => [
+                'title'       => 'Détails de budget',
+                'description' => 'Mettez à jour les détails du budget',
+            ],
+        ],
+        'charges' => [
+            'index' => [
+                'title' => 'Frais ponctuels',
+            ],
+            'create' => [
+                'title'       => 'Nouveau frais ponctuel',
+                'description' => 'Créez un nouveau frais ponctuel',
+            ],
+            'edit' => [
+                'title'       => 'Détails de frais ponctuel',
+                'description' => 'Mettez à jour les détails du frais ponctuel',
+            ],
+        ],
+    ],
+
     'settings' => [
         'title'   => 'Paramètres',
         'profile' => [

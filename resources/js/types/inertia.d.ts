@@ -13,7 +13,7 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
     auth?: {
         user: UserResource;
         abilities: UserAbilitiesResource;
-        team: TeamResource;
+        team?: TeamResource;
     };
     toast: ToastMessagesData;
     errors: Errors & ErrorBag;

@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
 type Emits = InertiaComboboxEmits<T>;
 const emits = defineEmits<Emits>();
 
-const delegatedProps = reactiveOmit(props, 'modelValue', 'label', 'data');
+const delegatedProps = reactiveOmit(props, 'modelValue', 'label', 'data', 'multiplePlaceholder', 'required');
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 const model = defineModel<Arrayable<T>>();
@@ -96,7 +96,7 @@ const filteredOptions = computed((): T[] =>
 
 type Group = {
     label: string;
-    options: T[];
+    options: (T & { _heading?: string })[];
 };
 const groups = computed((): Group[] => {
     if (!props.group || !props.groupBy) {
@@ -122,7 +122,13 @@ const groups = computed((): Group[] => {
             }
             return groups;
         }, [] as Group[])
-        .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+        .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()))
+        .map((group) => {
+            if (group.options.length > 0) {
+                group.options[0]._heading = group.label;
+            }
+            return group;
+        });
 });
 
 const placeholder = computed(() => {
@@ -142,8 +148,8 @@ const placeholder = computed(() => {
 
 <template>
     <Combobox v-model="model" v-bind="forwarded">
-        <ComboboxTrigger as-child>
-            <ComboboxAnchor class="relative w-full min-w-0 items-center">
+        <ComboboxAnchor as-child>
+            <ComboboxTrigger class="relative w-full min-w-0 items-center">
                 <ComboboxInput
                     v-model="searchTerm"
                     v-bind="$attrs"
@@ -164,9 +170,9 @@ const placeholder = computed(() => {
                         <ChevronDownIcon />
                     </Button>
                 </div>
-            </ComboboxAnchor>
-        </ComboboxTrigger>
-        <ComboboxList>
+            </ComboboxTrigger>
+        </ComboboxAnchor>
+        <ComboboxList class="max-h-96 overflow-y-auto">
             <WhenVisible v-if="!Array.isArray(data) && !pageOptions.length" :data>
                 <template #fallback>
                     <div class="grid place-items-center py-2">
@@ -180,26 +186,26 @@ const placeholder = computed(() => {
                 </ComboboxEmpty>
             </WhenVisible>
             <template v-else>
-                <ComboboxGroup
-                    v-for="group in groups"
-                    :key="group.label"
-                    :heading="groups.length > 1 ? group.label : undefined"
+                <ComboboxVirtualizer
+                    v-slot="{ option, virtualizer, virtualItem }"
+                    :options="groups.flatMap(({ options }) => options)"
+                    :text-content="(option) => option[label]"
                 >
-                    <ComboboxVirtualizer
-                        v-slot="{ option, virtualizer }"
-                        :options="group.options"
-                        :text-content="(option) => option[label]"
-                    >
-                        <div class="w-full" :ref="(node) => virtualizer.measureElement(node as Element)">
+                    <div class="w-full" :ref="(node) => virtualizer.measureElement(node as Element)">
+                        <ComboboxGroup class="pb-0" v-if="option._heading" :heading="option._heading"> </ComboboxGroup>
+                        <ComboboxGroup
+                            class="py-0"
+                            :class="{ 'pb-1': virtualItem.index === filteredOptions.length - 1 }"
+                        >
                             <ComboboxItem :value="option" :text-value="option[label]">
                                 <ComboboxItemIndicator />
                                 <CapitalizeText class="min-w-0 grow break-words">
                                     {{ option[label] }}
                                 </CapitalizeText>
                             </ComboboxItem>
-                        </div>
-                    </ComboboxVirtualizer>
-                </ComboboxGroup>
+                        </ComboboxGroup>
+                    </div>
+                </ComboboxVirtualizer>
                 <ComboboxEmpty>
                     <CapitalizeText>
                         {{ $t('components.ui.custom.combobox.empty') }}

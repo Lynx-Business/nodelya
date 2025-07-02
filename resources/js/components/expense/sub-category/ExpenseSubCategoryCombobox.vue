@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { InertiaCombobox, InertiaComboboxEmits, InertiaComboboxProps } from '@/components/ui/custom/combobox';
-import { ExpenseSubCategoryListResource } from '@/types';
+import { ExpenseSubCategoryResource } from '@/types';
 import { reactiveOmit } from '@vueuse/core';
 import { useForwardPropsEmits } from 'reka-ui';
 import { computed } from 'vue';
 
-type T = ExpenseSubCategoryListResource;
+type T = ExpenseSubCategoryResource;
 type Props = Partial<InertiaComboboxProps<T>> & {
     expenseCategoryId?: number;
 };

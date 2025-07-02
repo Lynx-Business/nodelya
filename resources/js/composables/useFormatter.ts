@@ -31,5 +31,20 @@ export function useFormatter() {
                 return '';
             }
         },
+        price(value?: number | string): string {
+            if (value == undefined) {
+                return '';
+            }
+
+            const number = Number(value);
+            if (isNaN(Number(value))) {
+                return '';
+            }
+
+            return Intl.NumberFormat(locale.value, {
+                style: 'currency',
+                currency: 'EUR',
+            }).format(number);
+        },
     };
 }

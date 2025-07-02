@@ -38,6 +38,21 @@ return [
     ],
 
     'expense' => [
+        'budget' => [
+            'name' => [
+                'one'  => 'budget',
+                'many' => 'budgets',
+            ],
+            'fields' => [
+                'amount'       => 'montant',
+                'deleted_at'   => 'archivé le',
+                'ends_at'      => 'fin',
+                'expense_item' => 'poste',
+                'is_trashed'   => 'est archivé',
+                'starts_at'    => 'début',
+                'type'         => 'type',
+            ],
+        ],
         'category' => [
             'name' => [
                 'one'  => 'catégorie de dépenses',
@@ -48,6 +63,20 @@ return [
                 'is_trashed' => 'est archivée',
                 'type'       => 'type',
                 'name'       => 'nom',
+            ],
+        ],
+        'charge' => [
+            'name' => [
+                'one'  => 'frais ponctuel',
+                'many' => 'frais ponctuels',
+            ],
+            'fields' => [
+                'amount'       => 'montant',
+                'charged_at'   => 'date',
+                'deleted_at'   => 'archivé le',
+                'expense_item' => 'poste',
+                'is_trashed'   => 'est archivé',
+                'type'         => 'type',
             ],
         ],
         'item' => [

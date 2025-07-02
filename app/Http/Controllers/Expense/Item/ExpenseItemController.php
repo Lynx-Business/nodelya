@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Expense\Item;
 
 use App\Data\Expense\Item\ExpenseItemOneOrManyRequest;
+use App\Data\Expense\Item\ExpenseItemResource;
 use App\Data\Expense\Item\Form\ExpenseItemFormProps;
 use App\Data\Expense\Item\Form\ExpenseItemFormRequest;
 use App\Data\Expense\Item\Index\ExpenseItemIndexProps;
 use App\Data\Expense\Item\Index\ExpenseItemIndexRequest;
-use App\Data\Expense\Item\Index\ExpenseItemIndexResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
@@ -33,9 +33,8 @@ class ExpenseItemController extends Controller
             'expenseTypes' => Lazy::closure(fn () => ExpenseType::labels()),
             'expenseType'  => $expenseType,
             'expenseItems' => Lazy::inertia(
-                fn () => ExpenseItemIndexResource::collect(
+                fn () => ExpenseItemResource::collect(
                     ExpenseItem::query()
-                        ->whereBelongsToTeam($team)
                         ->whereType($expenseType)
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
@@ -52,19 +51,17 @@ class ExpenseItemController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
-                ),
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
-                        ->whereBelongsToTeam($team)
                         ->whereType($expenseType),
                 ),
             ),
             'expenseSubCategories' => Lazy::inertia(
                 fn () => Services::expense()->subCategoriesList(
                     fn (Builder $q) => $q
-                        ->whereBelongsToTeam($team)
                         ->whereType($expenseType)
                         ->when($data->expense_category_ids, fn (Builder $q) => $q->whereIntegerInRaw('expense_category_id', $data->expense_category_ids)),
                 ),

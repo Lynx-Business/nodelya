@@ -32,8 +32,8 @@ import { TeamsFormExpensesLayout, TeamsFormLayout } from '@/layouts';
 import {
     ExpenseItemIndexProps,
     ExpenseItemIndexRequest,
-    ExpenseItemIndexResource,
     ExpenseItemOneOrManyRequest,
+    ExpenseItemResource,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -54,8 +54,8 @@ const props = defineProps<ExpenseItemIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ExpenseItemIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<ExpenseItemIndexResource>[] = [
+const selectedRows = ref<ExpenseItemResource[]>([]);
+const rowsActions: DataTableRowsAction<ExpenseItemResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -123,12 +123,12 @@ const rowsActions: DataTableRowsAction<ExpenseItemIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ExpenseItemIndexResource>[] = [
+const rowActions: DataTableRowAction<ExpenseItemResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (expenseItem) => expenseItem.can_update,
+        hidden: (expenseItem) => expenseItem.can_update ?? false,
         disabled: (expenseItem) => !expenseItem.can_view,
         href: (expenseItem) =>
             route('teams.expenses.items.edit', {
@@ -325,10 +325,7 @@ const filters = useFilters<ExpenseItemIndexRequest>(
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
                             <DataTableSortableHead value="expense_category.name">
-                                {{ $t('models.expense.category.name.one') }}
-                            </DataTableSortableHead>
-                            <DataTableSortableHead value="expense_sub_category.name">
-                                {{ $t('models.expense.sub_category.name.one') }}
+                                {{ $t('models.expense.item.fields.expense_category') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">
                                 {{ $t('models.expense.item.fields.name') }}
@@ -352,10 +349,15 @@ const filters = useFilters<ExpenseItemIndexRequest>(
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseItem.expense_category.name }}
-                            </DataTableCell>
-                            <DataTableCell>
-                                {{ expenseItem.expense_sub_category?.name }}
+                                <div>
+                                    {{ expenseItem.expense_category?.name }}
+                                </div>
+                                <div
+                                    class="text-muted-foreground text-xs"
+                                    v-if="expenseItem.expense_sub_category?.name"
+                                >
+                                    {{ expenseItem.expense_sub_category?.name }}
+                                </div>
                             </DataTableCell>
                             <DataTableCell>
                                 {{ expenseItem.name }}

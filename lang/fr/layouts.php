@@ -26,11 +26,17 @@ return [
     'app' => [
         'sidebar' => [
             'items' => [
-                'admin'  => 'Administration',
-                'index'  => 'Tableau de bord',
-                'client' => 'Client',
+                'admin'    => 'Administration',
+                'index'    => 'Tableau de bord',
+                'expenses' => 'Budgets',
+                'client'   => 'Client',
             ],
         ],
+    ],
+
+    'expenses' => [
+        'budgets' => 'Budgets',
+        'charges' => 'Frais ponctuels',
     ],
 
     'settings' => [
