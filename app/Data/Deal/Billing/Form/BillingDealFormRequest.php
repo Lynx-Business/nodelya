@@ -2,8 +2,8 @@
 
 namespace App\Data\Deal\Billing\Form;
 
+use App\Data\Deal\DealScheduleData;
 use App\Data\Deal\ScheduleItemData;
-use App\Data\Deal\YearScheduleData;
 use App\Models\Deal;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -47,7 +47,7 @@ class BillingDealFormRequest extends Data
         #[DataCollectionOf(ScheduleItemData::class)]
         public array $schedule_data,
 
-        #[DataCollectionOf(YearScheduleData::class)]
+        #[DataCollectionOf(DealScheduleData::class)]
         public ?DataCollection $schedule = null,
 
     ) {
@@ -85,13 +85,13 @@ class BillingDealFormRequest extends Data
 
         $years = [];
         foreach ($yearsMap as $year => $data) {
-            $years[] = YearScheduleData::from([
+            $years[] = DealScheduleData::from([
                 'year' => $year,
                 'data' => $data,
             ]);
         }
 
-        return new DataCollection(YearScheduleData::class, $years);
+        return new DataCollection(DealScheduleData::class, $years);
     }
 
     public static function rules(): array

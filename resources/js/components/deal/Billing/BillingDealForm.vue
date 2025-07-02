@@ -2,6 +2,19 @@
 import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import DealCombobox from '@/components/deal/common/DealCombobox.vue';
 import { Button } from '@/components/ui/button';
+import { EnumCombobox } from '@/components/ui/custom/combobox';
+import {
+    DataTable,
+    DataTableBody,
+    DataTableCell,
+    DataTableContent,
+    DataTableHead,
+    DataTableHeadActions,
+    DataTableHeader,
+    DataTableRow,
+    DataTableRowActions,
+    DataTableRowCallbackAction,
+} from '@/components/ui/custom/data-table';
 import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
     FormContent,
@@ -13,14 +26,17 @@ import {
 } from '@/components/ui/custom/form';
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { BillingDealFormData, useFormatter } from '@/composables';
+import { BillingDealFormData, useFormatter, usePageProp } from '@/composables';
+import { DealScheduleStatus, ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { PlusIcon, XIcon } from 'lucide-vue-next';
+import { EyeIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 const { form } = injectFormContext<BillingDealFormData>();
-const newScheduleItem = ref({ date: '', amount: 0 });
+const newScheduleItem = ref({ date: '', amount: 0, title: '' });
 const format = useFormatter();
+
+const schedule_status = usePageProp<Array<{ value: DealScheduleStatus; label: string }>>('schedule_status', []);
 
 const totalScheduleAmount = computed(() => {
     return (
@@ -46,19 +62,42 @@ function addScheduleItem() {
         form.schedule_data.push({
             ...newScheduleItem.value,
             status: 'pending',
-            title: 'Échéance',
         });
-        newScheduleItem.value = { date: '', amount: 0 };
+        newScheduleItem.value = { date: '', amount: 0, title: '' };
     }
 }
 
-function removeScheduleItem(index: number) {
-    form.schedule_data.splice(index, 1);
+function removeScheduleItem(item: ScheduleItemData) {
+    const index = form.schedule_data.findIndex(
+        (i: ScheduleItemData) =>
+            i.date === item.date && i.amount === item.amount && i.status === item.status && i.title === item.title,
+    );
+    if (index !== -1) {
+        form.schedule_data.splice(index, 1);
+    }
 }
+
 function getScheduleError(index: number, field: string) {
     const key = `schedule_data.${index}.${field}`;
     return (form.errors as Record<string, string>)[key] || '';
 }
+
+const rowActions: DataTableRowCallbackAction<any>[] = [
+    {
+        type: 'callback',
+        label: trans('view'),
+        icon: EyeIcon,
+        disabled: (item) => false,
+        callback: () => console.log('deal'),
+    },
+    {
+        type: 'callback',
+        label: trans('delete'),
+        icon: Trash2Icon,
+        disabled: (item) => false,
+        callback: (item) => removeScheduleItem(item),
+    },
+];
 </script>
 
 <template>
@@ -180,48 +219,98 @@ function getScheduleError(index: number, field: string) {
 
             <div class="mb-4 flex items-center gap-2">
                 <FormField>
+                    <FormLabel>
+                        <CapitalizeText> Date </CapitalizeText>
+                    </FormLabel>
                     <FormControl>
                         <DatePicker v-model="newScheduleItem.date" />
                     </FormControl>
                 </FormField>
                 <FormField>
+                    <FormLabel>
+                        <CapitalizeText>
+                            {{ $t('models.billing_deals.fields.amount') }}
+                        </CapitalizeText>
+                    </FormLabel>
                     <FormControl>
                         <PriceInput v-model="newScheduleItem.amount" />
                     </FormControl>
                 </FormField>
-                <Button @click="addScheduleItem" variant="ghost" size="icon">
-                    <PlusIcon class="cursor-pointer" />
-                </Button>
-            </div>
-
-            <div class="overflow-hidden rounded-lg border">
-                <div
-                    class="flex items-center gap-2 border-b p-3"
-                    v-for="(item, index) in form.schedule_data"
-                    :key="index"
-                >
-                    <FormField required>
-                        <FormControl>
-                            <DatePicker v-model="item.date" />
-                        </FormControl>
-                        <FormError :message="getScheduleError(index, 'date')" />
-                    </FormField>
-                    <FormField required>
-                        <FormControl>
-                            <PriceInput v-model="item.amount" />
-                        </FormControl>
-                        <FormError class="mt-1" :message="getScheduleError(index, 'amount')" />
-                    </FormField>
-
-                    <Button @click="removeScheduleItem(index)" variant="ghost" size="icon">
-                        <XIcon class="bg-red text-red-500" />
+                <FormField>
+                    <FormLabel>
+                        <CapitalizeText> Titre </CapitalizeText>
+                    </FormLabel>
+                    <FormControl>
+                        <TextInput v-model="newScheduleItem.title" />
+                    </FormControl>
+                </FormField>
+                <div class="flex items-center">
+                    <Button @click="addScheduleItem" variant="ghost" size="icon" class="mt-4">
+                        <PlusIcon />
                     </Button>
                 </div>
             </div>
 
+            <DataTable v-slot="{ rows }" :data="form.schedule_data" :row-actions="rowActions">
+                <DataTableContent tab="table">
+                    <DataTableHeader>
+                        <DataTableRow>
+                            <DataTableHead>Date</DataTableHead>
+                            <DataTableHead>Montant</DataTableHead>
+                            <DataTableHead>Statut</DataTableHead>
+                            <DataTableHead>Titre</DataTableHead>
+                            <DataTableHead>
+                                <DataTableHeadActions />
+                            </DataTableHead>
+                        </DataTableRow>
+                    </DataTableHeader>
+                    <DataTableBody>
+                        <DataTableRow v-for="(item, index) in rows" :key="index" :item>
+                            <DataTableCell>
+                                <FormField required>
+                                    <FormControl>
+                                        <DatePicker v-model="item.date" />
+                                    </FormControl>
+                                    <FormError :message="getScheduleError(index, 'date')" />
+                                </FormField>
+                            </DataTableCell>
+                            <DataTableCell>
+                                <FormField required>
+                                    <FormControl>
+                                        <PriceInput v-model="item.amount" />
+                                    </FormControl>
+                                    <FormError :message="getScheduleError(index, 'amount')" />
+                                </FormField>
+                            </DataTableCell>
+                            <DataTableCell>
+                                <FormField>
+                                    <FormControl>
+                                        <EnumCombobox
+                                            v-model="item.status"
+                                            data="schedule_status"
+                                            placeholder="Sélectionner un statut"
+                                        />
+                                    </FormControl>
+                                </FormField>
+                            </DataTableCell>
+                            <DataTableCell>
+                                <FormField>
+                                    <FormControl>
+                                        <TextInput v-model="item.title" />
+                                    </FormControl>
+                                </FormField>
+                            </DataTableCell>
+                            <DataTableCell>
+                                <DataTableRowActions />
+                            </DataTableCell>
+                        </DataTableRow>
+                    </DataTableBody>
+                </DataTableContent>
+            </DataTable>
+
             <div class="mt-4 flex items-center justify-between">
-                <span>Total échéancier: {{ totalScheduleAmount }}</span>
-                <span>Montant principal: {{ form.amount }}</span>
+                <span>Total échéancier: {{ format.price(totalScheduleAmount) }}</span>
+                <span>Montant principal: {{ format.price(form?.amount ?? 0) }}</span>
             </div>
         </div>
     </FormContent>

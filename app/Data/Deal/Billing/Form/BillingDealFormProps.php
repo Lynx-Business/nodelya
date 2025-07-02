@@ -2,8 +2,10 @@
 
 namespace App\Data\Deal\Billing\Form;
 
+use App\Attributes\EnumArrayOf;
 use App\Data\Client\ClientListResource;
 use App\Data\Deal\DealListResource;
+use App\Enums\Deal\DealScheduleStatus;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
@@ -24,5 +26,9 @@ class BillingDealFormProps extends Resource
         #[AutoInertiaLazy]
         #[DataCollectionOf(DealListResource::class)]
         public Lazy|DataCollection $deals,
+
+        #[AutoInertiaLazy]
+        #[EnumArrayOf(DealScheduleStatus::class)]
+        public Lazy|array $schedule_status,
     ) {}
 }

@@ -15,8 +15,8 @@ class ScheduleItemData extends Data
 
         public float $amount,
 
-        public string $status,
+        public ?string $status,
 
-        public string $title,
+        public ?string $title,
     ) {}
 }

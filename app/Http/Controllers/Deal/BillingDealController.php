@@ -11,6 +11,7 @@ use App\Data\Deal\Billing\Index\BillingDealIndexRequest;
 use App\Data\Deal\Billing\Index\BillingDealIndexResource;
 use App\Data\Deal\DealListResource;
 use App\Data\Deal\DealOneOrManyRequest;
+use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -59,8 +60,9 @@ class BillingDealController extends Controller
             'deal' => BillingDealFormResource::from(
                 $deal->load('client', 'parent'),
             ),
-            'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'deals'   => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
+            'clients'         => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'deals'           => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
+            'schedule_status' => Lazy::inertia(fn () => DealScheduleStatus::labels()),
         ]));
     }
 

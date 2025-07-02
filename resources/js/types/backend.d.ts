@@ -117,6 +117,82 @@ export type BannerOneOrManyRequest = {
     banner?: number;
     ids?: Array<number>;
 };
+export type BillingDealFormProps = {
+    deal?: BillingDealFormResource;
+    clients?: Array<ClientListResource>;
+    deals?: Array<DealListResource>;
+    schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
+};
+export type BillingDealFormRequest = {
+    deal?: any;
+    name: string;
+    amount: number;
+    code: string;
+    reference?: string;
+    ordered_at: string;
+    duration_in_months?: number;
+    starts_at?: string;
+    client_id: number;
+    deal_id?: number;
+    schedule_data: Array<ScheduleItemData>;
+    schedule?: Array<DealScheduleData>;
+};
+export type BillingDealFormResource = {
+    id: number;
+    name: string;
+    amount: number;
+    code?: string;
+    reference?: string;
+    success_rate: number;
+    ordered_at: string;
+    duration_in_months: number;
+    starts_at: string;
+    client: ClientListResource;
+    parent?: DealListResource;
+    schedule: Array<DealScheduleData>;
+};
+export type BillingDealIndexProps = {
+    request: BillingDealIndexRequest;
+    billing_deals?: {
+        data: Array<BillingDealIndexResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+};
+export type BillingDealIndexRequest = {
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+};
+export type BillingDealIndexResource = {
+    id: number;
+    name: string;
+    amount: number;
+    code: string;
+    success_rate: number;
+    client?: any;
+    can_view: boolean;
+    can_update: boolean;
+    can_trash: boolean;
+    can_restore: boolean;
+    can_delete: boolean;
+};
 export type ClientFormProps = {
     client?: ClientFormResource;
 };
@@ -192,7 +268,7 @@ export type CommercialDealFormRequest = {
     starts_at?: string;
     client_id: number;
     schedule_data: Array<ScheduleItemData>;
-    schedule?: Array<YearScheduleData>;
+    schedule?: Array<DealScheduleData>;
 };
 export type CommercialDealFormResource = {
     id: number;
@@ -205,7 +281,9 @@ export type CommercialDealFormResource = {
     ordered_at: string;
     duration_in_months: number;
     starts_at: string;
-    schedule: Array<YearScheduleData>;
+    client: ClientListResource;
+    parent?: DealListResource;
+    schedule: Array<DealScheduleData>;
 };
 export type CommercialDealIndexProps = {
     request: CommercialDealIndexRequest;
@@ -400,8 +478,10 @@ export type DealOneOrManyRequest = {
     ids?: Array<number>;
 };
 export type DealScheduleData = {
-    years: Array<YearScheduleData>;
+    year: string;
+    data: Array<ScheduleItemData>;
 };
+export type DealScheduleStatus = 'paid' | 'invoiced' | 'uncertain';
 export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
 export type EditProfileSettingsProps = {
@@ -996,8 +1076,8 @@ export type RoleName = 'tester' | 'owner' | 'member' | 'editor';
 export type ScheduleItemData = {
     date: string;
     amount: number;
-    status: string;
-    title: string;
+    status?: string;
+    title?: string;
 };
 export type TeamFormProps = {
     team?: TeamFormResource;
@@ -1223,8 +1303,4 @@ export type UserResource = {
 export type VerifyEmailProps = {};
 export type VerifyEmailRequest = {
     code: string;
-};
-export type YearScheduleData = {
-    year: string;
-    data: Array<ScheduleItemData>;
 };

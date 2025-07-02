@@ -4,7 +4,7 @@ namespace App\Data\Deal\Commercial\Form;
 
 use App\Data\Client\ClientListResource;
 use App\Data\Deal\DealListResource;
-use App\Data\Deal\YearScheduleData;
+use App\Data\Deal\DealScheduleData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Resource;
@@ -25,7 +25,7 @@ class CommercialDealFormResource extends Resource
         public string $starts_at,
         public ClientListResource $client,
         public ?DealListResource $parent,
-        #[DataCollectionOf(YearScheduleData::class)]
+        #[DataCollectionOf(DealScheduleData::class)]
         public DataCollection $schedule,
     ) {}
 }

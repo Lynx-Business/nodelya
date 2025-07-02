@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Data\Deal\YearScheduleData;
+use App\Data\Deal\DealScheduleData;
 use App\Enums\Deal\DealStatus;
 use App\Facades\Services;
 use App\Traits\BelongsToClient;
@@ -146,7 +146,7 @@ class Deal extends Model
             'ordered_at' => 'date',
             'starts_at'  => 'date',
             'ends_at'    => 'date',
-            'schedule'   => DataCollection::class.':'.YearScheduleData::class,
+            'schedule'   => DataCollection::class.':'.DealScheduleData::class,
         ];
     }
 
