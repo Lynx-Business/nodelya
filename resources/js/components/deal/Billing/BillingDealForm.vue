@@ -26,17 +26,53 @@ import {
 } from '@/components/ui/custom/form';
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { BillingDealFormData, useFormatter, usePageProp } from '@/composables';
-import { DealScheduleStatus, ScheduleItemData } from '@/types';
+import { BillingDealFormData, useFormatter } from '@/composables';
+import { ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { EyeIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
+import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import AlertDialogSchedule from './AlertDialogSchedule.vue';
 
 const { form } = injectFormContext<BillingDealFormData>();
 const newScheduleItem = ref({ date: '', amount: 0, title: '' });
 const format = useFormatter();
 
-const schedule_status = usePageProp<Array<{ value: DealScheduleStatus; label: string }>>('schedule_status', []);
+const showPostponeDialog = ref(false);
+const postponeMonths = ref(1);
+const selectedItemIndex = ref<number | null>(null);
+
+function openPostponeDialog(item: ScheduleItemData) {
+    const index = form.schedule_data.findIndex((i) => i === item);
+    if (index !== -1) {
+        selectedItemIndex.value = index;
+        showPostponeDialog.value = true;
+    }
+}
+
+function postponeSchedules() {
+    if (selectedItemIndex.value === null) return;
+
+    const startIndex = selectedItemIndex.value;
+    const months = postponeMonths.value;
+
+    const updatedSchedule = [...form.schedule_data];
+    for (let i = startIndex; i < updatedSchedule.length; i++) {
+        const newDate = addMonthsToDate(updatedSchedule[i].date, months);
+        if (updatedSchedule[i].status !== 'paid') {
+            updatedSchedule[i].date = newDate;
+        }
+    }
+
+    form.schedule_data = updatedSchedule;
+    showPostponeDialog.value = false;
+    postponeMonths.value = 1;
+}
+
+function addMonthsToDate(dateString: string, months: number): string {
+    const date = new Date(dateString);
+    date.setMonth(date.getMonth() + months);
+    return date.toISOString().split('T')[0];
+}
 
 const totalScheduleAmount = computed(() => {
     return (
@@ -61,8 +97,9 @@ function addScheduleItem() {
     if (newScheduleItem.value.date && newScheduleItem.value.amount > 0) {
         form.schedule_data.push({
             ...newScheduleItem.value,
-            status: 'pending',
+            status: 'uncertain',
         });
+        form.schedule_data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         newScheduleItem.value = { date: '', amount: 0, title: '' };
     }
 }
@@ -85,10 +122,10 @@ function getScheduleError(index: number, field: string) {
 const rowActions: DataTableRowCallbackAction<any>[] = [
     {
         type: 'callback',
-        label: trans('view'),
-        icon: EyeIcon,
+        label: 'Repousser les facture à venir',
+        icon: ClockArrowUpIcon,
         disabled: (item) => false,
-        callback: () => console.log('deal'),
+        callback: (item) => openPostponeDialog(item),
     },
     {
         type: 'callback',
@@ -314,4 +351,10 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
             </div>
         </div>
     </FormContent>
+
+    <AlertDialogSchedule
+        v-model:showPostponeDialog="showPostponeDialog"
+        v-model:postponeMonths="postponeMonths"
+        v-model:postponeSchedules="postponeSchedules"
+    />
 </template>
