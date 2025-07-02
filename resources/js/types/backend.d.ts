@@ -186,6 +186,9 @@ export type BillingDealIndexResource = {
     amount: number;
     code: string;
     success_rate: number;
+    duration_in_months?: number;
+    ordered_at: string;
+    starts_at?: string;
     client?: any;
     can_view: boolean;
     can_update: boolean;

@@ -249,6 +249,18 @@ const filters = useFilters<BillingDealIndexRequest>(
                             <DataTableSortableHead value="code">
                                 {{ $t('models.billing_deals.fields.code') }}
                             </DataTableSortableHead>
+                            <DataTableSortableHead value="success_rate">
+                                {{ $t('models.billing_deals.fields.success_rate') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="starts_at">
+                                {{ $t('models.billing_deals.fields.starts_at') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="ordered_at">
+                                {{ $t('models.billing_deals.fields.ordered_at') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="duration_in_months">
+                                {{ $t('models.billing_deals.fields.duration_in_months') }}
+                            </DataTableSortableHead>
                             <DataTableSortableHead value="amount">
                                 {{ $t('models.billing_deals.fields.total_sales') }}
                             </DataTableSortableHead>
@@ -277,6 +289,18 @@ const filters = useFilters<BillingDealIndexRequest>(
                             </DataTableCell>
                             <DataTableCell>
                                 {{ deal.code }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ deal.success_rate + ' %' }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ format.date(deal.starts_at) }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ format.date(deal.ordered_at) }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ deal.duration_in_months }}
                             </DataTableCell>
                             <DataTableCell class="bg-gray-300/30">
                                 {{ format.price((deal.amount * deal.success_rate) / 100) }}
