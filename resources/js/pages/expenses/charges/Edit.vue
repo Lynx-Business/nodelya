@@ -19,10 +19,6 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.expenses.title'),
-                href: route('expenses.charges.index'),
-            },
-            {
                 title: trans('pages.expenses.charges.index.title'),
                 href: route('expenses.charges.index'),
             },

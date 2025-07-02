@@ -22,13 +22,14 @@ import {
     DataTableRowsCheckbox,
     DataTableSortableHead,
 } from '@/components/ui/custom/data-table';
+import { DatePicker } from '@/components/ui/custom/date-picker';
 import { FiltersSheet, FiltersSheetContent, FiltersSheetTrigger } from '@/components/ui/custom/filters';
 import { FormContent, FormControl, FormField, FormLabel } from '@/components/ui/custom/form';
 import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useAuth, useFilters, useFormatter, useLayout, useLayouts } from '@/composables';
+import { useAlert, useAuth, useFilters, useFormatter, useLayout } from '@/composables';
 import { ExpensesLayout } from '@/layouts';
 import {
     ExpenseBudgetIndexProps,
@@ -43,7 +44,7 @@ import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, T
 import { ref } from 'vue';
 
 defineOptions({
-    layout: useLayouts([useLayout(ExpensesLayout, () => ({}))]),
+    layout: useLayout(ExpensesLayout, () => ({})),
 });
 
 const props = defineProps<ExpenseBudgetIndexProps>();
@@ -209,6 +210,8 @@ const filters = useFilters<ExpenseBudgetIndexRequest>(
         expense_categories: props.request.expense_categories ?? [],
         expense_sub_categories: props.request.expense_sub_categories ?? [],
         expense_items: props.request.expense_items ?? [],
+        starts_at: props.request.starts_at,
+        ends_at: props.request.ends_at,
     },
     {
         only: ['expenseBudgets'],
@@ -298,6 +301,26 @@ const format = useFormatter();
                                     <ExpenseItemCombobox v-model="filters.expense_items" multiple />
                                 </FormControl>
                             </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('start') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <DatePicker v-model="filters.starts_at" :max-value="filters.ends_at" />
+                                </FormControl>
+                            </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('end') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <DatePicker v-model="filters.ends_at" :min-value="filters.starts_at" />
+                                </FormControl>
+                            </FormField>
                         </FiltersSheetContent>
                     </FiltersSheet>
                 </FormContent>
@@ -320,11 +343,14 @@ const format = useFormatter();
                             <DataTableHead>
                                 {{ $t('models.expense.item.fields.expense_category') }}
                             </DataTableHead>
-                            <DataTableHead>
-                                {{ $t('models.expense.item.fields.expense_sub_category') }}
-                            </DataTableHead>
                             <DataTableSortableHead value="expense_item_id">
                                 {{ $t('models.expense.budget.fields.expense_item') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="starts_at">
+                                {{ $t('models.expense.budget.fields.starts_at') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="ends_at">
+                                {{ $t('models.expense.budget.fields.ends_at') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
                                 {{ $t('models.expense.budget.fields.amount') }}
@@ -348,13 +374,24 @@ const format = useFormatter();
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseBudget.expense_item?.expense_category?.name }}
-                            </DataTableCell>
-                            <DataTableCell>
-                                {{ expenseBudget.expense_item?.expense_sub_category?.name }}
+                                <div>
+                                    {{ expenseBudget.expense_item?.expense_category?.name }}
+                                </div>
+                                <div
+                                    class="text-muted-foreground text-xs"
+                                    v-if="expenseBudget.expense_item?.expense_sub_category?.name"
+                                >
+                                    {{ expenseBudget.expense_item?.expense_sub_category?.name }}
+                                </div>
                             </DataTableCell>
                             <DataTableCell>
                                 {{ expenseBudget.expense_item?.name }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ format.date(expenseBudget.starts_at) }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ format.date(expenseBudget.ends_at) }}
                             </DataTableCell>
                             <DataTableCell>
                                 {{ format.price(expenseBudget.amount) }}

@@ -242,6 +242,8 @@ export type ExpenseBudgetIndexRequest = {
     expense_category_ids?: null | Array<number>;
     expense_sub_category_ids?: null | Array<number>;
     expense_item_ids?: null | Array<number>;
+    starts_at?: string;
+    ends_at?: string;
 };
 export type ExpenseBudgetOneOrManyRequest = {
     expense_budget?: number;
@@ -368,6 +370,8 @@ export type ExpenseChargeIndexRequest = {
     expense_category_ids?: null | Array<number>;
     expense_sub_category_ids?: null | Array<number>;
     expense_item_ids?: null | Array<number>;
+    starts_at?: string;
+    ends_at?: string;
 };
 export type ExpenseChargeOneOrManyRequest = {
     expense_charge?: number;

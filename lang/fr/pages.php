@@ -94,7 +94,6 @@ return [
     ],
 
     'expenses' => [
-        'title'   => 'Budgets',
         'budgets' => [
             'index' => [
                 'title' => 'Budgets généraux',

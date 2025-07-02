@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/sidebar';
 import { clearSessionFilters } from '@/composables';
 import type { NavItem } from '@/types';
+import { ChevronRightIcon } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 type Props = {
@@ -46,7 +47,11 @@ const expanded = computed(() => isMobile.value || state.value === 'expanded');
                 <template v-for="item in items.filter((item) => !item.hidden)" :key="item.title">
                     <component v-if="item.items" :is="expanded ? Collapsible : DropdownMenu" :default-open="expanded">
                         <SidebarMenuItem>
-                            <component as-child :is="expanded ? CollapsibleTrigger : DropdownMenuTrigger">
+                            <component
+                                as-child
+                                :is="expanded ? CollapsibleTrigger : DropdownMenuTrigger"
+                                class="group/collapsible"
+                            >
                                 <SidebarMenuButton
                                     :is-active="!expanded && item.items.some((subItem) => subItem.isActive)"
                                     :tooltip="item.title"
@@ -55,6 +60,10 @@ const expanded = computed(() => isMobile.value || state.value === 'expanded');
                                     <CapitalizeText>
                                         {{ item.title }}
                                     </CapitalizeText>
+
+                                    <ChevronRightIcon
+                                        class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                                    />
                                 </SidebarMenuButton>
                             </component>
                             <CollapsibleContent v-if="expanded">

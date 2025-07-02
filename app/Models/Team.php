@@ -36,6 +36,8 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read int|null $expense_budgets_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCategory> $expenseCategories
  * @property-read int|null $expense_categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCharge> $expenseCharges
+ * @property-read int|null $expense_charges_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseItem> $expenseItems
  * @property-read int|null $expense_items_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseSubCategory> $expenseSubCategories

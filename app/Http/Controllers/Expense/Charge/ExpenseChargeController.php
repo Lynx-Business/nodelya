@@ -48,6 +48,8 @@ class ExpenseChargeController extends Controller
                                         ->when($data->expense_item_ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->expense_item_ids)),
                                 ),
                         )
+                        ->when($data->starts_at, fn (Builder $q) => $q->where('charged_at', '>=', $data->starts_at))
+                        ->when($data->ends_at, fn (Builder $q) => $q->where('charged_at', '<=', $data->ends_at))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with([
                             'expenseItem' => [

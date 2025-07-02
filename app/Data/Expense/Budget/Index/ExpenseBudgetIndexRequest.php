@@ -10,6 +10,7 @@ use App\Facades\Services;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
+use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -51,6 +52,10 @@ class ExpenseBudgetIndexRequest extends Data
 
         /** @var null|array<int> $expense_item_ids */
         public ?array $expense_item_ids = null,
+
+        public ?Carbon $starts_at = null,
+
+        public ?Carbon $ends_at = null,
     ) {
         if ($expense_category_ids) {
             $this->expense_categories = ExpenseCategoryResource::collect(
@@ -89,6 +94,8 @@ class ExpenseBudgetIndexRequest extends Data
             'trashed'                  => __('trashed'),
             'expense_category_ids'     => __('models.expense.category.name.many'),
             'expense_sub_category_ids' => __('models.expense.sub_category.name.many'),
+            'starts_at'                => __('start'),
+            'ends_at'                  => __('end'),
         ];
     }
 

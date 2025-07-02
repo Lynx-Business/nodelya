@@ -325,10 +325,7 @@ const filters = useFilters<ExpenseItemIndexRequest>(
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
                             <DataTableSortableHead value="expense_category.name">
-                                {{ $t('models.expense.category.name.one') }}
-                            </DataTableSortableHead>
-                            <DataTableSortableHead value="expense_sub_category.name">
-                                {{ $t('models.expense.sub_category.name.one') }}
+                                {{ $t('models.expense.item.fields.expense_category') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">
                                 {{ $t('models.expense.item.fields.name') }}
@@ -352,10 +349,15 @@ const filters = useFilters<ExpenseItemIndexRequest>(
                                 <DataTableRowCheckbox />
                             </DataTableCell>
                             <DataTableCell>
-                                {{ expenseItem.expense_category?.name }}
-                            </DataTableCell>
-                            <DataTableCell>
-                                {{ expenseItem.expense_sub_category?.name }}
+                                <div>
+                                    {{ expenseItem.expense_category?.name }}
+                                </div>
+                                <div
+                                    class="text-muted-foreground text-xs"
+                                    v-if="expenseItem.expense_sub_category?.name"
+                                >
+                                    {{ expenseItem.expense_sub_category?.name }}
+                                </div>
                             </DataTableCell>
                             <DataTableCell>
                                 {{ expenseItem.name }}
