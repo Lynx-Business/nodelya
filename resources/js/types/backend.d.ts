@@ -559,20 +559,16 @@ export type PermissionListResource = {
 export type PermissionName = 'client' | 'expenses';
 export type ProjectDepartmentFormProps = {
     team: TeamListResource;
-    projectDepartment?: ProjectDepartmentFormResource;
+    projectDepartment?: ProjectDepartmentResource;
 };
 export type ProjectDepartmentFormRequest = {
-    name: string;
-};
-export type ProjectDepartmentFormResource = {
-    id: number;
     name: string;
 };
 export type ProjectDepartmentIndexProps = {
     request: ProjectDepartmentIndexRequest;
     team: TeamListResource;
     projectDepartments?: {
-        data: Array<ProjectDepartmentIndexResource>;
+        data: Array<ProjectDepartmentResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
         meta: {
             current_page: number;
@@ -598,19 +594,19 @@ export type ProjectDepartmentIndexRequest = {
     sort_direction: string;
     trashed?: TrashedFilter;
 };
-export type ProjectDepartmentIndexResource = {
-    id: number;
-    name: string;
-    can_view: boolean;
-    can_update: boolean;
-    can_trash: boolean;
-    can_restore: boolean;
-    can_delete: boolean;
-    deleted_at?: string;
-};
 export type ProjectDepartmentOneOrManyRequest = {
     project_department?: number;
     ids?: Array<number>;
+};
+export type ProjectDepartmentResource = {
+    id: number;
+    name: string;
+    deleted_at?: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
 };
 export type RegisterProps = {};
 export type RegisterRequest = {

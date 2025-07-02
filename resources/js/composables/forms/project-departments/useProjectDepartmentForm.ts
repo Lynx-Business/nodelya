@@ -1,7 +1,7 @@
 import { useComputedForm } from '@/composables';
-import { ProjectDepartmentFormRequest, ProjectDepartmentFormResource } from '@/types';
+import { ProjectDepartmentFormRequest, ProjectDepartmentResource } from '@/types';
 
-export function useProjectDepartmentForm(projectDepartment?: ProjectDepartmentFormResource) {
+export function useProjectDepartmentForm(projectDepartment?: ProjectDepartmentResource) {
     const form = useComputedForm({
         name: projectDepartment?.name ?? '',
     });

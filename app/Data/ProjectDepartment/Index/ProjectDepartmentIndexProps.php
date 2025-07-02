@@ -3,6 +3,7 @@
 namespace App\Data\ProjectDepartment\Index;
 
 use App\Attributes\EnumArrayOf;
+use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
@@ -21,7 +22,7 @@ class ProjectDepartmentIndexProps extends Resource
         public TeamListResource $team,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ProjectDepartmentIndexResource::class)]
+        #[DataCollectionOf(ProjectDepartmentResource::class)]
         public Lazy|PaginatedDataCollection $projectDepartments,
 
         #[AutoInertiaLazy]
