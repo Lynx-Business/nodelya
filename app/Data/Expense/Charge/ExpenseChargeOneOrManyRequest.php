@@ -37,9 +37,8 @@ class ExpenseChargeOneOrManyRequest extends Data
         ];
     }
 
-    public static function rules(
-        ValidationContext $context,
-    ): array {
+    public static function rules(ValidationContext $context): array
+    {
         $model = app(ExpenseCharge::class);
         $team = Services::team()->current();
 

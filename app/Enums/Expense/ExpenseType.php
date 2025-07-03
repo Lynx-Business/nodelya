@@ -28,4 +28,13 @@ enum ExpenseType: string
             default                                    => self::GENERAL,
         };
     }
+
+    public function toMorphType(): ?string
+    {
+        return match ($this) {
+            self::CONTRACTOR => Relation::getMorphAlias(Contractor::class),
+            self::EMPLOYEE   => Relation::getMorphAlias(Employee::class),
+            default          => null
+        };
+    }
 }

@@ -136,8 +136,8 @@ class ExpenseCategoryController extends Controller
         try {
             DB::beginTransaction();
             $count = $team->expenseCategories()
-                ->onlyTrashed()
                 ->whereType($expenseType)
+                ->onlyTrashed()
                 ->when($data->expense_category, fn (Builder $q) => $q->where('id', $data->expense_category))
                 ->when($data->ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
@@ -158,8 +158,8 @@ class ExpenseCategoryController extends Controller
         try {
             DB::beginTransaction();
             $count = $team->expenseCategories()
-                ->withTrashed()
                 ->whereType($expenseType)
+                ->withTrashed()
                 ->when($data->expense_category, fn (Builder $q) => $q->where('id', $data->expense_category))
                 ->when($data->ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()

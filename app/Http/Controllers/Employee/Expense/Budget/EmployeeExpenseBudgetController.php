@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Expense\Charge;
+namespace App\Http\Controllers\Employee\Expense\Budget;
 
-use App\Data\Expense\Charge\ExpenseChargeOneOrManyRequest;
-use App\Data\Expense\Charge\ExpenseChargeResource;
-use App\Data\Expense\Charge\Form\ExpenseChargeFormProps;
-use App\Data\Expense\Charge\Form\ExpenseChargeFormRequest;
-use App\Data\Expense\Charge\Index\ExpenseChargeIndexProps;
-use App\Data\Expense\Charge\Index\ExpenseChargeIndexRequest;
+use App\Data\Employee\Expense\Budget\Form\EmployeeExpenseBudgetFormProps;
+use App\Data\Employee\Expense\Budget\Index\EmployeeExpenseBudgetIndexProps;
+use App\Data\Expense\Budget\ExpenseBudgetOneOrManyRequest;
+use App\Data\Expense\Budget\ExpenseBudgetResource;
+use App\Data\Expense\Budget\Form\ExpenseBudgetFormRequest;
+use App\Data\Expense\Budget\Index\ExpenseBudgetIndexRequest;
 use App\Enums\Expense\ExpenseType;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
-use App\Models\ExpenseCharge;
+use App\Models\Employee;
+use App\Models\ExpenseBudget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -21,20 +22,20 @@ use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
 
-class ExpenseChargeController extends Controller
+class EmployeeExpenseBudgetController extends Controller
 {
     public function __construct(
-        protected ExpenseType $type = ExpenseType::GENERAL,
+        protected ExpenseType $type = ExpenseType::EMPLOYEE,
     ) {}
 
-    public function index(ExpenseChargeIndexRequest $data)
+    public function index(Employee $employee, ExpenseBudgetIndexRequest $data)
     {
-        return Inertia::render('expenses/charges/Index', ExpenseChargeIndexProps::from([
+        return Inertia::render('employees/expenses/budgets/Index', EmployeeExpenseBudgetIndexProps::from([
             'request'        => $data,
-            'expenseCharges' => Lazy::inertia(
-                fn () => ExpenseChargeResource::collect(
-                    ExpenseCharge::query()
-                        ->whereType($this->type)
+            'employee'       => $employee,
+            'expenseBudgets' => Lazy::inertia(
+                fn () => ExpenseBudgetResource::collect(
+                    $employee->expenseBudgets()
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
                         ->when(
@@ -87,9 +88,10 @@ class ExpenseChargeController extends Controller
         ]));
     }
 
-    public function create()
+    public function create(Employee $employee)
     {
-        return Inertia::render('expenses/charges/Create', ExpenseChargeFormProps::from([
+        return Inertia::render('employees/expenses/budgets/Create', EmployeeExpenseBudgetFormProps::from([
+            'employee'         => $employee,
             'accountingPeriod' => Lazy::closure(
                 fn () => Services::accountingPeriod()->current(),
             ),
@@ -114,29 +116,30 @@ class ExpenseChargeController extends Controller
         ]));
     }
 
-    public function store(ExpenseChargeFormRequest $data)
+    public function store(Employee $employee, ExpenseBudgetFormRequest $data)
     {
-        $expenseCharge = Services::expense()->createOrUpdateCharge->execute($data);
+        $expenseBudget = Services::expense()->createOrUpdateBudget->execute($data);
 
-        if ($expenseCharge == null) {
+        if ($expenseBudget == null) {
             Services::toast()->error->execute();
 
             return back();
         }
 
-        Services::toast()->success->execute(__('messages.expense.charges.store.success'));
+        Services::toast()->success->execute(__('messages.expense.budgets.store.success'));
 
-        return to_route('expenses.charges.index');
+        return to_route('employees.expenses.budgets.index', $employee);
     }
 
-    public function show(ExpenseCharge $expenseCharge)
+    public function show(Employee $employee, ExpenseBudget $expenseBudget)
     {
         //
     }
 
-    public function edit(ExpenseCharge $expenseCharge)
+    public function edit(Employee $employee, ExpenseBudget $expenseBudget)
     {
-        return Inertia::render('expenses/charges/Edit', ExpenseChargeFormProps::from([
+        return Inertia::render('employees/expenses/budgets/Edit', EmployeeExpenseBudgetFormProps::from([
+            'employee'         => $employee,
             'accountingPeriod' => Lazy::closure(
                 fn () => Services::accountingPeriod()->current(),
             ),
@@ -158,7 +161,7 @@ class ExpenseChargeController extends Controller
                         ->whereType($this->type),
                 ),
             ),
-            'expenseCharge' => $expenseCharge->load([
+            'expenseBudget' => $expenseBudget->load([
                 'expenseItem' => [
                     'expenseCategory',
                     'expenseSubCategory',
@@ -167,33 +170,33 @@ class ExpenseChargeController extends Controller
         ]));
     }
 
-    public function update(ExpenseCharge $expenseCharge, ExpenseChargeFormRequest $data)
+    public function update(Employee $employee, ExpenseBudget $expenseBudget, ExpenseBudgetFormRequest $data)
     {
-        $expenseCharge = Services::expense()->createOrUpdateCharge->execute($data);
+        $data->except('starts_at', 'ends_at');
+        $expenseBudget = Services::expense()->createOrUpdateBudget->execute($data);
 
-        if ($expenseCharge == null) {
+        if ($expenseBudget == null) {
             Services::toast()->error->execute();
 
             return back();
         }
 
-        Services::toast()->success->execute(__('messages.expense.charges.update.success'));
+        Services::toast()->success->execute(__('messages.expense.budgets.update.success'));
 
-        return to_route('expenses.charges.index');
+        return to_route('employees.expenses.budgets.index', $employee);
     }
 
-    public function trash(ExpenseChargeOneOrManyRequest $data)
+    public function trash(Employee $employee, ExpenseBudgetOneOrManyRequest $data)
     {
         try {
             DB::beginTransaction();
-            $count = ExpenseCharge::query()
-                ->whereType($this->type)
-                ->when($data->expense_charge, fn (Builder $q) => $q->where('id', $data->expense_charge))
+            $count = $employee->expenseBudgets()
+                ->when($data->expense_budget, fn (Builder $q) => $q->where('id', $data->expense_budget))
                 ->when($data->ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->delete();
             DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.expense.charges.trash.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.expense.budgets.trash.success', $count));
         } catch (\Throwable $th) {
             Log::error($th->getMessage(), $th->getTrace());
             DB::rollBack();
@@ -203,19 +206,18 @@ class ExpenseChargeController extends Controller
         return back();
     }
 
-    public function restore(ExpenseChargeOneOrManyRequest $data)
+    public function restore(Employee $employee, ExpenseBudgetOneOrManyRequest $data)
     {
         try {
             DB::beginTransaction();
-            $count = ExpenseCharge::query()
-                ->whereType($this->type)
+            $count = $employee->expenseBudgets()
                 ->onlyTrashed()
-                ->when($data->expense_charge, fn (Builder $q) => $q->where('id', $data->expense_charge))
+                ->when($data->expense_budget, fn (Builder $q) => $q->where('id', $data->expense_budget))
                 ->when($data->ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->restore();
             DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.expense.charges.restore.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.expense.budgets.restore.success', $count));
         } catch (\Throwable $th) {
             Log::error($th->getMessage(), $th->getTrace());
             DB::rollBack();
@@ -225,19 +227,18 @@ class ExpenseChargeController extends Controller
         return back();
     }
 
-    public function destroy(ExpenseChargeOneOrManyRequest $data)
+    public function destroy(Employee $employee, ExpenseBudgetOneOrManyRequest $data)
     {
         try {
             DB::beginTransaction();
-            $count = ExpenseCharge::query()
-                ->whereType($this->type)
+            $count = $employee->expenseBudgets()
                 ->withTrashed()
-                ->when($data->expense_charge, fn (Builder $q) => $q->where('id', $data->expense_charge))
+                ->when($data->expense_budget, fn (Builder $q) => $q->where('id', $data->expense_budget))
                 ->when($data->ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->ids))
                 ->get()
                 ->each->forceDelete();
             DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.expense.charges.delete.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.expense.budgets.delete.success', $count));
         } catch (\Throwable $th) {
             Log::error($th->getMessage(), $th->getTrace());
             DB::rollBack();

@@ -110,7 +110,7 @@ return [
     'expenses' => [
         'budgets' => [
             'index' => [
-                'title' => 'Budgets généraux',
+                'title' => 'Budgets',
             ],
             'create' => [
                 'title'       => 'Nouveau budget',

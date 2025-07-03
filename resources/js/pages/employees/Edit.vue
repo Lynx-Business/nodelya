@@ -1,33 +1,14 @@
 <script setup lang="ts">
 import EmployeeForm from '@/components/employee/EmployeeForm.vue';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
-import {
-    Section,
-    SectionContent,
-    SectionDescription,
-    SectionFooter,
-    SectionHeader,
-    SectionTitle,
-} from '@/components/ui/custom/section';
 import { useEmployeeForm, useLayout } from '@/composables';
-import { AppLayout } from '@/layouts';
+import { EmployeesFormLayout } from '@/layouts';
 import { EmployeeFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { trans } from 'laravel-vue-i18n';
 
 defineOptions({
-    layout: useLayout(AppLayout, () => ({
-        breadcrumbs: [
-            {
-                title: trans('pages.employees.index.title'),
-                href: route('employees.index'),
-            },
-            {
-                title: trans('pages.employees.edit.title'),
-                href: route('employees.edit', { employee: route().params.employee }),
-            },
-        ],
-    })),
+    layout: useLayout(EmployeesFormLayout, () => ({})),
 });
 
 const props = defineProps<EmployeeFormProps>();
@@ -43,22 +24,22 @@ function submit() {
 <template>
     <Head :title="$t('pages.employees.edit.title')" />
 
-    <Form :form @submit="submit()">
-        <Section>
-            <SectionHeader>
-                <SectionTitle>
+    <Form :form :disabled="!employee?.can_update" @submit="submit()">
+        <Card>
+            <CardHeader>
+                <CardTitle>
                     {{ $t('pages.employees.edit.title') }}
-                </SectionTitle>
-                <SectionDescription>
+                </CardTitle>
+                <CardDescription>
                     {{ $t('pages.employees.edit.description') }}
-                </SectionDescription>
-            </SectionHeader>
-            <SectionContent class="sm:flex">
+                </CardDescription>
+            </CardHeader>
+            <CardContent class="sm:flex">
                 <EmployeeForm autofocus />
-            </SectionContent>
-            <SectionFooter>
+            </CardContent>
+            <CardFooter>
                 <FormSubmitButton />
-            </SectionFooter>
-        </Section>
+            </CardFooter>
+        </Card>
     </Form>
 </template>
