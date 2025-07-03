@@ -171,6 +171,7 @@ return [
             'team_id'               => 'société',
             'deal_id'               => 'Associer à une autre affaire commerciale',
             'total_sales'           => 'Totaux CA',
+            'targeted_turnover'     => 'CA ciblé',
         ],
     ],
     'billing_deals' => [

@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import DealCombobox from '@/components/deal/common/DealCombobox.vue';
-import { Button } from '@/components/ui/button';
+import {
+    DataTable,
+    DataTableBody,
+    DataTableCell,
+    DataTableContent,
+    DataTableHead,
+    DataTableHeader,
+    DataTableRow,
+} from '@/components/ui/custom/data-table';
 import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
     FormContent,
@@ -14,51 +22,65 @@ import {
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { CommercialDealFormData, useFormatter } from '@/composables';
-import { trans } from 'laravel-vue-i18n';
-import { PlusIcon, XIcon } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { DealScheduleStatus } from '@/types';
+import { computed, ref, watch } from 'vue';
 
 const { form } = injectFormContext<CommercialDealFormData>();
+const defaultStatus: DealScheduleStatus = 'uncertain';
 const newScheduleItem = ref({ date: '', amount: 0 });
 const format = useFormatter();
 
-const totalScheduleAmount = computed(() => {
-    return (
-        form.schedule_data.reduce((sum: any, item: any) => sum + (item.amount || 0), 0) + newScheduleItem.value.amount
-    );
-});
+function addMonths(date: Date, months: number): Date {
+    const d = new Date(date);
+    const day = d.getDate();
+    d.setMonth(d.getMonth() + months);
 
-const scheduleTotalError = computed(() => {
-    if (totalScheduleAmount.value > (form?.amount ?? 0)) {
-        return trans('validation.custom.schedule_total_exceeds', {
-            total: format.price(totalScheduleAmount.value),
-            principal: format.price(form?.amount ?? 0),
-        });
+    if (d.getDate() !== day) {
+        return new Date(d.getFullYear(), d.getMonth() + 1, 0);
     }
-    return null;
-});
+    return d;
+}
 
-function addScheduleItem() {
-    if (totalScheduleAmount.value + newScheduleItem.value.amount > (form?.amount ?? 0)) {
-        return;
-    }
-    if (newScheduleItem.value.date && newScheduleItem.value.amount > 0) {
+function generateSchedule() {
+    if (!form.amount || !form.duration_in_months || !form.starts_at) return;
+
+    const amount = form.amount;
+    const duration = form.duration_in_months;
+    const baseAmount = Math.floor(amount / duration);
+    const remainder = amount - baseAmount * duration;
+
+    let currentDate = new Date(form.starts_at);
+    form.schedule_data = [];
+
+    for (let i = 0; i < duration; i++) {
+        const installmentAmount = i === 0 ? baseAmount + remainder : baseAmount;
+        const dateStr = currentDate.toISOString().split('T')[0];
+
         form.schedule_data.push({
-            ...newScheduleItem.value,
-            status: 'pending',
-            title: 'Échéance',
+            date: dateStr,
+            amount: installmentAmount,
+            status: defaultStatus,
+            title: '',
         });
-        newScheduleItem.value = { date: '', amount: 0 };
+
+        currentDate = addMonths(currentDate, 1);
     }
 }
 
-function removeScheduleItem(index: number) {
-    form.schedule_data.splice(index, 1);
-}
-function getScheduleError(index: number, field: string) {
-    const key = `schedule_data.${index}.${field}`;
-    return (form.errors as Record<string, string>)[key] || '';
-}
+const targetedTurnover = computed(() => {
+    if (!form.amount || !form.success_rate) return 0;
+    return form.amount * (form.success_rate / 100);
+});
+
+watch(
+    () => [form.amount, form.duration_in_months, form.starts_at],
+    () => {
+        if (form.amount && form.duration_in_months && form.starts_at) {
+            generateSchedule();
+        }
+    },
+    { deep: true },
+);
 </script>
 
 <template>
@@ -169,55 +191,49 @@ function getScheduleError(index: number, field: string) {
             <FormError :message="form.errors.deal_id" />
         </FormField>
 
+        <FormField>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.commercial_deal.fields.targeted_turnover') }}
+                </CapitalizeText>
+            </FormLabel>
+            <FormControl>
+                <TextInput
+                    :model-value="format.price(targetedTurnover)"
+                    readonly
+                    class="bg-gray-100 dark:bg-gray-800"
+                />
+            </FormControl>
+        </FormField>
+
         <div class="col-span-full mt-6">
             <h3 class="mb-4 text-lg font-medium">Échéancier</h3>
-            <div v-if="scheduleTotalError" class="mb-4 text-sm text-red-500">
-                {{ scheduleTotalError }}
-            </div>
-            <FormField v-else>
+
+            <DataTable v-slot="{ rows }" :data="form.schedule_data">
+                <DataTableContent tab="table">
+                    <DataTableHeader>
+                        <DataTableRow>
+                            <DataTableHead>Date</DataTableHead>
+                            <DataTableHead>Montant</DataTableHead>
+                        </DataTableRow>
+                    </DataTableHeader>
+                    <DataTableBody>
+                        <DataTableRow v-for="(item, index) in rows" :key="index" :item>
+                            <DataTableCell>
+                                {{ format.date(item.date) }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ format.price(item.amount) }}
+                            </DataTableCell>
+                        </DataTableRow>
+                    </DataTableBody>
+                </DataTableContent>
+            </DataTable>
+
+            <!-- TODO remove after -->
+            <FormField>
                 <FormError class="mb-4" :message="form.errors.schedule_data" />
             </FormField>
-
-            <div class="mb-4 flex items-center gap-2">
-                <FormField>
-                    <FormControl>
-                        <DatePicker v-model="newScheduleItem.date" />
-                    </FormControl>
-                </FormField>
-                <FormField>
-                    <FormControl>
-                        <PriceInput v-model="newScheduleItem.amount" />
-                    </FormControl>
-                </FormField>
-                <Button @click="addScheduleItem" variant="ghost" size="icon">
-                    <PlusIcon class="cursor-pointer" />
-                </Button>
-            </div>
-
-            <div class="overflow-hidden rounded-lg border">
-                <div
-                    class="flex items-center gap-2 border-b p-3"
-                    v-for="(item, index) in form.schedule_data"
-                    :key="index"
-                >
-                    <FormField required>
-                        <FormControl>
-                            <DatePicker v-model="item.date" />
-                        </FormControl>
-                        <FormError :message="getScheduleError(index, 'date')" />
-                    </FormField>
-                    <FormField required>
-                        <FormControl>
-                            <PriceInput v-model="item.amount" />
-                        </FormControl>
-                        <FormError class="mt-1" :message="getScheduleError(index, 'amount')" />
-                    </FormField>
-
-                    <Button @click="removeScheduleItem(index)" variant="ghost" size="icon">
-                        <XIcon class="bg-red text-red-500" />
-                    </Button>
-                </div>
-            </div>
         </div>
     </FormContent>
 </template>
