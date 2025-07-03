@@ -27,13 +27,15 @@ import {
 import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { BillingDealFormData, useFormatter } from '@/composables';
-import { ScheduleItemData } from '@/types';
+import { DealScheduleStatus, ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import AlertDialogSchedule from './AlertDialogSchedule.vue';
 
 const { form } = injectFormContext<BillingDealFormData>();
+const defaultStatus: DealScheduleStatus = 'uncertain';
+const paidStatus: DealScheduleStatus = 'paid';
 const newScheduleItem = ref({ date: '', amount: 0, title: '' });
 const format = useFormatter();
 
@@ -52,16 +54,20 @@ function openPostponeDialog(item: ScheduleItemData) {
 function postponeSchedules() {
     if (selectedItemIndex.value === null) return;
 
-    const startIndex = selectedItemIndex.value;
+    const selectedItem = form.schedule_data[selectedItemIndex.value];
+    const selectedDate = selectedItem.date;
     const months = postponeMonths.value;
 
-    const updatedSchedule = [...form.schedule_data];
-    for (let i = startIndex; i < updatedSchedule.length; i++) {
-        const newDate = addMonthsToDate(updatedSchedule[i].date, months);
-        if (updatedSchedule[i].status !== 'paid') {
-            updatedSchedule[i].date = newDate;
+    const updatedSchedule = form.schedule_data.map((item) => {
+        if (new Date(item.date) < new Date(selectedDate) || item.status === paidStatus) {
+            return item;
         }
-    }
+
+        return {
+            ...item,
+            date: addMonthsToDate(item.date, months),
+        };
+    });
 
     form.schedule_data = updatedSchedule;
     showPostponeDialog.value = false;
@@ -91,13 +97,13 @@ const scheduleTotalError = computed(() => {
 });
 
 function addScheduleItem() {
-    if (totalScheduleAmount.value + newScheduleItem.value.amount > (form?.amount ?? 0)) {
+    if (totalScheduleAmount.value > (form?.amount ?? 0)) {
         return;
     }
     if (newScheduleItem.value.date && newScheduleItem.value.amount > 0) {
         form.schedule_data.push({
             ...newScheduleItem.value,
-            status: 'uncertain',
+            status: defaultStatus,
         });
         form.schedule_data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         newScheduleItem.value = { date: '', amount: 0, title: '' };
@@ -158,7 +164,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <PriceInput v-model="form.amount" :min="0" />
+                <PriceInput v-model="form.amount" :min="0" disabled />
             </FormControl>
             <FormError :message="form.errors.amount" />
         </FormField>
@@ -182,7 +188,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <DatePicker v-model="form.ordered_at" />
+                <DatePicker v-model="form.ordered_at" disabled />
             </FormControl>
             <FormError :message="form.errors.ordered_at" />
         </FormField>
@@ -194,7 +200,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <DatePicker v-model="form.starts_at" />
+                <DatePicker v-model="form.starts_at" disabled />
             </FormControl>
             <FormError :message="form.errors.starts_at" />
         </FormField>
@@ -223,6 +229,18 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
             <FormError :message="form.errors.code" />
         </FormField>
 
+        <FormField>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.billing_deals.fields.reference') }}
+                </CapitalizeText>
+            </FormLabel>
+            <FormControl>
+                <TextInput :model-value="form.reference" disabled />
+            </FormControl>
+            <FormError :message="form.errors.reference" />
+        </FormField>
+
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
@@ -245,14 +263,8 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
             <FormError :message="form.errors.deal_id" />
         </FormField>
 
-        <div class="col-span-full mt-6">
-            <h3 class="mb-4 text-lg font-medium">Échéancier</h3>
-            <div v-if="scheduleTotalError" class="mb-4 text-sm text-red-500">
-                {{ scheduleTotalError }}
-            </div>
-            <FormField v-else>
-                <FormError class="mb-4" :message="form.errors.schedule_data" />
-            </FormField>
+        <div class="col-span-full mt-2">
+            <h4 class="mb-4 text-lg font-medium">Échéancier</h4>
 
             <div class="mb-4 flex items-center gap-2">
                 <FormField>
@@ -260,7 +272,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                         <CapitalizeText> Date </CapitalizeText>
                     </FormLabel>
                     <FormControl>
-                        <DatePicker v-model="newScheduleItem.date" />
+                        <DatePicker v-model="newScheduleItem.date" :min-value="form?.starts_at" />
                     </FormControl>
                 </FormField>
                 <FormField>
@@ -320,7 +332,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                                 </FormField>
                             </DataTableCell>
                             <DataTableCell>
-                                <FormField>
+                                <FormField required>
                                     <FormControl>
                                         <EnumCombobox
                                             v-model="item.status"
@@ -328,6 +340,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                                             placeholder="Sélectionner un statut"
                                         />
                                     </FormControl>
+                                    <FormError :message="getScheduleError(index, 'status')" />
                                 </FormField>
                             </DataTableCell>
                             <DataTableCell>
@@ -335,6 +348,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                                     <FormControl>
                                         <TextInput v-model="item.title" />
                                     </FormControl>
+                                    <FormError :message="getScheduleError(index, 'title')" />
                                 </FormField>
                             </DataTableCell>
                             <DataTableCell>
@@ -349,6 +363,13 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 <span>Total échéancier: {{ format.price(totalScheduleAmount) }}</span>
                 <span>Montant principal: {{ format.price(form?.amount ?? 0) }}</span>
             </div>
+
+            <div v-if="scheduleTotalError" class="mt-4 text-sm text-red-500">
+                {{ scheduleTotalError }}
+            </div>
+            <FormField v-else>
+                <FormError class="mt-4" :message="form.errors.schedule_data" />
+            </FormField>
         </div>
     </FormContent>
 

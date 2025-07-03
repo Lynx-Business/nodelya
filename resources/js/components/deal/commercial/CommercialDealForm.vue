@@ -54,7 +54,7 @@ function generateSchedule() {
 
     for (let i = 0; i < duration; i++) {
         const installmentAmount = i === 0 ? baseAmount + remainder : baseAmount;
-        const dateStr = currentDate.toISOString().split('T')[0];
+        const dateStr = currentDate.toISOString().split('.')[0];
 
         form.schedule_data.push({
             date: dateStr,

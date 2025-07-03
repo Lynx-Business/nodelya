@@ -2,7 +2,8 @@
 
 namespace App\Data\Deal;
 
-use Spatie\LaravelData\Attributes\Validation\Date;
+use App\Enums\Deal\DealScheduleStatus;
+use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -10,12 +11,12 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class ScheduleItemData extends Data
 {
     public function __construct(
-        #[Date]
-        public string $date,
+
+        public Carbon $date,
 
         public float $amount,
 
-        public ?string $status,
+        public DealScheduleStatus $status,
 
         public ?string $title,
     ) {}

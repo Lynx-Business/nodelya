@@ -255,13 +255,13 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableSortableHead value="name">
                                 {{ $t('models.commercial_deal.fields.name') }}
                             </DataTableSortableHead>
-                            <DataTableSortableHead value="amount">
+                            <DataTableSortableHead value="amount_in_cents">
                                 {{ $t('models.commercial_deal.fields.amount') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="code">
                                 {{ $t('models.commercial_deal.fields.code') }}
                             </DataTableSortableHead>
-                            <DataTableSortableHead value="amount">
+                            <DataTableSortableHead value="amount_in_cents">
                                 {{ $t('models.commercial_deal.fields.total_sales') }}
                             </DataTableSortableHead>
                             <DataTableHead>

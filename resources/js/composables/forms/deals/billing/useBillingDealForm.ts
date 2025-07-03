@@ -17,6 +17,7 @@ export function useBillingDealForm(deal?: BillingDealFormResource) {
         amount: deal?.amount,
         parent: deal?.parent,
         client: deal?.client,
+        reference: deal?.reference,
         code: deal?.code || '',
         success_rate: deal?.success_rate || 50,
         ordered_at: deal?.ordered_at || '',
