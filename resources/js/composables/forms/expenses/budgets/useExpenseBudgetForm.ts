@@ -4,6 +4,8 @@ import { reactiveOmit } from '@vueuse/core';
 
 export function useExpenseBudgetForm(expenseBudget?: Partial<ExpenseBudgetResource>) {
     const form = useComputedForm({
+        model_type: expenseBudget?.model_type,
+        model_id: expenseBudget?.model_id,
         expense_category: expenseBudget?.expense_item?.expense_category,
         expense_sub_category: expenseBudget?.expense_item?.expense_sub_category,
         expense_item: expenseBudget?.expense_item,

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -16,10 +17,20 @@ class ExpenseBudgetResource extends Resource
 {
     public function __construct(
         public int $id,
-        public float $amount,
-        public Carbon $starts_at,
-        public Carbon $ends_at,
+
         public int $expense_item_id,
+
+        #[LiteralTypeScriptType("'contractor' | 'employee'")]
+        public ?string $model_type,
+
+        public ?int $model_id,
+
+        public float $amount,
+
+        public Carbon $starts_at,
+
+        public Carbon $ends_at,
+
         public ?Carbon $deleted_at,
 
         public Lazy|ExpenseType $type,
@@ -41,10 +52,12 @@ class ExpenseBudgetResource extends Resource
     {
         return new static(
             id              : $budget->id,
+            expense_item_id : $budget->expense_item_id,
+            model_type      : $budget->model_type,
+            model_id        : $budget->model_id,
             amount          : $budget->amount,
             starts_at       : $budget->starts_at,
             ends_at         : $budget->ends_at,
-            expense_item_id : $budget->expense_item_id,
             deleted_at      : $budget->deleted_at,
             type            : Lazy::create(fn () => $budget->type),
             can_view        : Lazy::create(fn () => $budget->can_view),

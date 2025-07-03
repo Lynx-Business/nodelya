@@ -20,5 +20,7 @@ class EmployeeFormProps extends Resource
         public Lazy|DataCollection $projectDepartments,
 
         public ?EmployeeResource $employee,
-    ) {}
+    ) {
+        $this->employee?->include('can_update');
+    }
 }

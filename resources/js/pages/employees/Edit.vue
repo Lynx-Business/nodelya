@@ -1,64 +1,83 @@
 <script setup lang="ts">
+import EmployeeEndsAtForm from '@/components/employee/EmployeeEndsAtForm.vue';
 import EmployeeForm from '@/components/employee/EmployeeForm.vue';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
-import {
-    Section,
-    SectionContent,
-    SectionDescription,
-    SectionFooter,
-    SectionHeader,
-    SectionTitle,
-} from '@/components/ui/custom/section';
-import { useEmployeeForm, useLayout } from '@/composables';
-import { AppLayout } from '@/layouts';
+import { InertiaLink } from '@/components/ui/custom/link';
+import { CapitalizeText } from '@/components/ui/custom/typography';
+import { useEmployeeEndsAtForm, useEmployeeForm, useLayout } from '@/composables';
+import { EmployeesFormLayout } from '@/layouts';
 import { EmployeeFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { trans } from 'laravel-vue-i18n';
+import { Trash2Icon } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 defineOptions({
-    layout: useLayout(AppLayout, () => ({
-        breadcrumbs: [
-            {
-                title: trans('pages.employees.index.title'),
-                href: route('employees.index'),
-            },
-            {
-                title: trans('pages.employees.edit.title'),
-                href: route('employees.edit', { employee: route().params.employee }),
-            },
-        ],
-    })),
+    layout: useLayout(EmployeesFormLayout, () => ({})),
 });
 
 const props = defineProps<EmployeeFormProps>();
 
-const form = useEmployeeForm(props.employee);
+const employee = computed(() => props.employee!);
 
+const form = useEmployeeForm(employee.value);
 function submit() {
-    const { employee } = props;
-    form.put(route('employees.update', { employee: employee! }));
+    form.put(route('employees.update', { employee: employee.value }));
+}
+
+const endsAtForm = useEmployeeEndsAtForm(employee.value);
+function endsAtSubmit() {
+    endsAtForm.put(route('employees.ends-at.update', { employee: employee.value }));
 }
 </script>
 
 <template>
     <Head :title="$t('pages.employees.edit.title')" />
 
-    <Form :form @submit="submit()">
-        <Section>
-            <SectionHeader>
-                <SectionTitle>
+    <Form :form :disabled="!employee.can_update" @submit="submit()">
+        <Card>
+            <CardHeader>
+                <CardTitle>
                     {{ $t('pages.employees.edit.title') }}
-                </SectionTitle>
-                <SectionDescription>
+                </CardTitle>
+                <CardDescription>
                     {{ $t('pages.employees.edit.description') }}
-                </SectionDescription>
-            </SectionHeader>
-            <SectionContent class="sm:flex">
+                </CardDescription>
+            </CardHeader>
+            <CardContent class="sm:flex">
                 <EmployeeForm autofocus />
-            </SectionContent>
-            <SectionFooter>
+            </CardContent>
+            <CardFooter>
                 <FormSubmitButton />
-            </SectionFooter>
-        </Section>
+            </CardFooter>
+        </Card>
+    </Form>
+
+    <Form :form="endsAtForm" :disabled="!employee.can_update" @submit="endsAtSubmit()">
+        <Card>
+            <CardHeader>
+                <CardTitle>
+                    {{ $t('pages.employees.edit.ends_at.title') }}
+                </CardTitle>
+                <CardDescription>
+                    {{ $t('pages.employees.edit.ends_at.description') }}
+                </CardDescription>
+            </CardHeader>
+            <CardContent class="sm:flex">
+                <EmployeeEndsAtForm />
+            </CardContent>
+            <CardFooter>
+                <FormSubmitButton />
+                <Button v-if="employee.ends_at" variant="destructive" as-child>
+                    <InertiaLink :href="route('employees.ends-at.destroy', { employee })" method="delete">
+                        <Trash2Icon />
+                        <CapitalizeText>
+                            {{ $t('delete') }}
+                        </CapitalizeText>
+                    </InertiaLink>
+                </Button>
+            </CardFooter>
+        </Card>
     </Form>
 </template>

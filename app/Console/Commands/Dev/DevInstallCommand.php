@@ -125,7 +125,7 @@ class DevInstallCommand extends Command
                             }
                         }
 
-                        Employee::factory()
+                        $employees = Employee::factory()
                             ->count($count)
                             ->recycle($team)
                             ->state(fn () => [
@@ -165,41 +165,37 @@ class DevInstallCommand extends Command
                                         ->first()->id,
                                 ])
                                 ->create();
-                        }
 
-                        Employee::factory()
-                            ->count($count)
-                            ->recycle($team)
-                            ->state(fn () => [
-                                'project_department_id' => ProjectDepartment::query()
-                                    ->inRandomOrder()
-                                    ->first()->id,
-                            ])
-                            ->has(
+                            foreach ($employees as $employee) {
                                 ExpenseBudget::factory()
                                     ->count($count)
                                     ->recycle($team)
-                                    ->forAccountingPeriod(AccountingPeriod::query()->latest()->first())
+                                    ->forAccountingPeriod($accountingPeriod)
                                     ->state(fn () => [
+                                        'model_type'      => ExpenseType::EMPLOYEE->toMorphType(),
+                                        'model_id'        => $employee->id,
                                         'expense_item_id' => ExpenseItem::query()
                                             ->whereType(ExpenseType::EMPLOYEE)
                                             ->inRandomOrder()
                                             ->first()->id,
-                                    ]),
-                            )
-                            ->has(
+                                    ])
+                                    ->create();
+
                                 ExpenseCharge::factory()
                                     ->count($count)
                                     ->recycle($team)
-                                    ->forAccountingPeriod(AccountingPeriod::query()->latest()->first())
+                                    ->forAccountingPeriod($accountingPeriod)
                                     ->state(fn () => [
+                                        'model_type'      => ExpenseType::EMPLOYEE->toMorphType(),
+                                        'model_id'        => $employee->id,
                                         'expense_item_id' => ExpenseItem::query()
                                             ->whereType(ExpenseType::EMPLOYEE)
                                             ->inRandomOrder()
                                             ->first()->id,
-                                    ]),
-                            )
-                            ->create();
+                                    ])
+                                    ->create();
+                            }
+                        }
                     },
                 );
             }

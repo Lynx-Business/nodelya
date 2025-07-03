@@ -34,6 +34,12 @@ return [
         ],
     ],
 
+    'employees' => [
+        'edit'    => 'Détails',
+        'budgets' => 'Budgets',
+        'charges' => 'Frais ponctuels',
+    ],
+
     'expenses' => [
         'budgets' => 'Budgets',
         'charges' => 'Frais ponctuels',

@@ -9,6 +9,9 @@ use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Employee\EmployeeController;
+use App\Http\Controllers\Employee\EmployeeEndsAtController;
+use App\Http\Controllers\Employee\Expense\Budget\EmployeeExpenseBudgetController;
+use App\Http\Controllers\Employee\Expense\Charge\EmployeeExpenseChargeController;
 use App\Http\Controllers\Expense\Budget\ExpenseBudgetController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
 use App\Http\Controllers\Expense\Charge\ExpenseChargeController;
@@ -67,9 +70,36 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::post('/create', 'store')->name('store')->can('viewAny', Employee::class);
         Route::get('/edit/{employee}', 'edit')->name('edit')->withTrashed()->can('view', 'employee');
         Route::put('/edit/{employee}', 'update')->name('update')->withTrashed()->can('update', 'employee');
+        Route::prefix('/edit/{employee}/ends-at')->name('ends-at.')->controller(EmployeeEndsAtController::class)->group(function () {
+            Route::put('/', 'update')->name('update')->withTrashed()->can('update', 'employee');
+            Route::delete('/', 'destroy')->name('destroy')->withTrashed()->can('update', 'employee');
+        });
         Route::delete('/trash/{employee?}', 'trash')->name('trash');
         Route::patch('/restore/{employee?}', 'restore')->name('restore');
         Route::delete('/delete/{employee?}', 'destroy')->name('delete');
+
+        Route::prefix('/edit/{employee}')->name('expenses.')->group(function () {
+            Route::prefix('/budgets')->name('budgets.')->controller(EmployeeExpenseBudgetController::class)->group(function () {
+                Route::get('/', 'index')->name('index')->can('viewAny', ExpenseBudget::class);
+                Route::get('/create', 'create')->name('create')->can('viewAny', ExpenseBudget::class);
+                Route::post('/create', 'store')->name('store')->can('viewAny', ExpenseBudget::class);
+                Route::get('/edit/{expenseBudget}', 'edit')->name('edit')->withTrashed()->can('view', 'expenseBudget');
+                Route::put('/edit/{expenseBudget}', 'update')->name('update')->withTrashed()->can('update', 'expenseBudget');
+                Route::delete('/trash/{expenseBudget?}', 'trash')->name('trash');
+                Route::patch('/restore/{expenseBudget?}', 'restore')->name('restore');
+                Route::delete('/delete/{expenseBudget?}', 'destroy')->name('delete');
+            });
+            Route::prefix('/charges')->name('charges.')->controller(EmployeeExpenseChargeController::class)->group(function () {
+                Route::get('/', 'index')->name('index')->can('viewAny', ExpenseCharge::class);
+                Route::get('/create', 'create')->name('create')->can('viewAny', ExpenseCharge::class);
+                Route::post('/create', 'store')->name('store')->can('viewAny', ExpenseCharge::class);
+                Route::get('/edit/{expenseCharge}', 'edit')->name('edit')->withTrashed()->can('view', 'expenseCharge');
+                Route::put('/edit/{expenseCharge}', 'update')->name('update')->withTrashed()->can('update', 'expenseCharge');
+                Route::delete('/trash/{expenseCharge?}', 'trash')->name('trash');
+                Route::patch('/restore/{expenseCharge?}', 'restore')->name('restore');
+                Route::delete('/delete/{expenseCharge?}', 'destroy')->name('delete');
+            });
+        });
     });
 
     Route::prefix('/expenses')->name('expenses.')->group(function () {

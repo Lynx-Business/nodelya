@@ -5,9 +5,12 @@ namespace App\Data\Expense\Charge\Form;
 use App\Attributes\InCurrentAccountingPeriod;
 use App\Enums\Expense\ExpenseType;
 use App\Facades\Services;
+use App\Models\Contractor;
+use App\Models\Employee;
 use App\Models\ExpenseCharge;
 use App\Models\ExpenseItem;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -17,8 +20,8 @@ use Spatie\LaravelData\Attributes\Validation\RequiredWith;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\Hidden;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
-use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 #[TypeScript]
 #[MergeValidationRules]
@@ -33,7 +36,7 @@ class ExpenseChargeFormRequest extends Data
         #[FromRouteParameter('expenseCharge')]
         public ?ExpenseCharge $expense_charge,
 
-        #[TypeScriptType("'contractor' | 'employee'")]
+        #[LiteralTypeScriptType("'contractor' | 'employee'")]
         public ?string $model_type,
 
         #[RequiredWith('model_type')]
@@ -59,21 +62,39 @@ class ExpenseChargeFormRequest extends Data
         ];
     }
 
-    public static function rules(
-        ValidationContext $context,
-    ): array {
-        $expenseType = ExpenseType::fromMorphType(data_get($context->payload, 'model_type'));
-        $expenseItem = ExpenseItem::query()
-            ->whereType($expenseType)
-            ->find(data_get($context->payload, 'expense_item_id'));
+    public static function rules(ValidationContext $context): array
+    {
+        $team = Services::team()->current();
+        $modelType = data_get($context->payload, 'model_type');
+        $expenseType = ExpenseType::fromMorphType($modelType);
 
-        if ($expenseItem) {
-            return [];
-        }
+        $modelClass = match ($modelType) {
+            Relation::getMorphAlias(Contractor::class) => Contractor::class,
+            Relation::getMorphAlias(Employee::class)   => Employee::class,
+            default                                    => null
+        };
 
-        // Invalid
+        $model = $modelClass ? app($modelClass) : null;
+        $modelIdRules = $model
+            ? [
+                Rule::exists($model->getTable(), $model->getKeyName())
+                    ->where($model->getQualifiedTeamIdColumn(), $team?->getKey()),
+            ]
+            : ['exclude'];
+        $modelTypeRules = $model
+            ? []
+            : ['exclude'];
+
         return [
-            'expense_item_id' => [Rule::in([])],
+            'expense_item_id' => [
+                Rule::in(
+                    ExpenseItem::query()
+                        ->whereType($expenseType)
+                        ->pluck('id'),
+                ),
+            ],
+            'model_type' => $modelTypeRules,
+            'model_id'   => $modelIdRules,
         ];
     }
 }

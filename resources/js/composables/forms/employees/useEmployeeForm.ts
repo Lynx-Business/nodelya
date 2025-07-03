@@ -10,7 +10,6 @@ export function useEmployeeForm(employee?: Partial<EmployeeResource>) {
         email: employee?.email ?? '',
         phone: employee?.phone,
         starts_at: employee?.starts_at ?? '',
-        ends_at: employee?.ends_at ?? '',
     });
 
     form.transform(transformEmployeeForm);

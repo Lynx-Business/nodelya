@@ -185,6 +185,74 @@ export type EditProfileSettingsProps = {
     mustVerifyEmail: boolean;
 };
 export type EditSecuritySettingsProps = {};
+export type EmployeeExpenseBudgetFormProps = {
+    accountingPeriod?: AccountingPeriodResource;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    employee: EmployeeResource;
+    expenseBudget?: ExpenseBudgetResource;
+};
+export type EmployeeExpenseBudgetIndexProps = {
+    request: ExpenseBudgetIndexRequest;
+    employee: EmployeeResource;
+    expenseBudgets?: {
+        data: Array<ExpenseBudgetResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+};
+export type EmployeeExpenseChargeFormProps = {
+    accountingPeriod?: AccountingPeriodResource;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    employee: EmployeeResource;
+    expenseCharge?: ExpenseChargeResource;
+};
+export type EmployeeExpenseChargeIndexProps = {
+    request: ExpenseChargeIndexRequest;
+    employee: EmployeeResource;
+    expenseCharges?: {
+        data: Array<ExpenseChargeResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+};
 export type EmployeeFormProps = {
     projectDepartments?: Array<ProjectDepartmentResource>;
     employee?: EmployeeResource;
@@ -262,7 +330,7 @@ export type ExpenseBudgetFormProps = {
     expenseBudget?: ExpenseBudgetResource;
 };
 export type ExpenseBudgetFormRequest = {
-    model_type?: string;
+    model_type?: 'contractor' | 'employee';
     model_id?: number;
     expense_item_id: number;
     amount: number;
@@ -314,10 +382,12 @@ export type ExpenseBudgetOneOrManyRequest = {
 };
 export type ExpenseBudgetResource = {
     id: number;
+    expense_item_id: number;
+    model_type?: 'contractor' | 'employee';
+    model_id?: number;
     amount: number;
     starts_at: string;
     ends_at: string;
-    expense_item_id: number;
     deleted_at?: string;
     type?: ExpenseType;
     can_view?: boolean;
@@ -391,7 +461,7 @@ export type ExpenseChargeFormProps = {
     expenseCharge?: ExpenseChargeResource;
 };
 export type ExpenseChargeFormRequest = {
-    model_type?: string;
+    model_type?: 'contractor' | 'employee';
     model_id?: number;
     expense_item_id: number;
     amount: number;
@@ -444,9 +514,11 @@ export type ExpenseChargeOneOrManyRequest = {
 };
 export type ExpenseChargeResource = {
     id: number;
+    model_type?: 'contractor' | 'employee';
+    model_id?: number;
+    expense_item_id: number;
     amount: number;
     charged_at: string;
-    expense_item_id: number;
     deleted_at?: string;
     type?: ExpenseType;
     can_view?: boolean;
@@ -782,6 +854,9 @@ export type ToastMessagesData = {
     error?: string;
 };
 export type TrashedFilter = 'only' | 'with';
+export type UpdateEmployeeEndsAtRequest = {
+    ends_at: string;
+};
 export type UpdatePasswordSettingsRequest = {
     current_password: string;
     password: string;
