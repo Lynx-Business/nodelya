@@ -70,6 +70,9 @@ class DealPolicy
 
     public function delete(User $user, Deal $deal): bool
     {
+        if ($deal->parent()->exists()) {
+            return false;
+        }
         if ($user->is_admin && Route::is('admin.*')) {
             return true;
         }
