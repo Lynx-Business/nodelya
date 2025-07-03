@@ -9,6 +9,7 @@ use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Employee\EmployeeController;
+use App\Http\Controllers\Employee\EmployeeEndsAtController;
 use App\Http\Controllers\Employee\Expense\Budget\EmployeeExpenseBudgetController;
 use App\Http\Controllers\Employee\Expense\Charge\EmployeeExpenseChargeController;
 use App\Http\Controllers\Expense\Budget\ExpenseBudgetController;
@@ -69,6 +70,10 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::post('/create', 'store')->name('store')->can('viewAny', Employee::class);
         Route::get('/edit/{employee}', 'edit')->name('edit')->withTrashed()->can('view', 'employee');
         Route::put('/edit/{employee}', 'update')->name('update')->withTrashed()->can('update', 'employee');
+        Route::prefix('/edit/{employee}/ends-at')->name('ends-at.')->controller(EmployeeEndsAtController::class)->group(function () {
+            Route::put('/', 'update')->name('update')->withTrashed()->can('update', 'employee');
+            Route::delete('/', 'destroy')->name('destroy')->withTrashed()->can('update', 'employee');
+        });
         Route::delete('/trash/{employee?}', 'trash')->name('trash');
         Route::patch('/restore/{employee?}', 'restore')->name('restore');
         Route::delete('/delete/{employee?}', 'destroy')->name('delete');

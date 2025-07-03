@@ -82,7 +82,7 @@ const { form } = injectFormContext<EmployeeFormData>();
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <DatePicker v-model="form.starts_at" :max-value="form.ends_at" />
+                <DatePicker v-model="form.starts_at" />
             </FormControl>
             <FormError :message="form.errors.starts_at" />
         </FormField>

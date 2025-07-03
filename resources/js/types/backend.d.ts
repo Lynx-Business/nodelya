@@ -854,6 +854,9 @@ export type ToastMessagesData = {
     error?: string;
 };
 export type TrashedFilter = 'only' | 'with';
+export type UpdateEmployeeEndsAtRequest = {
+    ends_at: string;
+};
 export type UpdatePasswordSettingsRequest = {
     current_password: string;
     password: string;

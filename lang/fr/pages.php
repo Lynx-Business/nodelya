@@ -93,6 +93,10 @@ return [
         'edit' => [
             'title'       => 'Détails du salarié',
             'description' => 'Mettez à jour les détails du salarié',
+            'ends_at'     => [
+                'title'       => 'Date de sortie',
+                'description' => 'Cette action va couper les budgets du salarié à la date de sortie',
+            ],
         ],
     ],
 

@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import EmployeeEndsAtForm from '@/components/employee/EmployeeEndsAtForm.vue';
 import EmployeeForm from '@/components/employee/EmployeeForm.vue';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
-import { useEmployeeForm, useLayout } from '@/composables';
+import { InertiaLink } from '@/components/ui/custom/link';
+import { CapitalizeText } from '@/components/ui/custom/typography';
+import { useEmployeeEndsAtForm, useEmployeeForm, useLayout } from '@/composables';
 import { EmployeesFormLayout } from '@/layouts';
 import { EmployeeFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
+import { Trash2Icon } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 defineOptions({
     layout: useLayout(EmployeesFormLayout, () => ({})),
@@ -13,18 +19,23 @@ defineOptions({
 
 const props = defineProps<EmployeeFormProps>();
 
-const form = useEmployeeForm(props.employee);
+const employee = computed(() => props.employee!);
 
+const form = useEmployeeForm(employee.value);
 function submit() {
-    const { employee } = props;
-    form.put(route('employees.update', { employee: employee! }));
+    form.put(route('employees.update', { employee: employee.value }));
+}
+
+const endsAtForm = useEmployeeEndsAtForm(employee.value);
+function endsAtSubmit() {
+    endsAtForm.put(route('employees.ends-at.update', { employee: employee.value }));
 }
 </script>
 
 <template>
     <Head :title="$t('pages.employees.edit.title')" />
 
-    <Form :form :disabled="!employee?.can_update" @submit="submit()">
+    <Form :form :disabled="!employee.can_update" @submit="submit()">
         <Card>
             <CardHeader>
                 <CardTitle>
@@ -39,6 +50,33 @@ function submit() {
             </CardContent>
             <CardFooter>
                 <FormSubmitButton />
+            </CardFooter>
+        </Card>
+    </Form>
+
+    <Form :form="endsAtForm" :disabled="!employee.can_update" @submit="endsAtSubmit()">
+        <Card>
+            <CardHeader>
+                <CardTitle>
+                    {{ $t('pages.employees.edit.ends_at.title') }}
+                </CardTitle>
+                <CardDescription>
+                    {{ $t('pages.employees.edit.ends_at.description') }}
+                </CardDescription>
+            </CardHeader>
+            <CardContent class="sm:flex">
+                <EmployeeEndsAtForm />
+            </CardContent>
+            <CardFooter>
+                <FormSubmitButton />
+                <Button v-if="employee.ends_at" variant="destructive" as-child>
+                    <InertiaLink :href="route('employees.ends-at.destroy', { employee })" method="delete">
+                        <Trash2Icon />
+                        <CapitalizeText>
+                            {{ $t('delete') }}
+                        </CapitalizeText>
+                    </InertiaLink>
+                </Button>
             </CardFooter>
         </Card>
     </Form>
