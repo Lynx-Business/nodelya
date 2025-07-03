@@ -82,6 +82,20 @@ return [
         ],
     ],
 
+    'employees' => [
+        'index' => [
+            'title' => 'Resources humaines',
+        ],
+        'create' => [
+            'title'       => 'Nouveau salarié',
+            'description' => 'Ajouter un nouveau salarié',
+        ],
+        'edit' => [
+            'title'       => 'Détails du salarié',
+            'description' => 'Mettez à jour les détails du salarié',
+        ],
+    ],
+
     'dashboard' => [
         'admin' => [
             'index' => [

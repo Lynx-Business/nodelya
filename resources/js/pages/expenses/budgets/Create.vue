@@ -19,7 +19,7 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.expenses.budgets.index.title'),
+                title: trans('enums.expense.type.general'),
                 href: route('expenses.budgets.index'),
             },
             {

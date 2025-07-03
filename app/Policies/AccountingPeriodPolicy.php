@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Facades\Services;
 use App\Models\AccountingPeriod;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,10 @@ class AccountingPeriodPolicy
             return false;
         }
 
+        if ($accountingPeriod->id == Services::accountingPeriod()->currentId()) {
+            return false;
+        }
+
         if ($user->is_admin && Route::is('admin.*')) {
             return true;
         }
@@ -93,6 +98,10 @@ class AccountingPeriodPolicy
 
     public function delete(User $user, AccountingPeriod $accountingPeriod): bool
     {
+        if ($accountingPeriod->id == Services::accountingPeriod()->currentId()) {
+            return false;
+        }
+
         if ($user->is_admin && Route::is('admin.*')) {
             return true;
         }

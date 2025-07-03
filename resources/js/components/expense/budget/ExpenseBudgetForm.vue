@@ -2,7 +2,6 @@
 import ExpenseCategoryCombobox from '@/components/expense/category/ExpenseCategoryCombobox.vue';
 import ExpenseItemCombobox from '@/components/expense/item/ExpenseItemCombobox.vue';
 import ExpenseSubCategoryCombobox from '@/components/expense/sub-category/ExpenseSubCategoryCombobox.vue';
-import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
     FormContent,
     FormControl,
@@ -99,28 +98,6 @@ function onItemChange() {
                     <TextInput v-model="form.amount" min="0" step="0.01" type="number" />
                 </FormControl>
                 <FormError :message="form.errors.amount" />
-            </FormField>
-            <FormField required>
-                <FormLabel>
-                    <CapitalizeText>
-                        {{ $t('models.expense.budget.fields.starts_at') }}
-                    </CapitalizeText>
-                </FormLabel>
-                <FormControl>
-                    <DatePicker v-model="form.starts_at" :max-value="form.ends_at" />
-                </FormControl>
-                <FormError :message="form.errors.starts_at" />
-            </FormField>
-            <FormField required>
-                <FormLabel>
-                    <CapitalizeText>
-                        {{ $t('models.expense.budget.fields.ends_at') }}
-                    </CapitalizeText>
-                </FormLabel>
-                <FormControl>
-                    <DatePicker v-model="form.ends_at" :min-value="form.starts_at" />
-                </FormControl>
-                <FormError :message="form.errors.ends_at" />
             </FormField>
         </FormContent>
     </WhenVisible>

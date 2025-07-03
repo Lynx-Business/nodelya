@@ -2,15 +2,16 @@
 
 namespace App\Data\Expense\Charge\Index;
 
+use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Expense\Category\ExpenseCategoryResource;
 use App\Data\Expense\Item\ExpenseItemResource;
 use App\Data\Expense\SubCategory\ExpenseSubCategoryResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
+use App\Models\AccountingPeriod;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
-use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -24,6 +25,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[MergeValidationRules]
 class ExpenseChargeIndexRequest extends Data
 {
+    #[Computed]
+    public ?AccountingPeriodResource $accounting_period;
+
     #[Computed]
     #[DataCollectionOf(ExpenseCategoryResource::class)]
     public ?DataCollection $expense_categories;
@@ -40,9 +44,12 @@ class ExpenseChargeIndexRequest extends Data
         public ?string $q = null,
         public ?int $page = null,
         public ?int $per_page = null,
-        public string $sort_by = 'id',
+        public string $sort_by = 'charged_at',
         public string $sort_direction = 'desc',
+
         public ?TrashedFilter $trashed = null,
+
+        public ?int $accounting_period_id = null,
 
         /** @var null|array<int> $expense_category_ids */
         public ?array $expense_category_ids = null,
@@ -52,11 +59,19 @@ class ExpenseChargeIndexRequest extends Data
 
         /** @var null|array<int> $expense_item_ids */
         public ?array $expense_item_ids = null,
-
-        public ?Carbon $starts_at = null,
-
-        public ?Carbon $ends_at = null,
     ) {
+        /** @var ?AccountingPeriod $period */
+        $period = null;
+        if ($accounting_period_id) {
+            $period = AccountingPeriod::find($accounting_period_id);
+        } else {
+            $period = Services::accountingPeriod()->current();
+            $this->accounting_period_id = Services::accountingPeriod()->currentId();
+        }
+        if ($period) {
+            $this->accounting_period = AccountingPeriodResource::from($period);
+        }
+
         if ($expense_category_ids) {
             $this->expense_categories = ExpenseCategoryResource::collect(
                 ExpenseCategory::query()
@@ -92,22 +107,25 @@ class ExpenseChargeIndexRequest extends Data
             'sort_by'                  => __('sort_by'),
             'sort_direction'           => __('sort_direction'),
             'trashed'                  => __('trashed'),
+            'accounting_period_id'     => __('models.accounting_period.name.one'),
             'expense_category_ids'     => __('models.expense.category.name.many'),
             'expense_sub_category_ids' => __('models.expense.sub_category.name.many'),
-            'starts_at'                => __('start'),
-            'ends_at'                  => __('end'),
         ];
     }
 
-    public static function rules(
-        ValidationContext $context,
-    ): array {
+    public static function rules(ValidationContext $context): array
+    {
+        $accountingPeriod = app(AccountingPeriod::class);
         $expenseCategory = app(ExpenseCategory::class);
         $expenseSubCategory = app(ExpenseSubCategory::class);
         $expenseItem = app(ExpenseItem::class);
         $team = Services::team()->current();
 
         return [
+            'accounting_period_id' => [
+                Rule::exists($accountingPeriod->getTable(), $accountingPeriod->getKeyName())
+                    ->where($accountingPeriod->getQualifiedTeamIdColumn(), $team?->getKey()),
+            ],
             'expense_category_ids.*' => [
                 'integer',
                 Rule::exists($expenseCategory->getTable(), $expenseCategory->getKeyName())

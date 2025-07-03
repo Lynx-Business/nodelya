@@ -34,6 +34,10 @@ class ExpenseBudgetPolicy
 
     public function update(User $user, ExpenseBudget $expenseBudget): bool
     {
+        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseBudget->isSameTeam($user->team_id);
     }
 

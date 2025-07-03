@@ -2,6 +2,7 @@
 
 namespace App\Data\User;
 
+use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCharge;
 use App\Models\Team;
@@ -14,6 +15,12 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 class UserAbilitiesResource extends Resource
 {
     public function __construct(
+        #[TypeScriptType([
+            'view_any' => 'bool',
+            'create'   => 'bool',
+        ])]
+        public array $employees,
+
         #[TypeScriptType([
             'budgets' => [
                 'view_any' => 'bool',
@@ -42,6 +49,10 @@ class UserAbilitiesResource extends Resource
     public static function fromModel(User $user): self
     {
         return self::from([
+            'employees' => [
+                'view_any' => $user->can('viewAny', Employee::class),
+                'create'   => $user->can('create', Employee::class),
+            ],
             'expenses' => [
                 'budgets' => [
                     'view_any' => $user->can('viewAny', ExpenseBudget::class),

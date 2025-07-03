@@ -6,6 +6,7 @@ use App\Data\Media\MediaResource;
 use Carbon\Carbon;
 use Spatie\LaravelData\Attributes\AutoWhenLoadedLazy;
 use Spatie\LaravelData\Lazy;
+use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -27,6 +28,6 @@ class UserMemberIndexResource extends Resource
         public ?Carbon $deleted_at,
 
         #[AutoWhenLoadedLazy]
-        public Lazy|MediaResource|null $avatar,
+        public Lazy|Optional|MediaResource $avatar,
     ) {}
 }

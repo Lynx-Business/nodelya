@@ -47,7 +47,7 @@ return [
             ],
             'filters' => [
                 'sheet' => [
-                    'title'       => 'Filtrer la liste',
+                    'title'       => 'Filtres',
                     'description' => 'Obtenez uniquement les éléments dont vous avez besoin',
                 ],
             ],

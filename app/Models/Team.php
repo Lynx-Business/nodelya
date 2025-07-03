@@ -32,6 +32,8 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read bool $can_update
  * @property-read bool $can_view
  * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employee> $employees
+ * @property-read int|null $employees_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseBudget> $expenseBudgets
  * @property-read int|null $expense_budgets_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCategory> $expenseCategories
@@ -123,6 +125,11 @@ class Team extends Model implements HasMedia
     public function accountingPeriods(): HasMany
     {
         return $this->hasMany(AccountingPeriod::class)->whereBelongsToAnyTeam();
+    }
+
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class)->whereBelongsToAnyTeam();
     }
 
     public function expenseBudgets(): HasMany

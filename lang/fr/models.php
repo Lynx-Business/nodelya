@@ -19,8 +19,8 @@ return [
         ],
         'fields' => [
             'label'     => 'période',
-            'starts_at' => 'date de debut',
-            'ends_at'   => 'date de fin',
+            'starts_at' => 'debut',
+            'ends_at'   => 'fin',
         ],
     ],
 
@@ -37,6 +37,24 @@ return [
         ],
     ],
 
+    'employee' => [
+        'name' => [
+            'one'  => 'salarié',
+            'many' => 'salariés',
+        ],
+        'fields' => [
+            'deleted_at' => 'archivé le',
+            'email'      => 'e-mail',
+            'ends_at'    => 'fin',
+            'first_name' => 'prénom',
+            'full_name'  => 'nom complet',
+            'is_trashed' => 'est archivé',
+            'last_name'  => 'nom',
+            'phone'      => 'téléphone',
+            'starts_at'  => 'debut',
+        ],
+    ],
+
     'expense' => [
         'budget' => [
             'name' => [
@@ -44,7 +62,7 @@ return [
                 'many' => 'budgets',
             ],
             'fields' => [
-                'amount'       => 'montant',
+                'amount'       => 'montant annuel',
                 'deleted_at'   => 'archivé le',
                 'ends_at'      => 'fin',
                 'expense_item' => 'poste',
@@ -179,7 +197,7 @@ return [
             'first_name'            => 'prénom',
             'full_name'             => 'nom complet',
             'is_trashed'            => 'est archivé',
-            'last_name'             => 'nom de famille',
+            'last_name'             => 'nom',
             'owner'                 => 'propriétaire',
             'password'              => 'mot de passe',
             'password_confirmation' => 'confirmer le mot de passe',

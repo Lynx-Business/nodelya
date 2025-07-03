@@ -2,6 +2,7 @@
 
 namespace App\Data\Expense\Charge\Form;
 
+use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Expense\Category\ExpenseCategoryResource;
 use App\Data\Expense\Charge\ExpenseChargeResource;
 use App\Data\Expense\Item\ExpenseItemResource;
@@ -18,6 +19,9 @@ class ExpenseChargeFormProps extends Resource
 {
     public function __construct(
         #[AutoInertiaLazy]
+        public Lazy|AccountingPeriodResource $accountingPeriod,
+
+        #[AutoInertiaLazy]
         #[DataCollectionOf(ExpenseCategoryResource::class)]
         public Lazy|DataCollection $expenseCategories,
 
@@ -30,5 +34,7 @@ class ExpenseChargeFormProps extends Resource
         public Lazy|DataCollection $expenseItems,
 
         public ?ExpenseChargeResource $expenseCharge,
-    ) {}
+    ) {
+        $this->expenseCharge?->include('can_update');
+    }
 }

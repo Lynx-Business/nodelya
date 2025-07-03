@@ -2,7 +2,7 @@
 import { ResponsiveTabs, ResponsiveTabsTrigger } from '@/components/ui/custom/responsive-tabs';
 import { Section, SectionContent, SectionHeader } from '@/components/ui/custom/section';
 import { clearSessionFilters, usePageProp, useRouterComputed } from '@/composables';
-import { Enum, ExpenseType, type NavItem } from '@/types';
+import { Enum, ExpenseType, NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { computed } from 'vue';
 
@@ -25,7 +25,7 @@ function plural(model: ExpenseModel): string {
 }
 
 const types = usePageProp<Enum<ExpenseType>[]>('expenseTypes', []);
-const typeTabs = useRouterComputed((): NavItem[] =>
+const typeTabs = useRouterComputed((): NavItemHref[] =>
     types.value.map((expenseType) => {
         const href = route(`teams.expenses.${plural(props.model)}.index`, {
             team: route().params.team,
@@ -44,7 +44,7 @@ const typeTabs = useRouterComputed((): NavItem[] =>
 );
 
 const models = computed((): ExpenseModel[] => ['category', 'sub-category', 'item']);
-const modelTabs = useRouterComputed((): NavItem[] =>
+const modelTabs = useRouterComputed((): NavItemHref[] =>
     models.value.map((model) => {
         const href = route(`teams.expenses.${plural(model)}.index`, {
             team: route().params.team,

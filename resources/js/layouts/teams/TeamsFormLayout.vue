@@ -4,7 +4,7 @@ import { Section, SectionContent } from '@/components/ui/custom/section';
 import { Separator } from '@/components/ui/separator';
 import { clearSessionFilters, useLayout, usePageProp, useRouterComputed } from '@/composables';
 import { AppLayout } from '@/layouts';
-import { type NavItem } from '@/types';
+import { NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { CalendarRangeIcon, NotebookPenIcon, SquarePenIcon, WalletIcon } from 'lucide-vue-next';
 
@@ -23,7 +23,7 @@ defineOptions({
     })),
 });
 
-const sidebarNavItems = useRouterComputed((): NavItem[] =>
+const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
     [
         {
             title: trans('layouts.teams.form.edit'),

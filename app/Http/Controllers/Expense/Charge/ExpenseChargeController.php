@@ -48,8 +48,7 @@ class ExpenseChargeController extends Controller
                                         ->when($data->expense_item_ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->expense_item_ids)),
                                 ),
                         )
-                        ->when($data->starts_at, fn (Builder $q) => $q->where('charged_at', '>=', $data->starts_at))
-                        ->when($data->ends_at, fn (Builder $q) => $q->where('charged_at', '<=', $data->ends_at))
+                        ->when($data->accounting_period_id, fn (Builder $q) => $q->whereInAccountingPeriod($data->accounting_period_id))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with([
                             'expenseItem' => [
@@ -65,6 +64,8 @@ class ExpenseChargeController extends Controller
                     PaginatedDataCollection::class,
                 )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
+            'trashedFilters'    => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'accountingPeriods' => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
@@ -83,13 +84,15 @@ class ExpenseChargeController extends Controller
                         ->whereType($this->type),
                 ),
             ),
-            'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));
     }
 
     public function create()
     {
         return Inertia::render('expenses/charges/Create', ExpenseChargeFormProps::from([
+            'accountingPeriod' => Lazy::closure(
+                fn () => Services::accountingPeriod()->current(),
+            ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
@@ -134,6 +137,9 @@ class ExpenseChargeController extends Controller
     public function edit(ExpenseCharge $expenseCharge)
     {
         return Inertia::render('expenses/charges/Edit', ExpenseChargeFormProps::from([
+            'accountingPeriod' => Lazy::closure(
+                fn () => Services::accountingPeriod()->current(),
+            ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\AccountingPeriod;
 
 use App\Data\AccountingPeriod\AccountingPeriodOneOrManyRequest;
+use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\AccountingPeriod\Form\AccountingPeriodFormProps;
 use App\Data\AccountingPeriod\Form\AccountingPeriodFormRequest;
 use App\Data\AccountingPeriod\Index\AccountingPeriodIndexProps;
 use App\Data\AccountingPeriod\Index\AccountingPeriodIndexRequest;
-use App\Data\AccountingPeriod\Index\AccountingPeriodIndexResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
@@ -30,7 +30,7 @@ class AccountingPeriodController extends Controller
             'request'           => $data,
             'team'              => TeamListResource::from($team),
             'accountingPeriods' => Lazy::inertia(
-                fn () => AccountingPeriodIndexResource::collect(
+                fn () => AccountingPeriodResource::collect(
                     AccountingPeriod::query()
                         ->whereBelongsToTeam($team)
                         ->search($data->q)
@@ -42,7 +42,7 @@ class AccountingPeriodController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
-                ),
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
             'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));

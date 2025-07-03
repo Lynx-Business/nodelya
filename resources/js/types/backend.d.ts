@@ -1,14 +1,8 @@
 export type AccountingPeriodFormProps = {
     team: TeamListResource;
-    accountingPeriod?: AccountingPeriodFormResource;
+    accountingPeriod?: AccountingPeriodResource;
 };
 export type AccountingPeriodFormRequest = {
-    starts_at: string;
-    ends_at: string;
-};
-export type AccountingPeriodFormResource = {
-    id: number;
-    label: string;
     starts_at: string;
     ends_at: string;
 };
@@ -16,7 +10,7 @@ export type AccountingPeriodIndexProps = {
     request: AccountingPeriodIndexRequest;
     team: TeamListResource;
     accountingPeriods?: {
-        data: Array<AccountingPeriodIndexResource>;
+        data: Array<AccountingPeriodResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
         meta: {
             current_page: number;
@@ -42,21 +36,21 @@ export type AccountingPeriodIndexRequest = {
     sort_direction: string;
     trashed?: TrashedFilter;
 };
-export type AccountingPeriodIndexResource = {
+export type AccountingPeriodOneOrManyRequest = {
+    accounting_period?: number;
+    ids?: Array<number>;
+};
+export type AccountingPeriodResource = {
     id: number;
     label: string;
     starts_at: string;
     ends_at: string;
-    can_view: boolean;
-    can_update: boolean;
-    can_trash: boolean;
-    can_restore: boolean;
-    can_delete: boolean;
     deleted_at?: string;
-};
-export type AccountingPeriodOneOrManyRequest = {
-    accounting_period?: number;
-    ids?: Array<number>;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
 };
 export type AddressData = {
     address: string;
@@ -191,7 +185,77 @@ export type EditProfileSettingsProps = {
     mustVerifyEmail: boolean;
 };
 export type EditSecuritySettingsProps = {};
+export type EmployeeFormProps = {
+    projectDepartments?: Array<ProjectDepartmentResource>;
+    employee?: EmployeeResource;
+};
+export type EmployeeFormRequest = {
+    project_department_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone?: string;
+    starts_at: string;
+};
+export type EmployeeIndexProps = {
+    request: EmployeeIndexRequest;
+    employees?: {
+        data: Array<EmployeeResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    projectDepartments?: Array<ProjectDepartmentResource>;
+};
+export type EmployeeIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
+    project_departments?: Array<ProjectDepartmentResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+    accounting_period_id?: number;
+    project_department_ids?: null | Array<number>;
+};
+export type EmployeeOneOrManyRequest = {
+    employee?: number;
+    ids?: Array<number>;
+};
+export type EmployeeResource = {
+    id: number;
+    project_department_id?: number;
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    phone: string;
+    email: string;
+    starts_at: string;
+    ends_at?: string;
+    deleted_at?: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    project_department?: ProjectDepartmentResource;
+};
 export type ExpenseBudgetFormProps = {
+    accountingPeriod?: AccountingPeriodResource;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
@@ -202,8 +266,6 @@ export type ExpenseBudgetFormRequest = {
     model_id?: number;
     expense_item_id: number;
     amount: number;
-    starts_at: string;
-    ends_at: string;
 };
 export type ExpenseBudgetIndexProps = {
     request: ExpenseBudgetIndexRequest;
@@ -225,11 +287,13 @@ export type ExpenseBudgetIndexProps = {
         };
     };
     trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
 };
 export type ExpenseBudgetIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
     expense_categories?: Array<ExpenseCategoryResource>;
     expense_sub_categories?: Array<ExpenseSubCategoryResource>;
     expense_items?: Array<ExpenseItemResource>;
@@ -239,11 +303,10 @@ export type ExpenseBudgetIndexRequest = {
     sort_by: string;
     sort_direction: string;
     trashed?: TrashedFilter;
+    accounting_period_id?: number;
     expense_category_ids?: null | Array<number>;
     expense_sub_category_ids?: null | Array<number>;
     expense_item_ids?: null | Array<number>;
-    starts_at?: string;
-    ends_at?: string;
 };
 export type ExpenseBudgetOneOrManyRequest = {
     expense_budget?: number;
@@ -321,6 +384,7 @@ export type ExpenseCategoryResource = {
     expense_sub_categories?: Array<ExpenseSubCategoryResource>;
 };
 export type ExpenseChargeFormProps = {
+    accountingPeriod?: AccountingPeriodResource;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
@@ -353,11 +417,13 @@ export type ExpenseChargeIndexProps = {
         };
     };
     trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
 };
 export type ExpenseChargeIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
     expense_categories?: Array<ExpenseCategoryResource>;
     expense_sub_categories?: Array<ExpenseSubCategoryResource>;
     expense_items?: Array<ExpenseItemResource>;
@@ -367,11 +433,10 @@ export type ExpenseChargeIndexRequest = {
     sort_by: string;
     sort_direction: string;
     trashed?: TrashedFilter;
+    accounting_period_id?: number;
     expense_category_ids?: null | Array<number>;
     expense_sub_category_ids?: null | Array<number>;
     expense_item_ids?: null | Array<number>;
-    starts_at?: string;
-    ends_at?: string;
 };
 export type ExpenseChargeOneOrManyRequest = {
     expense_charge?: number;
@@ -730,6 +795,7 @@ export type UpdateProfileSettingsRequest = {
     avatar?: string;
 };
 export type UserAbilitiesResource = {
+    employees: { view_any: boolean; create: boolean };
     expenses: { budgets: { view_any: boolean; create: boolean }; charges: { view_any: boolean; create: boolean } };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
@@ -821,7 +887,7 @@ export type UserMemberIndexResource = {
     can_restore: boolean;
     can_delete: boolean;
     deleted_at?: string;
-    avatar?: MediaResource | null;
+    avatar?: MediaResource;
 };
 export type UserMemberOneOrManyRequest = {
     user?: number;

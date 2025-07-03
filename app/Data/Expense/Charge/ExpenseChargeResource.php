@@ -7,7 +7,6 @@ use App\Enums\Expense\ExpenseType;
 use App\Models\ExpenseCharge;
 use Carbon\Carbon;
 use Spatie\LaravelData\Lazy;
-use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -33,7 +32,7 @@ class ExpenseChargeResource extends Resource
 
         public Lazy|bool $can_delete,
 
-        public Lazy|Optional|ExpenseItemResource $expense_item,
+        public Lazy|ExpenseItemResource $expense_item,
     ) {}
 
     public static function fromModel(ExpenseCharge $charge): static

@@ -54,6 +54,27 @@ return [
         ],
     ],
 
+    'employees' => [
+        'store' => [
+            'success' => 'Salarié créé avec succès',
+        ],
+        'update' => [
+            'success' => 'Salarié mis à jour avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver ce salarié ?|Êtes-vous sûr de vouloir archiver ces salariés ?',
+            'success' => 'Salarié archivé avec succès|Salariés archivés avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer ce salarié ?|Êtes-vous sûr de vouloir restaurer ces salariés ?',
+            'success' => 'Salarié restauré avec succès|Salariés restaurés avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer ce salarié ?|Êtes-vous sûr de vouloir supprimer ces salariés ?',
+            'success' => 'Salarié supprimé avec succès|Salariés supprimés avec succès',
+        ],
+    ],
+
     'expense' => [
         'budgets' => [
             'store' => [

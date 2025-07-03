@@ -11,12 +11,9 @@ use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
-use Spatie\LaravelData\Attributes\Validation\After;
-use Spatie\LaravelData\Attributes\Validation\Before;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\RequiredWith;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Support\Validation\References\FieldReference;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\Hidden;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -29,6 +26,14 @@ class ExpenseBudgetFormRequest extends Data
     #[Hidden]
     #[Computed]
     public int $amount_in_cents;
+
+    #[Hidden]
+    #[Computed]
+    public Carbon $starts_at;
+
+    #[Hidden]
+    #[Computed]
+    public Carbon $ends_at;
 
     public function __construct(
         #[Hidden]
@@ -45,20 +50,21 @@ class ExpenseBudgetFormRequest extends Data
 
         #[Min(0)]
         public float $amount,
-
-        #[Before(new FieldReference('ends_at'))]
-        public Carbon $starts_at,
-
-        #[After(new FieldReference('starts_at'))]
-        public Carbon $ends_at,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+
+        $period = Services::accountingPeriod()->current();
+        if ($period) {
+            $this->starts_at = $period->starts_at;
+            $this->ends_at = $period->ends_at;
+        }
     }
 
     public static function attributes(): array
     {
         return [
             'expense_item_id' => __('models.expense.item.name.one'),
+            'amount'          => __('models.expense.budget.fields.amount'),
         ];
     }
 

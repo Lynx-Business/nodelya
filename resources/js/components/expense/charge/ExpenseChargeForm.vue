@@ -15,13 +15,14 @@ import {
 import { TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { ExpenseChargeFormData, usePageProp } from '@/composables';
-import { ExpenseCategoryResource, ExpenseSubCategoryResource } from '@/types';
+import { AccountingPeriodResource, ExpenseCategoryResource, ExpenseSubCategoryResource } from '@/types';
 import { WhenVisible } from '@inertiajs/vue3';
 
 defineProps<FormProps>();
 
 const { form } = injectFormContext<ExpenseChargeFormData>();
 
+const accountingPeriod = usePageProp<AccountingPeriodResource>('accountingPeriod');
 const categories = usePageProp<ExpenseCategoryResource[]>('expenseCategories', []);
 const subCategories = usePageProp<ExpenseSubCategoryResource[]>('expenseSubCategories', []);
 
@@ -31,15 +32,17 @@ function onCategoryChange() {
 }
 function onSubCategoryChange() {
     form.expense_item = undefined;
-    form.expense_category = categories.value.find(
-        (category) => category.id === form.expense_sub_category?.expense_category_id,
-    );
+    form.expense_category =
+        categories.value.find((category) => category.id === form.expense_sub_category?.expense_category_id) ??
+        form.expense_category;
 }
 function onItemChange() {
-    form.expense_sub_category = subCategories.value.find(
-        (subCategory) => subCategory.id === form.expense_item?.expense_sub_category_id,
-    );
-    form.expense_category = categories.value.find((category) => category.id === form.expense_item?.expense_category_id);
+    form.expense_sub_category =
+        subCategories.value.find((subCategory) => subCategory.id === form.expense_item?.expense_sub_category_id) ??
+        form.expense_sub_category;
+    form.expense_category =
+        categories.value.find((category) => category.id === form.expense_item?.expense_category_id) ??
+        form.expense_category;
 }
 </script>
 
@@ -92,6 +95,21 @@ function onItemChange() {
             <FormField required>
                 <FormLabel>
                     <CapitalizeText>
+                        {{ $t('models.expense.charge.fields.charged_at') }}
+                    </CapitalizeText>
+                </FormLabel>
+                <FormControl>
+                    <DatePicker
+                        v-model="form.charged_at"
+                        :min-value="accountingPeriod?.starts_at"
+                        :max-value="accountingPeriod?.ends_at"
+                    />
+                </FormControl>
+                <FormError :message="form.errors.charged_at" />
+            </FormField>
+            <FormField required class="col-span-full">
+                <FormLabel>
+                    <CapitalizeText>
                         {{ $t('models.expense.charge.fields.amount') }}
                     </CapitalizeText>
                 </FormLabel>
@@ -99,17 +117,6 @@ function onItemChange() {
                     <TextInput v-model="form.amount" min="0" step="0.01" type="number" />
                 </FormControl>
                 <FormError :message="form.errors.amount" />
-            </FormField>
-            <FormField required>
-                <FormLabel>
-                    <CapitalizeText>
-                        {{ $t('models.expense.charge.fields.charged_at') }}
-                    </CapitalizeText>
-                </FormLabel>
-                <FormControl>
-                    <DatePicker v-model="form.charged_at" />
-                </FormControl>
-                <FormError :message="form.errors.charged_at" />
             </FormField>
         </FormContent>
     </WhenVisible>
