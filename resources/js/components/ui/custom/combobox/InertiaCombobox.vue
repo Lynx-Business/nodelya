@@ -192,10 +192,18 @@ const placeholder = computed(() => {
                     :text-content="(option) => option[label]"
                 >
                     <div class="w-full" :ref="(node) => virtualizer.measureElement(node as Element)">
-                        <ComboboxGroup class="pb-0" v-if="option._heading" :heading="option._heading"> </ComboboxGroup>
+                        <ComboboxGroup
+                            class="pb-0"
+                            v-if="groups.length > 1 && option._heading"
+                            :heading="option._heading"
+                        >
+                        </ComboboxGroup>
                         <ComboboxGroup
                             class="py-0"
-                            :class="{ 'pb-1': virtualItem.index === filteredOptions.length - 1 }"
+                            :class="{
+                                'pt-1': virtualItem.index === 0 && groups.length === 1,
+                                'pb-1': virtualItem.index === filteredOptions.length - 1,
+                            }"
                         >
                             <ComboboxItem :value="option" :text-value="option[label]">
                                 <ComboboxItemIndicator />
