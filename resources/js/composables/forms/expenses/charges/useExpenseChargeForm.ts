@@ -7,8 +7,8 @@ export function useExpenseChargeForm(expenseCharge?: Partial<ExpenseChargeResour
         expense_category: expenseCharge?.expense_item?.expense_category,
         expense_sub_category: expenseCharge?.expense_item?.expense_sub_category,
         expense_item: expenseCharge?.expense_item,
-        charged_at: expenseCharge?.charged_at,
-        amount: expenseCharge?.amount,
+        charged_at: expenseCharge?.charged_at ?? '',
+        amount: expenseCharge?.amount ?? 0,
     });
 
     form.transform(transformExpenseChargeForm);

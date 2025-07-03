@@ -7,9 +7,7 @@ export function useExpenseBudgetForm(expenseBudget?: Partial<ExpenseBudgetResour
         expense_category: expenseBudget?.expense_item?.expense_category,
         expense_sub_category: expenseBudget?.expense_item?.expense_sub_category,
         expense_item: expenseBudget?.expense_item,
-        starts_at: expenseBudget?.starts_at,
-        ends_at: expenseBudget?.ends_at,
-        amount: expenseBudget?.amount,
+        amount: expenseBudget?.amount ?? 0,
     });
 
     form.transform(transformExpenseBudgetForm);

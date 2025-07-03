@@ -19,11 +19,11 @@ const { filters, fields, count } = injectFiltersSheetRootContext();
 </script>
 
 <template>
-    <div :class="cn('relative flex items-stretch', props.class)">
+    <div :class="cn('relative flex items-stretch', { grid: !count }, props.class)">
         <SheetTrigger as-child>
-            <Button v-bind="forwarded" :class="{ 'rounded-r-none border-r-0': count > 0 }">
+            <Button v-bind="forwarded" :class="{ 'grow rounded-r-none border-r-0': count > 0 }">
                 <FunnelIcon />
-                <CapitalizeText class="max-sm:hidden">
+                <CapitalizeText>
                     {{ $t('filter') }}
                 </CapitalizeText>
             </Button>

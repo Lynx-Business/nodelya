@@ -3,6 +3,7 @@
 namespace App\Data\Expense\Budget\Index;
 
 use App\Attributes\EnumArrayOf;
+use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Expense\Budget\ExpenseBudgetResource;
 use App\Data\Expense\Category\ExpenseCategoryResource;
 use App\Data\Expense\Item\ExpenseItemResource;
@@ -29,6 +30,10 @@ class ExpenseBudgetIndexProps extends Resource
         #[AutoInertiaLazy]
         #[EnumArrayOf(TrashedFilter::class)]
         public Lazy|array $trashedFilters,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(AccountingPeriodResource::class)]
+        public Lazy|DataCollection $accountingPeriods,
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ExpenseCategoryResource::class)]

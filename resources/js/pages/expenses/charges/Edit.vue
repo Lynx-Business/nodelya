@@ -19,7 +19,7 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.expenses.charges.index.title'),
+                title: trans('enums.expense.type.general'),
                 href: route('expenses.charges.index'),
             },
             {
@@ -45,7 +45,7 @@ function submit() {
 <template>
     <Head :title="$t('pages.expenses.charges.edit.title')" />
 
-    <Form :form @submit="submit()">
+    <Form :form :disabled="!expenseCharge?.can_update" @submit="submit()">
         <Section>
             <SectionHeader>
                 <SectionTitle>

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\AccountingPeriod;
 use App\Models\ExpenseItem;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,5 +26,13 @@ class ExpenseBudgetFactory extends Factory
             'starts_at'       => fake()->dateTimeBetween('now', '+1 year'),
             'ends_at'         => fn (array $attributes) => fake()->dateTimeBetween(data_get($attributes, 'starts_at'), '+3 years'),
         ];
+    }
+
+    public function forAccountingPeriod(AccountingPeriod $accountingPeriod): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'starts_at' => $accountingPeriod->starts_at,
+            'ends_at'   => $accountingPeriod->ends_at,
+        ]);
     }
 }

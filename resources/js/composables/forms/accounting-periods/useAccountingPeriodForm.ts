@@ -1,7 +1,7 @@
 import { useComputedForm, useFormatter, useParser } from '@/composables';
-import { AccountingPeriodFormRequest, AccountingPeriodFormResource } from '@/types';
+import { AccountingPeriodFormRequest, AccountingPeriodResource } from '@/types';
 
-export function useAccountingPeriodForm(accountingPeriod?: AccountingPeriodFormResource) {
+export function useAccountingPeriodForm(accountingPeriod?: AccountingPeriodResource) {
     const parse = useParser();
     const format = useFormatter();
 

@@ -7,6 +7,7 @@ use App\Enums\Role\RoleName;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
 use App\Models\Banner;
+use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseCharge;
@@ -99,42 +100,106 @@ class DevInstallCommand extends Command
                         ]);
                         $user->assignRole(RoleName::OWNER);
 
-                        AccountingPeriod::factory()
-                            ->count($count)
-                            ->recycle($team)
-                            ->create();
                         ProjectDepartment::factory()
                             ->count($count)
                             ->recycle($team)
                             ->create();
 
-                        $categories = ExpenseCategory::factory()
+                        foreach (ExpenseType::cases() as $type) {
+                            $categories = ExpenseCategory::factory()
+                                ->count($count)
+                                ->recycle($team)
+                                ->create([
+                                    'type' => $type,
+                                ]);
+                            foreach ($categories as $category) {
+                                ExpenseSubCategory::factory()
+                                    ->count(2)
+                                    ->recycle($team)
+                                    ->recycle($category)
+                                    ->has(
+                                        ExpenseItem::factory()
+                                            ->count(2)
+                                            ->recycle($team),
+                                    )->create();
+                            }
+                        }
+
+                        Employee::factory()
                             ->count($count)
                             ->recycle($team)
-                            ->create([
-                                'type' => ExpenseType::GENERAL,
-                            ]);
-                        foreach ($categories as $category) {
-                            ExpenseSubCategory::factory()
-                                ->count(2)
+                            ->state(fn () => [
+                                'project_department_id' => ProjectDepartment::query()
+                                    ->inRandomOrder()
+                                    ->first()->id,
+                            ])
+                            ->create();
+
+                        for ($i = 0; $i < 3; $i++) {
+                            $accountingPeriod = AccountingPeriod::factory()
                                 ->recycle($team)
-                                ->recycle($category)
-                                ->has(
-                                    ExpenseItem::factory()
-                                        ->count(2)
-                                        ->recycle($team)
-                                        ->has(
-                                            ExpenseBudget::factory()
-                                                ->count(2)
-                                                ->recycle($team),
-                                        )
-                                        ->has(
-                                            ExpenseCharge::factory()
-                                                ->count(2)
-                                                ->recycle($team),
-                                        ),
-                                )->create();
+                                ->create([
+                                    'starts_at' => now()->subYears($i)->startOfDay(),
+                                ]);
+
+                            ExpenseBudget::factory()
+                                ->count($count)
+                                ->recycle($team)
+                                ->forAccountingPeriod($accountingPeriod)
+                                ->state(fn () => [
+                                    'expense_item_id' => ExpenseItem::query()
+                                        ->whereType(ExpenseType::GENERAL)
+                                        ->inRandomOrder()
+                                        ->first()->id,
+                                ])
+                                ->create();
+
+                            ExpenseCharge::factory()
+                                ->count($count)
+                                ->recycle($team)
+                                ->forAccountingPeriod($accountingPeriod)
+                                ->state(fn () => [
+                                    'expense_item_id' => ExpenseItem::query()
+                                        ->whereType(ExpenseType::GENERAL)
+                                        ->inRandomOrder()
+                                        ->first()->id,
+                                ])
+                                ->create();
                         }
+
+                        Employee::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->state(fn () => [
+                                'project_department_id' => ProjectDepartment::query()
+                                    ->inRandomOrder()
+                                    ->first()->id,
+                            ])
+                            ->has(
+                                ExpenseBudget::factory()
+                                    ->count($count)
+                                    ->recycle($team)
+                                    ->forAccountingPeriod(AccountingPeriod::query()->latest()->first())
+                                    ->state(fn () => [
+                                        'expense_item_id' => ExpenseItem::query()
+                                            ->whereType(ExpenseType::EMPLOYEE)
+                                            ->inRandomOrder()
+                                            ->first()->id,
+                                    ]),
+                            )
+                            ->has(
+                                ExpenseCharge::factory()
+                                    ->count($count)
+                                    ->recycle($team)
+                                    ->forAccountingPeriod(AccountingPeriod::query()->latest()->first())
+                                    ->state(fn () => [
+                                        'expense_item_id' => ExpenseItem::query()
+                                            ->whereType(ExpenseType::EMPLOYEE)
+                                            ->inRandomOrder()
+                                            ->first()->id,
+                                    ]),
+                            )
+                            ->create();
                     },
                 );
             }

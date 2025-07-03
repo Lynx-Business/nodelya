@@ -30,8 +30,8 @@ import { TeamsFormLayout } from '@/layouts';
 import {
     ProjectDepartmentIndexProps,
     ProjectDepartmentIndexRequest,
-    ProjectDepartmentIndexResource,
     ProjectDepartmentOneOrManyRequest,
+    ProjectDepartmentResource,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
@@ -46,8 +46,8 @@ const props = defineProps<ProjectDepartmentIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ProjectDepartmentIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<ProjectDepartmentIndexResource>[] = [
+const selectedRows = ref<ProjectDepartmentResource[]>([]);
+const rowsActions: DataTableRowsAction<ProjectDepartmentResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -112,12 +112,12 @@ const rowsActions: DataTableRowsAction<ProjectDepartmentIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ProjectDepartmentIndexResource>[] = [
+const rowActions: DataTableRowAction<ProjectDepartmentResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (projectDepartment) => projectDepartment.can_update,
+        hidden: (projectDepartment) => projectDepartment.can_update || false,
         disabled: (projectDepartment) => !projectDepartment.can_view,
         href: (projectDepartment) => route('teams.project-departments.edit', { team: props.team, projectDepartment }),
     },

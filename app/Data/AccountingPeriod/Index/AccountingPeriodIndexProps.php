@@ -3,6 +3,7 @@
 namespace App\Data\AccountingPeriod\Index;
 
 use App\Attributes\EnumArrayOf;
+use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
@@ -21,7 +22,7 @@ class AccountingPeriodIndexProps extends Resource
         public TeamListResource $team,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(AccountingPeriodIndexResource::class)]
+        #[DataCollectionOf(AccountingPeriodResource::class)]
         public Lazy|PaginatedDataCollection $accountingPeriods,
 
         #[AutoInertiaLazy]

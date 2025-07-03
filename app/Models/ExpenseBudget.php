@@ -7,6 +7,7 @@ use App\Facades\Services;
 use App\Traits\BelongsToExpenseItem;
 use App\Traits\BelongsToTeam;
 use App\Traits\HasPolicy;
+use App\Traits\IsInAccountingPeriod;
 use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -56,6 +59,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @method static Builder<static>|ExpenseBudget whereEndsAt($value)
  * @method static Builder<static>|ExpenseBudget whereExpenseItemId($value)
  * @method static Builder<static>|ExpenseBudget whereId($value)
+ * @method static Builder<static>|ExpenseBudget whereInAccountingPeriod(\App\Models\AccountingPeriod|int $accountingPeriod)
  * @method static Builder<static>|ExpenseBudget whereModelId($value)
  * @method static Builder<static>|ExpenseBudget whereModelType($value)
  * @method static Builder<static>|ExpenseBudget whereStartsAt($value)
@@ -76,6 +80,7 @@ class ExpenseBudget extends Model
     use HasFactory;
 
     use HasPolicy;
+    use IsInAccountingPeriod;
     use Searchable;
     use Trashable;
 
@@ -146,6 +151,28 @@ class ExpenseBudget extends Model
                 ExpenseType::GENERAL    => null,
                 default                 => null,
             },
+        );
+    }
+
+    public function isInAccountingPeriod(AccountingPeriod|int $accountingPeriod): bool
+    {
+        $accountingPeriod = is_int($accountingPeriod) ? AccountingPeriod::query()->findOrFail($accountingPeriod) : $accountingPeriod;
+
+        return $this->starts_at >= $accountingPeriod->starts_at && $this->ends_at <= $accountingPeriod->ends_at;
+    }
+
+    public function scopeWhereInAccountingPeriod(Builder $query, AccountingPeriod|int $accountingPeriod): Builder
+    {
+        $accountingPeriodModel = app(AccountingPeriod::class);
+        $id = is_int($accountingPeriod) ? $accountingPeriod : $accountingPeriod->getKey();
+
+        return $query->whereExists(
+            fn (QueryBuilder $q) => $q
+                ->select(DB::raw(1))
+                ->from($accountingPeriodModel->getTable())
+                ->where($accountingPeriodModel->getQualifiedKeyName(), $id)
+                ->whereColumn($accountingPeriodModel->qualifyColumn('starts_at'), '<=', $this->qualifyColumn('starts_at'))
+                ->whereColumn($accountingPeriodModel->qualifyColumn('ends_at'), '>=', $this->qualifyColumn('ends_at')),
         );
     }
 }

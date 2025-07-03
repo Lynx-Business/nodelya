@@ -2,6 +2,7 @@
 
 namespace App\Data\Expense\Charge\Form;
 
+use App\Attributes\InCurrentAccountingPeriod;
 use App\Enums\Expense\ExpenseType;
 use App\Facades\Services;
 use App\Models\ExpenseCharge;
@@ -43,6 +44,7 @@ class ExpenseChargeFormRequest extends Data
         #[Min(0)]
         public float $amount,
 
+        #[InCurrentAccountingPeriod]
         public Carbon $charged_at,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
@@ -52,6 +54,8 @@ class ExpenseChargeFormRequest extends Data
     {
         return [
             'expense_item_id' => __('models.expense.item.name.one'),
+            'amount'          => __('models.expense.charge.fields.amount'),
+            'charged_at'      => __('models.expense.charge.fields.charged_at'),
         ];
     }
 

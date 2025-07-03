@@ -30,8 +30,8 @@ import { TeamsFormLayout } from '@/layouts';
 import {
     AccountingPeriodIndexProps,
     AccountingPeriodIndexRequest,
-    AccountingPeriodIndexResource,
     AccountingPeriodOneOrManyRequest,
+    AccountingPeriodResource,
 } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
@@ -46,8 +46,8 @@ const props = defineProps<AccountingPeriodIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<AccountingPeriodIndexResource[]>([]);
-const rowsActions: DataTableRowsAction<AccountingPeriodIndexResource>[] = [
+const selectedRows = ref<AccountingPeriodResource[]>([]);
+const rowsActions: DataTableRowsAction<AccountingPeriodResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -112,12 +112,12 @@ const rowsActions: DataTableRowsAction<AccountingPeriodIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<AccountingPeriodIndexResource>[] = [
+const rowActions: DataTableRowAction<AccountingPeriodResource>[] = [
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (accountingPeriod) => accountingPeriod.can_update,
+        hidden: (accountingPeriod) => accountingPeriod.can_update || false,
         disabled: (accountingPeriod) => !accountingPeriod.can_view,
         href: (accountingPeriod) => route('teams.accounting-periods.edit', { team: props.team, accountingPeriod }),
     },

@@ -6,8 +6,8 @@ use App\Data\ProjectDepartment\Form\ProjectDepartmentFormProps;
 use App\Data\ProjectDepartment\Form\ProjectDepartmentFormRequest;
 use App\Data\ProjectDepartment\Index\ProjectDepartmentIndexProps;
 use App\Data\ProjectDepartment\Index\ProjectDepartmentIndexRequest;
-use App\Data\ProjectDepartment\Index\ProjectDepartmentIndexResource;
 use App\Data\ProjectDepartment\ProjectDepartmentOneOrManyRequest;
+use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Data\Team\TeamListResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
@@ -30,7 +30,7 @@ class ProjectDepartmentController extends Controller
             'request'            => $data,
             'team'               => TeamListResource::from($team),
             'projectDepartments' => Lazy::inertia(
-                fn () => ProjectDepartmentIndexResource::collect(
+                fn () => ProjectDepartmentResource::collect(
                     ProjectDepartment::query()
                         ->whereBelongsToTeam($team)
                         ->search($data->q)
@@ -42,7 +42,7 @@ class ProjectDepartmentController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
-                ),
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
             'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
         ]));

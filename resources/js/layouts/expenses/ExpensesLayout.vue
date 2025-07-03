@@ -6,15 +6,13 @@ import { clearSessionFilters, useLayout, useRouterComputed } from '@/composables
 import { AppLayout } from '@/layouts';
 import { NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { BanknoteIcon } from 'lucide-vue-next';
+import { BanknoteIcon, WalletIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: route().current('expenses.budgets.*')
-                    ? trans('pages.expenses.budgets.index.title')
-                    : trans('pages.expenses.charges.index.title'),
+                title: trans('enums.expense.type.general'),
                 href: route().current('expenses.budgets.*')
                     ? route('expenses.budgets.index')
                     : route('expenses.charges.index'),
@@ -34,7 +32,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
         {
             title: trans('layouts.expenses.charges'),
             href: route('expenses.charges.index'),
-            icon: BanknoteIcon,
+            icon: WalletIcon,
             isActive: route().current('expenses.charges.*'),
         },
     ].map((item) =>

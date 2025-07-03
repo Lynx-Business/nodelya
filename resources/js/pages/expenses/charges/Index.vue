@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
 import ExpenseCategoryCombobox from '@/components/expense/category/ExpenseCategoryCombobox.vue';
 import ExpenseItemCombobox from '@/components/expense/item/ExpenseItemCombobox.vue';
 import ExpenseSubCategoryCombobox from '@/components/expense/sub-category/ExpenseSubCategoryCombobox.vue';
@@ -22,7 +23,6 @@ import {
     DataTableRowsCheckbox,
     DataTableSortableHead,
 } from '@/components/ui/custom/data-table';
-import { DatePicker } from '@/components/ui/custom/date-picker';
 import { FiltersSheet, FiltersSheetContent, FiltersSheetTrigger } from '@/components/ui/custom/filters';
 import { FormContent, FormControl, FormField, FormLabel } from '@/components/ui/custom/form';
 import { TextInput } from '@/components/ui/custom/input';
@@ -129,7 +129,7 @@ const rowActions: DataTableRowAction<ExpenseChargeResource>[] = [
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
-        disabled: (expenseCharge) => !expenseCharge.can_update,
+        hidden: (expenseCharge) => !expenseCharge.can_update,
         href: (expenseCharge) =>
             route('expenses.charges.edit', {
                 expenseCharge,
@@ -207,11 +207,10 @@ const filters = useFilters<ExpenseChargeIndexRequest>(
         sort_by: props.request.sort_by,
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
+        accounting_period: props.request.accounting_period,
         expense_categories: props.request.expense_categories ?? [],
         expense_sub_categories: props.request.expense_sub_categories ?? [],
         expense_items: props.request.expense_items ?? [],
-        starts_at: props.request.starts_at,
-        ends_at: props.request.ends_at,
     },
     {
         only: ['expenseCharges'],
@@ -226,7 +225,14 @@ const filters = useFilters<ExpenseChargeIndexRequest>(
         },
         transform(data) {
             return {
-                ...reactiveOmit(data, 'expense_categories', 'expense_sub_categories', 'expense_items'),
+                ...reactiveOmit(
+                    data,
+                    'accounting_period',
+                    'expense_categories',
+                    'expense_sub_categories',
+                    'expense_items',
+                ),
+                accounting_period_id: data.accounting_period?.id,
                 expense_category_ids: data.expense_categories?.map(({ id }) => id),
                 expense_sub_category_ids: data.expense_sub_categories?.map(({ id }) => id),
                 expense_item_ids: data.expense_items?.map(({ id }) => id),
@@ -252,11 +258,20 @@ const format = useFormatter();
                 :rows-actions
                 :row-actions
             >
-                <FormContent class="charges-center flex">
+                <FormContent class="grid items-center sm:flex">
                     <TextInput v-model="filters.q" type="search" />
+                    <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters
-                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
+                        :omit="[
+                            'q',
+                            'page',
+                            'per_page',
+                            'sort_by',
+                            'sort_direction',
+                            'accounting_period_id',
+                            'accounting_period',
+                        ]"
                         :data="['trashedFilters', 'expenseCategories', 'expenseSubCategories', 'expenseItems']"
                     >
                         <FiltersSheetTrigger />
@@ -301,30 +316,10 @@ const format = useFormatter();
                                     <ExpenseItemCombobox v-model="filters.expense_items" multiple />
                                 </FormControl>
                             </FormField>
-                            <FormField>
-                                <FormLabel>
-                                    <CapitalizeText>
-                                        {{ $t('start') }}
-                                    </CapitalizeText>
-                                </FormLabel>
-                                <FormControl>
-                                    <DatePicker v-model="filters.starts_at" :max-value="filters.ends_at" />
-                                </FormControl>
-                            </FormField>
-                            <FormField>
-                                <FormLabel>
-                                    <CapitalizeText>
-                                        {{ $t('end') }}
-                                    </CapitalizeText>
-                                </FormLabel>
-                                <FormControl>
-                                    <DatePicker v-model="filters.ends_at" :min-value="filters.starts_at" />
-                                </FormControl>
-                            </FormField>
                         </FiltersSheetContent>
                     </FiltersSheet>
                 </FormContent>
-                <FormContent class="charges-center flex justify-between" v-if="abilities.expenses.charges.create">
+                <FormContent class="flex items-center justify-between" v-if="abilities.expenses.charges.create">
                     <Button class="ml-auto" as-child>
                         <InertiaLink :href="route('expenses.charges.create')">
                             <CirclePlusIcon />
