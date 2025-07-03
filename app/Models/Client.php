@@ -9,6 +9,8 @@ use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Deal;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -26,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read \App\Models\Team $team
+ * @property-read \Illuminate\Database\Eloquent\Collection|Deal[] $deals
+ * @property-read int|null $deals_count
  *
  * @method static \Database\Factories\ClientFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
@@ -89,5 +93,13 @@ class Client extends Model
         return [
             'address' => AddressData::class,
         ];
+    }
+
+    /**
+     * Get the deals for the client.
+     */
+    public function deals(): HasMany
+    {
+        return $this->hasMany(Deal::class);
     }
 }
