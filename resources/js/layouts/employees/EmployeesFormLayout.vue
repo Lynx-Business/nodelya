@@ -28,7 +28,7 @@ defineOptions({
 const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
     [
         {
-            title: trans('layouts.employees.edit'),
+            title: trans('layouts.employees.form.edit'),
             href: route('employees.edit', {
                 employee: route().params.employee,
             }),
@@ -36,7 +36,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             isActive: route().current('employees.edit'),
         },
         {
-            title: trans('layouts.expenses.budgets'),
+            title: trans('layouts.employees.form.budgets'),
             href: route('employees.expenses.budgets.index', {
                 employee: route().params.employee,
             }),
@@ -44,7 +44,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             isActive: route().current('employees.expenses.budgets.*'),
         },
         {
-            title: trans('layouts.expenses.charges'),
+            title: trans('layouts.employees.form.charges'),
             href: route('employees.expenses.charges.index', {
                 employee: route().params.employee,
             }),

@@ -34,12 +34,20 @@ class EmployeePolicy
 
     public function update(User $user, Employee $employee): bool
     {
+        if (! $employee->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $employee->isSameTeam($user->team_id);
     }
 
     public function trash(User $user, Employee $employee): bool
     {
         if ($employee->is_trashed) {
+            return false;
+        }
+
+        if (! $employee->isInCurrentAccountingPeriod()) {
             return false;
         }
 
@@ -52,11 +60,19 @@ class EmployeePolicy
             return false;
         }
 
+        if (! $employee->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $employee->isSameTeam($user->team_id);
     }
 
     public function delete(User $user, Employee $employee): bool
     {
+        if (! $employee->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $employee->isSameTeam($user->team_id);
     }
 }

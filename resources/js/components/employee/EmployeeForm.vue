@@ -53,7 +53,7 @@ const { form } = injectFormContext<EmployeeFormData>();
             </FormControl>
             <FormError :message="form.errors.last_name" />
         </FormField>
-        <FormField required>
+        <FormField>
             <FormLabel>
                 <CapitalizeText>
                     {{ $t('models.employee.fields.email') }}

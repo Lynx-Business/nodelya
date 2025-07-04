@@ -25,6 +25,8 @@ class ContractorFactory extends Factory
             'last_name'             => fake()->lastName(),
             'phone'                 => fake()->phoneNumber(),
             'email'                 => fake()->safeEmail(),
+            'starts_at'             => fake()->dateTimeBetween('now', '+1 year'),
+            'ends_at'               => fn (array $attributes) => fake()->dateTimeBetween(data_get($attributes, 'starts_at'), '+3 years'),
         ];
     }
 }

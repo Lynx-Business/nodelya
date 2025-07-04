@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \App\Services\AccountingPeriodService accountingPeriod()
  * @method static \App\Services\ConversionService conversion()
  * @method static \App\Services\MediaService media()
+ * @method static \App\Services\ContractorService contractor()
  * @method static \App\Services\EmployeeService employee()
  * @method static \App\Services\ExpenseService expense()
  * @method static \App\Services\ProjectDepartmentService projectDepartment()

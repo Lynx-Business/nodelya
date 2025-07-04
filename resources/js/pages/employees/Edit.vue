@@ -28,8 +28,9 @@ function submit() {
 
 const endsAtForm = useEmployeeEndsAtForm(employee.value);
 function endsAtSubmit() {
-    endsAtForm.put(route('employees.ends-at.update', { employee: employee.value }));
+    endsAtForm.patch(route('employees.ends-at.update', { employee: employee.value }));
 }
+const endsAtDisabled = computed(() => !employee.value.can_update);
 </script>
 
 <template>
@@ -54,7 +55,7 @@ function endsAtSubmit() {
         </Card>
     </Form>
 
-    <Form :form="endsAtForm" :disabled="!employee.can_update" @submit="endsAtSubmit()">
+    <Form :form="endsAtForm" :disabled="endsAtDisabled" @submit="endsAtSubmit()">
         <Card>
             <CardHeader>
                 <CardTitle>
@@ -65,15 +66,19 @@ function endsAtSubmit() {
                 </CardDescription>
             </CardHeader>
             <CardContent class="sm:flex">
-                <EmployeeEndsAtForm />
+                <EmployeeEndsAtForm :disabled="employee.ends_at != undefined" />
             </CardContent>
-            <CardFooter>
-                <FormSubmitButton />
-                <Button v-if="employee.ends_at" variant="destructive" as-child>
-                    <InertiaLink :href="route('employees.ends-at.destroy', { employee })" method="delete">
+            <CardFooter v-if="!endsAtDisabled">
+                <FormSubmitButton v-if="!employee.ends_at" />
+                <Button v-else variant="destructive" as-child>
+                    <InertiaLink
+                        :href="route('employees.ends-at.destroy', { employee })"
+                        method="delete"
+                        :on-success="() => (endsAtForm.ends_at = '')"
+                    >
                         <Trash2Icon />
                         <CapitalizeText>
-                            {{ $t('delete') }}
+                            {{ $t('pages.employees.edit.ends_at.actions.delete') }}
                         </CapitalizeText>
                     </InertiaLink>
                 </Button>

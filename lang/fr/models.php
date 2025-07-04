@@ -37,6 +37,22 @@ return [
         ],
     ],
 
+    'contractor' => [
+        'name' => [
+            'one'  => 'sous-traitant',
+            'many' => 'sous-traitants',
+        ],
+        'fields' => [
+            'deleted_at' => 'archivé le',
+            'email'      => 'e-mail',
+            'first_name' => 'prénom',
+            'full_name'  => 'nom complet',
+            'is_trashed' => 'est archivé',
+            'last_name'  => 'nom',
+            'phone'      => 'téléphone',
+        ],
+    ],
+
     'employee' => [
         'name' => [
             'one'  => 'salarié',

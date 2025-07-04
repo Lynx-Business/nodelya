@@ -31,6 +31,8 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contractor> $contractors
+ * @property-read int|null $contractors_count
  * @property-read \App\Models\User|null $creator
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employee> $employees
  * @property-read int|null $employees_count
@@ -125,6 +127,11 @@ class Team extends Model implements HasMedia
     public function accountingPeriods(): HasMany
     {
         return $this->hasMany(AccountingPeriod::class)->whereBelongsToAnyTeam();
+    }
+
+    public function contractors(): HasMany
+    {
+        return $this->hasMany(Contractor::class)->whereBelongsToAnyTeam();
     }
 
     public function employees(): HasMany

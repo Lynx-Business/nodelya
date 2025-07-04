@@ -20,7 +20,10 @@ return new class extends Migration
             $table->string('full_name')->virtualAs('CONCAT_WS(" ", first_name, last_name)');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
+            $table->timestamp('starts_at');
+            $table->timestamp('ends_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

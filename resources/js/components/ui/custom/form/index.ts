@@ -9,4 +9,5 @@ export { default as FormSubmitButton } from './FormSubmitButton.vue';
 
 export type FormProps = {
     autofocus?: boolean;
+    disabled?: boolean;
 };

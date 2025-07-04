@@ -104,7 +104,7 @@ class EmployeeController extends Controller
 
         Services::toast()->success->execute(__('messages.employees.update.success'));
 
-        return to_route('employees.index');
+        return back();
     }
 
     public function trash(EmployeeOneOrManyRequest $data)
