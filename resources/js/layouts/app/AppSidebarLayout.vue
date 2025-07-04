@@ -35,6 +35,7 @@ const items = useRouterComputed((): NavItem[] => [
     {
         title: trans('layouts.app.sidebar.items.expenses'),
         icon: BanknoteIcon,
+        hidden: !user.permissions?.includes('expenses'),
         items: [
             {
                 title: trans(`enums.expense.type.general`),
