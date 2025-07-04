@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\Auth;
 
 use App\Facades\Services;
+use App\Models\AccountingPeriod;
 use App\Models\Team;
 use Closure;
 use Illuminate\Http\Request;
@@ -38,6 +39,14 @@ class AuthSetupMiddleware
 
         // Select the first available team
         Services::user()->selectTeam->execute($user, $team);
+        if (! $team->currentAccountingPeriod) {
+            Services::team()->setCurrent($team);
+
+            return $user->can('create', AccountingPeriod::class)
+                ? to_route('auth.setup.step-two.edit')
+                : to_route('auth.setup.not-ready');
+        }
+
         if (Route::is('teams.*')) {
             /** @var Team|string|int|null $routeTeam */
             $routeTeam = $request->team;

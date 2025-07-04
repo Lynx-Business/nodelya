@@ -45,17 +45,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/verification/code', [VerifyEmailController::class, 'code'])->name('verification.code')->middleware(['auth']);
 
-Route::middleware(['auth', 'auth.not_ready', 'auth.include'])->group(function () {
+Route::middleware(['auth', 'auth.include'])->group(function () {
     Route::prefix('/setup')->name('auth.setup.')->group(function () {
         Route::get('/not-ready', [AuthSetupNotReadyController::class, 'index'])->name('not-ready');
         Route::middleware(['auth.owner'])->group(function () {
             Route::prefix('/1')->name('step-one.')->controller(AuthSetupStepOneController::class)->group(function () {
-                Route::get('', 'edit')->name('edit');
-                Route::post('', 'update')->name('update');
+                Route::get('/', 'edit')->name('edit');
+                Route::post('/', 'update')->name('update');
             });
             Route::prefix('/2')->name('step-two.')->controller(AuthSetupStepTwoController::class)->group(function () {
-                Route::get('', 'edit')->name('edit');
-                Route::post('', 'update')->name('update');
+                Route::get('/', 'edit')->name('edit');
+                Route::post('/', 'update')->name('update');
             });
         });
     });
