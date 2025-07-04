@@ -169,17 +169,6 @@ watch(
             <FormError :message="form.errors.code" />
         </FormField>
 
-        <FormField required>
-            <FormLabel>
-                <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.client_id') }}
-                </CapitalizeText>
-            </FormLabel>
-
-            <ClientCombobox v-model="form.client" />
-            <FormError :message="form.errors.client_id" />
-        </FormField>
-
         <FormField>
             <FormLabel>
                 <CapitalizeText>
@@ -189,6 +178,17 @@ watch(
 
             <DealCombobox v-model="form.parent" />
             <FormError :message="form.errors.deal_id" />
+        </FormField>
+
+        <FormField required>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.commercial_deal.fields.client_id') }}
+                </CapitalizeText>
+            </FormLabel>
+
+            <ClientCombobox v-model="form.client" />
+            <FormError :message="form.errors.client_id" />
         </FormField>
 
         <FormField>

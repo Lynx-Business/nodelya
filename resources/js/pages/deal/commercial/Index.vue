@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
 import { Button } from '@/components/ui/button';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
@@ -24,14 +25,15 @@ import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useFormatter, useLayout } from '@/composables';
+import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import { AppLayout } from '@/layouts';
 import { CommercialDealIndexProps, CommercialDealIndexRequest, CommercialDealIndexResource } from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
+import { reactiveOmit } from '@vueuse/core';
 import { trans, transChoice } from 'laravel-vue-i18n';
 import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -45,10 +47,37 @@ defineOptions({
 });
 
 const props = defineProps<CommercialDealIndexProps>();
-console.log('commercial_deals => ', props.commercial_deals?.data);
 
 const format = useFormatter();
 const alert = useAlert();
+const { locale } = useLocale();
+
+const dynamicMonths = computed(() => {
+    if (!props.accounting_period_months) return [];
+
+    const months: any[] = [];
+    props.accounting_period_months.forEach((month) => {
+        months.push({
+            key: month,
+            lettre: formatMonth(month),
+        });
+    });
+
+    return months;
+});
+
+function formatMonth(monthString: string): string {
+    const [year, month] = monthString.split('-');
+    const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+    return new Intl.DateTimeFormat(locale.value, {
+        month: 'long',
+        year: 'numeric',
+    }).format(date);
+}
+
+function findExpenseForMonth(expenses: any[], monthKey: string) {
+    return expenses.find((expense) => expense.date === monthKey);
+}
 
 const selectedRows = ref<CommercialDealIndexResource[]>([]);
 
@@ -181,6 +210,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
         sort_by: props.request.sort_by,
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
+        accounting_period: props.request.accounting_period,
     },
     {
         only: ['commercial_deals'],
@@ -192,6 +222,12 @@ const filters = useFilters<CommercialDealIndexRequest>(
             if (!keys.includes('page')) {
                 filters.page = 1;
             }
+        },
+        transform(data) {
+            return {
+                ...reactiveOmit(data, 'accounting_period'),
+                accounting_period_id: data.accounting_period?.id,
+            };
         },
     },
 );
@@ -213,9 +249,10 @@ const filters = useFilters<CommercialDealIndexRequest>(
             >
                 <FormContent class="flex items-center">
                     <TextInput v-model="filters.q" type="search" />
+                    <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters="filters"
-                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
+                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction', 'accounting_period']"
                         :data="['trashed_filters']"
                     >
                         <FiltersSheetTrigger />
@@ -261,9 +298,19 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableSortableHead value="code">
                                 {{ $t('models.commercial_deal.fields.code') }}
                             </DataTableSortableHead>
+                            <DataTableSortableHead value="ordered_at">
+                                {{ $t('models.commercial_deal.fields.ordered_at') }}
+                            </DataTableSortableHead>
+                            <DataTableSortableHead value="duration_in_months">
+                                {{ $t('models.commercial_deal.fields.duration_in_months') }}
+                            </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
                                 {{ $t('models.commercial_deal.fields.total_sales') }}
                             </DataTableSortableHead>
+
+                            <DataTableHead v-for="(month, index) in dynamicMonths" :key="index">
+                                {{ month.lettre }}
+                            </DataTableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
                             </DataTableHead>
@@ -290,8 +337,22 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableCell>
                                 {{ deal.code }}
                             </DataTableCell>
+                            <DataTableCell>
+                                {{ format.date(deal.ordered_at) }}
+                            </DataTableCell>
+                            <DataTableCell>
+                                {{ deal.duration_in_months }}
+                            </DataTableCell>
                             <DataTableCell class="bg-gray-300/30">
                                 {{ format.price((deal.amount * deal.success_rate) / 100) }}
+                            </DataTableCell>
+
+                            <DataTableCell v-for="(month, index) in dynamicMonths" :key="index" class="min-w-30">
+                                {{
+                                    findExpenseForMonth(deal.monthly_expenses, month.key)
+                                        ? format.price(findExpenseForMonth(deal.monthly_expenses, month.key).amount)
+                                        : 0
+                                }}
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

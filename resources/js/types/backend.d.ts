@@ -299,6 +299,7 @@ export type CommercialDealFormResource = {
 };
 export type CommercialDealIndexProps = {
     request: CommercialDealIndexRequest;
+    accounting_period_months: Array<any>;
     commercial_deals?: {
         data: Array<CommercialDealIndexResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
@@ -317,13 +318,16 @@ export type CommercialDealIndexProps = {
         };
     };
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
 };
 export type CommercialDealIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
     q?: string;
     page?: number;
     per_page?: number;
     sort_by: string;
     sort_direction: string;
+    accounting_period_id?: number;
     trashed?: TrashedFilter;
 };
 export type CommercialDealIndexResource = {
@@ -332,12 +336,16 @@ export type CommercialDealIndexResource = {
     amount: number;
     code: string;
     success_rate: number;
+    duration_in_months?: number;
+    ordered_at: string;
+    starts_at?: string;
     client?: any;
     can_view: boolean;
     can_update: boolean;
     can_trash: boolean;
     can_restore: boolean;
     can_delete: boolean;
+    monthly_expenses: Array<any>;
 };
 export type CommercialDealValidateProps = {
     projectDepartments?: Array<ProjectDepartmentResource>;

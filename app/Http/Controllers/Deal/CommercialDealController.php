@@ -19,6 +19,8 @@ use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Deal;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -33,26 +35,79 @@ class CommercialDealController extends Controller
      */
     public function index(CommercialDealIndexRequest $data)
     {
+        $months = [];
+
+        $accountingPeriod = $data->accounting_period;
+
+        $months = [];
+        if ($accountingPeriod) {
+            $start = Carbon::parse($accountingPeriod->starts_at);
+            $end = Carbon::parse($accountingPeriod->ends_at);
+            $period = CarbonPeriod::create($start, '1 month', $end);
+
+            foreach ($period as $date) {
+                $months[] = $date->format('Y-m');
+            }
+        }
 
         return Inertia::render('deal/commercial/Index', CommercialDealIndexProps::from([
             'request'          => $data,
             'commercial_deals' => Lazy::inertia(
-                fn () => CommercialDealIndexResource::collect(
-                    Deal::commercial()
+                function () use ($data, $accountingPeriod) {
+                    $paginatedDeals = Deal::commercial()
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
+                        ->when($accountingPeriod, function (Builder $query) use ($accountingPeriod) {
+                            $query->where(function ($q) use ($accountingPeriod) {
+                                $q->whereBetween('starts_at', [
+                                    $accountingPeriod->starts_at,
+                                    $accountingPeriod->ends_at,
+                                ])
+                                    ->orWhereBetween('ends_at', [
+                                        $accountingPeriod->starts_at,
+                                        $accountingPeriod->ends_at,
+                                    ])
+                                    ->orWhere(function ($q) use ($accountingPeriod) {
+                                        $q->where('starts_at', '<', $accountingPeriod->starts_at)
+                                            ->where('ends_at', '>', $accountingPeriod->ends_at);
+                                    });
+                            });
+                        })
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with(['client'])
                         ->paginate(
                             perPage: $data->per_page ?? Config::integer('default.per_page'),
                             page: $data->page ?? 1,
                         )
-                        ->withQueryString(),
-                    PaginatedDataCollection::class,
-                ),
-            ),
+                        ->withQueryString();
 
-            'trashed_filters' => Lazy::inertia(fn () => TrashedFilter::labels()),
+                    $resources = CommercialDealIndexResource::collect($paginatedDeals, PaginatedDataCollection::class);
+
+                    $resources->through(function ($resource) use ($accountingPeriod) {
+                        if (isset($resource->monthly_expenses) && $accountingPeriod) {
+                            $resource->monthly_expenses = array_filter(
+                                $resource->monthly_expenses,
+                                function ($expense) use ($accountingPeriod) {
+                                    $expenseDate = Carbon::parse($expense->date);
+
+                                    return $expenseDate->between(
+                                        Carbon::parse($accountingPeriod->starts_at),
+                                        Carbon::parse($accountingPeriod->ends_at),
+                                    );
+                                },
+                            );
+                            $resource->monthly_expenses = array_values($resource->monthly_expenses);
+                        }
+
+                        return $resource;
+                    });
+
+                    return $resources;
+                },
+            ),
+            'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
+            'accounting_period_months' => $months,
         ]));
     }
 
