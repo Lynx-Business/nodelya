@@ -18,6 +18,12 @@ return [
             'validated' => 'validée',
             'finished'  => 'terminée',
         ],
+
+        'schedule_status' => [
+            'paid'      => 'Payé',
+            'invoiced'  => 'Facture émise',
+            'uncertain' => 'Incertain',
+        ],
     ],
 
     'expense' => [

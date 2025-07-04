@@ -149,6 +149,56 @@ return [
         ],
     ],
 
+    'commercial_deal' => [
+        'name' => [
+            'one'  => 'affaire',
+            'many' => 'affaires',
+        ],
+        'fields' => [
+            'amount'                => 'montant',
+            'code'                  => 'Codification',
+            'client_id'             => 'client',
+            'duration_in_months'    => 'Durée (MOIS)',
+            'ends_at'               => 'date de fin',
+            'name'                  => 'nom',
+            'ordered_at'            => 'Prise de commande',
+            'project_department_id' => 'direction de projets',
+            'reference'             => 'référence',
+            'schedule'              => 'planning',
+            'starts_at'             => 'Démarrage',
+            'status'                => 'statut',
+            'success_rate'          => '% Réussite',
+            'team_id'               => 'société',
+            'deal_id'               => 'Rattacher affaire existante',
+            'total_sales'           => 'Totaux CA',
+            'targeted_turnover'     => 'CA ciblé',
+        ],
+    ],
+    'billing_deals' => [
+        'name' => [
+            'one'  => 'facture',
+            'many' => 'factures',
+        ],
+        'fields' => [
+            'amount'                => 'montant',
+            'code'                  => 'Codification',
+            'client_id'             => 'client',
+            'duration_in_months'    => 'Durée (MOIS)',
+            'ends_at'               => 'date de fin',
+            'name'                  => 'nom',
+            'ordered_at'            => 'Prise de commande',
+            'project_department_id' => 'direction de projets',
+            'reference'             => 'référence',
+            'schedule'              => 'planning',
+            'starts_at'             => 'Démarrage',
+            'status'                => 'statut',
+            'success_rate'          => '% Réussite',
+            'team_id'               => 'société',
+            'deal_id'               => 'Rattacher affaire existante',
+            'total_sales'           => 'Totaux CA',
+        ],
+    ],
+
     'media' => [
         'fields' => [
         ],

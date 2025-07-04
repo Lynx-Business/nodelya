@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('deals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('project_department_id')->constrained();
+            $table->foreignId('project_department_id')->nullable()->constrained();
             $table->foreignId('client_id')->constrained();
             $table->foreignId('deal_id')->nullable()->constrained();
             $table->string('name');

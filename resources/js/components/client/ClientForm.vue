@@ -32,7 +32,7 @@ const { form } = injectFormContext<ClientFormData>();
             <FormField class="col-span-full" required>
                 <FormLabel>
                     <CapitalizeText>
-                        {{ $t('models.address.fields.address') }}
+                        {{ $t('data.address.fields.address') }}
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>
@@ -44,7 +44,7 @@ const { form } = injectFormContext<ClientFormData>();
             <FormField class="col-span-full">
                 <FormLabel>
                     <CapitalizeText>
-                        {{ $t('models.address.fields.address_complement') }}
+                        {{ $t('data.address.fields.address_complement') }}
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>
@@ -56,7 +56,7 @@ const { form } = injectFormContext<ClientFormData>();
             <FormField required>
                 <FormLabel>
                     <CapitalizeText>
-                        {{ $t('models.address.fields.city') }}
+                        {{ $t('data.address.fields.city') }}
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>
@@ -68,7 +68,7 @@ const { form } = injectFormContext<ClientFormData>();
             <FormField required>
                 <FormLabel>
                     <CapitalizeText>
-                        {{ $t('models.address.fields.postal_code') }}
+                        {{ $t('data.address.fields.postal_code') }}
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>
@@ -80,7 +80,7 @@ const { form } = injectFormContext<ClientFormData>();
             <FormField class="col-span-full" required>
                 <FormLabel>
                     <CapitalizeText>
-                        {{ $t('models.address.fields.country') }}
+                        {{ $t('data.address.fields.country') }}
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>

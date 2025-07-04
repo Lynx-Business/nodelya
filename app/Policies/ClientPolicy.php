@@ -77,10 +77,12 @@ class ClientPolicy
 
     public function delete(User $user, Client $client): bool
     {
+        if ($client->deals()->exists()) {
+            return false;
+        }
         if ($user->is_admin && Route::is('admin.*')) {
             return true;
         }
-
         if (! $client->isSameTeam($user->team_id)) {
             return false;
         }

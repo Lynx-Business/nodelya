@@ -26,10 +26,12 @@ return [
     'app' => [
         'sidebar' => [
             'items' => [
-                'admin'    => 'Administration',
-                'index'    => 'Tableau de bord',
-                'expenses' => 'Budgets',
-                'client'   => 'Client',
+                'admin'            => 'Administration',
+                'index'            => 'Tableau de bord',
+                'expenses'         => 'Budgets',
+                'client'           => 'Client',
+                'commercial_deals' => 'Commerce',
+                'billing_deals'    => 'Facturation',
             ],
         ],
     ],

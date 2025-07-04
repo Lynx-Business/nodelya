@@ -8,7 +8,14 @@ import { useAuth, useRouterComputed } from '@/composables';
 import type { BreadcrumbItemType, NavItem } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { BanknoteIcon, LayoutGridIcon, MonitorCogIcon, UsersIcon } from 'lucide-vue-next';
+import {
+    BanknoteIcon,
+    LayoutGridIcon,
+    MonitorCogIcon,
+    ReceiptEuroIcon,
+    ShoppingBagIcon,
+    UsersIcon,
+} from 'lucide-vue-next';
 
 type Props = {
     breadcrumbs?: BreadcrumbItemType[];
@@ -59,6 +66,18 @@ const items = useRouterComputed((): NavItem[] => [
         href: route('clients.index'),
         icon: UsersIcon,
         isActive: route().current('clients.*'),
+    },
+    {
+        title: trans('layouts.app.sidebar.items.commercial_deals'),
+        href: route('commercial.deals.index'),
+        icon: ShoppingBagIcon,
+        isActive: route().current('commercial.deals.*'),
+    },
+    {
+        title: trans('layouts.app.sidebar.items.billing_deals'),
+        href: route('billing.deals.index'),
+        icon: ReceiptEuroIcon,
+        isActive: route().current('billing.deals.*'),
     },
 ]);
 </script>

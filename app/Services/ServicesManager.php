@@ -89,4 +89,18 @@ class ServicesManager
     {
         return $this->client ??= app(ClientService::class);
     }
+
+    protected ?CommercialDealService $commercialDeal = null;
+
+    public function commercialDeal(): CommercialDealService
+    {
+        return $this->commercialDeal ??= app(CommercialDealService::class);
+    }
+
+    protected ?BillingDealService $billingDeal = null;
+
+    public function billingDeal(): BillingDealService
+    {
+        return $this->billingDeal ??= app(BillingDealService::class);
+    }
 }
