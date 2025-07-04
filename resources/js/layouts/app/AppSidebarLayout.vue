@@ -46,6 +46,11 @@ const items = useRouterComputed((): NavItem[] => [
                 href: route('employees.index'),
                 isActive: route().current('employees.*'),
             },
+            {
+                title: trans(`enums.expense.type.contractor`),
+                href: route('contractors.index'),
+                isActive: route().current('contractors.*'),
+            },
         ],
     },
     {

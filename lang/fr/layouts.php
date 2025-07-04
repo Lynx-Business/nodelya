@@ -34,10 +34,20 @@ return [
         ],
     ],
 
+    'contractors' => [
+        'form' => [
+            'edit'    => 'Détails',
+            'budgets' => 'Budgets',
+            'charges' => 'Frais ponctuels',
+        ],
+    ],
+
     'employees' => [
-        'edit'    => 'Détails',
-        'budgets' => 'Budgets',
-        'charges' => 'Frais ponctuels',
+        'form' => [
+            'edit'    => 'Détails',
+            'budgets' => 'Budgets',
+            'charges' => 'Frais ponctuels',
+        ],
     ],
 
     'expenses' => [

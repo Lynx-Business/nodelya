@@ -7,7 +7,7 @@ export function useEmployeeForm(employee?: Partial<EmployeeResource>) {
         project_department: employee?.project_department,
         first_name: employee?.first_name ?? '',
         last_name: employee?.last_name ?? '',
-        email: employee?.email ?? '',
+        email: employee?.email,
         phone: employee?.phone,
         starts_at: employee?.starts_at ?? '',
     });

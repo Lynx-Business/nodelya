@@ -47,6 +47,10 @@ class ExpenseChargePolicy
             return false;
         }
 
+        if (! $expenseCharge->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseCharge->isSameTeam($user->team_id);
     }
 
@@ -56,11 +60,19 @@ class ExpenseChargePolicy
             return false;
         }
 
+        if (! $expenseCharge->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseCharge->isSameTeam($user->team_id);
     }
 
     public function delete(User $user, ExpenseCharge $expenseCharge): bool
     {
+        if (! $expenseCharge->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseCharge->isSameTeam($user->team_id);
     }
 }

@@ -7,6 +7,7 @@ use App\Enums\Role\RoleName;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
 use App\Models\Banner;
+use App\Models\Contractor;
 use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
@@ -125,6 +126,16 @@ class DevInstallCommand extends Command
                             }
                         }
 
+                        $contractors = Contractor::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->state(fn () => [
+                                'project_department_id' => ProjectDepartment::query()
+                                    ->inRandomOrder()
+                                    ->first()->id,
+                            ])
+                            ->create();
+
                         $employees = Employee::factory()
                             ->count($count)
                             ->recycle($team)
@@ -190,6 +201,36 @@ class DevInstallCommand extends Command
                                         'model_id'        => $employee->id,
                                         'expense_item_id' => ExpenseItem::query()
                                             ->whereType(ExpenseType::EMPLOYEE)
+                                            ->inRandomOrder()
+                                            ->first()->id,
+                                    ])
+                                    ->create();
+                            }
+
+                            foreach ($contractors as $contractor) {
+                                ExpenseBudget::factory()
+                                    ->count($count)
+                                    ->recycle($team)
+                                    ->forAccountingPeriod($accountingPeriod)
+                                    ->state(fn () => [
+                                        'model_type'      => ExpenseType::CONTRACTOR->toMorphType(),
+                                        'model_id'        => $contractor->id,
+                                        'expense_item_id' => ExpenseItem::query()
+                                            ->whereType(ExpenseType::CONTRACTOR)
+                                            ->inRandomOrder()
+                                            ->first()->id,
+                                    ])
+                                    ->create();
+
+                                ExpenseCharge::factory()
+                                    ->count($count)
+                                    ->recycle($team)
+                                    ->forAccountingPeriod($accountingPeriod)
+                                    ->state(fn () => [
+                                        'model_type'      => ExpenseType::CONTRACTOR->toMorphType(),
+                                        'model_id'        => $contractor->id,
+                                        'expense_item_id' => ExpenseItem::query()
+                                            ->whereType(ExpenseType::CONTRACTOR)
                                             ->inRandomOrder()
                                             ->first()->id,
                                     ])

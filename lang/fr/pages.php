@@ -82,6 +82,28 @@ return [
         ],
     ],
 
+    'contractors' => [
+        'index' => [
+            'title' => 'Sous traitance',
+        ],
+        'create' => [
+            'title'       => 'Nouveau sous traitant',
+            'description' => 'Ajouter un nouveau sous traitant',
+        ],
+        'edit' => [
+            'title'       => 'Détails du sous traitant',
+            'description' => 'Mettez à jour les détails du sous traitant',
+            'ends_at'     => [
+                'title'       => 'Fin de collaboration',
+                'description' => 'Cette action mettra fin à la collaboration avec le sous-traitant',
+                'actions'     => [
+                    'update' => 'Finir la collaboration',
+                    'delete' => 'Reprendre la collaboration',
+                ],
+            ],
+        ],
+    ],
+
     'employees' => [
         'index' => [
             'title' => 'Resources humaines',
@@ -96,6 +118,9 @@ return [
             'ends_at'     => [
                 'title'       => 'Date de sortie',
                 'description' => 'Cette action va couper les budgets du salarié à la date de sortie',
+                'actions'     => [
+                    'delete' => 'Supprimer la date de sortie',
+                ],
             ],
         ],
     ],

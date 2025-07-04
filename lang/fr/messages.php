@@ -54,6 +54,27 @@ return [
         ],
     ],
 
+    'contractors' => [
+        'store' => [
+            'success' => 'Sous-traitant créé avec succès',
+        ],
+        'update' => [
+            'success' => 'Sous-traitant mis à jour avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver ce sous-traitant ?|Êtes-vous sûr de vouloir archiver ces sous-traitants ?',
+            'success' => 'Sous-traitant archivé avec succès|Sous-traitants archivés avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer ce sous-traitant ?|Êtes-vous sûr de vouloir restaurer ces sous-traitants ?',
+            'success' => 'Sous-traitant restauré avec succès|Sous-traitants restaurés avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer ce sous-traitant ?|Êtes-vous sûr de vouloir supprimer ces sous-traitants ?',
+            'success' => 'Sous-traitant supprimé avec succès|Sous-traitants supprimés avec succès',
+        ],
+    ],
+
     'employees' => [
         'store' => [
             'success' => 'Salarié créé avec succès',

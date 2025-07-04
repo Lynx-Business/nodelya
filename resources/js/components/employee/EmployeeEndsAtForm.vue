@@ -19,7 +19,7 @@ const { form } = injectFormContext<EmployeeEndsAtFormData>();
 
 <template>
     <FormContent>
-        <FormField required>
+        <FormField required :disabled>
             <FormLabel>
                 <CapitalizeText>
                     {{ $t('models.employee.fields.ends_at') }}

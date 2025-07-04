@@ -141,7 +141,9 @@ class Employee extends Model
     {
         $accountingPeriod = is_int($accountingPeriod) ? AccountingPeriod::query()->findOrFail($accountingPeriod) : $accountingPeriod;
 
-        return ($this->ends_at ?? $this->starts_at) <= $accountingPeriod->ends_at;
+        return ! (
+            $this->starts_at >= $accountingPeriod->ends_at || ($this->ends_at && $this->ends_at <= $accountingPeriod->starts_at)
+        );
     }
 
     public function scopeWhereInAccountingPeriod(Builder $query, AccountingPeriod|int $accountingPeriod): Builder

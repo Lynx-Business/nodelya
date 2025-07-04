@@ -24,9 +24,10 @@ class EloquentServiceProvider extends ServiceProvider
         Model::preventLazyLoading(! app()->isProduction());
         Relation::requireMorphMap();
         Relation::enforceMorphMap([
-            'employee' => \App\Models\Employee::class,
-            'team'     => \App\Models\Team::class,
-            'user'     => \App\Models\User::class,
+            'contractor' => \App\Models\Contractor::class,
+            'employee'   => \App\Models\Employee::class,
+            'team'       => \App\Models\Team::class,
+            'user'       => \App\Models\User::class,
         ]);
     }
 }

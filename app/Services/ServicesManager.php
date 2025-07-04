@@ -20,6 +20,13 @@ class ServicesManager
         return $this->conversion ??= app(ConversionService::class);
     }
 
+    protected ?ContractorService $contractor = null;
+
+    public function contractor(): ContractorService
+    {
+        return $this->contractor ??= app(ContractorService::class);
+    }
+
     protected ?EmployeeService $employee = null;
 
     public function employee(): EmployeeService

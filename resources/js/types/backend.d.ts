@@ -176,6 +176,142 @@ export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;
 };
+export type ContractorExpenseBudgetFormProps = {
+    accountingPeriod?: AccountingPeriodResource;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    contractor: ContractorResource;
+    expenseBudget?: ExpenseBudgetResource;
+};
+export type ContractorExpenseBudgetIndexProps = {
+    request: ExpenseBudgetIndexRequest;
+    contractor: ContractorResource;
+    expenseBudgets?: {
+        data: Array<ExpenseBudgetResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+};
+export type ContractorExpenseChargeFormProps = {
+    accountingPeriod?: AccountingPeriodResource;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    contractor: ContractorResource;
+    expenseCharge?: ExpenseChargeResource;
+};
+export type ContractorExpenseChargeIndexProps = {
+    request: ExpenseChargeIndexRequest;
+    contractor: ContractorResource;
+    expenseCharges?: {
+        data: Array<ExpenseChargeResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    expenseCategories?: Array<ExpenseCategoryResource>;
+    expenseSubCategories?: Array<ExpenseSubCategoryResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+};
+export type ContractorFormProps = {
+    projectDepartments?: Array<ProjectDepartmentResource>;
+    contractor?: ContractorResource;
+};
+export type ContractorFormRequest = {
+    project_department_id: number;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    phone?: string;
+};
+export type ContractorIndexProps = {
+    request: ContractorIndexRequest;
+    contractors?: {
+        data: Array<ContractorResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashedFilters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    projectDepartments?: Array<ProjectDepartmentResource>;
+};
+export type ContractorIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
+    project_departments?: Array<ProjectDepartmentResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    trashed?: TrashedFilter;
+    accounting_period_id?: number;
+    project_department_ids?: null | Array<number>;
+};
+export type ContractorOneOrManyRequest = {
+    contractor?: number;
+    ids?: Array<number>;
+};
+export type ContractorResource = {
+    id: number;
+    project_department_id?: number;
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    phone?: string;
+    email?: string;
+    starts_at: string;
+    ends_at?: string;
+    deleted_at?: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+    project_department?: ProjectDepartmentResource;
+};
 export type DashboardAdminIndexProps = {};
 export type DashboardIndexProps = {};
 export type DealScheduleData = {};
@@ -261,7 +397,7 @@ export type EmployeeFormRequest = {
     project_department_id: number;
     first_name: string;
     last_name: string;
-    email: string;
+    email?: string;
     phone?: string;
     starts_at: string;
 };
@@ -310,8 +446,8 @@ export type EmployeeResource = {
     first_name: string;
     last_name: string;
     full_name: string;
-    phone: string;
-    email: string;
+    phone?: string;
+    email?: string;
     starts_at: string;
     ends_at?: string;
     deleted_at?: string;
@@ -870,6 +1006,7 @@ export type UpdateProfileSettingsRequest = {
     avatar?: string;
 };
 export type UserAbilitiesResource = {
+    contractors: { view_any: boolean; create: boolean };
     employees: { view_any: boolean; create: boolean };
     expenses: { budgets: { view_any: boolean; create: boolean }; charges: { view_any: boolean; create: boolean } };
     teams: { view_any: boolean; create: boolean };

@@ -26,7 +26,7 @@ class EmployeeFormRequest extends Data
 
         public string $last_name,
 
-        public string $email,
+        public ?string $email,
 
         public ?string $phone,
 

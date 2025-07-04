@@ -47,6 +47,10 @@ class ExpenseBudgetPolicy
             return false;
         }
 
+        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseBudget->isSameTeam($user->team_id);
     }
 
@@ -56,11 +60,19 @@ class ExpenseBudgetPolicy
             return false;
         }
 
+        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseBudget->isSameTeam($user->team_id);
     }
 
     public function delete(User $user, ExpenseBudget $expenseBudget): bool
     {
+        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+            return false;
+        }
+
         return $user->is_editor && $expenseBudget->isSameTeam($user->team_id);
     }
 }
