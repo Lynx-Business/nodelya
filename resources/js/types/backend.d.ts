@@ -122,6 +122,7 @@ export type BillingDealFormProps = {
     clients?: Array<ClientListResource>;
     deals?: Array<DealListResource>;
     schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
+    projectDepartments?: Array<ProjectDepartmentResource>;
 };
 export type BillingDealFormRequest = {
     deal?: any;
@@ -134,6 +135,7 @@ export type BillingDealFormRequest = {
     starts_at?: string;
     client_id: number;
     deal_id?: number;
+    project_department_id?: number;
     schedule_data: Array<ScheduleItemData>;
     schedule?: Array<DealScheduleData>;
 };
@@ -148,6 +150,7 @@ export type BillingDealFormResource = {
     duration_in_months: number;
     starts_at: string;
     client: ClientListResource;
+    project_department?: ProjectDepartmentResource;
     parent?: DealListResource;
     schedule: Array<DealScheduleData>;
 };
@@ -263,11 +266,12 @@ export type ClientOneOrManyRequest = {
 export type CommercialDealFormProps = {
     deal?: CommercialDealFormResource;
     clients?: Array<ClientListResource>;
+    deals?: Array<DealListResource>;
 };
 export type CommercialDealFormRequest = {
     deal?: any;
     name: string;
-    amount_in_cents: number;
+    amount: number;
     code: string;
     reference?: string;
     success_rate: number;
@@ -275,14 +279,14 @@ export type CommercialDealFormRequest = {
     duration_in_months?: number;
     starts_at?: string;
     client_id: number;
+    deal_id?: number;
     schedule_data: Array<ScheduleItemData>;
     schedule?: Array<DealScheduleData>;
 };
 export type CommercialDealFormResource = {
     id: number;
     name: string;
-    amount_in_cents: number;
-    client_id: number;
+    amount: number;
     code?: string;
     reference?: string;
     success_rate: number;
@@ -325,21 +329,26 @@ export type CommercialDealIndexRequest = {
 export type CommercialDealIndexResource = {
     id: number;
     name: string;
+    amount: number;
+    code: string;
+    success_rate: number;
+    client?: any;
     can_view: boolean;
     can_update: boolean;
     can_trash: boolean;
     can_restore: boolean;
     can_delete: boolean;
 };
-export type CommercialDealOneOrManyRequest = {
-    deal?: number;
-    ids?: Array<number>;
-};
-
 export type CommercialDealValidateProps = {
+    projectDepartments?: Array<ProjectDepartmentResource>;
     deal: DealListResource;
     reference: string;
 };
+export type CommercialDealValidateRequest = {
+    project_department_id?: number;
+    reference: string;
+};
+export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
     password: string;
 };
@@ -481,6 +490,12 @@ export type ContractorResource = {
 };
 export type DashboardAdminIndexProps = {};
 export type DashboardIndexProps = {};
+export type DealListResource = {
+    id: number;
+    name: string;
+    amount: number;
+    project_department?: ProjectDepartmentResource;
+};
 export type DealOneOrManyRequest = {
     deal?: number;
     ids?: Array<number>;
@@ -1004,7 +1019,8 @@ export type MonthlyExpenseData = {
     amount: number;
     status?: string;
 };
-export type PermissionListResource = {
+export type PermissionName = 'client' | 'expenses' | 'deal';
+export type PermissionResource = {
     id: number;
     name: string;
     display_name: string;

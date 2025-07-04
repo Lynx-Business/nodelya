@@ -18,6 +18,7 @@ export function useBillingDealForm(deal?: BillingDealFormResource) {
         parent: deal?.parent,
         client: deal?.client,
         reference: deal?.reference,
+        project_department: deal?.project_department,
         code: deal?.code || '',
         success_rate: deal?.success_rate || 50,
         ordered_at: deal?.ordered_at || '',
@@ -42,6 +43,7 @@ function transformDealForm(data: BillingDealFormData): BillingDealFormRequest {
         deal_id: data.parent?.id,
         deal: undefined,
         amount: data.amount!,
+        project_department_id: data.project_department?.id!,
         schedule: Array.isArray(data.schedule) ? data.schedule : undefined,
     };
 }

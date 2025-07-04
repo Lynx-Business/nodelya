@@ -12,7 +12,7 @@ class CommercialDealValidateRequest extends Data
 {
     public function __construct(
 
-        public float $amount,
+        public ?int $project_department_id,
 
         public string $reference,
 

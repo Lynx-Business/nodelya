@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ProjectDepartmentCombobox from '@/components/project-department/ProjectDepartmentCombobox.vue';
 import {
     FormContent,
     FormControl,
@@ -7,7 +8,7 @@ import {
     FormLabel,
     injectFormContext,
 } from '@/components/ui/custom/form';
-import { PriceInput, TextInput } from '@/components/ui/custom/input';
+import { TextInput } from '@/components/ui/custom/input';
 import { CommercialDealValidateFormData } from '@/composables';
 
 const { form } = injectFormContext<CommercialDealValidateFormData>();
@@ -23,11 +24,13 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
         </FormField>
 
         <FormField required>
-            <FormLabel>Montant</FormLabel>
+            <CapitalizeText>
+                {{ $t('models.project_department.name.one') }}
+            </CapitalizeText>
             <FormControl>
-                <PriceInput v-model="form.amount" />
+                <ProjectDepartmentCombobox v-model="form.project_department" />
             </FormControl>
-            <FormError :message="form.errors.amount" />
+            <FormError :message="form.errors.project_department" />
         </FormField>
     </FormContent>
 </template>

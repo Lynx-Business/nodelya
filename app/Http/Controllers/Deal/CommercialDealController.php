@@ -196,7 +196,10 @@ class CommercialDealController extends Controller
         $reference = $this->generateReference($deal);
 
         return Inertia::render('deal/commercial/Validate', CommercialDealValidateProps::from([
-            'deal'      => DealListResource::from($deal),
+            'deal'               => DealListResource::from($deal),
+            'projectDepartments' => Lazy::inertia(
+                fn () => Services::projectDepartment()->list(),
+            ),
             'reference' => $reference,
         ]));
     }
@@ -207,10 +210,11 @@ class CommercialDealController extends Controller
         DB::transaction(function () use ($data, $deal) {
 
             $deal->update([
-                'amount'    => $data->amount,
-                'reference' => $data->reference,
-                'status'    => DealStatus::VALIDATED,
+                'project_department_id' => $data->project_department_id,
+                'reference'             => $data->reference,
+                'status'                => DealStatus::VALIDATED,
             ]);
+
         });
 
         Services::toast()->success->execute(__('messages.commercial_deals.validate.success'));

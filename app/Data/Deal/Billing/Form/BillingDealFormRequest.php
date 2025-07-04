@@ -43,6 +43,8 @@ class BillingDealFormRequest extends Data
 
         public ?int $deal_id,
 
+        public ?int $project_department_id,
+
         #[Min(1)]
         #[DataCollectionOf(ScheduleItemData::class)]
         public array $schedule_data,

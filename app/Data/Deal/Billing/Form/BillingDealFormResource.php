@@ -5,6 +5,7 @@ namespace App\Data\Deal\Billing\Form;
 use App\Data\Client\ClientListResource;
 use App\Data\Deal\DealListResource;
 use App\Data\Deal\DealScheduleData;
+use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Resource;
@@ -24,6 +25,7 @@ class BillingDealFormResource extends Resource
         public int $duration_in_months,
         public string $starts_at,
         public ClientListResource $client,
+        public ?ProjectDepartmentResource $project_department,
         public ?DealListResource $parent,
         #[DataCollectionOf(DealScheduleData::class)]
         public DataCollection $schedule,

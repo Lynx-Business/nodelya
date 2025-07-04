@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import DealCombobox from '@/components/deal/common/DealCombobox.vue';
+import ProjectDepartmentCombobox from '@/components/project-department/ProjectDepartmentCombobox.vue';
 import { Button } from '@/components/ui/button';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
@@ -250,6 +251,18 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
 
             <ClientCombobox v-model="form.client" />
             <FormError :message="form.errors.client_id" />
+        </FormField>
+
+        <FormField>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.project_department.name.one') }}
+                </CapitalizeText>
+            </FormLabel>
+            <FormControl>
+                <ProjectDepartmentCombobox v-model="form.project_department" />
+            </FormControl>
+            <FormError :message="form.errors.project_department_id" />
         </FormField>
 
         <FormField>

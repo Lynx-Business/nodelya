@@ -113,11 +113,14 @@ class BillingDealController extends Controller
 
         return Inertia::render('deal/billing/Edit', BillingDealFormProps::from([
             'deal' => BillingDealFormResource::from(
-                $deal->load('client', 'parent'),
+                $deal->load('client', 'parent', 'projectDepartment'),
             ),
-            'clients'         => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'deals'           => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
-            'schedule_status' => Lazy::inertia(fn () => DealScheduleStatus::labels()),
+            'clients'            => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'deals'              => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
+            'schedule_status'    => Lazy::inertia(fn () => DealScheduleStatus::labels()),
+            'projectDepartments' => Lazy::inertia(
+                fn () => Services::projectDepartment()->list(),
+            ),
         ]));
     }
 

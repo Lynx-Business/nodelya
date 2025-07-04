@@ -2,6 +2,7 @@
 
 namespace App\Data\Deal;
 
+use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -12,5 +13,6 @@ class DealListResource extends Resource
         public int $id,
         public string $name,
         public float $amount,
+        public ?ProjectDepartmentResource $project_department,
     ) {}
 }
