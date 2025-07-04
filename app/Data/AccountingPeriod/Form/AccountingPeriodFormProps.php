@@ -12,6 +12,9 @@ class AccountingPeriodFormProps extends Resource
 {
     public function __construct(
         public TeamListResource $team,
+
+        public AccountingPeriodResource $currentAccountingPeriod,
+
         public ?AccountingPeriodResource $accountingPeriod,
     ) {}
 }

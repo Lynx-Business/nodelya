@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
     FormContent,
@@ -11,14 +12,18 @@ import {
 } from '@/components/ui/custom/form';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { AccountingPeriodFormData } from '@/composables';
+import { AccountingPeriodResource } from '@/types';
 
-defineProps<FormProps>();
+type Props = FormProps & {
+    accountingPeriod?: AccountingPeriodResource;
+};
+defineProps<Props>();
 
 const { form } = injectFormContext<AccountingPeriodFormData>();
 </script>
 
 <template>
-    <FormContent>
+    <FormContent class="sm:grid-cols-2">
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
@@ -41,5 +46,37 @@ const { form } = injectFormContext<AccountingPeriodFormData>();
             </FormControl>
             <FormError :message="form.errors.ends_at" />
         </FormField>
+        <template v-if="!accountingPeriod">
+            <FormField class="col-span-full">
+                <FormLabel>
+                    <FormControl>
+                        <Checkbox v-model="form.keep_general_expense_budgets" />
+                    </FormControl>
+                    <CapitalizeText>
+                        {{ $t('components.accounting_period.form.fields.keep_general_expense_budgets') }}
+                    </CapitalizeText>
+                </FormLabel>
+            </FormField>
+            <FormField class="col-span-full">
+                <FormLabel>
+                    <FormControl>
+                        <Checkbox v-model="form.keep_employee_expense_budgets" />
+                    </FormControl>
+                    <CapitalizeText>
+                        {{ $t('components.accounting_period.form.fields.keep_employee_expense_budgets') }}
+                    </CapitalizeText>
+                </FormLabel>
+            </FormField>
+            <FormField class="col-span-full">
+                <FormLabel>
+                    <FormControl>
+                        <Checkbox v-model="form.keep_contractor_expense_budgets" />
+                    </FormControl>
+                    <CapitalizeText>
+                        {{ $t('components.accounting_period.form.fields.keep_contractor_expense_budgets') }}
+                    </CapitalizeText>
+                </FormLabel>
+            </FormField>
+        </template>
     </FormContent>
 </template>

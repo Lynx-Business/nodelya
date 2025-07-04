@@ -1,10 +1,14 @@
 export type AccountingPeriodFormProps = {
     team: TeamListResource;
+    currentAccountingPeriod: AccountingPeriodResource;
     accountingPeriod?: AccountingPeriodResource;
 };
 export type AccountingPeriodFormRequest = {
     starts_at: string;
     ends_at: string;
+    keep_general_expense_budgets: boolean;
+    keep_employee_expense_budgets: boolean;
+    keep_contractor_expense_budgets: boolean;
 };
 export type AccountingPeriodIndexProps = {
     request: AccountingPeriodIndexRequest;

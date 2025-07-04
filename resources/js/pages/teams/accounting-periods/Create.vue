@@ -9,7 +9,7 @@ import {
     SectionHeader,
     SectionTitle,
 } from '@/components/ui/custom/section';
-import { useAccountingPeriodForm, useLayout, usePageProp } from '@/composables';
+import { useAccountingPeriodForm, useFormatter, useLayout, usePageProp, useParser } from '@/composables';
 import { AppLayout } from '@/layouts';
 import { AccountingPeriodFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
@@ -40,7 +40,13 @@ defineOptions({
 
 const props = defineProps<AccountingPeriodFormProps>();
 
-const form = useAccountingPeriodForm();
+const parse = useParser();
+const format = useFormatter();
+const form = useAccountingPeriodForm({
+    starts_at: props.currentAccountingPeriod
+        ? format.timestamp(parse.toDate(props.currentAccountingPeriod.ends_at)?.add({ days: 1 }))
+        : '',
+});
 
 function submit() {
     const { team } = props;

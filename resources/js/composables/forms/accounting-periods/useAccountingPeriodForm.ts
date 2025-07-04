@@ -1,7 +1,7 @@
 import { useComputedForm, useFormatter, useParser } from '@/composables';
 import { AccountingPeriodFormRequest, AccountingPeriodResource } from '@/types';
 
-export function useAccountingPeriodForm(accountingPeriod?: AccountingPeriodResource) {
+export function useAccountingPeriodForm(accountingPeriod?: Partial<AccountingPeriodResource>) {
     const parse = useParser();
     const format = useFormatter();
 
@@ -16,7 +16,13 @@ export function useAccountingPeriodForm(accountingPeriod?: AccountingPeriodResou
             this.ends_at = format.timestamp(parse.toDate(value)?.add({ years: 1, days: -1 }));
         },
         ends_at: accountingPeriod?.ends_at ?? '',
+        keep_general_expense_budgets: true,
+        keep_employee_expense_budgets: true,
+        keep_contractor_expense_budgets: true,
     });
+    if (startsAt && !form.ends_at) {
+        form.starts_at = startsAt;
+    }
 
     form.transform(transformAccountingPeriodForm);
 

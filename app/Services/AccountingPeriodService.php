@@ -23,8 +23,7 @@ class AccountingPeriodService
     public function current(): ?AccountingPeriod
     {
         return $this->current ??= AccountingPeriod::query()
-            ->where('starts_at', '<=', now())
-            ->where('ends_at', '>=', now())
+            ->current()
             ->first();
     }
 

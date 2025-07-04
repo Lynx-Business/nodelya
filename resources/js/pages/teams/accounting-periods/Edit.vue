@@ -65,7 +65,7 @@ function submit() {
                 </SectionDescription>
             </SectionHeader>
             <SectionContent class="sm:flex">
-                <AccountingPeriodForm autofocus />
+                <AccountingPeriodForm :accounting-period autofocus />
             </SectionContent>
             <SectionFooter>
                 <FormSubmitButton />

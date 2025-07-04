@@ -12,6 +12,16 @@ return [
     |
     */
 
+    'accounting_period' => [
+        'form' => [
+            'fields' => [
+                'keep_general_expense_budgets'    => 'Conserver les budgets des dépenses générales',
+                'keep_employee_expense_budgets'   => 'Conserver les budgets des dépenses des employés',
+                'keep_contractor_expense_budgets' => 'Conserver les budgets des dépenses des sous-traitants',
+            ],
+        ],
+    ],
+
     'app' => [
         'alert_dialog' => [
             'title' => [
@@ -64,4 +74,5 @@ return [
             ],
         ],
     ],
+
 ];
