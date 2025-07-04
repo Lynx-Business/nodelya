@@ -324,7 +324,7 @@ const filters = useFilters<ExpenseItemIndexRequest>(
                             <DataTableHead>
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
-                            <DataTableSortableHead value="expense_category.name">
+                            <DataTableSortableHead value="expense_category_id">
                                 {{ $t('models.expense.item.fields.expense_category') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">

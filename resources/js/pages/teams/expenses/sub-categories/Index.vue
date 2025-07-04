@@ -317,7 +317,7 @@ const filters = useFilters<ExpenseSubCategoryIndexRequest>(
                             <DataTableHead>
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
-                            <DataTableSortableHead value="name">
+                            <DataTableSortableHead value="expense_category_id">
                                 {{ $t('models.expense.sub_category.fields.expense_category') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">
