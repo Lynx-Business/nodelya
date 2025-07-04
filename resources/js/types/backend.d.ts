@@ -1,6 +1,6 @@
 export type AccountingPeriodFormProps = {
     team: TeamListResource;
-    currentAccountingPeriod: AccountingPeriodResource;
+    currentAccountingPeriod?: AccountingPeriodResource;
     accountingPeriod?: AccountingPeriodResource;
 };
 export type AccountingPeriodFormRequest = {

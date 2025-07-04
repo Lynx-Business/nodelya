@@ -12,10 +12,9 @@ import {
 } from '@/components/ui/custom/form';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { AccountingPeriodFormData } from '@/composables';
-import { AccountingPeriodResource } from '@/types';
 
 type Props = FormProps & {
-    accountingPeriod?: AccountingPeriodResource;
+    showKeepFields?: boolean;
 };
 defineProps<Props>();
 
@@ -46,7 +45,7 @@ const { form } = injectFormContext<AccountingPeriodFormData>();
             </FormControl>
             <FormError :message="form.errors.ends_at" />
         </FormField>
-        <template v-if="!accountingPeriod">
+        <template v-if="showKeepFields">
             <FormField class="col-span-full">
                 <FormLabel>
                     <FormControl>
