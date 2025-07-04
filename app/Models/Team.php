@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
@@ -34,6 +35,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contractor> $contractors
  * @property-read int|null $contractors_count
  * @property-read \App\Models\User|null $creator
+ * @property-read \App\Models\AccountingPeriod|null $currentAccountingPeriod
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employee> $employees
  * @property-read int|null $employees_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseBudget> $expenseBudgets
@@ -127,6 +129,16 @@ class Team extends Model implements HasMedia
     public function accountingPeriods(): HasMany
     {
         return $this->hasMany(AccountingPeriod::class)->whereBelongsToAnyTeam();
+    }
+
+    public function currentAccountingPeriod(): HasOne
+    {
+        return $this->accountingPeriods()
+            ->one()
+            ->ofMany(
+                ['created_at' => 'max'],
+                fn (Builder $query) => $query->current(),
+            );
     }
 
     public function contractors(): HasMany

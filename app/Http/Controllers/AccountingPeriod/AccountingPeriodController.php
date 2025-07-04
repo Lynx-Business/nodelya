@@ -51,7 +51,8 @@ class AccountingPeriodController extends Controller
     public function create(Team $team)
     {
         return Inertia::render('teams/accounting-periods/Create', AccountingPeriodFormProps::from([
-            'team' => $team,
+            'team'                    => $team,
+            'currentAccountingPeriod' => $team->currentAccountingPeriod,
         ]));
     }
 
@@ -78,8 +79,9 @@ class AccountingPeriodController extends Controller
     public function edit(Team $team, AccountingPeriod $accountingPeriod)
     {
         return Inertia::render('teams/accounting-periods/Edit', AccountingPeriodFormProps::from([
-            'team'             => $team,
-            'accountingPeriod' => $accountingPeriod,
+            'team'                    => $team,
+            'currentAccountingPeriod' => $team->currentAccountingPeriod,
+            'accountingPeriod'        => $accountingPeriod,
         ]));
     }
 

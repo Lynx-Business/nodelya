@@ -21,7 +21,7 @@ class AccountingPeriodFactory extends Factory
         return [
             'team_id'   => Team::factory(),
             'starts_at' => Carbon::parse(fake()->dateTimeInInterval('-10 years', '+20 years'))->startOfDay(),
-            'ends_at'   => fn (array $attributes) => Carbon::parse($attributes['starts_at'])->addYear()->subDay()->startOfDay(),
+            'ends_at'   => fn (array $attributes) => Carbon::parse($attributes['starts_at'])->addYear()->subDay()->endOfDay(),
         ];
     }
 }

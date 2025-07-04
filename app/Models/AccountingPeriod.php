@@ -6,6 +6,7 @@ use App\Traits\BelongsToTeam;
 use App\Traits\HasPolicy;
 use App\Traits\Searchable;
 use App\Traits\Trashable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,23 +29,24 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $label
  * @property-read \App\Models\Team $team
  *
+ * @method static Builder<static>|AccountingPeriod current()
  * @method static \Database\Factories\AccountingPeriodFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod search(?string $q)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereBelongsToTeam(\App\Models\Team|int $team)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereEndsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereStartsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereTeamId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountingPeriod withoutTrashed()
+ * @method static Builder<static>|AccountingPeriod filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
+ * @method static Builder<static>|AccountingPeriod newModelQuery()
+ * @method static Builder<static>|AccountingPeriod newQuery()
+ * @method static Builder<static>|AccountingPeriod onlyTrashed()
+ * @method static Builder<static>|AccountingPeriod query()
+ * @method static Builder<static>|AccountingPeriod search(?string $q)
+ * @method static Builder<static>|AccountingPeriod whereBelongsToTeam(\App\Models\Team|int $team)
+ * @method static Builder<static>|AccountingPeriod whereCreatedAt($value)
+ * @method static Builder<static>|AccountingPeriod whereDeletedAt($value)
+ * @method static Builder<static>|AccountingPeriod whereEndsAt($value)
+ * @method static Builder<static>|AccountingPeriod whereId($value)
+ * @method static Builder<static>|AccountingPeriod whereStartsAt($value)
+ * @method static Builder<static>|AccountingPeriod whereTeamId($value)
+ * @method static Builder<static>|AccountingPeriod whereUpdatedAt($value)
+ * @method static Builder<static>|AccountingPeriod withTrashed()
+ * @method static Builder<static>|AccountingPeriod withoutTrashed()
  *
  * @mixin \Eloquent
  */
@@ -100,5 +102,13 @@ class AccountingPeriod extends Model
                 ? "{$this->starts_at->year}"
                 : "{$this->starts_at->year}-{$this->ends_at->year}",
         );
+    }
+
+    public function scopeCurrent(Builder $query): Builder
+    {
+        return $query->where([
+            ['starts_at', '<=', now()],
+            ['ends_at', '>=', now()],
+        ]);
     }
 }

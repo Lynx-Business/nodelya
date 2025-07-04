@@ -40,7 +40,16 @@ class AccountingPeriodFormRequest extends Data
 
         #[After(new FieldReference('starts_at'))]
         public Carbon $ends_at,
-    ) {}
+
+        public bool $keep_general_expense_budgets,
+
+        public bool $keep_employee_expense_budgets,
+
+        public bool $keep_contractor_expense_budgets,
+    ) {
+        $this->starts_at->startOfDay();
+        $this->ends_at->endOfDay();
+    }
 
     public static function attributes(): array
     {

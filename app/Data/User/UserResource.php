@@ -4,7 +4,6 @@ namespace App\Data\User;
 
 use App\Data\Media\MediaResource;
 use App\Data\Team\TeamListResource;
-use App\Enums\Permission\PermissionName;
 use App\Models\User;
 use Carbon\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -48,7 +47,7 @@ class UserResource extends Resource
 
         public Lazy|bool $is_trashed,
 
-        /** @var Lazy|array<PermissionName> */
+        /** @var Lazy|array<\App\Enums\Permission\PermissionName> */
         public Lazy|array $permissions,
 
         public Lazy|Optional|MediaResource $avatar,
