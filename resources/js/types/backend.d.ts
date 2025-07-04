@@ -153,6 +153,7 @@ export type BillingDealFormResource = {
 };
 export type BillingDealIndexProps = {
     request: BillingDealIndexRequest;
+    accounting_period_months: Array<any>;
     billing_deals?: {
         data: Array<BillingDealIndexResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
@@ -171,13 +172,16 @@ export type BillingDealIndexProps = {
         };
     };
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
 };
 export type BillingDealIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
     q?: string;
     page?: number;
     per_page?: number;
     sort_by: string;
     sort_direction: string;
+    accounting_period_id?: number;
     trashed?: TrashedFilter;
 };
 export type BillingDealIndexResource = {
@@ -195,6 +199,7 @@ export type BillingDealIndexResource = {
     can_trash: boolean;
     can_restore: boolean;
     can_delete: boolean;
+    monthly_expenses: Array<any>;
 };
 export type ClientFormProps = {
     client?: ClientFormResource;
@@ -994,8 +999,12 @@ export type MediaResource = {
     url: string;
     custom_properties?: Record<string, any>;
 };
-export type PermissionName = 'client' | 'expenses' | 'deal';
-export type PermissionResource = {
+export type MonthlyExpenseData = {
+    date: string;
+    amount: number;
+    status?: string;
+};
+export type PermissionListResource = {
     id: number;
     name: string;
     display_name: string;
@@ -1079,7 +1088,7 @@ export type RoleName = 'tester' | 'owner' | 'member' | 'editor';
 export type ScheduleItemData = {
     date: string;
     amount: number;
-    status?: string;
+    status: DealScheduleStatus;
     title?: string;
 };
 export type TeamFormProps = {

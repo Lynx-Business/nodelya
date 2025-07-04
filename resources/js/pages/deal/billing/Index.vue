@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
@@ -22,14 +23,15 @@ import { FormContent, FormControl, FormField, FormLabel } from '@/components/ui/
 import { TextInput } from '@/components/ui/custom/input';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useFormatter, useLayout } from '@/composables';
+import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import { AppLayout } from '@/layouts';
 import { BillingDealIndexProps, BillingDealIndexRequest, BillingDealIndexResource } from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
+import { reactiveOmit } from '@vueuse/core';
 import { trans, transChoice } from 'laravel-vue-i18n';
-import { ArchiveIcon, ArchiveRestoreIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { ArchiveIcon, ArchiveRestoreIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -46,6 +48,34 @@ const props = defineProps<BillingDealIndexProps>();
 
 const format = useFormatter();
 const alert = useAlert();
+const { locale } = useLocale();
+
+const dynamicMonths = computed(() => {
+    if (!props.accounting_period_months) return [];
+
+    const months: any[] = [];
+    props.accounting_period_months.forEach((month) => {
+        months.push({
+            key: month,
+            lettre: formatMonth(month),
+        });
+    });
+
+    return months;
+});
+
+function formatMonth(monthString: string): string {
+    const [year, month] = monthString.split('-');
+    const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+    return new Intl.DateTimeFormat(locale.value, {
+        month: 'long',
+        year: 'numeric',
+    }).format(date);
+}
+
+function findExpenseForMonth(expenses: any[], monthKey: string) {
+    return expenses.find((expense) => expense.date === monthKey);
+}
 
 const selectedRows = ref<BillingDealIndexResource[]>([]);
 
@@ -117,12 +147,6 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
         href: (deal) => route('billing.deals.edit', { deal }),
     },
     {
-        type: 'href',
-        label: trans('view'),
-        icon: EyeIcon,
-        href: (deal) => route('billing.deals.edit', { deal }),
-    },
-    {
         type: 'callback',
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -178,6 +202,7 @@ const filters = useFilters<BillingDealIndexRequest>(
         sort_by: props.request.sort_by,
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
+        accounting_period: props.request.accounting_period,
     },
     {
         only: ['billing_deals'],
@@ -190,8 +215,26 @@ const filters = useFilters<BillingDealIndexRequest>(
                 filters.page = 1;
             }
         },
+        transform(data) {
+            return {
+                ...reactiveOmit(data, 'accounting_period'),
+                accounting_period_id: data.accounting_period?.id,
+            };
+        },
     },
 );
+
+const statusClass = (status: string | undefined) => {
+    if (!status) return 'bg-white';
+
+    const statusMap: Record<string, string> = {
+        uncertain: 'bg-white',
+        invoiced: 'bg-blue-400/50',
+        paid: 'bg-emerald-200/50',
+    };
+
+    return statusMap[status] || 'bg-white';
+};
 </script>
 
 <template>
@@ -208,11 +251,12 @@ const filters = useFilters<BillingDealIndexRequest>(
                 :rows-actions
                 :row-actions
             >
-                <FormContent class="flex items-center">
+                <FormContent class="flex items-center sm:flex">
                     <TextInput v-model="filters.q" type="search" />
+                    <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters="filters"
-                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction']"
+                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction', 'accounting_period']"
                         :data="['trashed_filters']"
                     >
                         <FiltersSheetTrigger />
@@ -243,7 +287,7 @@ const filters = useFilters<BillingDealIndexRequest>(
                             <DataTableSortableHead value="name">
                                 {{ $t('models.billing_deals.fields.name') }}
                             </DataTableSortableHead>
-                            <DataTableSortableHead value="amount">
+                            <DataTableSortableHead value="amount_in_cents">
                                 {{ $t('models.billing_deals.fields.amount') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="code">
@@ -261,9 +305,13 @@ const filters = useFilters<BillingDealIndexRequest>(
                             <DataTableSortableHead value="duration_in_months">
                                 {{ $t('models.billing_deals.fields.duration_in_months') }}
                             </DataTableSortableHead>
-                            <DataTableSortableHead value="amount">
+                            <DataTableSortableHead value="amount_in_cents">
                                 {{ $t('models.billing_deals.fields.total_sales') }}
                             </DataTableSortableHead>
+
+                            <DataTableHead v-for="(month, index) in dynamicMonths" :key="index">
+                                {{ month.lettre }}
+                            </DataTableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
                             </DataTableHead>
@@ -305,6 +353,22 @@ const filters = useFilters<BillingDealIndexRequest>(
                             <DataTableCell class="bg-gray-300/30">
                                 {{ format.price((deal.amount * deal.success_rate) / 100) }}
                             </DataTableCell>
+
+                            <DataTableCell
+                                v-for="(month, index) in dynamicMonths"
+                                :key="index"
+                                :class="[
+                                    statusClass(findExpenseForMonth(deal.monthly_expenses, month.key)?.status),
+                                    'min-w-30',
+                                ]"
+                            >
+                                {{
+                                    findExpenseForMonth(deal.monthly_expenses, month.key)
+                                        ? format.price(findExpenseForMonth(deal.monthly_expenses, month.key).amount)
+                                        : 0
+                                }}
+                            </DataTableCell>
+
                             <DataTableCell>
                                 <DataTableRowActions />
                             </DataTableCell>

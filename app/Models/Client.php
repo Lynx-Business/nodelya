@@ -9,7 +9,6 @@ use App\Traits\Searchable;
 use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Deal;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -25,11 +24,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Deal> $deals
+ * @property-read int|null $deals_count
  * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read \App\Models\Team $team
- * @property-read \Illuminate\Database\Eloquent\Collection|Deal[] $deals
- * @property-read int|null $deals_count
  *
  * @method static \Database\Factories\ClientFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Client filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)

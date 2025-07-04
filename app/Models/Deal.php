@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Data\Deal\DealScheduleData;
+use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Deal\DealStatus;
 use App\Facades\Services;
 use App\Traits\BelongsToClient;
@@ -11,6 +12,7 @@ use App\Traits\BelongsToTeam;
 use App\Traits\HasPolicy;
 use App\Traits\Searchable;
 use App\Traits\Trashable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -195,5 +197,40 @@ class Deal extends Model
     public function scopeBilling($query)
     {
         return $query->where('status', DealStatus::VALIDATED);
+    }
+
+    protected function schedule(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? DealScheduleData::collect(json_decode($value, true)) : [],
+        );
+    }
+
+    public function getMonthlyStatusAttribute()
+    {
+        if (! $this->schedule) {
+            return [];
+        }
+
+        $statusPriority = [
+            DealScheduleStatus::UNCERTAIN->value => 3,
+            DealScheduleStatus::INVOICED->value  => 2,
+            DealScheduleStatus::PAID->value      => 1,
+        ];
+
+        $monthlyStatus = [];
+        foreach ($this->schedule as $yearSchedule) {
+            foreach ($yearSchedule->data as $item) {
+                $month = Carbon::parse($item->date)->format('Y-m');
+                $currentPriority = $statusPriority[$monthlyStatus[$month] ?? null] ?? 0;
+                $itemPriority = $statusPriority[$item->status->value] ?? 0;
+
+                if ($itemPriority > $currentPriority) {
+                    $monthlyStatus[$month] = $item->status->value;
+                }
+            }
+        }
+
+        return $monthlyStatus;
     }
 }
