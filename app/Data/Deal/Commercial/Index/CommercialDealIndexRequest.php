@@ -3,13 +3,17 @@
 namespace App\Data\Deal\Commercial\Index;
 
 use App\Data\AccountingPeriod\AccountingPeriodResource;
+use App\Data\Client\ClientListResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
+use App\Models\Client;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -20,6 +24,10 @@ class CommercialDealIndexRequest extends Data
     #[Computed]
     public ?AccountingPeriodResource $accounting_period;
 
+    #[Computed]
+    #[DataCollectionOf(ClientListResource::class)]
+    public ?DataCollection $clients_items;
+
     public function __construct(
         public ?string $q = null,
         public ?int $page = null,
@@ -28,6 +36,9 @@ class CommercialDealIndexRequest extends Data
         public string $sort_direction = 'desc',
         public ?int $accounting_period_id = null,
         public ?TrashedFilter $trashed = null,
+
+        /** @var null|array<int> $client_ids */
+        public ?array $client_ids = null,
     ) {
 
         if ($accounting_period_id) {
@@ -39,6 +50,15 @@ class CommercialDealIndexRequest extends Data
 
         if ($period) {
             $this->accounting_period = AccountingPeriodResource::from($period);
+        }
+
+        if ($client_ids) {
+            $this->clients_items = ClientListResource::collect(
+                Client::query()
+                    ->whereIntegerInRaw('id', $client_ids)
+                    ->get(),
+                DataCollection::class,
+            );
         }
     }
 

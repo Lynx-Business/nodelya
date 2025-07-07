@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
+import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
@@ -203,6 +204,7 @@ const filters = useFilters<BillingDealIndexRequest>(
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
         accounting_period: props.request.accounting_period,
+        clients_items: props.request.clients_items ?? [],
     },
     {
         only: ['billing_deals'],
@@ -217,8 +219,9 @@ const filters = useFilters<BillingDealIndexRequest>(
         },
         transform(data) {
             return {
-                ...reactiveOmit(data, 'accounting_period'),
+                ...reactiveOmit(data, 'accounting_period', 'clients_items'),
                 accounting_period_id: data.accounting_period?.id,
+                client_ids: data.clients_items?.map(({ id }) => id),
             };
         },
     },
@@ -263,8 +266,17 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                     <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters="filters"
-                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction', 'accounting_period']"
-                        :data="['trashed_filters']"
+                        :omit="[
+                            'q',
+                            'page',
+                            'per_page',
+                            'sort_by',
+                            'sort_direction',
+                            'accounting_period',
+                            'clients_items',
+                            'client_ids',
+                        ]"
+                        :data="['trashed_filters', 'clients']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
@@ -276,6 +288,16 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 </FormLabel>
                                 <FormControl>
                                     <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                </FormControl>
+                            </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.deal.billing.fields.client_id') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <ClientCombobox v-model="filters.clients_items" multiple />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>

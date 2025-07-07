@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
+import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import { Button } from '@/components/ui/button';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
@@ -216,6 +217,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
         accounting_period: props.request.accounting_period,
+        clients_items: props.request.clients_items ?? [],
     },
     {
         only: ['commercial_deals'],
@@ -230,8 +232,9 @@ const filters = useFilters<CommercialDealIndexRequest>(
         },
         transform(data) {
             return {
-                ...reactiveOmit(data, 'accounting_period'),
+                ...reactiveOmit(data, 'accounting_period', 'clients_items'),
                 accounting_period_id: data.accounting_period?.id,
+                client_ids: data.clients_items?.map(({ id }) => id),
             };
         },
     },
@@ -257,8 +260,17 @@ const filters = useFilters<CommercialDealIndexRequest>(
                     <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters="filters"
-                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction', 'accounting_period']"
-                        :data="['trashed_filters']"
+                        :omit="[
+                            'q',
+                            'page',
+                            'per_page',
+                            'sort_by',
+                            'sort_direction',
+                            'accounting_period',
+                            'clients_items',
+                            'client_ids',
+                        ]"
+                        :data="['trashed_filters', 'clients']"
                     >
                         <FiltersSheetTrigger />
                         <FiltersSheetContent>
@@ -270,6 +282,16 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 </FormLabel>
                                 <FormControl>
                                     <EnumCombobox v-model="filters.trashed" data="trashed_filters" />
+                                </FormControl>
+                            </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.deal.commercial.fields.client_id') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <ClientCombobox v-model="filters.clients_items" multiple />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>

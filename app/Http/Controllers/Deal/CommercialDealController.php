@@ -56,6 +56,7 @@ class CommercialDealController extends Controller
                 function () use ($data, $accountingPeriod) {
                     $paginatedDeals = Deal::commercial()
                         ->search($data->q)
+                        ->when($data->client_ids, fn (Builder $q) => $q->whereIntegerInRaw('client_id', $data->client_ids))
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
                         ->when($accountingPeriod, fn (Builder $query) => $query->whereInAccountingPeriod($accountingPeriod->id))
                         ->orderBy($data->sort_by, $data->sort_direction)
@@ -90,6 +91,7 @@ class CommercialDealController extends Controller
             ),
             'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
             'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
+            'clients'                  => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
             'accounting_period_months' => $months,
         ]));
     }

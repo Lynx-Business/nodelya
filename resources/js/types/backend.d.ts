@@ -176,9 +176,11 @@ export type BillingDealIndexProps = {
     };
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
     accountingPeriods?: Array<AccountingPeriodResource>;
+    clients?: Array<ClientListResource>;
 };
 export type BillingDealIndexRequest = {
     accounting_period?: AccountingPeriodResource;
+    clients_items?: Array<ClientListResource>;
     q?: string;
     page?: number;
     per_page?: number;
@@ -186,6 +188,7 @@ export type BillingDealIndexRequest = {
     sort_direction: string;
     accounting_period_id?: number;
     trashed?: TrashedFilter;
+    client_ids?: null | Array<number>;
 };
 export type BillingDealIndexResource = {
     id: number;
@@ -319,9 +322,11 @@ export type CommercialDealIndexProps = {
     };
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
     accountingPeriods?: Array<AccountingPeriodResource>;
+    clients?: Array<ClientListResource>;
 };
 export type CommercialDealIndexRequest = {
     accounting_period?: AccountingPeriodResource;
+    clients_items?: Array<ClientListResource>;
     q?: string;
     page?: number;
     per_page?: number;
@@ -329,6 +334,7 @@ export type CommercialDealIndexRequest = {
     sort_direction: string;
     accounting_period_id?: number;
     trashed?: TrashedFilter;
+    client_ids?: null | Array<number>;
 };
 export type CommercialDealIndexResource = {
     id: number;
