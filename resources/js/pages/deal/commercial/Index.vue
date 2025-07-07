@@ -27,7 +27,12 @@ import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import { AppLayout } from '@/layouts';
-import { CommercialDealIndexProps, CommercialDealIndexRequest, CommercialDealIndexResource } from '@/types';
+import {
+    CommercialDealIndexProps,
+    CommercialDealIndexRequest,
+    CommercialDealIndexResource,
+    MonthlyExpenseData,
+} from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -55,7 +60,7 @@ const { locale } = useLocale();
 const dynamicMonths = computed(() => {
     if (!props.accounting_period_months) return [];
 
-    const months: any[] = [];
+    const months: { key: string; lettre: string }[] = [];
     props.accounting_period_months.forEach((month) => {
         months.push({
             key: month,
@@ -75,8 +80,8 @@ function formatMonth(monthString: string): string {
     }).format(date);
 }
 
-function findExpenseForMonth(expenses: any[], monthKey: string) {
-    return expenses.find((expense) => expense.date === monthKey);
+function findExpenseForMonth(expenses: MonthlyExpenseData[], monthKey: string) {
+    return expenses.find((expense) => expense.date_key === monthKey);
 }
 
 const selectedRows = ref<CommercialDealIndexResource[]>([]);
@@ -348,11 +353,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             </DataTableCell>
 
                             <DataTableCell v-for="(month, index) in dynamicMonths" :key="index" class="min-w-30">
-                                {{
-                                    findExpenseForMonth(deal.monthly_expenses, month.key)
-                                        ? format.price(findExpenseForMonth(deal.monthly_expenses, month.key).amount)
-                                        : 0
-                                }}
+                                {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />
