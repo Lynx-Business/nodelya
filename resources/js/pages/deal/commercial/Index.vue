@@ -96,7 +96,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
                 variant: 'warning',
                 description: transChoice('messages.Commercial_deals.trash.confirm', items.length),
                 callback: () =>
-                    router.delete(route('commercial.deals.trash'), {
+                    router.delete(route('deals.commercials.trash'), {
                         data: { ids: items.map(({ id }) => id) },
                         only: ['commercial_deals'],
                         onSuccess: () => {
@@ -115,7 +115,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
                 description: transChoice('messages.Commercial_deals.restore.confirm', items.length),
                 callback: () =>
                     router.patch(
-                        route('commercial.deals.restore'),
+                        route('deals.commercials.restore'),
                         { ids: items.map(({ id }) => id) },
                         {
                             only: ['commercial_deals'],
@@ -135,7 +135,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
                 variant: 'destructive',
                 description: transChoice('messages.Commercial_deals.delete.confirm', items.length),
                 callback: () =>
-                    router.delete(route('commercial.deals.delete'), {
+                    router.delete(route('deals.commercials.delete'), {
                         data: { ids: items.map(({ id }) => id) },
                         only: ['commercial_deals'],
                         onSuccess: () => {
@@ -151,13 +151,13 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
-        href: (deal) => route('commercial.deals.edit', { deal }),
+        href: (deal) => route('deals.commercials.edit', { deal }),
     },
     {
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        href: (deal) => route('commercial.deals.edit', { deal }),
+        href: (deal) => route('deals.commercials.edit', { deal }),
     },
     {
         type: 'callback',
@@ -169,7 +169,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
                 variant: 'warning',
                 description: transChoice('messages.Commercial_deals.trash.confirm', 1),
                 callback: () =>
-                    router.delete(route('commercial.deals.trash', { deal }), {
+                    router.delete(route('deals.commercials.trash', { deal }), {
                         only: ['commercial_deals'],
                     }),
             }),
@@ -184,7 +184,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
                 variant: 'success',
                 description: transChoice('messages.Commercial_deals.restore.confirm', 1),
                 callback: () =>
-                    router.patch(route('commercial.deals.restore', { deal }), undefined, {
+                    router.patch(route('deals.commercials.restore', { deal }), undefined, {
                         only: ['commercial_deals'],
                     }),
             }),
@@ -199,7 +199,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
                 variant: 'destructive',
                 description: transChoice('messages.Commercial_deals.delete.confirm', 1),
                 callback: () =>
-                    router.delete(route('commercial.deals.delete', { deal }), {
+                    router.delete(route('deals.commercials.delete', { deal }), {
                         only: ['commercial_deals'],
                     }),
             }),
@@ -207,7 +207,7 @@ const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
 ];
 
 const filters = useFilters<CommercialDealIndexRequest>(
-    route('commercial.deals.index'),
+    route('deals.commercials.index'),
     {
         q: props.request.q ?? '',
         page: props.commercial_deals?.meta.current_page,
@@ -277,7 +277,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                 </FormContent>
                 <FormContent class="flex items-center justify-between">
                     <Button as-child>
-                        <InertiaLink :href="route('commercial.deals.create')">
+                        <InertiaLink :href="route('deals.commercials.create')">
                             <CirclePlusIcon />
                             <CapitalizeText>
                                 {{ $t('pages.commercial_deals.create.title') }}

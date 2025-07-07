@@ -285,34 +285,36 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::delete('/delete/{client?}', 'destroy')->name('delete');
     });
 
-    Route::prefix('/commercial-deals')->name('commercial.deals.')->controller(CommercialDealController::class)->group(function () {
-        Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
-        Route::get('/create', 'create')->name('create')->can('create', Deal::class);
-        Route::post('/create', 'store')->name('store')->can('create', Deal::class);
+    Route::prefix('deals')->group(function () {
+        Route::prefix('commercial')->name('deals.commercials.')->controller(CommercialDealController::class)->group(function () {
+            Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
+            Route::get('/create', 'create')->name('create')->can('create', Deal::class);
+            Route::post('/create', 'store')->name('store')->can('create', Deal::class);
 
-        Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
-        Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
+            Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+            Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
 
-        Route::delete('/trash/{deal?}', 'trash')->name('trash');
-        Route::patch('/restore/{deal?}', 'restore')->name('restore');
-        Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+            Route::delete('/trash/{deal?}', 'trash')->name('trash');
+            Route::patch('/restore/{deal?}', 'restore')->name('restore');
+            Route::delete('/delete/{deal?}', 'destroy')->name('delete');
 
-        Route::get('/validate/{deal}', 'validateDeal')->name('validate');
-        Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
-    });
+            Route::get('/validate/{deal}', 'validateDeal')->name('validate');
+            Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
+        });
 
-    Route::prefix('/billing-deals')->name('billing.deals.')->controller(BillingDealController::class)->group(function () {
-        Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
+        Route::prefix('billing')->name('deals.billings.')->controller(BillingDealController::class)->group(function () {
+            Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
 
-        Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
-        Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
+            Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+            Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
 
-        Route::delete('/trash/{deal?}', 'trash')->name('trash');
-        Route::patch('/restore/{deal?}', 'restore')->name('restore');
-        Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+            Route::delete('/trash/{deal?}', 'trash')->name('trash');
+            Route::patch('/restore/{deal?}', 'restore')->name('restore');
+            Route::delete('/delete/{deal?}', 'destroy')->name('delete');
 
-        Route::get('/validate/{deal}', 'validateDeal')->name('validate');
-        Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
+            Route::get('/validate/{deal}', 'validateDeal')->name('validate');
+            Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
+        });
     });
 });
 

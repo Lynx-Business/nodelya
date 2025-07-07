@@ -89,7 +89,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
                 variant: 'warning',
                 description: transChoice('messages.billing_deals.trash.confirm', items.length),
                 callback: () =>
-                    router.delete(route('billing.deals.trash'), {
+                    router.delete(route('deals.billings.trash'), {
                         data: { ids: items.map(({ id }) => id) },
                         only: ['billing_deals'],
                         onSuccess: () => {
@@ -108,7 +108,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
                 description: transChoice('messages.billing_deals.restore.confirm', items.length),
                 callback: () =>
                     router.patch(
-                        route('billing.deals.restore'),
+                        route('deals.billings.restore'),
                         { ids: items.map(({ id }) => id) },
                         {
                             only: ['billing_deals'],
@@ -128,7 +128,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
                 variant: 'destructive',
                 description: transChoice('messages.billing_deals.delete.confirm', items.length),
                 callback: () =>
-                    router.delete(route('billing.deals.delete'), {
+                    router.delete(route('deals.billings.delete'), {
                         data: { ids: items.map(({ id }) => id) },
                         only: ['billing_deals'],
                         onSuccess: () => {
@@ -144,7 +144,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
-        href: (deal) => route('billing.deals.edit', { deal }),
+        href: (deal) => route('deals.billings.edit', { deal }),
     },
     {
         type: 'callback',
@@ -156,7 +156,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
                 variant: 'warning',
                 description: transChoice('messages.billing_deals.trash.confirm', 1),
                 callback: () =>
-                    router.delete(route('billing.deals.trash', { deal }), {
+                    router.delete(route('deals.billings.trash', { deal }), {
                         only: ['billing_deals'],
                     }),
             }),
@@ -171,7 +171,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
                 variant: 'success',
                 description: transChoice('messages.billing_deals.restore.confirm', 1),
                 callback: () =>
-                    router.patch(route('billing.deals.restore', { deal }), undefined, {
+                    router.patch(route('deals.billings.restore', { deal }), undefined, {
                         only: ['billing_deals'],
                     }),
             }),
@@ -186,7 +186,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
                 variant: 'destructive',
                 description: transChoice('messages.billing_deals.delete.confirm', 1),
                 callback: () =>
-                    router.delete(route('billing.deals.delete', { deal }), {
+                    router.delete(route('deals.billings.delete', { deal }), {
                         only: ['billing_deals'],
                     }),
             }),
@@ -194,7 +194,7 @@ const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
 ];
 
 const filters = useFilters<BillingDealIndexRequest>(
-    route('billing.deals.index'),
+    route('deals.billings.index'),
     {
         q: props.request.q ?? '',
         page: props.billing_deals?.meta.current_page,

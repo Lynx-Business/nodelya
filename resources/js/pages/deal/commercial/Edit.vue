@@ -15,11 +15,11 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.commercial_deals.index.title'),
-                href: route('commercial.deals.index'),
+                href: route('deals.commercials.index'),
             },
             {
                 title: trans('pages.commercial_deals.edit.title'),
-                href: route('commercial.deals.edit', { deal: route().params.deal }),
+                href: route('deals.commercials.edit', { deal: route().params.deal }),
             },
         ],
     })),
@@ -30,7 +30,7 @@ const form = useCommercialDealForm(props.deal);
 
 function submit() {
     const { deal } = props;
-    form.put(route('commercial.deals.edit', { deal: deal! }));
+    form.put(route('deals.commercials.edit', { deal: deal! }));
 }
 </script>
 
@@ -45,7 +45,7 @@ function submit() {
                         {{ $t('pages.commercial_deals.edit.title') }}
                     </span>
                     <Button class="text-right">
-                        <InertiaLink method="get" :href="route('commercial.deals.validate', { deal: deal! })">
+                        <InertiaLink method="get" :href="route('deals.commercials.validate', { deal: deal! })">
                             Passer l’affaire au statut validé
                         </InertiaLink>
                     </Button>

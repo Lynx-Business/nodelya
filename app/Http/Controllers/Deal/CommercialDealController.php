@@ -122,7 +122,7 @@ class CommercialDealController extends Controller
 
         Services::toast()->success->execute(__('messages.commercial_deals.store.success'));
 
-        return to_route('commercial.deals.index');
+        return to_route('deals.commercials.index');
     }
 
     /**
@@ -164,7 +164,7 @@ class CommercialDealController extends Controller
 
         Services::toast()->success->execute(__('messages.commercial_deals.update.success'));
 
-        return to_route('commercial.deals.index');
+        return to_route('deals.commercials.index');
     }
 
     public function trash(DealOneOrManyRequest $data)
@@ -257,7 +257,7 @@ class CommercialDealController extends Controller
 
         Services::toast()->success->execute(__('messages.commercial_deals.validate.success'));
 
-        return to_route('billing.deals.index');
+        return to_route('deals.billings.index');
     }
 
     private function generateReference(Deal $deal): string

@@ -13,11 +13,11 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.commercial_deals.index.title'),
-                href: route('commercial.deals.index'),
+                href: route('deals.commercials.index'),
             },
             {
                 title: trans('pages.commercial_deals.create.title'),
-                href: route('commercial.deals.create'),
+                href: route('deals.commercials.create'),
             },
         ],
     })),
@@ -27,7 +27,7 @@ defineProps<CommercialDealFormProps>();
 const form = useCommercialDealForm();
 
 function submit() {
-    form.post(route('commercial.deals.store'));
+    form.post(route('deals.commercials.store'));
 }
 </script>
 

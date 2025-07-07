@@ -14,11 +14,11 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.billing_deals.index.title'),
-                href: route('billing.deals.index'),
+                href: route('deals.billings.index'),
             },
             {
                 title: trans('pages.billing_deals.edit.title'),
-                href: route('billing.deals.edit', { deal: route().params.deal }),
+                href: route('deals.billings.edit', { deal: route().params.deal }),
             },
         ],
     })),
@@ -29,7 +29,7 @@ const form = useBillingDealForm(props.deal);
 
 function submit() {
     const { deal } = props;
-    form.put(route('billing.deals.edit', { deal: deal! }));
+    form.put(route('deals.billings.edit', { deal: deal! }));
 }
 </script>
 

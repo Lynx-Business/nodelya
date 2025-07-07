@@ -120,7 +120,7 @@ class BillingDealController extends Controller
 
         Services::toast()->success->execute(__('messages.billing_deals.update.success'));
 
-        return to_route('billing.deals.index');
+        return to_route('deals.billings.index');
     }
 
     public function trash(DealOneOrManyRequest $data)

@@ -69,15 +69,15 @@ const items = useRouterComputed((): NavItem[] => [
     },
     {
         title: trans('layouts.app.sidebar.items.commercial_deals'),
-        href: route('commercial.deals.index'),
+        href: route('deals.commercials.index'),
         icon: ShoppingBagIcon,
-        isActive: route().current('commercial.deals.*'),
+        isActive: route().current('deals.commercials.*'),
     },
     {
         title: trans('layouts.app.sidebar.items.billing_deals'),
-        href: route('billing.deals.index'),
+        href: route('deals.billings.index'),
         icon: ReceiptEuroIcon,
-        isActive: route().current('billing.deals.*'),
+        isActive: route().current('deals.billings.*'),
     },
 ]);
 </script>
