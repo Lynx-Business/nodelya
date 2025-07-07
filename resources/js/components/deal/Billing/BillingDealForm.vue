@@ -89,7 +89,7 @@ const totalScheduleAmount = computed(() => {
 });
 
 const scheduleTotalError = computed(() => {
-    if (totalScheduleAmount.value > (form?.amount ?? 0)) {
+    if (totalScheduleAmount.value !== (form?.amount ?? 0)) {
         return trans('validation.custom.schedule_total_exceeds', {
             total: format.price(totalScheduleAmount.value),
             principal: format.price(form?.amount ?? 0),
@@ -99,7 +99,7 @@ const scheduleTotalError = computed(() => {
 });
 
 function addScheduleItem() {
-    if (totalScheduleAmount.value > (form?.amount ?? 0)) {
+    if (totalScheduleAmount.value === (form?.amount ?? 0)) {
         return;
     }
     if (newScheduleItem.value.date && newScheduleItem.value.amount > 0) {

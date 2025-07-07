@@ -103,7 +103,7 @@ class BillingDealFormRequest extends Data
                 $principalAmount = request()->input('amount');
                 $totalSchedule = collect($value)->sum('amount');
 
-                if ($totalSchedule > $principalAmount) {
+                if ($totalSchedule !== $principalAmount) {
                     $fail(__('validation.custom.schedule_total_exceeds', [
                         'total'     => $totalSchedule,
                         'principal' => $principalAmount,
