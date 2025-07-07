@@ -187,8 +187,12 @@ export type BillingDealIndexRequest = {
     sort_by: string;
     sort_direction: string;
     accounting_period_id?: number;
-    trashed?: TrashedFilter;
+    name?: string;
+    amount?: number;
+    success_rate?: number;
+    code?: string;
     client_ids?: null | Array<number>;
+    trashed?: TrashedFilter;
 };
 export type BillingDealIndexResource = {
     id: number;
@@ -333,8 +337,12 @@ export type CommercialDealIndexRequest = {
     sort_by: string;
     sort_direction: string;
     accounting_period_id?: number;
-    trashed?: TrashedFilter;
+    name?: string;
+    amount?: number;
+    success_rate?: number;
+    code?: string;
     client_ids?: null | Array<number>;
+    trashed?: TrashedFilter;
 };
 export type CommercialDealIndexResource = {
     id: number;

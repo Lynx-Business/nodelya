@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/custom/data-table';
 import { FiltersSheet, FiltersSheetContent, FiltersSheetTrigger } from '@/components/ui/custom/filters';
 import { FormContent, FormControl, FormField, FormLabel } from '@/components/ui/custom/form';
-import { TextInput } from '@/components/ui/custom/input';
+import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
@@ -198,6 +198,10 @@ const filters = useFilters<BillingDealIndexRequest>(
     route('deals.billings.index'),
     {
         q: props.request.q ?? '',
+        name: props.request.name ?? '',
+        amount: props.request.amount,
+        success_rate: props.request.success_rate,
+        code: props.request.name,
         page: props.billing_deals?.meta.current_page,
         per_page: props.billing_deals?.meta.per_page,
         sort_by: props.request.sort_by,
@@ -298,6 +302,47 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 </FormLabel>
                                 <FormControl>
                                     <ClientCombobox v-model="filters.clients_items" multiple />
+                                </FormControl>
+                            </FormField>
+
+                            <FormField>
+                                <FormField>
+                                    <FormLabel>
+                                        <CapitalizeText>
+                                            {{ $t('models.deal.commercial.fields.name') }}
+                                        </CapitalizeText>
+                                    </FormLabel>
+                                    <FormControl>
+                                        <TextInput v-model="filters.name" />
+                                    </FormControl>
+                                </FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.deal.commercial.fields.amount') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <PriceInput v-model="filters.amount" />
+                                </FormControl>
+                            </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.deal.commercial.fields.success_rate') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <NumberInput v-model="filters.success_rate" :min="0" :max="100" />
+                                </FormControl>
+                            </FormField>
+                            <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.deal.commercial.fields.code') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <TextInput v-model="filters.code" />
                                 </FormControl>
                             </FormField>
                         </FiltersSheetContent>

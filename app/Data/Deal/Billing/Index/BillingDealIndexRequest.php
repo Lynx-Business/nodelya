@@ -35,10 +35,14 @@ class BillingDealIndexRequest extends Data
         public string $sort_by = 'id',
         public string $sort_direction = 'desc',
         public ?int $accounting_period_id = null,
-        public ?TrashedFilter $trashed = null,
+        public ?string $name = null,
+        public ?int $amount = null,
+        public ?int $success_rate = null,
+        public ?string $code = null,
 
         /** @var null|array<int> $client_ids */
         public ?array $client_ids = null,
+        public ?TrashedFilter $trashed = null,
     ) {
 
         if ($accounting_period_id) {

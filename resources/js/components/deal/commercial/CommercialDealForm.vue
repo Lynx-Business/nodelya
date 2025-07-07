@@ -152,7 +152,7 @@ watch(
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
-                <NumberInput v-model="form.success_rate" />
+                <NumberInput v-model="form.success_rate" :min="0" :max="100" />
             </FormControl>
             <FormError :message="form.errors.success_rate" />
         </FormField>
