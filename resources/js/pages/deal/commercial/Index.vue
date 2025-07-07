@@ -292,25 +292,25 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
                             <DataTableSortableHead value="client">
-                                {{ $t('models.commercial_deal.fields.client_id') }}
+                                {{ $t('models.deal.commercial.fields.client_id') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">
-                                {{ $t('models.commercial_deal.fields.name') }}
+                                {{ $t('models.deal.commercial.fields.name') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
-                                {{ $t('models.commercial_deal.fields.amount') }}
+                                {{ $t('models.deal.commercial.fields.amount') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="code">
-                                {{ $t('models.commercial_deal.fields.code') }}
+                                {{ $t('models.deal.commercial.fields.code') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="ordered_at">
-                                {{ $t('models.commercial_deal.fields.ordered_at') }}
+                                {{ $t('models.deal.commercial.fields.ordered_at') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="duration_in_months">
-                                {{ $t('models.commercial_deal.fields.duration_in_months') }}
+                                {{ $t('models.deal.commercial.fields.duration_in_months') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
-                                {{ $t('models.commercial_deal.fields.total_sales') }}
+                                {{ $t('models.deal.commercial.fields.total_sales') }}
                             </DataTableSortableHead>
 
                             <DataTableHead v-for="(month, index) in dynamicMonths" :key="index">

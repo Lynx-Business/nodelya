@@ -289,31 +289,31 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
                             <DataTableSortableHead value="client">
-                                {{ $t('models.billing_deals.fields.client_id') }}
+                                {{ $t('models.deal.billing.fields.client_id') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="name">
-                                {{ $t('models.billing_deals.fields.name') }}
+                                {{ $t('models.deal.billing.fields.name') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
-                                {{ $t('models.billing_deals.fields.amount') }}
+                                {{ $t('models.deal.billing.fields.amount') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="code">
-                                {{ $t('models.billing_deals.fields.code') }}
+                                {{ $t('models.deal.billing.fields.code') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="success_rate">
-                                {{ $t('models.billing_deals.fields.success_rate') }}
+                                {{ $t('models.deal.billing.fields.success_rate') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="starts_at">
-                                {{ $t('models.billing_deals.fields.starts_at') }}
+                                {{ $t('models.deal.billing.fields.starts_at') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="ordered_at">
-                                {{ $t('models.billing_deals.fields.ordered_at') }}
+                                {{ $t('models.deal.billing.fields.ordered_at') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="duration_in_months">
-                                {{ $t('models.billing_deals.fields.duration_in_months') }}
+                                {{ $t('models.deal.billing.fields.duration_in_months') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
-                                {{ $t('models.billing_deals.fields.total_sales') }}
+                                {{ $t('models.deal.billing.fields.total_sales') }}
                             </DataTableSortableHead>
 
                             <DataTableHead v-for="(month, index) in dynamicMonths" :key="index">

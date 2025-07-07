@@ -21,8 +21,8 @@ class CommercialDealValidateRequest extends Data
     public static function attributes(): array
     {
         return [
-            'amount'    => __('models.commercial_deal.fields.amount'),
-            'reference' => __('models.commercial_deal.fields.reference'),
+            'amount'    => __('models.deal.commercial.fields.amount'),
+            'reference' => __('models.deal.commercial.fields.reference'),
         ];
     }
 }

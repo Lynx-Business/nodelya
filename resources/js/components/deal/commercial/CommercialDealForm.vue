@@ -88,7 +88,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.name') }}
+                    {{ $t('models.deal.commercial.fields.name') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -100,7 +100,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.amount') }}
+                    {{ $t('models.deal.commercial.fields.amount') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -112,7 +112,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.duration_in_months') }}
+                    {{ $t('models.deal.commercial.fields.duration_in_months') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -124,7 +124,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.ordered_at') }}
+                    {{ $t('models.deal.commercial.fields.ordered_at') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -136,7 +136,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.starts_at') }}
+                    {{ $t('models.deal.commercial.fields.starts_at') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -148,7 +148,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.success_rate') }}
+                    {{ $t('models.deal.commercial.fields.success_rate') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -160,7 +160,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.code') }}
+                    {{ $t('models.deal.commercial.fields.code') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -172,7 +172,7 @@ watch(
         <FormField>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.deal_id') }}
+                    {{ $t('models.deal.commercial.fields.deal_id') }}
                 </CapitalizeText>
             </FormLabel>
 
@@ -183,7 +183,7 @@ watch(
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.client_id') }}
+                    {{ $t('models.deal.commercial.fields.client_id') }}
                 </CapitalizeText>
             </FormLabel>
 
@@ -194,7 +194,7 @@ watch(
         <FormField>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.commercial_deal.fields.targeted_turnover') }}
+                    {{ $t('models.deal.commercial.fields.targeted_turnover') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>

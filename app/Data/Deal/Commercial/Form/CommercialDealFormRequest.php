@@ -61,17 +61,17 @@ class CommercialDealFormRequest extends Data
     public static function attributes(): array
     {
         return [
-            'name'               => __('models.commercial_deal.fields.name'),
-            'amount_in_cents'    => __('models.commercial_deal.fields.amount'),
-            'code'               => __('models.commercial_deal.fields.code'),
-            'reference'          => __('models.commercial_deal.fields.reference'),
-            'success_rate'       => __('models.commercial_deal.fields.success_rate'),
-            'ordered_at'         => __('models.commercial_deal.fields.ordered_at'),
-            'duration_in_months' => __('models.commercial_deal.fields.duration_in_months'),
-            'starts_at'          => __('models.commercial_deal.fields.starts_at'),
-            'client_id'          => __('models.commercial_deal.fields.client_id'),
-            'deal_id'            => __('models.commercial_deal.fields.deal_id'),
-            'schedule_data'      => __('models.commercial_deal.fields.schedule'),
+            'name'               => __('models.deal.commercial.fields.name'),
+            'amount_in_cents'    => __('models.deal.commercial.fields.amount'),
+            'code'               => __('models.deal.commercial.fields.code'),
+            'reference'          => __('models.deal.commercial.fields.reference'),
+            'success_rate'       => __('models.deal.commercial.fields.success_rate'),
+            'ordered_at'         => __('models.deal.commercial.fields.ordered_at'),
+            'duration_in_months' => __('models.deal.commercial.fields.duration_in_months'),
+            'starts_at'          => __('models.deal.commercial.fields.starts_at'),
+            'client_id'          => __('models.deal.commercial.fields.client_id'),
+            'deal_id'            => __('models.deal.commercial.fields.deal_id'),
+            'schedule_data'      => __('models.deal.commercial.fields.schedule'),
         ];
     }
 

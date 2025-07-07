@@ -32,8 +32,8 @@ class DealOneOrManyRequest extends Data
     public static function attributes(): array
     {
         return [
-            'deal' => __('models.commercial_deal.name.one'),
-            'ids'  => __('models.commercial_deal.name.many'),
+            'deal' => __('models.deal.commercial.name.one'),
+            'ids'  => __('models.deal.commercial.name.many'),
         ];
     }
 

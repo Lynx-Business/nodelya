@@ -60,16 +60,16 @@ class BillingDealFormRequest extends Data
     public static function attributes(): array
     {
         return [
-            'name'               => __('models.commercial_deal.fields.name'),
-            'amount_in_cents'    => __('models.commercial_deal.fields.amount'),
-            'code'               => __('models.commercial_deal.fields.code'),
-            'reference'          => __('models.commercial_deal.fields.reference'),
-            'ordered_at'         => __('models.commercial_deal.fields.ordered_at'),
-            'duration_in_months' => __('models.commercial_deal.fields.duration_in_months'),
-            'starts_at'          => __('models.commercial_deal.fields.starts_at'),
-            'client_id'          => __('models.commercial_deal.fields.client_id'),
-            'deal_id'            => __('models.commercial_deal.fields.deal_id'),
-            'schedule_data'      => __('models.commercial_deal.fields.schedule'),
+            'name'               => __('models.deal.billing.fields.name'),
+            'amount_in_cents'    => __('models.deal.billing.fields.amount'),
+            'code'               => __('models.deal.billing.fields.code'),
+            'reference'          => __('models.deal.billing.fields.reference'),
+            'ordered_at'         => __('models.deal.billing.fields.ordered_at'),
+            'duration_in_months' => __('models.deal.billing.fields.duration_in_months'),
+            'starts_at'          => __('models.deal.billing.fields.starts_at'),
+            'client_id'          => __('models.deal.billing.fields.client_id'),
+            'deal_id'            => __('models.deal.billing.fields.deal_id'),
+            'schedule_data'      => __('models.deal.billing.fields.schedule'),
         ];
     }
 
@@ -112,7 +112,7 @@ class BillingDealFormRequest extends Data
 
                 foreach ($value as $item) {
                     if (empty($item['title'])) {
-                        $fail(__('validation.required', ['attribute' => __('models.commercial_deal.fields.schedule_data.title')]));
+                        $fail(__('validation.required', ['attribute' => __('models.deal.billing.fields.schedule_data.title')]));
                         break;
                     }
                 }

@@ -150,7 +150,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.name') }}
+                    {{ $t('models.deal.billing.fields.name') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -162,7 +162,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.amount') }}
+                    {{ $t('models.deal.billing.fields.amount') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -174,7 +174,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.duration_in_months') }}
+                    {{ $t('models.deal.billing.fields.duration_in_months') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -186,7 +186,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.ordered_at') }}
+                    {{ $t('models.deal.billing.fields.ordered_at') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -198,7 +198,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.starts_at') }}
+                    {{ $t('models.deal.billing.fields.starts_at') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -210,7 +210,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.success_rate') }}
+                    {{ $t('models.deal.billing.fields.success_rate') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -222,7 +222,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.code') }}
+                    {{ $t('models.deal.billing.fields.code') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -234,7 +234,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.reference') }}
+                    {{ $t('models.deal.billing.fields.reference') }}
                 </CapitalizeText>
             </FormLabel>
             <FormControl>
@@ -246,7 +246,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.client_id') }}
+                    {{ $t('models.deal.billing.fields.client_id') }}
                 </CapitalizeText>
             </FormLabel>
 
@@ -269,7 +269,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.billing_deals.fields.deal_id') }}
+                    {{ $t('models.deal.billing.fields.deal_id') }}
                 </CapitalizeText>
             </FormLabel>
 
@@ -292,7 +292,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 <FormField>
                     <FormLabel>
                         <CapitalizeText>
-                            {{ $t('models.billing_deals.fields.amount') }}
+                            {{ $t('models.deal.billing.fields.amount') }}
                         </CapitalizeText>
                     </FormLabel>
                     <FormControl>
