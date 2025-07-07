@@ -109,6 +109,13 @@ class BillingDealFormRequest extends Data
                         'principal' => $principalAmount,
                     ]));
                 }
+
+                foreach ($value as $item) {
+                    if (empty($item['title'])) {
+                        $fail(__('validation.required', ['attribute' => __('models.commercial_deal.fields.schedule_data.title')]));
+                        break;
+                    }
+                }
             }],
         ];
     }

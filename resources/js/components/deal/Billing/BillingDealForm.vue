@@ -358,7 +358,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                                 </FormField>
                             </DataTableCell>
                             <DataTableCell>
-                                <FormField>
+                                <FormField required>
                                     <FormControl>
                                         <TextInput v-model="item.title" />
                                     </FormControl>

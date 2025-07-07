@@ -172,6 +172,9 @@ return [
             'deal_id'               => 'Rattacher affaire existante',
             'total_sales'           => 'Totaux CA',
             'targeted_turnover'     => 'CA ciblé',
+            'schedule_data'         => [
+                'title' => 'titre de l\'échéance',
+            ],
         ],
     ],
     'billing_deals' => [
