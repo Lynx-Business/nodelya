@@ -2,6 +2,7 @@
 
 namespace App\Data\Deal;
 
+use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -9,9 +10,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class MonthlyExpenseData extends Data
 {
     public function __construct(
-        // TODO change to Date carbon
-        public string $date,
+        public string $date_key,
         public float $amount,
-        public ?string $status,
+        public string $status,
+        public Carbon $date,
     ) {}
 }

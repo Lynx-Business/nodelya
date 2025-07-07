@@ -1023,9 +1023,10 @@ export type MediaResource = {
     custom_properties?: Record<string, any>;
 };
 export type MonthlyExpenseData = {
-    date: string;
+    date_key: string;
     amount: number;
-    status?: string;
+    status: string;
+    date: string;
 };
 export type PermissionName = 'client' | 'expenses' | 'deal';
 export type PermissionResource = {

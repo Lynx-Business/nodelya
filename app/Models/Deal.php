@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Data\Deal\DealScheduleData;
+use App\Data\Deal\MonthlyExpenseData;
 use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Deal\DealStatus;
 use App\Facades\Services;
@@ -12,10 +13,12 @@ use App\Traits\BelongsToTeam;
 use App\Traits\HasPolicy;
 use App\Traits\Searchable;
 use App\Traits\Trashable;
-use Carbon\Carbon;
+use DB;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Spatie\LaravelData\DataCollection;
 
 /**
@@ -202,35 +205,89 @@ class Deal extends Model
     protected function schedule(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? DealScheduleData::collect(json_decode($value, true)) : [],
+            get: fn ($value) => DealScheduleData::collect(json_decode($value)),
         );
     }
 
-    public function getMonthlyStatusAttribute()
+    public function scopeWhereInAccountingPeriod(Builder $query, AccountingPeriod|int $accountingPeriod): Builder
     {
-        if (! $this->schedule) {
-            return [];
-        }
+        $accountingPeriodModel = app(AccountingPeriod::class);
+        $id = is_int($accountingPeriod) ? $accountingPeriod : $accountingPeriod->getKey();
 
-        $statusPriority = [
-            DealScheduleStatus::UNCERTAIN->value => 3,
-            DealScheduleStatus::INVOICED->value  => 2,
-            DealScheduleStatus::PAID->value      => 1,
-        ];
+        return $query->whereNot->whereExists(
+            fn (QueryBuilder $q) => $q
+                ->select(DB::raw(1))
+                ->from($accountingPeriodModel->getTable())
+                ->where($accountingPeriodModel->getQualifiedKeyName(), $id)
+                ->where(
+                    fn (QueryBuilder $q) => $q
+                        ->whereColumn($accountingPeriodModel->qualifyColumn('starts_at'), '>=', $this->qualifyColumn('ends_at'))
+                        ->orWhereColumn($accountingPeriodModel->qualifyColumn('ends_at'), '<=', $this->qualifyColumn('starts_at')),
+                ),
+        );
+    }
 
-        $monthlyStatus = [];
-        foreach ($this->schedule as $yearSchedule) {
-            foreach ($yearSchedule->data as $item) {
-                $month = Carbon::parse($item->date)->format('Y-m');
-                $currentPriority = $statusPriority[$monthlyStatus[$month] ?? null] ?? 0;
-                $itemPriority = $statusPriority[$item->status->value] ?? 0;
+    protected function monthlyStatus(): Attribute
+    {
+        return Attribute::get(function () {
+            $schedule = $this->schedule;
+            if (empty($schedule)) {
+                return [];
+            }
 
-                if ($itemPriority > $currentPriority) {
-                    $monthlyStatus[$month] = $item->status->value;
+            $statusPriority = [
+                DealScheduleStatus::UNCERTAIN->value         => 4,
+                DealScheduleStatus::PENDING_INVOICING->value => 3,
+                DealScheduleStatus::INVOICED->value          => 2,
+                DealScheduleStatus::PAID->value              => 1,
+            ];
+
+            $monthlyStatus = [];
+            foreach ($schedule as $yearSchedule) {
+                foreach ($yearSchedule->data as $item) {
+                    $month = $item->date->format('Y-m');
+                    $itemStatus = $item->status->value ?? $item->status;
+                    $currentPriority = $statusPriority[$monthlyStatus[$month] ?? null] ?? 0;
+                    $itemPriority = $statusPriority[$itemStatus] ?? 0;
+
+                    if ($itemPriority > $currentPriority) {
+                        $monthlyStatus[$month] = $itemStatus;
+                    }
                 }
             }
-        }
 
-        return $monthlyStatus;
+            return $monthlyStatus;
+        });
+    }
+
+    protected function monthlyExpenses(): Attribute
+    {
+        return Attribute::get(function () {
+            $monthlyAmounts = [];
+            $monthlyRawDates = [];
+            $monthlyStatuses = $this->monthly_status;
+
+            if ($this->schedule) {
+                foreach ($this->schedule as $yearSchedule) {
+                    foreach ($yearSchedule->data as $item) {
+                        $month = $item->date->format('Y-m');
+                        $monthlyAmounts[$month] = ($monthlyAmounts[$month] ?? 0) + $item->amount;
+                        $monthlyRawDates[$month] = $item->date;
+                    }
+                }
+            }
+
+            $result = [];
+            foreach ($monthlyAmounts as $month => $amount) {
+                $result[$month] = new MonthlyExpenseData(
+                    date_key: $month,
+                    amount: $amount,
+                    status: $monthlyStatuses[$month],
+                    date: $monthlyRawDates[$month],
+                );
+            }
+
+            return $result;
+        });
     }
 }

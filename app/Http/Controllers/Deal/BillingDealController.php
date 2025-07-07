@@ -38,10 +38,7 @@ class BillingDealController extends Controller
 
         $months = [];
         if ($accountingPeriod) {
-            $start = Carbon::parse($accountingPeriod->starts_at);
-            $end = Carbon::parse($accountingPeriod->ends_at);
-            $period = CarbonPeriod::create($start, '1 month', $end);
-
+            $period = CarbonPeriod::create($accountingPeriod->starts_at, '1 month', $accountingPeriod->ends_at);
             foreach ($period as $date) {
                 $months[] = $date->format('Y-m');
             }
@@ -54,22 +51,7 @@ class BillingDealController extends Controller
                     $paginatedDeals = Deal::billing()
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
-                        ->when($accountingPeriod, function (Builder $query) use ($accountingPeriod) {
-                            $query->where(function ($q) use ($accountingPeriod) {
-                                $q->whereBetween('starts_at', [
-                                    $accountingPeriod->starts_at,
-                                    $accountingPeriod->ends_at,
-                                ])
-                                    ->orWhereBetween('ends_at', [
-                                        $accountingPeriod->starts_at,
-                                        $accountingPeriod->ends_at,
-                                    ])
-                                    ->orWhere(function ($q) use ($accountingPeriod) {
-                                        $q->where('starts_at', '<', $accountingPeriod->starts_at)
-                                            ->where('ends_at', '>', $accountingPeriod->ends_at);
-                                    });
-                            });
-                        })
+                        ->when($accountingPeriod, fn (Builder $query) => $query->whereInAccountingPeriod($accountingPeriod->id))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with(['client'])
                         ->paginate(
@@ -85,9 +67,7 @@ class BillingDealController extends Controller
                             $resource->monthly_expenses = array_filter(
                                 $resource->monthly_expenses,
                                 function ($expense) use ($accountingPeriod) {
-                                    $expenseDate = Carbon::parse($expense->date);
-
-                                    return $expenseDate->between(
+                                    return $expense->date->between(
                                         Carbon::parse($accountingPeriod->starts_at),
                                         Carbon::parse($accountingPeriod->ends_at),
                                     );

@@ -25,7 +25,7 @@ import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import { AppLayout } from '@/layouts';
-import { BillingDealIndexProps, BillingDealIndexRequest, BillingDealIndexResource } from '@/types';
+import { BillingDealIndexProps, BillingDealIndexRequest, BillingDealIndexResource, MonthlyExpenseData } from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -53,7 +53,7 @@ const { locale } = useLocale();
 const dynamicMonths = computed(() => {
     if (!props.accounting_period_months) return [];
 
-    const months: any[] = [];
+    const months: { key: string; lettre: string }[] = [];
     props.accounting_period_months.forEach((month) => {
         months.push({
             key: month,
@@ -73,8 +73,8 @@ function formatMonth(monthString: string): string {
     }).format(date);
 }
 
-function findExpenseForMonth(expenses: any[], monthKey: string) {
-    return expenses.find((expense) => expense.date === monthKey);
+function findExpenseForMonth(expenses: MonthlyExpenseData[], monthKey: string) {
+    return expenses.find((expense) => expense.date_key === monthKey);
 }
 
 const selectedRows = ref<BillingDealIndexResource[]>([]);
