@@ -224,17 +224,24 @@ const filters = useFilters<BillingDealIndexRequest>(
     },
 );
 
-const statusClass = (status: string | undefined) => {
-    if (!status) return 'bg-white';
+function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
+    if (!status) return 'bg-[var(--status-uncertain)]';
 
-    const statusMap: Record<string, string> = {
-        uncertain: 'bg-white',
-        invoiced: 'bg-blue-400/50',
-        paid: 'bg-emerald-200/50',
-    };
+    if (status === 'invoiced' && expense?.date) {
+        const now = new Date();
+        const expenseDate = new Date(expense.date);
+        const diffDays = Math.floor((now.getTime() - expenseDate.getTime()) / (1000 * 60 * 60 * 24));
 
-    return statusMap[status] || 'bg-white';
-};
+        if (diffDays >= 60) {
+            return 'bg-[var(--status-invoiced-red)]';
+        }
+        if (diffDays >= 45) {
+            return 'bg-[var(--status-invoiced-orange)]';
+        }
+    }
+
+    return `bg-[var(--status-${status})]`;
+}
 </script>
 
 <template>
@@ -358,17 +365,15 @@ const statusClass = (status: string | undefined) => {
                                 v-for="(month, index) in dynamicMonths"
                                 :key="index"
                                 :class="[
-                                    statusClass(findExpenseForMonth(deal.monthly_expenses, month.key)?.status),
+                                    statusClass(
+                                        findExpenseForMonth(deal.monthly_expenses, month.key)?.status,
+                                        findExpenseForMonth(deal.monthly_expenses, month.key),
+                                    ),
                                     'min-w-30',
                                 ]"
                             >
-                                {{
-                                    findExpenseForMonth(deal.monthly_expenses, month.key)
-                                        ? format.price(findExpenseForMonth(deal.monthly_expenses, month.key).amount)
-                                        : 0
-                                }}
+                                {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
                             </DataTableCell>
-
                             <DataTableCell>
                                 <DataTableRowActions />
                             </DataTableCell>

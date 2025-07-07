@@ -50,6 +50,8 @@ use Spatie\LaravelData\DataCollection;
  * @property-read \App\Models\Client $client
  * @property-read true $is_trashable
  * @property bool $is_trashed
+ * @property-read mixed $monthly_expenses
+ * @property-read mixed $monthly_status
  * @property-read Deal|null $parent
  * @property-read \App\Models\ProjectDepartment|null $projectDepartment
  * @property-read mixed $revenue
@@ -76,6 +78,7 @@ use Spatie\LaravelData\DataCollection;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereDurationInMonths($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereInAccountingPeriod(\App\Models\AccountingPeriod|int $accountingPeriod)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereOrderedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereProjectDepartmentId($value)
