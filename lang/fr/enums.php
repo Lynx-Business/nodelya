@@ -23,6 +23,7 @@ return [
             'paid'      => 'Payé',
             'invoiced'  => 'Facture émise',
             'uncertain' => 'Incertain',
+            'pending_invoicing' => 'En attente de facturation',
         ],
     ],
 

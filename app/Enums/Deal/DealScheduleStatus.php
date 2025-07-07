@@ -11,6 +11,7 @@ enum DealScheduleStatus: string
     case PAID = 'paid';
     case INVOICED = 'invoiced';
     case UNCERTAIN = 'uncertain';
+    case PENDING_INVOICING = 'pending_invoicing';
 
     public function label(): string
     {

@@ -512,7 +512,7 @@ export type DealScheduleData = {
     year: string;
     data: Array<ScheduleItemData>;
 };
-export type DealScheduleStatus = 'paid' | 'invoiced' | 'uncertain';
+export type DealScheduleStatus = 'paid' | 'invoiced' | 'uncertain' | 'pending_invoicing';
 export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
 export type EditProfileSettingsProps = {
