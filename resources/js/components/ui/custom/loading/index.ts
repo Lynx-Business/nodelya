@@ -6,7 +6,7 @@ export const loadingIconVariants = cva('fill-current animate-pulse-grow ', {
     variants: {
         variant: {
             default: 'text-current',
-            primary: 'text-primary',
+            primary: 'text-secondary',
         },
         size: {
             md: 'size-5',
