@@ -65,12 +65,14 @@ const items = useRouterComputed((): NavItem[] => [
         title: trans('layouts.app.sidebar.items.client'),
         href: route('clients.index'),
         icon: UsersIcon,
+        hidden: !user.permissions?.includes('deal'),
         isActive: route().current('clients.*'),
     },
     {
         title: trans('layouts.app.sidebar.items.commercial_deals'),
         href: route('deals.commercials.index'),
         icon: ShoppingBagIcon,
+        hidden: !user.permissions?.includes('deal'),
         isActive: route().current('deals.commercials.*'),
     },
     {
