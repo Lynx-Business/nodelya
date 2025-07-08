@@ -318,8 +318,9 @@ return [
             'description' => 'Créez une nouvelle affaire commerciale pour gérer vos transactions',
         ],
         'edit' => [
-            'title'       => 'Mettre à jour une affaire commerciale',
-            'description' => 'Modifiez les détails d\'une affaire commerciale existante',
+            'title'           => 'Mettre à jour une affaire commerciale',
+            'description'     => 'Modifiez les détails d\'une affaire commerciale existante',
+            'validate_button' => 'Passer l’affaire au statut validé',
         ],
 
         'validate' => [

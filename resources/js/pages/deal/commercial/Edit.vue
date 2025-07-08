@@ -46,7 +46,7 @@ function submit() {
                     </span>
                     <Button class="text-right">
                         <InertiaLink method="get" :href="route('deals.commercials.validate', { deal: deal! })">
-                            Passer l’affaire au statut validé
+                            {{ $t('pages.commercial_deals.edit.validate_button') }}
                         </InertiaLink>
                     </Button>
                 </SectionTitle>

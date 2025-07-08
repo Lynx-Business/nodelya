@@ -464,7 +464,7 @@ export type DealResource = {
     duration_in_months?: number;
     starts_at?: string;
     client?: ClientListResource;
-    project_department?: ProjectDepartmentResource | null;
+    project_department?: ProjectDepartmentResource;
     parent?: DealResource;
     schedule?: Array<DealScheduleData>;
     monthly_expenses?: Record<string, MonthlyExpenseData>;

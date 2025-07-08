@@ -26,10 +26,10 @@ class DealResource extends Resource
         public ?int $duration_in_months,
         public ?string $starts_at,
         public Lazy|ClientListResource $client,
-        public Lazy|ProjectDepartmentResource|null $project_department,
+        public Lazy|ProjectDepartmentResource $project_department,
         public Lazy|DealResource $parent,
         #[DataCollectionOf(DealScheduleData::class)]
-        public DataCollection|Lazy|null $schedule,
+        public DataCollection|Lazy $schedule,
         #[RecordTypeScriptType('string', MonthlyExpenseData::class)]
         public Lazy|array $monthly_expenses,
         public Lazy|bool $can_view,
