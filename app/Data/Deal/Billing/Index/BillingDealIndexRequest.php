@@ -66,19 +66,6 @@ class BillingDealIndexRequest extends Data
         }
     }
 
-    public static function attributes(): array
-    {
-        return [
-            'q'                    => __('query'),
-            'page'                 => __('page'),
-            'per_page'             => __('per_page'),
-            'sort_by'              => __('sort_by'),
-            'sort_direction'       => __('sort_direction'),
-            'trashed'              => __('trashed'),
-            'accounting_period_id' => __('models.accounting_period.name.one'),
-        ];
-    }
-
     public static function rules(ValidationContext $context): array
     {
         $accountingPeriod = app(AccountingPeriod::class);

@@ -304,6 +304,7 @@ export type CommercialDealValidateProps = {
     reference: string;
 };
 export type CommercialDealValidateRequest = {
+    project_department?: ProjectDepartmentResource;
     project_department_id?: number;
     reference: string;
 };
