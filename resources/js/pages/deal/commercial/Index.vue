@@ -370,6 +370,9 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableSortableHead value="code">
                                 {{ $t('models.deal.commercial.fields.code') }}
                             </DataTableSortableHead>
+                              <DataTableSortableHead value="success_rate">
+                                {{ $t('models.deal.billing.fields.success_rate') }}
+                            </DataTableSortableHead>
                             <DataTableSortableHead value="ordered_at">
                                 {{ $t('models.deal.commercial.fields.ordered_at') }}
                             </DataTableSortableHead>
@@ -408,6 +411,9 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             </DataTableCell>
                             <DataTableCell>
                                 {{ deal.code }}
+                            </DataTableCell>
+                              <DataTableCell>
+                                {{ deal.success_rate + ' %' }}
                             </DataTableCell>
                             <DataTableCell>
                                 {{ format.date(deal.ordered_at) }}

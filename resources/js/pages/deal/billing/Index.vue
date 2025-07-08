@@ -371,9 +371,6 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                             <DataTableSortableHead value="code">
                                 {{ $t('models.deal.billing.fields.code') }}
                             </DataTableSortableHead>
-                            <DataTableSortableHead value="success_rate">
-                                {{ $t('models.deal.billing.fields.success_rate') }}
-                            </DataTableSortableHead>
                             <DataTableSortableHead value="starts_at">
                                 {{ $t('models.deal.billing.fields.starts_at') }}
                             </DataTableSortableHead>
@@ -415,9 +412,6 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                             </DataTableCell>
                             <DataTableCell>
                                 {{ deal.code }}
-                            </DataTableCell>
-                            <DataTableCell>
-                                {{ deal.success_rate + ' %' }}
                             </DataTableCell>
                             <DataTableCell>
                                 {{ format.date(deal.starts_at) }}
