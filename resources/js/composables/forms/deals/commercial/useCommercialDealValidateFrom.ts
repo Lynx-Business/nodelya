@@ -1,5 +1,6 @@
 import { useComputedForm } from '@/composables';
 import { CommercialDealValidateRequest, DealResource } from '@/types';
+import { reactiveOmit } from '@vueuse/core';
 
 export function useCommercialDealValidateFrom(deal?: DealResource, reference?: string) {
     const form = useComputedForm({
@@ -16,7 +17,7 @@ export type CommercialDealValidateFormData = ReturnType<CommercialDealValidateFo
 
 function transformValidateDealForm(data: CommercialDealValidateFormData): CommercialDealValidateRequest {
     return {
-        ...data,
+        ...reactiveOmit(data, 'project_department'),
         project_department_id: data.project_department?.id!,
     };
 }

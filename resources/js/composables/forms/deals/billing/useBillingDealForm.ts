@@ -1,5 +1,6 @@
 import { useComputedForm } from '@/composables';
 import { BillingDealFormRequest, DealResource } from '@/types';
+import { reactiveOmit } from '@vueuse/core';
 
 export function useBillingDealForm(deal?: DealResource) {
     const initialSchedule =
@@ -38,10 +39,9 @@ export type BillingDealFormData = ReturnType<BillinDealForm['data']>;
 
 function transformDealForm(data: BillingDealFormData): BillingDealFormRequest {
     return {
-        ...data,
+        ...reactiveOmit(data, 'client', 'parent', 'project_department'),
         client_id: data.client?.id!,
         deal_id: data.parent?.id,
-        deal: undefined,
         amount: data.amount!,
         project_department_id: data.project_department?.id!,
         schedule: Array.isArray(data.schedule) ? data.schedule : undefined,

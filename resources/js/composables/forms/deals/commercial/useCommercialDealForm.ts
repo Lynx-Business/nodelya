@@ -1,5 +1,6 @@
 import { useComputedForm } from '@/composables';
 import { CommercialDealFormRequest, DealResource } from '@/types';
+import { reactiveOmit } from '@vueuse/core';
 
 export function useCommercialDealForm(deal?: DealResource) {
     const initialSchedule =
@@ -36,7 +37,7 @@ export type CommercialDealFormData = ReturnType<CommercialDealForm['data']>;
 
 function transformDealForm(data: CommercialDealFormData): CommercialDealFormRequest {
     return {
-        ...data,
+        ...reactiveOmit(data, 'client', 'parent'),
         client_id: data.client?.id!,
         deal_id: data.parent?.id,
         deal: undefined,
