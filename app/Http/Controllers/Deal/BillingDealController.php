@@ -39,7 +39,7 @@ class BillingDealController extends Controller
             }
         }
 
-        return Inertia::render('deal/billing/Index', BillingDealIndexProps::from([
+        return Inertia::render('deals/billing/Index', BillingDealIndexProps::from([
             'request'       => $data,
             'billing_deals' => Lazy::inertia(
                 function () use ($data, $accountingPeriod) {
@@ -92,7 +92,7 @@ class BillingDealController extends Controller
     public function edit(Deal $deal)
     {
 
-        return Inertia::render('deal/billing/Edit', BillingDealFormProps::from([
+        return Inertia::render('deals/billing/Edit', BillingDealFormProps::from([
             'deal' => DealResource::from(
                 $deal->load('client', 'parent', 'projectDepartment'),
             )->include('schedule'),

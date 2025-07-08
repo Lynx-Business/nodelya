@@ -46,7 +46,7 @@ class CommercialDealController extends Controller
             }
         }
 
-        return Inertia::render('deal/commercial/Index', CommercialDealIndexProps::from([
+        return Inertia::render('deals/commercial/Index', CommercialDealIndexProps::from([
             'request'          => $data,
             'commercial_deals' => Lazy::inertia(
                 function () use ($data, $accountingPeriod) {
@@ -102,7 +102,7 @@ class CommercialDealController extends Controller
     public function create()
     {
 
-        return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([
+        return Inertia::render('deals/commercial/Create', CommercialDealFormProps::from([
             'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::all())),
         ]));
@@ -141,7 +141,7 @@ class CommercialDealController extends Controller
     public function edit(Deal $deal)
     {
 
-        return Inertia::render('deal/commercial/Edit', CommercialDealFormProps::from([
+        return Inertia::render('deals/commercial/Edit', CommercialDealFormProps::from([
             'deal' => DealResource::from(
                 $deal->load('client', 'parent'),
             )->include('schedule'),
@@ -235,7 +235,7 @@ class CommercialDealController extends Controller
     {
         $reference = $this->generateReference($deal);
 
-        return Inertia::render('deal/commercial/Validate', CommercialDealValidateProps::from([
+        return Inertia::render('deals/commercial/Validate', CommercialDealValidateProps::from([
             'deal'               => DealResource::from($deal),
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),
