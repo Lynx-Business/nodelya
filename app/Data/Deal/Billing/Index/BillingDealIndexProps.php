@@ -21,7 +21,6 @@ class BillingDealIndexProps extends Resource
     public function __construct(
         public BillingDealIndexRequest $request,
 
-        // TODO add structure
         public array $accounting_period_months,
 
         #[AutoInertiaLazy]
