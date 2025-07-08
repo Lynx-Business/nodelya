@@ -241,45 +241,48 @@ return [
         ],
     ],
 
-    'commercial_deals' => [
-        'store' => [
-            'success' => 'Affaire commerciale créée avec succès',
-        ],
-        'update' => [
-            'success' => 'Affaire commerciale mise à jour avec succès',
-        ],
-        'validate' => [
-            'success' => 'Affaire commerciale a été bien validée.',
-        ],
-        'trash' => [
-            'confirm' => 'Êtes-vous sûr de vouloir archiver cette affaire commerciale ?|Êtes-vous sûr de vouloir archiver ces affaires commerciales ?',
-            'success' => 'Affaire commerciale archivée avec succès|Affaires commerciales archivées avec succès',
-        ],
-        'restore' => [
-            'confirm' => 'Êtes-vous sûr de vouloir restaurer cette affaire commerciale ?|Êtes-vous sûr de vouloir restaurer ces affaires commerciales ?',
-            'success' => 'Affaire commerciale restaurée avec succès|Affaires commerciales restaurées avec succès',
-        ],
-        'delete' => [
-            'confirm' => 'Êtes-vous sûr de vouloir supprimer cette affaire commerciale ?|Êtes-vous sûr de vouloir supprimer ces affaires commerciales ?',
-            'success' => 'Affaire commerciale supprimée avec succès|Affaires commerciales supprimées avec succès',
-        ],
-    ],
+    'deals' => [
 
-    'billing_deals' => [
-        'update' => [
-            'success' => 'Facture mise à jour avec succès',
+        'commercials' => [
+            'store' => [
+                'success' => 'Affaire commerciale créée avec succès',
+            ],
+            'update' => [
+                'success' => 'Affaire commerciale mise à jour avec succès',
+            ],
+            'validate' => [
+                'success' => 'Affaire commerciale a été bien validée.',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver cette affaire commerciale ?|Êtes-vous sûr de vouloir archiver ces affaires commerciales ?',
+                'success' => 'Affaire commerciale archivée avec succès|Affaires commerciales archivées avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer cette affaire commerciale ?|Êtes-vous sûr de vouloir restaurer ces affaires commerciales ?',
+                'success' => 'Affaire commerciale restaurée avec succès|Affaires commerciales restaurées avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer cette affaire commerciale ?|Êtes-vous sûr de vouloir supprimer ces affaires commerciales ?',
+                'success' => 'Affaire commerciale supprimée avec succès|Affaires commerciales supprimées avec succès',
+            ],
         ],
-        'trash' => [
-            'confirm' => 'Êtes-vous sûr de vouloir archiver cette facture ?|Êtes-vous sûr de vouloir archiver ces factures ?',
-            'success' => 'Facture archivée avec succès|Factures archivées avec succès',
-        ],
-        'restore' => [
-            'confirm' => 'Êtes-vous sûr de vouloir restaurer cette facture ?|Êtes-vous sûr de vouloir restaurer ces factures ?',
-            'success' => 'Facture restaurée avec succès|Factures restaurées avec succès',
-        ],
-        'delete' => [
-            'confirm' => 'Êtes-vous sûr de vouloir supprimer cette facture ?|Êtes-vous sûr de vouloir supprimer ces factures ?',
-            'success' => 'Facture supprimée avec succès|Factures supprimées avec succès',
+
+        'billings' => [
+            'update' => [
+                'success' => 'Facture mise à jour avec succès',
+            ],
+            'trash' => [
+                'confirm' => 'Êtes-vous sûr de vouloir archiver cette facture ?|Êtes-vous sûr de vouloir archiver ces factures ?',
+                'success' => 'Facture archivée avec succès|Factures archivées avec succès',
+            ],
+            'restore' => [
+                'confirm' => 'Êtes-vous sûr de vouloir restaurer cette facture ?|Êtes-vous sûr de vouloir restaurer ces factures ?',
+                'success' => 'Facture restaurée avec succès|Factures restaurées avec succès',
+            ],
+            'delete' => [
+                'confirm' => 'Êtes-vous sûr de vouloir supprimer cette facture ?|Êtes-vous sûr de vouloir supprimer ces factures ?',
+                'success' => 'Facture supprimée avec succès|Factures supprimées avec succès',
+            ],
         ],
     ],
 

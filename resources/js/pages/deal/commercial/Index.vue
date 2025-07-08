@@ -96,7 +96,7 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
         callback: (items) =>
             alert({
                 variant: 'warning',
-                description: transChoice('messages.Commercial_deals.trash.confirm', items.length),
+                description: transChoice('messages.deals.commercials.trash.confirm', items.length),
                 callback: () =>
                     router.delete(route('deals.commercials.trash'), {
                         data: { ids: items.map(({ id }) => id) },
@@ -114,7 +114,7 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
         callback: (items) =>
             alert({
                 variant: 'success',
-                description: transChoice('messages.Commercial_deals.restore.confirm', items.length),
+                description: transChoice('messages.deals.commercials.restore.confirm', items.length),
                 callback: () =>
                     router.patch(
                         route('deals.commercials.restore'),
@@ -135,7 +135,7 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
         callback: (items) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.Commercial_deals.delete.confirm', items.length),
+                description: transChoice('messages.deals.commercials.delete.confirm', items.length),
                 callback: () =>
                     router.delete(route('deals.commercials.delete'), {
                         data: { ids: items.map(({ id }) => id) },
@@ -169,7 +169,7 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         callback: (deal) =>
             alert({
                 variant: 'warning',
-                description: transChoice('messages.Commercial_deals.trash.confirm', 1),
+                description: transChoice('messages.deals.commercials.trash.confirm', 1),
                 callback: () =>
                     router.delete(route('deals.commercials.trash', { deal }), {
                         only: ['commercial_deals'],
@@ -184,7 +184,7 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         callback: (deal) =>
             alert({
                 variant: 'success',
-                description: transChoice('messages.Commercial_deals.restore.confirm', 1),
+                description: transChoice('messages.deals.commercials.restore.confirm', 1),
                 callback: () =>
                     router.patch(route('deals.commercials.restore', { deal }), undefined, {
                         only: ['commercial_deals'],
@@ -199,7 +199,7 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         callback: (deal) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.Commercial_deals.delete.confirm', 1),
+                description: transChoice('messages.deals.commercials.delete.confirm', 1),
                 callback: () =>
                     router.delete(route('deals.commercials.delete', { deal }), {
                         only: ['commercial_deals'],

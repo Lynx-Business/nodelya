@@ -122,7 +122,7 @@ class CommercialDealController extends Controller
             return back();
         }
 
-        Services::toast()->success->execute(__('messages.commercial_deals.store.success'));
+        Services::toast()->success->execute(__('messages.deals.commercials.store.success'));
 
         return to_route('deals.commercials.index');
     }
@@ -164,7 +164,7 @@ class CommercialDealController extends Controller
             return back();
         }
 
-        Services::toast()->success->execute(__('messages.commercial_deals.update.success'));
+        Services::toast()->success->execute(__('messages.deals.commercials.update.success'));
 
         return to_route('deals.commercials.index');
     }
@@ -179,7 +179,7 @@ class CommercialDealController extends Controller
                 ->get()
                 ->each->delete();
             \DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.commercial_deals.trash.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.deals.commercials.trash.success', $count));
         } catch (\Throwable $e) {
             \DB::rollBack();
             Services::toast()->error->execute();
@@ -199,7 +199,7 @@ class CommercialDealController extends Controller
                 ->get()
                 ->each->restore();
             \DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.commercial_deals.restore.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.deals.commercials.restore.success', $count));
         } catch (\Throwable $e) {
             \DB::rollBack();
             Services::toast()->error->execute();
@@ -222,7 +222,7 @@ class CommercialDealController extends Controller
                 ->get()
                 ->each->forceDelete();
             \DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.commercial_deals.delete.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.deals.commercials.delete.success', $count));
         } catch (\Throwable $e) {
             \DB::rollBack();
             Services::toast()->error->execute();
@@ -257,7 +257,7 @@ class CommercialDealController extends Controller
 
         });
 
-        Services::toast()->success->execute(__('messages.commercial_deals.validate.success'));
+        Services::toast()->success->execute(__('messages.deals.commercials.validate.success'));
 
         return to_route('deals.billings.index');
     }

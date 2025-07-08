@@ -119,7 +119,7 @@ class BillingDealController extends Controller
             return back();
         }
 
-        Services::toast()->success->execute(__('messages.billing_deals.update.success'));
+        Services::toast()->success->execute(__('messages.deals.billings.update.success'));
 
         return to_route('deals.billings.index');
     }
@@ -134,7 +134,7 @@ class BillingDealController extends Controller
                 ->get()
                 ->each->delete();
             \DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.billing_deals.trash.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.deals.billings.trash.success', $count));
         } catch (\Throwable $e) {
             \DB::rollBack();
             Services::toast()->error->execute();
@@ -154,7 +154,7 @@ class BillingDealController extends Controller
                 ->get()
                 ->each->restore();
             \DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.billing_deals.restore.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.deals.billings.restore.success', $count));
         } catch (\Throwable $e) {
             \DB::rollBack();
             Services::toast()->error->execute();
@@ -177,7 +177,7 @@ class BillingDealController extends Controller
                 ->get()
                 ->each->forceDelete();
             \DB::commit();
-            Services::toast()->success->execute(trans_choice('messages.billing_deals.delete.success', $count));
+            Services::toast()->success->execute(trans_choice('messages.deals.billings.delete.success', $count));
         } catch (\Throwable $e) {
             \DB::rollBack();
             Services::toast()->error->execute();
