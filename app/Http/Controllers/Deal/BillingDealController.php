@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Deal;
 
-use App\Data\Client\ClientListResource;
 use App\Data\Deal\Billing\Form\BillingDealFormProps;
 use App\Data\Deal\Billing\Form\BillingDealFormRequest;
 use App\Data\Deal\Billing\Index\BillingDealIndexProps;
@@ -13,7 +12,6 @@ use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
-use App\Models\Client;
 use App\Models\Deal;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
@@ -87,7 +85,7 @@ class BillingDealController extends Controller
             'accounting_period_months' => $months,
             'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
             'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
-            'clients'                  => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'clients'                  => Lazy::inertia(fn () => Services::client()->list()),
         ]));
     }
 
@@ -98,7 +96,7 @@ class BillingDealController extends Controller
             'deal' => DealResource::from(
                 $deal->load('client', 'parent', 'projectDepartment'),
             )->include('schedule'),
-            'clients'            => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'clients'            => Lazy::inertia(fn () => Services::client()->list()),
             'deals'              => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
             'schedule_status'    => Lazy::inertia(fn () => DealScheduleStatus::labels()),
             'projectDepartments' => Lazy::inertia(

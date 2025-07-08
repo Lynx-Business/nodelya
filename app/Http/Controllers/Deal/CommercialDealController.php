@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Deal;
 
-use App\Data\Client\ClientListResource;
 use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
@@ -15,7 +14,6 @@ use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
-use App\Models\Client;
 use App\Models\Deal;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -94,7 +92,7 @@ class CommercialDealController extends Controller
             'accounting_period_months' => $months,
             'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
             'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
-            'clients'                  => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'clients'                  => Lazy::inertia(fn () => Services::client()->list()),
         ]));
     }
 
@@ -105,7 +103,7 @@ class CommercialDealController extends Controller
     {
 
         return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([
-            'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::all())),
         ]));
     }
@@ -147,7 +145,7 @@ class CommercialDealController extends Controller
             'deal' => DealResource::from(
                 $deal->load('client', 'parent'),
             )->include('schedule'),
-            'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
+            'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
         ]));
     }
