@@ -1186,6 +1186,7 @@ export type UserAbilitiesResource = {
     contractors: { view_any: boolean; create: boolean };
     employees: { view_any: boolean; create: boolean };
     expenses: { budgets: { view_any: boolean; create: boolean }; charges: { view_any: boolean; create: boolean } };
+    deals: { view_any: boolean; create: boolean };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
 };

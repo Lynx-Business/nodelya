@@ -8,6 +8,7 @@ import { BillingDealFormProps } from '@/types';
 
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
+import { computed } from 'vue';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -27,6 +28,7 @@ defineOptions({
 const props = defineProps<BillingDealFormProps>();
 const form = useBillingDealForm(props.deal);
 
+const deal = computed(() => props.deal);
 function submit() {
     const { deal } = props;
     form.put(route('deals.billings.edit', { deal: deal! }));
@@ -36,7 +38,7 @@ function submit() {
 <template>
     <Head :title="$t('pages.deals.billings.edit.title')" />
 
-    <Form :form @submit="submit()">
+    <Form :form :disabled="!deal?.can_update" @submit="submit()">
         <Section>
             <SectionHeader>
                 <SectionTitle class="flex items-center justify-between gap-4">

@@ -128,14 +128,6 @@ class CommercialDealController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Deal $deal)
@@ -144,7 +136,7 @@ class CommercialDealController extends Controller
         return Inertia::render('deals/commercial/Edit', CommercialDealFormProps::from([
             'deal' => DealResource::from(
                 $deal->load('client', 'parent'),
-            )->include('schedule'),
+            )->include('schedule', 'can_update'),
             'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
         ]));

@@ -147,15 +147,17 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
 const rowActions: DataTableRowAction<DealResource>[] = [
     {
         type: 'href',
-        label: trans('edit'),
-        icon: PencilIcon,
-        disabled: (deal) => !deal.can_update,
+        label: trans('view'),
+        hidden: (deal) => deal.can_update || false,
+        disabled: (deal) => !deal.can_view,
+        icon: EyeIcon,
         href: (deal) => route('deals.billings.edit', { deal }),
     },
     {
         type: 'href',
-        label: trans('view'),
-        icon: EyeIcon,
+        label: trans('edit'),
+        icon: PencilIcon,
+        disabled: (deal) => !deal.can_update,
         href: (deal) => route('deals.billings.edit', { deal }),
     },
     {

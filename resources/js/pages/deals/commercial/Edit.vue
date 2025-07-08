@@ -9,6 +9,7 @@ import { AppLayout } from '@/layouts';
 import type { CommercialDealFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
+import { computed } from 'vue';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -28,6 +29,8 @@ defineOptions({
 const props = defineProps<CommercialDealFormProps>();
 const form = useCommercialDealForm(props.deal);
 
+const deal = computed(() => props.deal);
+
 function submit() {
     const { deal } = props;
     form.put(route('deals.commercials.edit', { deal: deal! }));
@@ -37,14 +40,14 @@ function submit() {
 <template>
     <Head :title="$t('pages.deals.commercials.edit.title')" />
 
-    <Form :form @submit="submit()">
+    <Form :disabled="!deal?.can_update" :form @submit="submit()">
         <Section>
             <SectionHeader>
                 <SectionTitle class="flex items-center justify-between gap-4">
                     <span>
                         {{ $t('pages.deals.commercials.edit.title') }}
                     </span>
-                    <Button class="text-right">
+                    <Button class="text-right" v-if="deal?.can_update">
                         <InertiaLink method="get" :href="route('deals.commercials.validate', { deal: deal! })">
                             {{ $t('pages.deals.commercials.edit.validate_button') }}
                         </InertiaLink>

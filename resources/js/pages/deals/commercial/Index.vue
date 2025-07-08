@@ -26,14 +26,9 @@ import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
+import { useAlert, useAuth, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import { AppLayout } from '@/layouts';
-import {
-    CommercialDealIndexProps,
-    CommercialDealIndexRequest,
-    DealResource,
-    MonthlyExpenseData,
-} from '@/types';
+import { CommercialDealIndexProps, CommercialDealIndexRequest, DealResource, MonthlyExpenseData } from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -53,7 +48,7 @@ defineOptions({
 });
 
 const props = defineProps<CommercialDealIndexProps>();
-
+const { abilities } = useAuth();
 const format = useFormatter();
 const alert = useAlert();
 const { locale } = useLocale();
@@ -151,14 +146,17 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
 const rowActions: DataTableRowAction<DealResource>[] = [
     {
         type: 'href',
-        label: trans('edit'),
-        icon: PencilIcon,
+        label: trans('view'),
+        hidden: (deal) => deal.can_update || false,
+        disabled: (deal) => !deal.can_view,
+        icon: EyeIcon,
         href: (deal) => route('deals.commercials.edit', { deal }),
     },
     {
         type: 'href',
-        label: trans('view'),
-        icon: EyeIcon,
+        label: trans('edit'),
+        icon: PencilIcon,
+        disabled: (deal) => !deal.can_update,
         href: (deal) => route('deals.commercials.edit', { deal }),
     },
     {
@@ -265,14 +263,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                     <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters="filters"
-                        :omit="[
-                            'q',
-                            'page',
-                            'per_page',
-                            'sort_by',
-                            'sort_direction',
-                            'accounting_period_id',
-                        ]"
+                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction', 'accounting_period_id']"
                         :data="['trashed_filters', 'clients']"
                     >
                         <FiltersSheetTrigger />
@@ -340,7 +331,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                         </FiltersSheetContent>
                     </FiltersSheet>
                 </FormContent>
-                <FormContent class="flex items-center justify-between">
+                <FormContent class="flex items-center justify-between" v-if="abilities.deals.create">
                     <Button as-child>
                         <InertiaLink :href="route('deals.commercials.create')">
                             <CirclePlusIcon />
@@ -368,7 +359,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableSortableHead value="code">
                                 {{ $t('models.deal.commercial.fields.code') }}
                             </DataTableSortableHead>
-                              <DataTableSortableHead value="success_rate">
+                            <DataTableSortableHead value="success_rate">
                                 {{ $t('models.deal.billing.fields.success_rate') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="ordered_at">
@@ -410,7 +401,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <DataTableCell>
                                 {{ deal.code }}
                             </DataTableCell>
-                              <DataTableCell>
+                            <DataTableCell>
                                 {{ deal.success_rate + ' %' }}
                             </DataTableCell>
                             <DataTableCell>
@@ -424,7 +415,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             </DataTableCell>
 
                             <DataTableCell v-for="(month, index) in dynamicMonths" :key="index" class="min-w-30">
-                                {{ format.price(findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key)?.amount ?? 0) }}
+                                {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

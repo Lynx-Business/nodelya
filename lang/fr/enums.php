@@ -20,9 +20,9 @@ return [
         ],
 
         'schedule_status' => [
-            'paid'      => 'Payé',
-            'invoiced'  => 'Facture émise',
-            'uncertain' => 'Incertain',
+            'paid'              => 'Payé',
+            'invoiced'          => 'Facture émise',
+            'uncertain'         => 'Incertain',
             'pending_invoicing' => 'En attente de facturation',
         ],
     ],
@@ -39,6 +39,7 @@ return [
         'name' => [
             'client'   => 'clients',
             'expenses' => 'dépenses',
+            'deal'     => 'Commerces/Facturations',
         ],
     ],
 

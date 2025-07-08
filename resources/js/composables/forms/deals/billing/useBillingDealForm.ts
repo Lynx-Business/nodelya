@@ -26,6 +26,7 @@ export function useBillingDealForm(deal?: DealResource) {
         duration_in_months: deal?.duration_in_months || 12,
         starts_at: deal?.starts_at || '',
         schedule: deal?.schedule,
+        can_update: deal?.can_update,
         schedule_data: initialSchedule,
     });
 
@@ -39,7 +40,7 @@ export type BillingDealFormData = ReturnType<BillinDealForm['data']>;
 
 function transformDealForm(data: BillingDealFormData): BillingDealFormRequest {
     return {
-        ...reactiveOmit(data, 'client', 'parent', 'project_department'),
+        ...reactiveOmit(data, 'client', 'parent', 'project_department', 'can_update'),
         client_id: data.client?.id!,
         deal_id: data.parent?.id,
         amount: data.amount!,

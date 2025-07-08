@@ -280,10 +280,10 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <div class="col-span-full mt-2">
             <h4 class="mb-4 text-lg font-medium">Échéancier</h4>
 
-            <div class="mb-4 flex items-center gap-2">
+            <div class="mb-4 flex items-center gap-2" v-if="form.can_update">
                 <FormField>
                     <FormLabel>
-                        <CapitalizeText> Date </CapitalizeText>
+                        <CapitalizeText> {{ $t('models.deal.billing.fields.schedule_data.date') }} </CapitalizeText>
                     </FormLabel>
                     <FormControl>
                         <DatePicker v-model="newScheduleItem.date" :min-value="form?.starts_at" />
@@ -301,7 +301,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 </FormField>
                 <FormField>
                     <FormLabel>
-                        <CapitalizeText> Titre </CapitalizeText>
+                        <CapitalizeText> {{ $t('models.deal.billing.fields.schedule_data.title') }} </CapitalizeText>
                     </FormLabel>
                     <FormControl>
                         <TextInput v-model="newScheduleItem.title" />
