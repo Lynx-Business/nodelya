@@ -31,7 +31,7 @@ import { BillingDealIndexProps, BillingDealIndexRequest, DealResource, MonthlyEx
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
 import { trans, transChoice } from 'laravel-vue-i18n';
-import { ArchiveIcon, ArchiveRestoreIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
+import { ArchiveIcon, ArchiveRestoreIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 defineOptions({
@@ -149,6 +149,13 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
+        disabled: (deal) => !deal.can_update,
+        href: (deal) => route('deals.billings.edit', { deal }),
+    },
+    {
+        type: 'href',
+        label: trans('view'),
+        icon: EyeIcon,
         href: (deal) => route('deals.billings.edit', { deal }),
     },
     {
@@ -274,14 +281,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                     <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
                         :filters="filters"
-                        :omit="[
-                            'q',
-                            'page',
-                            'per_page',
-                            'sort_by',
-                            'sort_direction',
-                            'accounting_period_id',
-                        ]"
+                        :omit="['q', 'page', 'per_page', 'sort_by', 'sort_direction', 'accounting_period_id']"
                         :data="['trashed_filters', 'clients']"
                     >
                         <FiltersSheetTrigger />
@@ -429,14 +429,15 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 :key="index"
                                 :class="[
                                     statusClass(
-                                        findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key)?.status,
-                                        findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key),
+                                        findExpenseForMonth(deal.monthly_expenses, month.key)?.status,
+                                        findExpenseForMonth(deal.monthly_expenses, month.key),
                                     ),
                                     'min-w-30',
                                 ]"
                             >
-                                {{ format.price(findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key)?.amount ?? 0) }}
+                                {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
                             </DataTableCell>
+
                             <DataTableCell>
                                 <DataTableRowActions />
                             </DataTableCell>
