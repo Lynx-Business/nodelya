@@ -280,9 +280,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                             'per_page',
                             'sort_by',
                             'sort_direction',
-                            'accounting_period',
-                            'clients_items',
-                            'client_ids',
+                            'accounting_period_id',
                         ]"
                         :data="['trashed_filters', 'clients']"
                     >
