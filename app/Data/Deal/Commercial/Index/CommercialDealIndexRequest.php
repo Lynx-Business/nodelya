@@ -36,7 +36,7 @@ class CommercialDealIndexRequest extends Data
         public string $sort_direction = 'desc',
         public ?int $accounting_period_id = null,
         public ?string $name = null,
-        public ?int $amount = null,
+        public ?float $amount = null,
         public ?int $success_rate = null,
         public ?string $code = null,
 

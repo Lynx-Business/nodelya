@@ -109,14 +109,8 @@ class BillingDealFormRequest extends Data
                         'principal' => $principalAmount,
                     ]));
                 }
-
-                foreach ($value as $item) {
-                    if (empty($item['title'])) {
-                        $fail(__('validation.required', ['attribute' => __('models.deal.billing.fields.schedule_data.title')]));
-                        break;
-                    }
-                }
             }],
+            'schedule_data.*.title' => ['required'],
         ];
     }
 }
