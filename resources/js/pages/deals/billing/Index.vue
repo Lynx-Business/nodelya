@@ -54,11 +54,11 @@ const { locale } = useLocale();
 const dynamicMonths = computed(() => {
     if (!props.accounting_period_months) return [];
 
-    const months: { key: string; lettre: string }[] = [];
+    const months: { key: string; label: string }[] = [];
     props.accounting_period_months.forEach((month) => {
         months.push({
             key: month,
-            lettre: formatMonth(month),
+            label: formatMonth(month),
         });
     });
 
@@ -383,7 +383,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                             </DataTableSortableHead>
 
                             <DataTableHead v-for="(month, index) in dynamicMonths" :key="index">
-                                {{ month.lettre }}
+                                {{ month.label }}
                             </DataTableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
