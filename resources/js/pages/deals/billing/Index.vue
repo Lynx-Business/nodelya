@@ -38,7 +38,7 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.billing_deals.index.title'),
+                title: trans('pages.deals.billings.index.title'),
                 href: route('index'),
             },
         ],
@@ -256,7 +256,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
 </script>
 
 <template>
-    <Head :title="trans('pages.billing_deals.title')" />
+    <Head :title="trans('pages.deals.billings.title')" />
 
     <Section>
         <SectionContent>

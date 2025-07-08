@@ -45,7 +45,7 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.commercial_deals.index.title'),
+                title: trans('pages.deals.commercials.index.title'),
                 href: route('index'),
             },
         ],
@@ -247,7 +247,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
 </script>
 
 <template>
-    <Head :title="trans('pages.commercial_deals.title')" />
+    <Head :title="trans('pages.deals.commercials.title')" />
 
     <Section>
         <SectionContent>
@@ -345,7 +345,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                         <InertiaLink :href="route('deals.commercials.create')">
                             <CirclePlusIcon />
                             <CapitalizeText>
-                                {{ $t('pages.commercial_deals.create.title') }}
+                                {{ $t('pages.deals.commercials.create.title') }}
                             </CapitalizeText>
                         </InertiaLink>
                     </Button>

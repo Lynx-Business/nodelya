@@ -14,11 +14,11 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.commercial_deals.index.title'),
+                title: trans('pages.deals.commercials.index.title'),
                 href: route('deals.commercials.index'),
             },
             {
-                title: trans('pages.commercial_deals.edit.title'),
+                title: trans('pages.deals.commercials.edit.title'),
                 href: route('deals.commercials.edit', { deal: route().params.deal }),
             },
         ],
@@ -35,18 +35,18 @@ function submit() {
 </script>
 
 <template>
-    <Head :title="$t('pages.commercial_deals.edit.title')" />
+    <Head :title="$t('pages.deals.commercials.edit.title')" />
 
     <Form :form @submit="submit()">
         <Section>
             <SectionHeader>
                 <SectionTitle class="flex items-center justify-between gap-4">
                     <span>
-                        {{ $t('pages.commercial_deals.edit.title') }}
+                        {{ $t('pages.deals.commercials.edit.title') }}
                     </span>
                     <Button class="text-right">
                         <InertiaLink method="get" :href="route('deals.commercials.validate', { deal: deal! })">
-                            {{ $t('pages.commercial_deals.edit.validate_button') }}
+                            {{ $t('pages.deals.commercials.edit.validate_button') }}
                         </InertiaLink>
                     </Button>
                 </SectionTitle>

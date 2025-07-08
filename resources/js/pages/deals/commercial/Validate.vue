@@ -14,11 +14,11 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.commercial_deals.index.title'),
+                title: trans('pages.deals.commercials.index.title'),
                 href: route('deals.commercials.index'),
             },
             {
-                title: trans('pages.commercial_deals.edit.title'),
+                title: trans('pages.deals.commercials.edit.title'),
                 href: route('deals.commercials.edit', { deal: route().params.deal }),
             },
             {
@@ -38,13 +38,13 @@ function submit() {
 </script>
 
 <template>
-    <Head :title="$t('pages.commercial_deals.validate.title', { name: props.deal.name })" />
+    <Head :title="$t('pages.deals.commercials.validate.title', { name: props.deal.name })" />
 
     <Form :form @submit="submit()">
         <Section>
             <SectionHeader>
                 <SectionTitle>
-                    {{ $t('pages.commercial_deals.validate.title', { name: props.deal.name }) }}
+                    {{ $t('pages.deals.commercials.validate.title', { name: props.deal.name }) }}
                 </SectionTitle>
             </SectionHeader>
             <SectionContent class="sm:flex">
@@ -54,7 +54,7 @@ function submit() {
                 <FormSubmitButton>
                     <SaveIcon />
                     <CapitalizeText>
-                        {{ $t('pages.commercial_deals.validate.save') }}
+                        {{ $t('pages.deals.commercials.validate.save') }}
                     </CapitalizeText>
                 </FormSubmitButton>
             </SectionFooter>

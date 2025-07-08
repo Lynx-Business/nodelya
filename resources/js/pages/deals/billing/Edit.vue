@@ -13,11 +13,11 @@ defineOptions({
     layout: useLayout(AppLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.billing_deals.index.title'),
+                title: trans('pages.deals.billings.index.title'),
                 href: route('deals.billings.index'),
             },
             {
-                title: trans('pages.billing_deals.edit.title'),
+                title: trans('pages.deals.billings.edit.title'),
                 href: route('deals.billings.edit', { deal: route().params.deal }),
             },
         ],
@@ -34,14 +34,14 @@ function submit() {
 </script>
 
 <template>
-    <Head :title="$t('pages.billing_deals.edit.title')" />
+    <Head :title="$t('pages.deals.billings.edit.title')" />
 
     <Form :form @submit="submit()">
         <Section>
             <SectionHeader>
                 <SectionTitle class="flex items-center justify-between gap-4">
                     <span>
-                        {{ $t('pages.billing_deals.edit.title') }}
+                        {{ $t('pages.deals.billings.edit.title') }}
                     </span>
                 </SectionTitle>
             </SectionHeader>

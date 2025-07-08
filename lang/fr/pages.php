@@ -308,34 +308,38 @@ return [
         ],
     ],
 
-    'commercial_deals' => [
-        'index' => [
-            'title' => 'Affaires commerciales',
+    'deals' => [
+        'commercials' => [
+            'index' => [
+                'title' => 'Affaires commerciales',
+            ],
+
+            'create' => [
+                'title'       => 'Créer une affaire commerciale',
+                'description' => 'Créez une nouvelle affaire commerciale pour gérer vos transactions',
+            ],
+            'edit' => [
+                'title'           => 'Mettre à jour une affaire commerciale',
+                'description'     => 'Modifiez les détails d\'une affaire commerciale existante',
+                'validate_button' => 'Passer l’affaire au statut validé',
+            ],
+
+            'validate' => [
+                'title' => 'Validation de l’affaire :name',
+                'save'  => 'Valider l’affaire',
+            ],
         ],
 
-        'create' => [
-            'title'       => 'Créer une affaire commerciale',
-            'description' => 'Créez une nouvelle affaire commerciale pour gérer vos transactions',
-        ],
-        'edit' => [
-            'title'           => 'Mettre à jour une affaire commerciale',
-            'description'     => 'Modifiez les détails d\'une affaire commerciale existante',
-            'validate_button' => 'Passer l’affaire au statut validé',
+        'billings' => [
+            'index' => [
+                'title' => 'Factures',
+            ],
+            'edit' => [
+                'title'       => 'Mettre à jour une facture',
+                'description' => 'Modifiez les détails d\'une facture existante',
+            ],
         ],
 
-        'validate' => [
-            'title' => 'Validation de l’affaire :name',
-            'save'  => 'Valider l’affaire',
-        ],
     ],
 
-    'billing_deals' => [
-        'index' => [
-            'title' => 'Factures',
-        ],
-        'edit' => [
-            'title'       => 'Mettre à jour une facture',
-            'description' => 'Modifiez les détails d\'une facture existante',
-        ],
-    ],
 ];
