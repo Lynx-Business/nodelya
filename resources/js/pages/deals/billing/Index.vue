@@ -39,7 +39,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.deals.billings.index.title'),
-                href: route('index'),
+                href: route('deals.billings.index'),
             },
         ],
     })),
