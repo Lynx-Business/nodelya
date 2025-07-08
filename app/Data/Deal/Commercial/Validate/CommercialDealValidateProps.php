@@ -2,7 +2,7 @@
 
 namespace App\Data\Deal\Commercial\Validate;
 
-use App\Data\Deal\DealListResource;
+use App\Data\Deal\DealResource;
 use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -20,7 +20,7 @@ class CommercialDealValidateProps extends Resource
         #[DataCollectionOf(ProjectDepartmentResource::class)]
         public Lazy|DataCollection $projectDepartments,
 
-        public DealListResource $deal,
+        public DealResource $deal,
 
         public string $reference,
     ) {}

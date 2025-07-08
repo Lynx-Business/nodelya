@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { InertiaCombobox, InertiaComboboxEmits, InertiaComboboxProps } from '@/components/ui/custom/combobox';
-import { DealListResource } from '@/types';
+import { DealResource } from '@/types';
 import { useForwardPropsEmits } from 'reka-ui';
 
-type T = DealListResource;
+type T = DealResource;
 type Props = Partial<InertiaComboboxProps<T>>;
 const props = withDefaults(defineProps<Props>(), {
     by: 'id',

@@ -31,7 +31,7 @@ import { AppLayout } from '@/layouts';
 import {
     CommercialDealIndexProps,
     CommercialDealIndexRequest,
-    CommercialDealIndexResource,
+    DealResource,
     MonthlyExpenseData,
 } from '@/types';
 
@@ -81,13 +81,14 @@ function formatMonth(monthString: string): string {
     }).format(date);
 }
 
-function findExpenseForMonth(expenses: MonthlyExpenseData[], monthKey: string) {
-    return expenses.find((expense) => expense.date_key === monthKey);
+function findExpenseForMonth(expenses: Record<string, MonthlyExpenseData> | undefined, monthKey: string) {
+    if (!expenses) return undefined;
+    return expenses[monthKey];
 }
 
-const selectedRows = ref<CommercialDealIndexResource[]>([]);
+const selectedRows = ref<DealResource[]>([]);
 
-const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
+const rowsActions: DataTableRowsAction<DealResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -147,7 +148,7 @@ const rowsActions: DataTableRowsAction<CommercialDealIndexResource>[] = [
     },
 ];
 
-const rowActions: DataTableRowAction<CommercialDealIndexResource>[] = [
+const rowActions: DataTableRowAction<DealResource>[] = [
     {
         type: 'href',
         label: trans('edit'),
@@ -419,7 +420,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             </DataTableCell>
 
                             <DataTableCell v-for="(month, index) in dynamicMonths" :key="index" class="min-w-30">
-                                {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
+                                {{ format.price(findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key)?.amount ?? 0) }}
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

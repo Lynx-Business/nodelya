@@ -4,7 +4,7 @@ namespace App\Data\Deal\Billing\Form;
 
 use App\Attributes\EnumArrayOf;
 use App\Data\Client\ClientListResource;
-use App\Data\Deal\DealListResource;
+use App\Data\Deal\DealResource;
 use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Enums\Deal\DealScheduleStatus;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
@@ -18,14 +18,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class BillingDealFormProps extends Resource
 {
     public function __construct(
-        public ?BillingDealFormResource $deal,
+        public ?DealResource $deal,
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientListResource::class)]
         public Lazy|DataCollection $clients,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(DealListResource::class)]
+        #[DataCollectionOf(DealResource::class)]
         public Lazy|DataCollection $deals,
 
         #[AutoInertiaLazy]

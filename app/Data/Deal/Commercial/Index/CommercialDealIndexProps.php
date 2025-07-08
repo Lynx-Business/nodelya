@@ -5,6 +5,7 @@ namespace App\Data\Deal\Commercial\Index;
 use App\Attributes\EnumArrayOf;
 use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Client\ClientListResource;
+use App\Data\Deal\DealResource;
 use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -24,7 +25,7 @@ class CommercialDealIndexProps extends Resource
         public array $accounting_period_months,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(CommercialDealIndexResource::class)]
+        #[DataCollectionOf(DealResource::class)]
         public Lazy|PaginatedDataCollection $commercial_deals,
 
         #[AutoInertiaLazy]

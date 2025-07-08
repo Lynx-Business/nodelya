@@ -26,7 +26,7 @@ import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import { AppLayout } from '@/layouts';
-import { BillingDealIndexProps, BillingDealIndexRequest, BillingDealIndexResource, MonthlyExpenseData } from '@/types';
+import { BillingDealIndexProps, BillingDealIndexRequest, DealResource, MonthlyExpenseData } from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
@@ -74,13 +74,17 @@ function formatMonth(monthString: string): string {
     }).format(date);
 }
 
-function findExpenseForMonth(expenses: MonthlyExpenseData[], monthKey: string) {
-    return expenses.find((expense) => expense.date_key === monthKey);
+function findExpenseForMonth(
+    expenses: Record<string, MonthlyExpenseData> | undefined | null,
+    monthKey: string,
+): MonthlyExpenseData | undefined {
+    if (!expenses) return undefined;
+    return expenses[monthKey];
 }
 
-const selectedRows = ref<BillingDealIndexResource[]>([]);
+const selectedRows = ref<DealResource[]>([]);
 
-const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
+const rowsActions: DataTableRowsAction<DealResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -140,7 +144,7 @@ const rowsActions: DataTableRowsAction<BillingDealIndexResource>[] = [
     },
 ];
 
-const rowActions: DataTableRowAction<BillingDealIndexResource>[] = [
+const rowActions: DataTableRowAction<DealResource>[] = [
     {
         type: 'href',
         label: trans('edit'),
@@ -433,13 +437,13 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 :key="index"
                                 :class="[
                                     statusClass(
-                                        findExpenseForMonth(deal.monthly_expenses, month.key)?.status,
-                                        findExpenseForMonth(deal.monthly_expenses, month.key),
+                                        findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key)?.status,
+                                        findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key),
                                     ),
                                     'min-w-30',
                                 ]"
                             >
-                                {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
+                                {{ format.price(findExpenseForMonth(deal.monthly_expenses as unknown as Record<string, MonthlyExpenseData>, month.key)?.amount ?? 0) }}
                             </DataTableCell>
                             <DataTableCell>
                                 <DataTableRowActions />

@@ -5,19 +5,16 @@ namespace App\Http\Controllers\Deal;
 use App\Data\Client\ClientListResource;
 use App\Data\Deal\Billing\Form\BillingDealFormProps;
 use App\Data\Deal\Billing\Form\BillingDealFormRequest;
-use App\Data\Deal\Billing\Form\BillingDealFormResource;
 use App\Data\Deal\Billing\Index\BillingDealIndexProps;
 use App\Data\Deal\Billing\Index\BillingDealIndexRequest;
-use App\Data\Deal\Billing\Index\BillingDealIndexResource;
-use App\Data\Deal\DealListResource;
 use App\Data\Deal\DealOneOrManyRequest;
+use App\Data\Deal\DealResource;
 use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Deal;
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
@@ -65,16 +62,16 @@ class BillingDealController extends Controller
                         )
                         ->withQueryString();
 
-                    $resources = BillingDealIndexResource::collect($paginatedDeals, PaginatedDataCollection::class);
+                    $resources = DealResource::collect($paginatedDeals, PaginatedDataCollection::class)->include('monthly_expenses', 'can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete');
 
                     $resources->through(function ($resource) use ($accountingPeriod) {
-                        if (isset($resource->monthly_expenses) && $accountingPeriod) {
+                        if (isset($resource->monthly_expenses) && is_array($resource->monthly_expenses) && $accountingPeriod) {
                             $resource->monthly_expenses = array_filter(
-                                $resource->monthly_expenses,
+                                $resource->monthly_expenses ?? null,
                                 function ($expense) use ($accountingPeriod) {
-                                    return $expense->date->between(
-                                        Carbon::parse($accountingPeriod->starts_at),
-                                        Carbon::parse($accountingPeriod->ends_at),
+                                    return $expense->date?->between(
+                                        $accountingPeriod->starts_at,
+                                        $accountingPeriod->ends_at,
                                     );
                                 },
                             );
@@ -87,10 +84,10 @@ class BillingDealController extends Controller
                     return $resources;
                 },
             ),
+            'accounting_period_months' => $months,
             'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
             'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
             'clients'                  => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'accounting_period_months' => $months,
         ]));
     }
 
@@ -98,11 +95,11 @@ class BillingDealController extends Controller
     {
 
         return Inertia::render('deal/billing/Edit', BillingDealFormProps::from([
-            'deal' => BillingDealFormResource::from(
+            'deal' => DealResource::from(
                 $deal->load('client', 'parent', 'projectDepartment'),
-            ),
+            )->include('schedule'),
             'clients'            => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'deals'              => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
+            'deals'              => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
             'schedule_status'    => Lazy::inertia(fn () => DealScheduleStatus::labels()),
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),

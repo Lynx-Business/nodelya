@@ -3,7 +3,7 @@
 namespace App\Data\Deal\Commercial\Form;
 
 use App\Data\Client\ClientListResource;
-use App\Data\Deal\DealListResource;
+use App\Data\Deal\DealResource;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
@@ -15,14 +15,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class CommercialDealFormProps extends Resource
 {
     public function __construct(
-        public ?CommercialDealFormResource $deal,
+        public ?DealResource $deal,
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientListResource::class)]
         public Lazy|DataCollection $clients,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(DealListResource::class)]
+        #[DataCollectionOf(DealResource::class)]
         public Lazy|DataCollection $deals,
     ) {}
 }

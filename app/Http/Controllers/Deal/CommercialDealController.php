@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Deal;
 use App\Data\Client\ClientListResource;
 use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
-use App\Data\Deal\Commercial\Form\CommercialDealFormResource;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
-use App\Data\Deal\Commercial\Index\CommercialDealIndexResource;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateRequest;
-use App\Data\Deal\DealListResource;
 use App\Data\Deal\DealOneOrManyRequest;
+use App\Data\Deal\DealResource;
 use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
@@ -71,16 +69,16 @@ class CommercialDealController extends Controller
                         )
                         ->withQueryString();
 
-                    $resources = CommercialDealIndexResource::collect($paginatedDeals, PaginatedDataCollection::class);
+                    $resources = DealResource::collect($paginatedDeals, PaginatedDataCollection::class)->include('monthly_expenses', 'can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete');
 
                     $resources->through(function ($resource) use ($accountingPeriod) {
-                        if (isset($resource->monthly_expenses) && $accountingPeriod) {
+                        if (isset($resource->monthly_expenses) && is_array($resource->monthly_expenses) && $accountingPeriod) {
                             $resource->monthly_expenses = array_filter(
-                                $resource->monthly_expenses,
+                                $resource->monthly_expenses ?? null,
                                 function ($expense) use ($accountingPeriod) {
-                                    return $expense->date->between(
-                                        Carbon::parse($accountingPeriod->starts_at),
-                                        Carbon::parse($accountingPeriod->ends_at),
+                                    return $expense->date?->between(
+                                        $accountingPeriod->starts_at,
+                                        $accountingPeriod->ends_at,
                                     );
                                 },
                             );
@@ -93,10 +91,10 @@ class CommercialDealController extends Controller
                     return $resources;
                 },
             ),
+            'accounting_period_months' => $months,
             'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
             'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
             'clients'                  => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'accounting_period_months' => $months,
         ]));
     }
 
@@ -108,7 +106,7 @@ class CommercialDealController extends Controller
 
         return Inertia::render('deal/commercial/Create', CommercialDealFormProps::from([
             'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'deals'   => Lazy::inertia(fn () => DealListResource::collect(Deal::all())),
+            'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::all())),
         ]));
     }
 
@@ -146,11 +144,11 @@ class CommercialDealController extends Controller
     {
 
         return Inertia::render('deal/commercial/Edit', CommercialDealFormProps::from([
-            'deal' => CommercialDealFormResource::from(
+            'deal' => DealResource::from(
                 $deal->load('client', 'parent'),
-            ),
+            )->include('schedule'),
             'clients' => Lazy::inertia(fn () => ClientListResource::collect(Client::all())),
-            'deals'   => Lazy::inertia(fn () => DealListResource::collect(Deal::where('id', '!=', $deal->id)->get())),
+            'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
         ]));
     }
 
@@ -240,7 +238,7 @@ class CommercialDealController extends Controller
         $reference = $this->generateReference($deal);
 
         return Inertia::render('deal/commercial/Validate', CommercialDealValidateProps::from([
-            'deal'               => DealListResource::from($deal),
+            'deal'               => DealResource::from($deal),
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),
             ),

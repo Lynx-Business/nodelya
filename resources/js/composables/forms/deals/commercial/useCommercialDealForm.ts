@@ -1,7 +1,7 @@
 import { useComputedForm } from '@/composables';
-import { CommercialDealFormRequest, CommercialDealFormResource } from '@/types';
+import { CommercialDealFormRequest, DealResource } from '@/types';
 
-export function useCommercialDealForm(deal?: CommercialDealFormResource) {
+export function useCommercialDealForm(deal?: DealResource) {
     const initialSchedule =
         deal?.schedule?.flatMap((yearData) =>
             yearData.data.map((item) => ({

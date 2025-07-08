@@ -5,6 +5,7 @@ namespace App\Data\Deal\Billing\Index;
 use App\Attributes\EnumArrayOf;
 use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Client\ClientListResource;
+use App\Data\Deal\DealResource;
 use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -24,7 +25,7 @@ class BillingDealIndexProps extends Resource
         public array $accounting_period_months,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(BillingDealIndexResource::class)]
+        #[DataCollectionOf(DealResource::class)]
         public Lazy|PaginatedDataCollection $billing_deals,
 
         #[AutoInertiaLazy]

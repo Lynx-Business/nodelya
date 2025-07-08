@@ -23,11 +23,10 @@ import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { CommercialDealFormData, useFormatter } from '@/composables';
 import { DealScheduleStatus } from '@/types';
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 
 const { form } = injectFormContext<CommercialDealFormData>();
 const defaultStatus: DealScheduleStatus = 'uncertain';
-const newScheduleItem = ref({ date: '', amount: 0 });
 const format = useFormatter();
 
 function addMonths(date: Date, months: number): Date {
@@ -176,7 +175,9 @@ watch(
                 </CapitalizeText>
             </FormLabel>
 
-            <DealCombobox v-model="form.parent" />
+            <FormControl>
+                <DealCombobox v-model="form.parent" />
+            </FormControl>
             <FormError :message="form.errors.deal_id" />
         </FormField>
 
@@ -186,8 +187,9 @@ watch(
                     {{ $t('models.deal.commercial.fields.client_id') }}
                 </CapitalizeText>
             </FormLabel>
-
-            <ClientCombobox v-model="form.client" />
+            <FormControl>
+                <ClientCombobox v-model="form.client" />
+            </FormControl>
             <FormError :message="form.errors.client_id" />
         </FormField>
 

@@ -1,7 +1,7 @@
 import { useComputedForm } from '@/composables';
-import { BillingDealFormRequest, BillingDealFormResource } from '@/types';
+import { BillingDealFormRequest, DealResource } from '@/types';
 
-export function useBillingDealForm(deal?: BillingDealFormResource) {
+export function useBillingDealForm(deal?: DealResource) {
     const initialSchedule =
         deal?.schedule?.flatMap((yearData) =>
             yearData.data.map((item) => ({
