@@ -165,6 +165,7 @@ return [
                 'ordered_at'            => 'Prise de commande',
                 'project_department_id' => 'direction de projets',
                 'reference'             => 'référence',
+                'reference_commande'    => 'Référence de commande',
                 'schedule'              => 'planning',
                 'starts_at'             => 'Démarrage',
                 'status'                => 'statut',
@@ -173,6 +174,10 @@ return [
                 'deal_id'               => 'Rattacher affaire existante',
                 'total_sales'           => 'Totaux CA',
                 'targeted_turnover'     => 'CA ciblé',
+                'schedule_data'         => [
+                    'date'   => 'Date',
+                    'amount' => 'Montant',
+                ],
             ],
         ],
         'billing' => [
@@ -198,7 +203,10 @@ return [
                 'deal_id'               => 'Rattacher affaire existante',
                 'total_sales'           => 'Totaux CA',
                 'schedule_data'         => [
-                    'title' => 'titre de l\'échéance',
+                    'title'  => 'titre de l\'échéance',
+                    'date'   => 'Date',
+                    'amount' => 'Montant',
+                    'status' => 'Statut',
                 ],
             ],
         ],

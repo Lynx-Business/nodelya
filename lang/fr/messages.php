@@ -271,7 +271,8 @@ return [
             'update' => [
                 'success' => 'Facture mise à jour avec succès',
             ],
-            'trash' => [
+            'postpone_upcoming_invoices' => 'Repousser les factures à venir',
+            'trash'                      => [
                 'confirm' => 'Êtes-vous sûr de vouloir archiver cette facture ?|Êtes-vous sûr de vouloir archiver ces factures ?',
                 'success' => 'Facture archivée avec succès|Factures archivées avec succès',
             ],

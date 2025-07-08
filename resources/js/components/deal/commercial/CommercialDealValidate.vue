@@ -17,16 +17,18 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
 <template>
     <FormContent class="sm:grid-cols-2">
         <FormField>
-            <FormLabel>Référence de commande</FormLabel>
+            <FormLabel>{{ $t('models.deal.commercial.fields.reference_commande') }}</FormLabel>
             <FormControl>
                 <TextInput :model-value="form.reference" disabled />
             </FormControl>
         </FormField>
 
         <FormField required>
-            <CapitalizeText>
-                {{ $t('models.project_department.name.one') }}
-            </CapitalizeText>
+            <FormLabel>
+                <CapitalizeText>
+                    {{ $t('models.project_department.name.one') }}
+                </CapitalizeText>
+            </FormLabel>
             <FormControl>
                 <ProjectDepartmentCombobox v-model="form.project_department" />
             </FormControl>

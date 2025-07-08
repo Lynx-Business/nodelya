@@ -215,8 +215,10 @@ watch(
                 <DataTableContent tab="table">
                     <DataTableHeader>
                         <DataTableRow>
-                            <DataTableHead>Date</DataTableHead>
-                            <DataTableHead>Montant</DataTableHead>
+                            <DataTableHead>{{ $t('models.deal.commercial.fields.schedule_data.date') }}</DataTableHead>
+                            <DataTableHead>{{
+                                $t('models.deal.commercial.fields.schedule_data.amount')
+                            }}</DataTableHead>
                         </DataTableRow>
                     </DataTableHeader>
                     <DataTableBody>
@@ -231,11 +233,6 @@ watch(
                     </DataTableBody>
                 </DataTableContent>
             </DataTable>
-
-            <!-- TODO remove after -->
-            <FormField>
-                <FormError class="mb-4" :message="form.errors.schedule_data" />
-            </FormField>
         </div>
     </FormContent>
 </template>

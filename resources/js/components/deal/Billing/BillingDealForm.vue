@@ -130,7 +130,7 @@ function getScheduleError(index: number, field: string) {
 const rowActions: DataTableRowCallbackAction<any>[] = [
     {
         type: 'callback',
-        label: 'Repousser les facture à venir',
+        label: trans('messages.deals.billings.postpone_upcoming_invoices'),
         icon: ClockArrowUpIcon,
         disabled: (item) => false,
         callback: (item) => openPostponeDialog(item),
@@ -318,10 +318,10 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 <DataTableContent tab="table">
                     <DataTableHeader>
                         <DataTableRow>
-                            <DataTableHead>Date</DataTableHead>
-                            <DataTableHead>Montant</DataTableHead>
-                            <DataTableHead>Statut</DataTableHead>
-                            <DataTableHead>Titre</DataTableHead>
+                            <DataTableHead>{{ $t('models.deal.billing.fields.schedule_data.date') }}</DataTableHead>
+                            <DataTableHead>{{ $t('models.deal.billing.fields.schedule_data.amount') }}</DataTableHead>
+                            <DataTableHead>{{ $t('models.deal.billing.fields.schedule_data.status') }}</DataTableHead>
+                            <DataTableHead>{{ $t('models.deal.billing.fields.schedule_data.title') }}</DataTableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
                             </DataTableHead>
@@ -374,8 +374,14 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
             </DataTable>
 
             <div class="mt-4 flex items-center justify-between">
-                <span>Total échéancier: {{ format.price(totalScheduleAmount) }}</span>
-                <span>Montant principal: {{ format.price(form?.amount ?? 0) }}</span>
+                <span
+                    >{{ $t('pages.deals.billings.schedule_totals.total') }}:
+                    {{ format.price(totalScheduleAmount) }}</span
+                >
+                <span
+                    >{{ $t('pages.deals.billings.schedule_totals.principal') }}:
+                    {{ format.price(form?.amount ?? 0) }}</span
+                >
             </div>
 
             <div v-if="scheduleTotalError" class="mt-4 text-sm text-red-500">

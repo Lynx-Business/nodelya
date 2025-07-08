@@ -338,6 +338,10 @@ return [
                 'title'       => 'Mettre à jour une facture',
                 'description' => 'Modifiez les détails d\'une facture existante',
             ],
+            'schedule_totals' => [
+                'total'     => 'Total échéancier',
+                'principal' => 'Montant principal',
+            ],
         ],
 
     ],
