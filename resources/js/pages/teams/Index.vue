@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TeamLogoIcon from '@/components/team/TeamLogoIcon.vue';
+import TeamLogo from '@/components/team/TeamLogo.vue';
 import TrashedBadge from '@/components/trash/TrashedBadge.vue';
 import TrashedFilterCombobox from '@/components/trash/TrashedFilterCombobox.vue';
 import { Button } from '@/components/ui/button';
@@ -263,10 +263,7 @@ const filters = useFilters<TeamIndexRequest>(
                             </DataTableCell>
                             <DataTableCell>
                                 <div class="flex items-center gap-2">
-                                    <TeamLogoIcon :media="team.logo" />
-                                    <CapitalizeText>
-                                        {{ team.name }}
-                                    </CapitalizeText>
+                                    <TeamLogo :team />
                                 </div>
                             </DataTableCell>
                             <DataTableCell v-if="filters.trashed">

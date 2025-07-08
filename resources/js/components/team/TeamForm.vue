@@ -40,7 +40,7 @@ const { form } = injectFormContext<TeamFormData>();
                     type="image"
                     accept="image/svg+xml"
                 >
-                    <TeamLogoIcon class="bg-primary text-primary-foreground p-4" :media="form.logo" size="lg" />
+                    <TeamLogoIcon class="bg-secondary text-secondary-foreground p-4" :media="form.logo" size="lg" />
                 </MediaInput>
             </FormControl>
             <FormError :message="form.errors.logo" />
