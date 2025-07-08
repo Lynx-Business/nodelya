@@ -32,7 +32,7 @@ import { DealScheduleStatus, ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import AlertDialogSchedule from './AlertDialogSchedule.vue';
+import PostponeScheduleDialog from './PostponeScheduleDialog.vue';
 
 const { form } = injectFormContext<BillingDealFormData>();
 const defaultStatus: DealScheduleStatus = 'uncertain';
@@ -385,11 +385,11 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                 <FormError class="mt-4" :message="form.errors.schedule_data" />
             </FormField>
         </div>
-    </FormContent>
 
-    <AlertDialogSchedule
-        v-model:showPostponeDialog="showPostponeDialog"
-        v-model:postponeMonths="postponeMonths"
-        v-model:postponeSchedules="postponeSchedules"
-    />
+        <PostponeScheduleDialog
+            v-model:showPostponeDialog="showPostponeDialog"
+            v-model:postponeMonths="postponeMonths"
+            v-model:postponeSchedules="postponeSchedules"
+        />
+    </FormContent>
 </template>
