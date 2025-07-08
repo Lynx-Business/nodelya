@@ -111,9 +111,9 @@ class BillingDealController extends Controller
     public function update(BillingDealFormRequest $data, Deal $deal)
     {
         /** @var ?Deal $deal */
-        $newClient = Services::billingDeal()->update->execute($data);
+        $newDeal = Services::billingDeal()->update->execute($data);
 
-        if (is_null($newClient)) {
+        if (is_null($newDeal)) {
             Services::toast()->error->execute();
 
             return back();

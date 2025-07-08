@@ -156,9 +156,9 @@ class CommercialDealController extends Controller
     public function update(CommercialDealFormRequest $data, Deal $deal)
     {
         /** @var ?Deal $deal */
-        $newClient = Services::commercialDeal()->createOrUpdate->execute($data);
+        $newDeal = Services::commercialDeal()->createOrUpdate->execute($data);
 
-        if (is_null($newClient)) {
+        if (is_null($newDeal)) {
             Services::toast()->error->execute();
 
             return back();
