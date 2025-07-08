@@ -236,7 +236,7 @@ const filters = useFilters<BillingDealIndexRequest>(
 );
 
 function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
-    if (!status) return 'bg-[var(--status-uncertain)]';
+    if (!status) return 'bg-[var(--status-uncertain)]/50';
 
     if (status === 'invoiced' && expense?.date) {
         const now = new Date();
@@ -251,7 +251,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
         }
     }
 
-    return `bg-[var(--status-${status})]`;
+    return `bg-[var(--status-${status})]/50`;
 }
 </script>
 

@@ -48,8 +48,8 @@
 
     --status-uncertain: var(--color-violet-500);
     --status-pending_invoicing: var(--color-yellow-500);
-    --status-invoiced: var(--color-blue-500);
     --status-paid: var(--color-emerald-500);
+    --status-invoiced: var(--color-blue-500);
     --status-invoiced-orange: var(--color-orange-500);
     --status-invoiced-red: var(--color-red-500);
 }
