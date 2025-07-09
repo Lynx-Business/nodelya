@@ -30,12 +30,14 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $deal_id
  * @property float $amount
  * @property-read bool $can_delete
  * @property-read bool $can_restore
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read \App\Models\Deal|null $deal
  * @property-read \App\Models\ExpenseItem $expenseItem
  * @property-read true $is_trashable
  * @property bool $is_trashed
@@ -55,6 +57,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder<static>|ExpenseCharge whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static Builder<static>|ExpenseCharge whereChargedAt($value)
  * @method static Builder<static>|ExpenseCharge whereCreatedAt($value)
+ * @method static Builder<static>|ExpenseCharge whereDealId($value)
  * @method static Builder<static>|ExpenseCharge whereDeletedAt($value)
  * @method static Builder<static>|ExpenseCharge whereExpenseItemId($value)
  * @method static Builder<static>|ExpenseCharge whereId($value)
@@ -90,9 +93,11 @@ class ExpenseCharge extends Model
     protected $fillable = [
         'team_id',
         'expense_item_id',
+        'deal_id',
         'model_type',
         'model_id',
         'amount_in_cents',
+        'amount',
         'charged_at',
     ];
 
@@ -170,5 +175,10 @@ class ExpenseCharge extends Model
                 ->whereColumn($accountingPeriodModel->qualifyColumn('starts_at'), '<=', $this->qualifyColumn('charged_at'))
                 ->whereColumn($accountingPeriodModel->qualifyColumn('ends_at'), '>=', $this->qualifyColumn('charged_at')),
         );
+    }
+
+    public function deal()
+    {
+        return $this->belongsTo(Deal::class);
     }
 }

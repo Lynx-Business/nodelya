@@ -14,6 +14,7 @@ use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
+use App\Models\Contractor;
 use App\Models\Deal;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -228,17 +229,22 @@ class CommercialDealController extends Controller
         $reference = $this->generateReference($deal);
 
         return Inertia::render('deals/commercial/Validate', CommercialDealValidateProps::from([
-            'deal'               => DealResource::from($deal),
+            'deal'         => DealResource::from($deal),
+            'reference'    => $reference,
+            'expenseItems' => Lazy::inertia(
+                fn () => Services::expense()->itemsList(),
+            ),
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),
             ),
-            'reference' => $reference,
+            'contractors' => Lazy::inertia(
+                fn () => Services::contractor()->list(),
+            ),
         ]));
     }
 
     public function processValidation(CommercialDealValidateRequest $data, Deal $deal)
     {
-
         DB::transaction(function () use ($data, $deal) {
 
             $deal->update([
@@ -247,6 +253,17 @@ class CommercialDealController extends Controller
                 'status'                => DealStatus::VALIDATED,
             ]);
 
+            $deal->expenseCharges()->delete();
+
+            foreach ($data->expense_charges as $charge) {
+                $deal->expenseCharges()->create([
+                    'expense_item_id' => $charge->expense_item_id,
+                    'amount'          => $charge->amount,
+                    'charged_at'      => $charge->charged_at,
+                    'model_type'      => $charge->contractor_id ? Contractor::class : null,
+                    'model_id'        => $charge->contractor_id ?? null,
+                ]);
+            }
         });
 
         Services::toast()->success->execute(__('messages.deals.commercials.validate.success'));

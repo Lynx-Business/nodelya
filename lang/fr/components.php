@@ -75,4 +75,10 @@ return [
         ],
     ],
 
+    'deal' => [
+        'commercial' => [
+            'subcontracting_expense_title' => 'Dépense de sous traitance',
+        ],
+    ],
+
 ];

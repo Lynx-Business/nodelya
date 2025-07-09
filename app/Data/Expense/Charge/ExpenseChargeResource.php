@@ -24,6 +24,8 @@ class ExpenseChargeResource extends Resource
 
         public int $expense_item_id,
 
+        public ?int $deal_id,
+
         public float $amount,
 
         public Carbon $charged_at,
@@ -50,6 +52,7 @@ class ExpenseChargeResource extends Resource
         return new static(
             id              : $charge->id,
             expense_item_id : $charge->expense_item_id,
+            deal_id         : $charge->deal_id,
             model_type      : $charge->model_type,
             model_id        : $charge->model_id,
             amount          : $charge->amount,

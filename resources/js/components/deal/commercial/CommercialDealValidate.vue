@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/custom/form';
 import { TextInput } from '@/components/ui/custom/input';
 import { CommercialDealValidateFormData } from '@/composables';
+import ExpenseChargeTable from './ExpenseChargeTable.vue';
 
 const { form } = injectFormContext<CommercialDealValidateFormData>();
 </script>
@@ -33,6 +34,10 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
                 <ProjectDepartmentCombobox v-model="form.project_department" />
             </FormControl>
             <FormError :message="form.errors.project_department" />
+        </FormField>
+
+        <FormField class="col-span-2 mt-4">
+            <ExpenseChargeTable v-model="form.expense_charges" />
         </FormField>
     </FormContent>
 </template>
