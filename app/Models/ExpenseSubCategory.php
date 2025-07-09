@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
+ *
  * @property int $id
  * @property int $team_id
  * @property int $expense_category_id
@@ -34,7 +36,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_trashed
  * @property-read \App\Models\Team $team
  * @property-read ExpenseType $type
- *
  * @method static \Database\Factories\ExpenseSubCategoryFactory factory($count = null, $state = [])
  * @method static Builder<static>|ExpenseSubCategory filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
  * @method static Builder<static>|ExpenseSubCategory newModelQuery()
@@ -54,7 +55,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|ExpenseSubCategory whereUpdatedAt($value)
  * @method static Builder<static>|ExpenseSubCategory withTrashed()
  * @method static Builder<static>|ExpenseSubCategory withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class ExpenseSubCategory extends Model

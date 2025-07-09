@@ -6,6 +6,11 @@ export function useCommercialDealValidateFrom(deal?: DealResource, reference?: s
     const form = useComputedForm({
         project_department: deal?.project_department,
         reference: reference || '',
+        expense_charges: Array.isArray(deal?.expenseCharges)
+            ? deal.expenseCharges
+            : deal?.expenseCharges
+              ? [deal.expenseCharges]
+              : [],
     });
 
     form.transform(transformValidateDealForm);
@@ -19,5 +24,13 @@ function transformValidateDealForm(data: CommercialDealValidateFormData): Commer
     return {
         ...reactiveOmit(data, 'project_department'),
         project_department_id: data.project_department?.id!,
+        expense_charges: Array.isArray(data.expense_charges)
+            ? data.expense_charges.map((item: any) => ({
+                  contractor_id: item.contractor.id,
+                  amount: item.amount,
+                  charged_at: item.charged_at,
+                  expense_item_id: item.expense_item.id,
+              }))
+            : [],
     };
 }

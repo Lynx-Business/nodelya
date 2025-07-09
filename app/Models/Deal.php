@@ -48,6 +48,8 @@ use Spatie\LaravelData\DataCollection;
  * @property-read bool $can_update
  * @property-read bool $can_view
  * @property-read \App\Models\Client $client
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExpenseCharge> $expenseCharges
+ * @property-read int|null $expense_charges_count
  * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read mixed $monthly_expenses
@@ -166,6 +168,11 @@ class Deal extends Model
     public function parent()
     {
         return $this->belongsTo(Deal::class, 'deal_id');
+    }
+
+    public function expenseCharges()
+    {
+        return $this->hasMany(ExpenseCharge::class);
     }
 
     public static function booted(): void

@@ -2,11 +2,13 @@
 
 namespace App\Data\Deal\Commercial\Validate;
 
+use App\Data\Expense\Charge\ContractorExpenseChargeData;
 use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Facades\Services;
 use App\Models\ProjectDepartment;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
@@ -25,6 +27,8 @@ class CommercialDealValidateRequest extends Data
 
         public string $reference,
 
+        #[DataCollectionOf(ContractorExpenseChargeData::class)]
+        public array $expense_charges,
     ) {
         if ($project_department_id) {
             $this->project_department = ProjectDepartmentResource::from(
@@ -53,6 +57,11 @@ class CommercialDealValidateRequest extends Data
                 Rule::exists($projectDepartment->getTable(), $projectDepartment->getKeyName())
                     ->where($projectDepartment->getQualifiedTeamIdColumn(), $team?->getKey()),
             ],
+            'expense_charges'                   => ['array'],
+            'expense_charges.*.expense_item_id' => ['required', 'integer', 'exists:expense_items,id'],
+            'expense_charges.*.amount'          => ['required', 'numeric', 'min:0'],
+            'expense_charges.*.charged_at'      => ['required', 'date'],
+            'expense_charges.*.contractor_id'   => ['nullable', 'integer', 'exists:contractors,id'],
         ];
     }
 }

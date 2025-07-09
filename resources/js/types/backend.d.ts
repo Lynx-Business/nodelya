@@ -317,14 +317,17 @@ export type CommercialDealIndexRequest = {
     trashed?: TrashedFilter;
 };
 export type CommercialDealValidateProps = {
-    projectDepartments?: Array<ProjectDepartmentResource>;
     deal: DealResource;
     reference: string;
+    projectDepartments?: Array<ProjectDepartmentResource>;
+    contractors?: Array<ContractorResource>;
+    expenseItems?: Array<ExpenseItemResource>;
 };
 export type CommercialDealValidateRequest = {
     project_department?: ProjectDepartmentResource;
     project_department_id?: number;
     reference: string;
+    expense_charges: Array<ContractorExpenseChargeData>;
 };
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
@@ -363,6 +366,12 @@ export type ContractorExpenseBudgetIndexProps = {
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
+};
+export type ContractorExpenseChargeData = {
+    expense_item_id: number;
+    amount: number;
+    charged_at: string;
+    contractor_id: number;
 };
 export type ContractorExpenseChargeFormProps = {
     accountingPeriod?: AccountingPeriodResource;
@@ -486,6 +495,7 @@ export type DealResource = {
     project_department?: ProjectDepartmentResource;
     parent?: DealResource;
     schedule?: Array<DealScheduleData>;
+    expenseCharges?: Array<ExpenseChargeResource>;
     monthly_expenses?: Record<string, MonthlyExpenseData>;
     can_view?: boolean;
     can_update?: boolean;
@@ -836,6 +846,7 @@ export type ExpenseChargeResource = {
     model_type?: 'contractor' | 'employee';
     model_id?: number;
     expense_item_id: number;
+    deal_id?: number;
     amount: number;
     charged_at: string;
     deleted_at?: string;
