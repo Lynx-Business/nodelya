@@ -40,7 +40,6 @@ function transformDealForm(data: CommercialDealFormData): CommercialDealFormRequ
         ...reactiveOmit(data, 'client', 'parent'),
         client_id: data.client?.id!,
         deal_id: data.parent?.id,
-        deal: undefined,
         amount: data.amount!,
         schedule: Array.isArray(data.schedule) ? data.schedule : undefined,
     };
