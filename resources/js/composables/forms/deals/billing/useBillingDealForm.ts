@@ -21,7 +21,6 @@ export function useBillingDealForm(deal?: DealResource) {
         reference: deal?.reference,
         project_department: deal?.project_department,
         code: deal?.code || '',
-        success_rate: deal?.success_rate || 50,
         ordered_at: deal?.ordered_at || '',
         duration_in_months: deal?.duration_in_months || 12,
         starts_at: deal?.starts_at || '',

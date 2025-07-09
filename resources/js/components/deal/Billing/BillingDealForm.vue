@@ -210,18 +210,6 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         <FormField required>
             <FormLabel>
                 <CapitalizeText>
-                    {{ $t('models.deal.billing.fields.success_rate') }}
-                </CapitalizeText>
-            </FormLabel>
-            <FormControl>
-                <NumberInput v-model="form.success_rate" />
-            </FormControl>
-            <FormError :message="form.errors.success_rate" />
-        </FormField>
-
-        <FormField required>
-            <FormLabel>
-                <CapitalizeText>
                     {{ $t('models.deal.billing.fields.code') }}
                 </CapitalizeText>
             </FormLabel>

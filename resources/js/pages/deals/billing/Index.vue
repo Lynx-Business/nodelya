@@ -423,7 +423,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 {{ deal.duration_in_months }}
                             </DataTableCell>
                             <DataTableCell class="bg-gray-300/30">
-                                {{ format.price((deal.amount * deal.success_rate) / 100) }}
+                                {{ format.price(deal.amount) }}
                             </DataTableCell>
 
                             <DataTableCell
