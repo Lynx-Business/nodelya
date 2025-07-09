@@ -3,20 +3,28 @@
 namespace App\Models;
 
 use App\Data\Deal\DealScheduleData;
+use App\Data\Deal\MonthlyExpenseData;
+use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Deal\DealStatus;
 use App\Facades\Services;
 use App\Traits\BelongsToClient;
 use App\Traits\BelongsToProjectDepartment;
 use App\Traits\BelongsToTeam;
+use App\Traits\HasPolicy;
+use App\Traits\Searchable;
 use App\Traits\Trashable;
+use DB;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Spatie\LaravelData\DataCollection;
 
 /**
  * @property int $id
  * @property int $team_id
- * @property int $project_department_id
+ * @property int|null $project_department_id
  * @property int $client_id
  * @property int|null $deal_id
  * @property string $name
@@ -29,24 +37,35 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $duration_in_months
  * @property \Illuminate\Support\Carbon $starts_at
  * @property \Illuminate\Support\Carbon|null $ends_at
- * @property \Spatie\LaravelData\Contracts\BaseData $schedule
+ * @property \Spatie\LaravelData\DataCollection $schedule
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property float $amount
- * @property-read \App\Models\User $client
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
+ * @property-read \App\Models\Client $client
  * @property-read true $is_trashable
  * @property bool $is_trashed
- * @property-read \App\Models\ProjectDepartment $projectDepartment
+ * @property-read mixed $monthly_expenses
+ * @property-read mixed $monthly_status
+ * @property-read Deal|null $parent
+ * @property-read \App\Models\ProjectDepartment|null $projectDepartment
  * @property-read mixed $revenue
  * @property-read \App\Models\Team $team
  *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal billing()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal commercial()
  * @method static \Database\Factories\DealFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal filterTrashed(\App\Enums\Trashed\TrashedFilter $filter)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal search(?string $q)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereAmountInCents($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereBelongsToClient(\App\Models\Client|int $client)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereBelongsToProjectDepartment(\App\Models\ProjectDepartment|int $projectDepartment)
@@ -59,6 +78,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereDurationInMonths($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereInAccountingPeriod(\App\Models\AccountingPeriod|int $accountingPeriod)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereOrderedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Deal whereProjectDepartmentId($value)
@@ -83,6 +103,8 @@ class Deal extends Model
     /** @use HasFactory<\Database\Factories\DealFactory> */
     use HasFactory;
 
+    use HasPolicy;
+    use Searchable;
     use Trashable;
 
     /**
@@ -94,6 +116,7 @@ class Deal extends Model
         'team_id',
         'project_department_id',
         'client_id',
+        'deal_id',
         'name',
         'status',
         'amount_in_cents',
@@ -104,6 +127,19 @@ class Deal extends Model
         'duration_in_months',
         'starts_at',
         'schedule',
+        'amount',
+    ];
+
+    /**
+     * The attributes that are searchable.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'name',
+        'code',
+        'reference',
+        'client.name',
     ];
 
     /**
@@ -118,8 +154,18 @@ class Deal extends Model
             'ordered_at' => 'date',
             'starts_at'  => 'date',
             'ends_at'    => 'date',
-            'schedule'   => DealScheduleData::class,
+            'schedule'   => DataCollection::class.':'.DealScheduleData::class,
         ];
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Deal::class, 'deal_id');
     }
 
     public static function booted(): void
@@ -147,5 +193,104 @@ class Deal extends Model
 
                 return Services::conversion()->centsToPrice($this->amount_in_cents * ($this->success_rate / 100));
             });
+    }
+
+    public function scopeCommercial($query)
+    {
+        return $query->where('status', DealStatus::CREATED);
+    }
+
+    public function scopeBilling($query)
+    {
+        return $query->where('status', DealStatus::VALIDATED);
+    }
+
+    protected function schedule(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => DealScheduleData::collect(json_decode($value)),
+        );
+    }
+
+    public function scopeWhereInAccountingPeriod(Builder $query, AccountingPeriod|int $accountingPeriod): Builder
+    {
+        $accountingPeriodModel = app(AccountingPeriod::class);
+        $id = is_int($accountingPeriod) ? $accountingPeriod : $accountingPeriod->getKey();
+
+        return $query->whereNot->whereExists(
+            fn (QueryBuilder $q) => $q
+                ->select(DB::raw(1))
+                ->from($accountingPeriodModel->getTable())
+                ->where($accountingPeriodModel->getQualifiedKeyName(), $id)
+                ->where(
+                    fn (QueryBuilder $q) => $q
+                        ->whereColumn($accountingPeriodModel->qualifyColumn('starts_at'), '>=', $this->qualifyColumn('ends_at'))
+                        ->orWhereColumn($accountingPeriodModel->qualifyColumn('ends_at'), '<=', $this->qualifyColumn('starts_at')),
+                ),
+        );
+    }
+
+    protected function monthlyStatus(): Attribute
+    {
+        return Attribute::get(function () {
+            $schedule = $this->schedule;
+            if (empty($schedule)) {
+                return [];
+            }
+
+            $statusPriority = [
+                DealScheduleStatus::UNCERTAIN->value         => 4,
+                DealScheduleStatus::PENDING_INVOICING->value => 3,
+                DealScheduleStatus::INVOICED->value          => 2,
+                DealScheduleStatus::PAID->value              => 1,
+            ];
+
+            $monthlyStatus = [];
+            foreach ($schedule as $yearSchedule) {
+                foreach ($yearSchedule->data as $item) {
+                    $month = $item->date->format('Y-m');
+                    $itemStatus = $item->status->value ?? $item->status;
+                    $currentPriority = $statusPriority[$monthlyStatus[$month] ?? null] ?? 0;
+                    $itemPriority = $statusPriority[$itemStatus] ?? 0;
+
+                    if ($itemPriority > $currentPriority) {
+                        $monthlyStatus[$month] = $itemStatus;
+                    }
+                }
+            }
+
+            return $monthlyStatus;
+        });
+    }
+
+    protected function monthlyExpenses(): Attribute
+    {
+        return Attribute::get(function () {
+            $monthlyAmounts = [];
+            $monthlyRawDates = [];
+            $monthlyStatuses = $this->monthly_status;
+
+            if ($this->schedule) {
+                foreach ($this->schedule as $yearSchedule) {
+                    foreach ($yearSchedule->data as $item) {
+                        $month = $item->date->format('Y-m');
+                        $monthlyAmounts[$month] = ($monthlyAmounts[$month] ?? 0) + $item->amount;
+                        $monthlyRawDates[$month] = $item->date;
+                    }
+                }
+            }
+
+            $result = [];
+            foreach ($monthlyAmounts as $month => $amount) {
+                $result[$month] = new MonthlyExpenseData(
+                    date_key: $month,
+                    amount: $amount,
+                    status: $monthlyStatuses[$month],
+                    date: $monthlyRawDates[$month],
+                );
+            }
+
+            return $result;
+        });
     }
 }

@@ -308,4 +308,49 @@ return [
         ],
     ],
 
+    'deals' => [
+        'commercials' => [
+            'index' => [
+                'title' => 'Affaires commerciales',
+            ],
+
+            'create' => [
+                'title'       => 'Créer une affaire commerciale',
+                'description' => 'Créez une nouvelle affaire commerciale pour gérer vos transactions',
+            ],
+            'edit' => [
+                'title'           => 'Mettre à jour une affaire commerciale',
+                'description'     => 'Modifiez les détails d\'une affaire commerciale existante',
+                'validate_button' => 'Passer l’affaire au statut validé',
+            ],
+
+            'validate' => [
+                'title' => 'Validation de l’affaire :name',
+                'save'  => 'Valider l’affaire',
+            ],
+            'schedule' => 'Échéancier',
+        ],
+
+        'billings' => [
+            'index' => [
+                'title' => 'Factures',
+            ],
+            'edit' => [
+                'title'       => 'Mettre à jour une facture',
+                'description' => 'Modifiez les détails d\'une facture existante',
+            ],
+            'postpone_schedule' => [
+                'title'       => 'Reporter les factures',
+                'description' => 'Combien de mois voulez-vous reporter les factures à partir de cette échéance ?',
+            ],
+            'schedule_totals' => [
+                'total'     => 'Total échéancier',
+                'principal' => 'Montant principal',
+            ],
+            'schedule'                    => 'Échéancier',
+            'schedule_status_placeholder' => 'Sélectionner un statut',
+        ],
+
+    ],
+
 ];

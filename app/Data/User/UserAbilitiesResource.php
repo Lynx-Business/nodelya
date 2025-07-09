@@ -3,6 +3,7 @@
 namespace App\Data\User;
 
 use App\Models\Contractor;
+use App\Models\Deal;
 use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCharge;
@@ -39,6 +40,12 @@ class UserAbilitiesResource extends Resource
             ],
         ])]
         public array $expenses,
+
+        #[TypeScriptType([
+            'view_any' => 'bool',
+            'create'   => 'bool',
+        ])]
+        public array $deals,
 
         #[TypeScriptType([
             'view_any' => 'bool',
@@ -81,6 +88,10 @@ class UserAbilitiesResource extends Resource
             'users' => [
                 'view_any' => $user->can('viewAny', User::class),
                 'create'   => $user->can('create', User::class),
+            ],
+            'deals' => [
+                'view_any' => $user->can('viewAny', Deal::class),
+                'create'   => $user->can('create', Deal::class),
             ],
         ]);
     }

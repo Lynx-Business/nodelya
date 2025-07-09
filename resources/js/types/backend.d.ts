@@ -121,6 +121,67 @@ export type BannerOneOrManyRequest = {
     banner?: number;
     ids?: Array<number>;
 };
+export type BillingDealFormProps = {
+    deal?: DealResource;
+    clients?: Array<ClientListResource>;
+    deals?: Array<DealResource>;
+    schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
+    projectDepartments?: Array<ProjectDepartmentResource>;
+};
+export type BillingDealFormRequest = {
+    deal?: any;
+    name: string;
+    amount: number;
+    code: string;
+    reference?: string;
+    ordered_at: string;
+    duration_in_months?: number;
+    starts_at?: string;
+    client_id: number;
+    deal_id?: number;
+    project_department_id?: number;
+    schedule_data: Array<ScheduleItemData>;
+    schedule?: Array<DealScheduleData>;
+};
+export type BillingDealIndexProps = {
+    request: BillingDealIndexRequest;
+    accounting_period_months: Array<any>;
+    billing_deals?: {
+        data: Array<DealResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    clients?: Array<ClientListResource>;
+};
+export type BillingDealIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
+    clients_items?: Array<ClientListResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    accounting_period_id?: number;
+    name?: string;
+    amount?: number;
+    code?: string;
+    client_ids?: null | Array<number>;
+    trashed?: TrashedFilter;
+};
 export type ClientFormProps = {
     client?: ClientFormResource;
 };
@@ -172,9 +233,83 @@ export type ClientIndexResource = {
     can_restore: boolean;
     can_delete: boolean;
 };
+export type ClientListResource = {
+    id: number;
+    name: string;
+};
 export type ClientOneOrManyRequest = {
     client?: number;
     ids?: Array<number>;
+};
+export type CommercialDealFormProps = {
+    deal?: DealResource;
+    clients?: Array<ClientListResource>;
+    deals?: Array<DealResource>;
+};
+export type CommercialDealFormRequest = {
+    deal?: any;
+    name: string;
+    amount: number;
+    code: string;
+    reference?: string;
+    success_rate: number;
+    ordered_at: string;
+    duration_in_months?: number;
+    starts_at?: string;
+    client_id: number;
+    deal_id?: number;
+    schedule_data: Array<ScheduleItemData>;
+    schedule?: Array<DealScheduleData>;
+};
+export type CommercialDealIndexProps = {
+    request: CommercialDealIndexRequest;
+    accounting_period_months: Array<any>;
+    commercial_deals?: {
+        data: Array<DealResource>;
+        links: Array<{ url: string; label: string; active: boolean }>;
+        meta: {
+            current_page: number;
+            first_page_url: string;
+            from: number;
+            last_page: number;
+            last_page_url: string;
+            next_page_url: string;
+            path: string;
+            per_page: number;
+            prev_page_url: string;
+            to: number;
+            total: number;
+        };
+    };
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    clients?: Array<ClientListResource>;
+};
+export type CommercialDealIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
+    clients_items?: Array<ClientListResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    accounting_period_id?: number;
+    name?: string;
+    amount?: number;
+    success_rate?: number;
+    code?: string;
+    client_ids?: null | Array<number>;
+    trashed?: TrashedFilter;
+};
+export type CommercialDealValidateProps = {
+    projectDepartments?: Array<ProjectDepartmentResource>;
+    deal: DealResource;
+    reference: string;
+};
+export type CommercialDealValidateRequest = {
+    project_department?: ProjectDepartmentResource;
+    project_department_id?: number;
+    reference: string;
 };
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
@@ -318,7 +453,36 @@ export type ContractorResource = {
 };
 export type DashboardAdminIndexProps = {};
 export type DashboardIndexProps = {};
-export type DealScheduleData = {};
+export type DealOneOrManyRequest = {
+    deal?: number;
+    ids?: Array<number>;
+};
+export type DealResource = {
+    id: number;
+    name: string;
+    amount: number;
+    code?: string;
+    reference?: string;
+    success_rate: number;
+    ordered_at: string;
+    duration_in_months?: number;
+    starts_at?: string;
+    client?: ClientListResource;
+    project_department?: ProjectDepartmentResource;
+    parent?: DealResource;
+    schedule?: Array<DealScheduleData>;
+    monthly_expenses?: Record<string, MonthlyExpenseData>;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
+export type DealScheduleData = {
+    year: string;
+    data: Array<ScheduleItemData>;
+};
+export type DealScheduleStatus = 'paid' | 'invoiced' | 'uncertain' | 'pending_invoicing';
 export type DealStatus = 'created' | 'validated' | 'finished';
 export type EditAppearanceSettingsProps = {};
 export type EditProfileSettingsProps = {
@@ -828,7 +992,13 @@ export type MediaResource = {
     url: string;
     custom_properties?: Record<string, any>;
 };
-export type PermissionName = 'client' | 'expenses';
+export type MonthlyExpenseData = {
+    date_key: string;
+    amount: number;
+    status: string;
+    date: string;
+};
+export type PermissionName = 'client' | 'expenses' | 'deal';
 export type PermissionResource = {
     id: number;
     name: string;
@@ -910,6 +1080,12 @@ export type RoleListResource = {
     display_name: string;
 };
 export type RoleName = 'tester' | 'owner' | 'member' | 'editor';
+export type ScheduleItemData = {
+    date: string;
+    amount: number;
+    status: DealScheduleStatus;
+    title?: string;
+};
 export type TeamFormProps = {
     team?: TeamFormResource;
 };
@@ -1013,6 +1189,7 @@ export type UserAbilitiesResource = {
     contractors: { view_any: boolean; create: boolean };
     employees: { view_any: boolean; create: boolean };
     expenses: { budgets: { view_any: boolean; create: boolean }; charges: { view_any: boolean; create: boolean } };
+    deals: { view_any: boolean; create: boolean };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
 };

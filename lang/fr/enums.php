@@ -18,6 +18,13 @@ return [
             'validated' => 'validée',
             'finished'  => 'terminée',
         ],
+
+        'schedule_status' => [
+            'paid'              => 'Payé',
+            'invoiced'          => 'Facture émise',
+            'uncertain'         => 'Incertain',
+            'pending_invoicing' => 'En attente de facturation',
+        ],
     ],
 
     'expense' => [
@@ -32,6 +39,7 @@ return [
         'name' => [
             'client'   => 'clients',
             'expenses' => 'dépenses',
+            'deal'     => 'Commerces / Facturations',
         ],
     ],
 
