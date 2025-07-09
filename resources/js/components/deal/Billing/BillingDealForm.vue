@@ -34,7 +34,7 @@ import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import PostponeScheduleDialog from './PostponeScheduleDialog.vue';
 
-const { form } = injectFormContext<BillingDealFormData>();
+const { form, disabled } = injectFormContext<BillingDealFormData>();
 const defaultStatus: DealScheduleStatus = 'uncertain';
 const paidStatus: DealScheduleStatus = 'paid';
 const newScheduleItem = ref({ date: '', amount: 0, title: '' });
@@ -278,9 +278,9 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
         </FormField>
 
         <div class="col-span-full mt-2">
-            <h4 class="mb-4 text-lg font-medium">Échéancier</h4>
+            <h4 class="mb-4 text-lg font-medium">{{ $t('pages.deals.billings.schedule') }}</h4>
 
-            <div class="mb-4 flex items-center gap-2" v-if="form.can_update">
+            <div class="mb-4 flex items-center gap-2" v-if="disabled">
                 <FormField>
                     <FormLabel>
                         <CapitalizeText> {{ $t('models.deal.billing.fields.schedule_data.date') }} </CapitalizeText>

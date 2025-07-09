@@ -209,7 +209,7 @@ watch(
         </FormField>
 
         <div class="col-span-full mt-6">
-            <h3 class="mb-4 text-lg font-medium">Échéancier</h3>
+            <h3 class="mb-4 text-lg font-medium">{{ $t('pages.deals.commercials.schedule') }}</h3>
 
             <DataTable v-slot="{ rows }" :data="form.schedule_data">
                 <DataTableContent tab="table">

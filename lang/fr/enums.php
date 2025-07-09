@@ -39,7 +39,7 @@ return [
         'name' => [
             'client'   => 'clients',
             'expenses' => 'dépenses',
-            'deal'     => 'Commerces/Facturations',
+            'deal'     => 'Commerces / Facturations',
         ],
     ],
 

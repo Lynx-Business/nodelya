@@ -20,9 +20,9 @@ const showPostponeDialog = defineModel<boolean>('showPostponeDialog');
     <AlertDialog :open="showPostponeDialog">
         <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogTitle>Reporter les factures</AlertDialogTitle>
+                <AlertDialogTitle>{{ $t('pages.deals.billings.postpone_schedule.title') }}</AlertDialogTitle>
                 <AlertDialogDescription>
-                    Combien de mois voulez-vous reporter les factures à partir de cette échéance ?
+                    {{ $t('pages.deals.billings.postpone_schedule.description') }}
                 </AlertDialogDescription>
             </AlertDialogHeader>
 

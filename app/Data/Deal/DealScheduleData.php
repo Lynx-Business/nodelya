@@ -10,9 +10,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 class DealScheduleData extends Data
 {
-    /**
-     * @param  ScheduleItemData[]  $data
-     */
     public function __construct(
 
         public string $year,

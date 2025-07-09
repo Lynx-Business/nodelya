@@ -328,6 +328,7 @@ return [
                 'title' => 'Validation de l’affaire :name',
                 'save'  => 'Valider l’affaire',
             ],
+            'schedule' => 'Échéancier',
         ],
 
         'billings' => [
@@ -338,10 +339,15 @@ return [
                 'title'       => 'Mettre à jour une facture',
                 'description' => 'Modifiez les détails d\'une facture existante',
             ],
+            'postpone_schedule' => [
+                'title'       => 'Reporter les factures',
+                'description' => 'Combien de mois voulez-vous reporter les factures à partir de cette échéance ?',
+            ],
             'schedule_totals' => [
                 'total'     => 'Total échéancier',
                 'principal' => 'Montant principal',
             ],
+            'schedule' => 'Échéancier',
         ],
 
     ],
