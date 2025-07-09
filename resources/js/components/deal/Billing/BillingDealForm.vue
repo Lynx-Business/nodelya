@@ -127,7 +127,7 @@ function getScheduleError(index: number, field: string) {
     return (form.errors as Record<string, string>)[key] || '';
 }
 
-const rowActions: DataTableRowCallbackAction<any>[] = [
+const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
     {
         type: 'callback',
         label: trans('messages.deals.billings.postpone_upcoming_invoices'),
