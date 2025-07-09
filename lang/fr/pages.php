@@ -347,7 +347,8 @@ return [
                 'total'     => 'Total échéancier',
                 'principal' => 'Montant principal',
             ],
-            'schedule' => 'Échéancier',
+            'schedule'                    => 'Échéancier',
+            'schedule_status_placeholder' => 'Sélectionner un statut',
         ],
 
     ],

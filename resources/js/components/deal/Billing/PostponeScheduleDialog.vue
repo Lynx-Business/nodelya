@@ -38,8 +38,8 @@ const showPostponeDialog = defineModel<boolean>('showPostponeDialog');
             </div>
 
             <AlertDialogFooter>
-                <AlertDialogCancel @click="showPostponeDialog = false"> Annuler </AlertDialogCancel>
-                <Button @click="postponeSchedules"> Confirmer </Button>
+                <AlertDialogCancel @click="showPostponeDialog = false"> {{ $t('cancel') }} </AlertDialogCancel>
+                <Button @click="postponeSchedules"> {{ $t('confirm') }} </Button>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>

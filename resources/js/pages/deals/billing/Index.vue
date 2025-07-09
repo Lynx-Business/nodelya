@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/custom/data-table';
 import { FiltersSheet, FiltersSheetContent, FiltersSheetTrigger } from '@/components/ui/custom/filters';
 import { FormContent, FormControl, FormField, FormLabel } from '@/components/ui/custom/form';
-import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
+import { PriceInput, TextInput } from '@/components/ui/custom/input';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
@@ -213,7 +213,6 @@ const filters = useFilters<BillingDealIndexRequest>(
         q: props.request.q ?? '',
         name: props.request.name ?? '',
         amount: props.request.amount,
-        success_rate: props.request.success_rate,
         code: props.request.name,
         page: props.billing_deals?.meta.current_page,
         per_page: props.billing_deals?.meta.per_page,
@@ -313,7 +312,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 <FormField>
                                     <FormLabel>
                                         <CapitalizeText>
-                                            {{ $t('models.deal.commercial.fields.name') }}
+                                            {{ $t('models.deal.billing.fields.name') }}
                                         </CapitalizeText>
                                     </FormLabel>
                                     <FormControl>
@@ -322,7 +321,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                                 </FormField>
                                 <FormLabel>
                                     <CapitalizeText>
-                                        {{ $t('models.deal.commercial.fields.amount') }}
+                                        {{ $t('models.deal.billing.fields.amount') }}
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
@@ -332,17 +331,7 @@ function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
                             <FormField>
                                 <FormLabel>
                                     <CapitalizeText>
-                                        {{ $t('models.deal.commercial.fields.success_rate') }}
-                                    </CapitalizeText>
-                                </FormLabel>
-                                <FormControl>
-                                    <NumberInput v-model="filters.success_rate" :min="0" :max="100" />
-                                </FormControl>
-                            </FormField>
-                            <FormField>
-                                <FormLabel>
-                                    <CapitalizeText>
-                                        {{ $t('models.deal.commercial.fields.code') }}
+                                        {{ $t('models.deal.billing.fields.code') }}
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>

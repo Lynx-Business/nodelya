@@ -47,7 +47,6 @@ class BillingDealController extends Controller
                         ->search($data->q)
                         ->when($data->name, fn (Builder $q) => $q->where('name', 'like', '%'.$data->name.'%'))
                         ->when($data->amount, fn (Builder $q) => $q->where('amount_in_cents', Services::conversion()->priceToCents($data->amount)))
-                        ->when($data->success_rate, fn (Builder $q) => $q->where('success_rate', $data->success_rate))
                         ->when($data->code, fn (Builder $q) => $q->where('code', 'like', '%'.$data->code.'%'))
                         ->when($data->client_ids, fn (Builder $q) => $q->whereIntegerInRaw('client_id', $data->client_ids))
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))

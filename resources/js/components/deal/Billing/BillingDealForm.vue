@@ -339,7 +339,7 @@ const rowActions: DataTableRowCallbackAction<any>[] = [
                                         <EnumCombobox
                                             v-model="item.status"
                                             data="schedule_status"
-                                            placeholder="Sélectionner un statut"
+                                            placeholder="$t('pages.deals.billings.schedule_status_placeholder')"
                                         />
                                     </FormControl>
                                     <FormError :message="getScheduleError(index, 'status')" />

@@ -174,7 +174,6 @@ export type BillingDealIndexRequest = {
     accounting_period_id?: number;
     name?: string;
     amount?: number;
-    success_rate?: number;
     code?: string;
     client_ids?: null | Array<number>;
     trashed?: TrashedFilter;

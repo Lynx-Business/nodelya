@@ -37,7 +37,6 @@ class BillingDealIndexRequest extends Data
         public ?int $accounting_period_id = null,
         public ?string $name = null,
         public ?float $amount = null,
-        public ?int $success_rate = null,
         public ?string $code = null,
 
         /** @var null|array<int> $client_ids */
