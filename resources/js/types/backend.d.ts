@@ -189,6 +189,7 @@ export type ClientFormRequest = {
     client?: any;
     name: string;
     address: AddressData;
+    comments?: Array<any>;
 };
 export type ClientIndexProps = {
     request: ClientIndexRequest;
@@ -219,10 +220,6 @@ export type ClientIndexRequest = {
     sort_direction: string;
     trashed?: TrashedFilter;
 };
-export type ClientListResource = {
-    id: number;
-    name: string;
-};
 export type ClientOneOrManyRequest = {
     client?: number;
     ids?: Array<number>;
@@ -236,6 +233,14 @@ export type ClientResource = {
     can_trash?: boolean;
     can_restore?: boolean;
     can_delete?: boolean;
+    comments?: Array<CommentResource>;
+};
+export type CommentResource = {
+    id: number;
+    message: string;
+    created_at: string;
+    updated_at: string;
+    is_edited: boolean;
 };
 export type CommercialDealFormProps = {
     deal?: DealResource;

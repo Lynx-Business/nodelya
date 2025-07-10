@@ -3,12 +3,15 @@
 namespace App\Data\Client\Form;
 
 use App\Data\Address\AddressData;
+use App\Data\Comment\CommentRequestData;
 use App\Models\Client;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Hidden;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -24,6 +27,9 @@ class ClientFormRequest extends Data
         public string $name,
 
         public AddressData $address,
+
+        #[DataCollectionOf(CommentRequestData::class)]
+        public ?DataCollection $comments,
     ) {}
 
     public static function attributes(): array

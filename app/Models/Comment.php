@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $creator
+ * @property-read Model|\Eloquent $model
  *
  * @method static \Database\Factories\CommentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
@@ -60,5 +61,10 @@ class Comment extends Model
         return [
             //
         ];
+    }
+
+    public function model()
+    {
+        return $this->morphTo();
     }
 }

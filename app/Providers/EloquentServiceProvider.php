@@ -28,6 +28,7 @@ class EloquentServiceProvider extends ServiceProvider
             'employee'   => \App\Models\Employee::class,
             'team'       => \App\Models\Team::class,
             'user'       => \App\Models\User::class,
+            'client'     => \App\Models\Client::class,
         ]);
     }
 }
