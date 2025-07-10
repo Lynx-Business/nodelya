@@ -3,7 +3,6 @@
 namespace App\Actions\Deal\Billing;
 
 use App\Data\Deal\Billing\Form\BillingDealFormRequest;
-use App\Models\Contractor;
 use App\Models\Deal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -40,7 +39,7 @@ class UpdateBillingDeal
                             'expense_item_id' => $charge->expense_item_id,
                             'amount_in_cents' => $charge->amount_in_cents,
                             'charged_at'      => $charge->charged_at,
-                            'model_type'      => Contractor::class,
+                            'model_type'      => 'contractor',
                             'model_id'        => $charge->contractor_id,
                         ],
                     );

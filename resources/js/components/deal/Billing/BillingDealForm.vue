@@ -381,7 +381,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             </FormField>
         </div>
 
-        <FormField class="col-span-2 mt-4">
+        <FormField class="col-span-full mt-4">
             <ExpenseChargeTable v-model:charges="form.expense_charges" v-model:errors="form.errors" />
         </FormField>
 
