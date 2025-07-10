@@ -2,8 +2,10 @@
 
 namespace App\Data\Expense\Charge;
 
+use App\Data\Contractor\ContractorResource;
 use App\Data\Expense\Item\ExpenseItemResource;
 use App\Enums\Expense\ExpenseType;
+use App\Models\Contractor;
 use App\Models\ExpenseCharge;
 use Carbon\Carbon;
 use Spatie\LaravelData\Lazy;
@@ -45,6 +47,8 @@ class ExpenseChargeResource extends Resource
         public Lazy|bool $can_delete,
 
         public Lazy|ExpenseItemResource $expense_item,
+
+        public Lazy|null|ContractorResource $contractor,
     ) {}
 
     public static function fromModel(ExpenseCharge $charge): static
@@ -65,6 +69,7 @@ class ExpenseChargeResource extends Resource
             can_restore     : Lazy::create(fn () => $charge->can_restore),
             can_delete      : Lazy::create(fn () => $charge->can_delete),
             expense_item    : Lazy::whenLoaded('expenseItem', $charge, fn () => ExpenseItemResource::from($charge->expenseItem)),
+            contractor      : Lazy::whenLoaded('model', $charge, fn () => $charge->model instanceof Contractor ? ContractorResource::from($charge->model) : null),
         );
     }
 }

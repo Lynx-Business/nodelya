@@ -26,6 +26,7 @@ export function useBillingDealForm(deal?: DealResource) {
         starts_at: deal?.starts_at || '',
         schedule: deal?.schedule,
         schedule_data: initialSchedule,
+        expense_charges: deal?.expenseCharges ?? [],
     });
 
     form.transform(transformDealForm);
@@ -44,5 +45,14 @@ function transformDealForm(data: BillingDealFormData): BillingDealFormRequest {
         amount: data.amount!,
         project_department_id: data.project_department?.id!,
         schedule: Array.isArray(data.schedule) ? data.schedule : undefined,
+        expense_charges: data.expense_charges
+            .filter((item) => item.expense_item?.id != null)
+            .map((item) => ({
+                id: item.id,
+                contractor_id: item.contractor?.id!,
+                amount: item.amount,
+                charged_at: item.charged_at,
+                expense_item_id: item.expense_item!.id,
+            })),
     };
 }

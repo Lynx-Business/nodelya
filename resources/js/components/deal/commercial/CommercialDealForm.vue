@@ -216,9 +216,9 @@ watch(
                     <DataTableHeader>
                         <DataTableRow>
                             <DataTableHead>{{ $t('models.deal.commercial.fields.schedule_data.date') }}</DataTableHead>
-                            <DataTableHead>{{
-                                $t('models.deal.commercial.fields.schedule_data.amount')
-                            }}</DataTableHead>
+                            <DataTableHead>
+                                {{ $t('models.deal.commercial.fields.schedule_data.amount') }}
+                            </DataTableHead>
                         </DataTableRow>
                     </DataTableHeader>
                     <DataTableBody>

@@ -97,7 +97,6 @@ class ExpenseCharge extends Model
         'model_type',
         'model_id',
         'amount_in_cents',
-        'amount',
         'charged_at',
     ];
 

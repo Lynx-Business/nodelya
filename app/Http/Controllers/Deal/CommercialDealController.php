@@ -258,9 +258,9 @@ class CommercialDealController extends Controller
             foreach ($data->expense_charges as $charge) {
                 $deal->expenseCharges()->create([
                     'expense_item_id' => $charge->expense_item_id,
-                    'amount'          => $charge->amount,
+                    'amount_in_cents' => $charge->amount_in_cents,
                     'charged_at'      => $charge->charged_at,
-                    'model_type'      => $charge->contractor_id ? Contractor::class : null,
+                    'model_type'      => Contractor::class,
                     'model_id'        => $charge->contractor_id ?? null,
                 ]);
             }

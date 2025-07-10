@@ -127,6 +127,8 @@ export type BillingDealFormProps = {
     deals?: Array<DealResource>;
     schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
     projectDepartments?: Array<ProjectDepartmentResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    contractors?: Array<ContractorResource>;
 };
 export type BillingDealFormRequest = {
     deal?: any;
@@ -142,6 +144,7 @@ export type BillingDealFormRequest = {
     project_department_id?: number;
     schedule_data: Array<ScheduleItemData>;
     schedule?: Array<DealScheduleData>;
+    expense_charges?: Array<ContractorExpenseChargeData>;
 };
 export type BillingDealIndexProps = {
     request: BillingDealIndexRequest;
@@ -312,7 +315,7 @@ export type CommercialDealValidateRequest = {
     project_department?: ProjectDepartmentResource;
     project_department_id?: number;
     reference: string;
-    expense_charges: Array<ContractorExpenseChargeData>;
+    expense_charges?: Array<ContractorExpenseChargeData>;
 };
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
@@ -353,6 +356,7 @@ export type ContractorExpenseBudgetIndexProps = {
     expenseItems?: Array<ExpenseItemResource>;
 };
 export type ContractorExpenseChargeData = {
+    id?: number;
     expense_item_id: number;
     amount: number;
     charged_at: string;
@@ -842,6 +846,7 @@ export type ExpenseChargeResource = {
     can_restore?: boolean;
     can_delete?: boolean;
     expense_item?: ExpenseItemResource;
+    contractor?: ContractorResource | null;
 };
 export type ExpenseItemFormProps = {
     team: TeamListResource;

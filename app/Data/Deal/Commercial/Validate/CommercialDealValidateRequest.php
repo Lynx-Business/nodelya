@@ -11,6 +11,7 @@ use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -28,7 +29,7 @@ class CommercialDealValidateRequest extends Data
         public string $reference,
 
         #[DataCollectionOf(ContractorExpenseChargeData::class)]
-        public array $expense_charges,
+        public ?DataCollection $expense_charges,
     ) {
         if ($project_department_id) {
             $this->project_department = ProjectDepartmentResource::from(
