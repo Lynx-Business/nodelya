@@ -65,8 +65,6 @@ function removeCharge(item: any) {
 
 function getScheduleError(index: number, field: string) {
     const key = `expense_charges.${index}.${field}`;
-    console.log((errors.value as Record<string, string>)?.[key]);
-
     return (errors.value as Record<string, string>)?.[key] || '';
 }
 
