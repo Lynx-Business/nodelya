@@ -24,7 +24,7 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
             </FormControl>
         </FormField>
 
-        <FormField required>
+        <FormField>
             <FormLabel>
                 <CapitalizeText>
                     {{ $t('models.project_department.name.one') }}
@@ -37,7 +37,7 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
         </FormField>
 
         <FormField class="col-span-2 mt-4">
-            <ExpenseChargeTable v-model="form.expense_charges" />
+            <ExpenseChargeTable v-model:charges="form.expense_charges" v-model:errors="form.errors" />
         </FormField>
     </FormContent>
 </template>

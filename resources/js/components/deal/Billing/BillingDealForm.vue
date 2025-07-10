@@ -32,6 +32,7 @@ import { DealScheduleStatus, ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import ExpenseChargeTable from '../commercial/ExpenseChargeTable.vue';
 import PostponeScheduleDialog from './PostponeScheduleDialog.vue';
 
 const { form, disabled } = injectFormContext<BillingDealFormData>();
@@ -239,7 +240,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             </FormLabel>
 
             <ClientCombobox v-model="form.client" />
-            <FormError :message="form.errors.client_id" />
+            <FormError :message="form.errors.client" />
         </FormField>
 
         <FormField>
@@ -251,7 +252,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             <FormControl>
                 <ProjectDepartmentCombobox v-model="form.project_department" />
             </FormControl>
-            <FormError :message="form.errors.project_department_id" />
+            <FormError :message="form.errors.project_department" />
         </FormField>
 
         <FormField>
@@ -262,7 +263,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             </FormLabel>
 
             <DealCombobox v-model="form.parent" />
-            <FormError :message="form.errors.deal_id" />
+            <FormError :message="form.errors.parent" />
         </FormField>
 
         <div class="col-span-full mt-2">
@@ -379,6 +380,10 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
                 <FormError class="mt-4" :message="form.errors.schedule_data" />
             </FormField>
         </div>
+
+        <FormField class="col-span-2 mt-4">
+            <ExpenseChargeTable v-model:charges="form.expense_charges" v-model:errors="form.errors" />
+        </FormField>
 
         <PostponeScheduleDialog
             v-model:showPostponeDialog="showPostponeDialog"

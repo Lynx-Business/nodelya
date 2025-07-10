@@ -78,7 +78,7 @@ class DealResource extends Resource
             client: Lazy::whenLoaded('client', $deal, fn () => ClientResource::from($deal->client)),
             project_department: Lazy::whenLoaded('projectDepartment', $deal, fn () => ProjectDepartmentResource::from($deal->projectDepartment)),
             parent: Lazy::whenLoaded('parent', $deal, fn () => DealResource::from($deal->parent)),
-            expenseCharges        : Lazy::whenLoaded('expenseCharges', $deal, fn () => ExpenseChargeResource::collect($deal->expenseCharges)),
+            expenseCharges : Lazy::whenLoaded('expenseCharges', $deal, fn () => ExpenseChargeResource::collect($deal->expenseCharges)),
             monthly_expenses: Lazy::create(fn () => $deal->monthlyExpenses),
             schedule: Lazy::create(fn () => $deal->schedule),
             can_view: Lazy::create(fn () => $deal->can_view),

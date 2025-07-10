@@ -14,33 +14,40 @@ import {
     DataTableRowActions,
 } from '@/components/ui/custom/data-table';
 import DatePicker from '@/components/ui/custom/date-picker/DatePicker.vue';
-import { FormControl, FormField, FormLabel, injectFormContext } from '@/components/ui/custom/form';
+import { FormControl, FormError, FormField, FormLabel } from '@/components/ui/custom/form';
 import { PriceInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { CommercialDealValidateFormData } from '@/composables';
 import { PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { ref } from 'vue';
 
+interface Props {
+    errors?: Record<string, string>;
+}
+
+const errors = defineModel<Record<string, string>>('errors');
+const charges = defineModel<any[]>('charges');
+
 const newCharge = ref({
+    id: undefined,
     expense_item: undefined,
     amount: 0,
     charged_at: undefined,
     contractor: undefined,
 });
 
-const { form } = injectFormContext<CommercialDealValidateFormData>();
-
 function addCharge() {
     if (!newCharge.value.expense_item || !newCharge.value.amount || !newCharge.value.charged_at) {
         return;
     }
-    form.expense_charges.push({
+    charges.value?.push({
+        id: newCharge.value.id,
         expense_item: newCharge.value.expense_item,
         amount: newCharge.value.amount,
         charged_at: newCharge.value.charged_at,
         contractor: newCharge.value.contractor,
     });
     newCharge.value = {
+        id: undefined,
         expense_item: undefined,
         amount: 0,
         charged_at: undefined,
@@ -49,13 +56,17 @@ function addCharge() {
 }
 
 function removeCharge(item: any) {
-    const idx = form.expense_charges.indexOf(item);
-    if (idx !== -1) form.expense_charges.splice(idx, 1);
+    const idx = charges.value?.indexOf(item);
+    if (idx !== -1 && idx !== undefined && charges.value) {
+        charges.value.splice(idx, 1);
+    }
 }
 
 function getScheduleError(index: number, field: string) {
-    const key = `schedule_data.${index}.${field}`;
-    return (form.errors as Record<string, string>)[key] || '';
+    const key = `expense_charges.${index}.${field}`;
+    console.log((errors.value as Record<string, string>)?.[key]);
+
+    return (errors.value as Record<string, string>)?.[key] || '';
 }
 
 const rowActions = [
@@ -112,7 +123,7 @@ const rowActions = [
                 </Button>
             </div>
         </div>
-        <DataTable v-slot="{ rows }" :data="form.expense_charges" :row-actions="rowActions">
+        <DataTable v-slot="{ rows }" :data="charges" :row-actions="rowActions">
             <DataTableContent tab="table">
                 <DataTableHeader>
                     <DataTableRow>
