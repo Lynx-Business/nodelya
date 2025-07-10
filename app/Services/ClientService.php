@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Actions\Client\CreateOrUpdateClient;
-use App\Data\Client\ClientListResource;
+use App\Data\Client\ClientResource;
 use App\Models\Client;
 
 class ClientService
@@ -14,7 +14,7 @@ class ClientService
 
     public function list()
     {
-        return ClientListResource::collect(
+        return ClientResource::collect(
             Client::query()->orderBy('name')->get(),
         );
     }

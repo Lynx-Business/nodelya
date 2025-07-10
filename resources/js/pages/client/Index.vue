@@ -26,7 +26,7 @@ import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
-import type { ClientIndexProps, ClientIndexRequest, ClientIndexResource, ClientOneOrManyRequest } from '@/types';
+import type { ClientIndexProps, ClientIndexRequest, ClientOneOrManyRequest, ClientResource } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { trans, transChoice } from 'laravel-vue-i18n';
 import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
@@ -47,9 +47,9 @@ const props = defineProps<ClientIndexProps>();
 
 const alert = useAlert();
 
-const selectedRows = ref<ClientIndexResource[]>([]);
+const selectedRows = ref<ClientResource[]>([]);
 
-const rowsActions: DataTableRowsAction<ClientIndexResource>[] = [
+const rowsActions: DataTableRowsAction<ClientResource>[] = [
     {
         label: trans('trash'),
         icon: ArchiveIcon,
@@ -108,7 +108,7 @@ const rowsActions: DataTableRowsAction<ClientIndexResource>[] = [
             }),
     },
 ];
-const rowActions: DataTableRowAction<ClientIndexResource>[] = [
+const rowActions: DataTableRowAction<ClientResource>[] = [
     {
         type: 'href',
         label: trans('edit'),
@@ -119,7 +119,7 @@ const rowActions: DataTableRowAction<ClientIndexResource>[] = [
         type: 'href',
         label: trans('view'),
         icon: EyeIcon,
-        hidden: (user) => user.can_update,
+        hidden: (user) => user?.can_update || false,
         disabled: (user) => !user.can_view,
         href: (client) => route('clients.edit', { client }),
     },

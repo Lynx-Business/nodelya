@@ -3,7 +3,7 @@
 namespace App\Data\Deal\Billing\Form;
 
 use App\Attributes\EnumArrayOf;
-use App\Data\Client\ClientListResource;
+use App\Data\Client\ClientResource;
 use App\Data\Deal\DealResource;
 use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Enums\Deal\DealScheduleStatus;
@@ -21,7 +21,7 @@ class BillingDealFormProps extends Resource
         public ?DealResource $deal,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ClientListResource::class)]
+        #[DataCollectionOf(ClientResource::class)]
         public Lazy|DataCollection $clients,
 
         #[AutoInertiaLazy]

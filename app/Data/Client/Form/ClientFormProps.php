@@ -2,6 +2,7 @@
 
 namespace App\Data\Client\Form;
 
+use App\Data\Client\ClientResource;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -9,6 +10,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class ClientFormProps extends Resource
 {
     public function __construct(
-        public ?ClientFormResource $client,
+        public ?ClientResource $client,
     ) {}
 }

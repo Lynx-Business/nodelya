@@ -3,6 +3,7 @@
 namespace App\Data\Client\Index;
 
 use App\Attributes\EnumArrayOf;
+use App\Data\Client\ClientResource;
 use App\Enums\Trashed\TrashedFilter;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -18,7 +19,7 @@ class ClientIndexProps extends Resource
         public ClientIndexRequest $request,
 
         #[AutoInertiaLazy]
-        #[DataCollectionOf(ClientIndexResource::class)]
+        #[DataCollectionOf(ClientResource::class)]
         public Lazy|PaginatedDataCollection $clients,
 
         #[AutoInertiaLazy]

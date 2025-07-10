@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Client;
 
 use App\Data\Client\ClientOneOrManyRequest;
+use App\Data\Client\ClientResource;
 use App\Data\Client\Form\ClientFormProps;
 use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
 use App\Data\Client\Index\ClientIndexRequest;
-use App\Data\Client\Index\ClientIndexResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -30,7 +30,7 @@ class ClientController extends Controller
         return Inertia::render('client/Index', ClientIndexProps::from([
             'request' => $data,
             'clients' => Lazy::inertia(
-                fn () => ClientIndexResource::collect(
+                fn () => ClientResource::collect(
                     Client::query()
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
@@ -41,7 +41,7 @@ class ClientController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
-                ),
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
 
             'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
