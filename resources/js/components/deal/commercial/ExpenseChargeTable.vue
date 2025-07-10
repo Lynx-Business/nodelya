@@ -17,6 +17,7 @@ import DatePicker from '@/components/ui/custom/date-picker/DatePicker.vue';
 import { FormControl, FormError, FormField, FormLabel } from '@/components/ui/custom/form';
 import { PriceInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
+import { trans } from 'laravel-vue-i18n';
 import { PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { ref } from 'vue';
 
@@ -72,7 +73,7 @@ function getScheduleError(index: number, field: string) {
 const rowActions = [
     {
         type: 'callback' as const,
-        label: 'Supprimer',
+        label: trans('delete'),
         icon: Trash2Icon,
         callback: (item: any) => removeCharge(item),
     },
