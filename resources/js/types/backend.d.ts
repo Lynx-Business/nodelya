@@ -371,6 +371,8 @@ export type ContractorExpenseBudgetIndexProps = {
     expenseItems?: Array<ExpenseItemResource>;
 };
 export type ContractorExpenseChargeData = {
+    expense_item?: ExpenseItemResource;
+    contractor?: ContractorResource;
     id?: number;
     expense_item_id: number;
     amount: number;

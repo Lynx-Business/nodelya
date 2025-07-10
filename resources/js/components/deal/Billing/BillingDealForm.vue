@@ -240,7 +240,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             </FormLabel>
 
             <ClientCombobox v-model="form.client" />
-            <FormError :message="form.errors.client" />
+            <FormError :message="form.errors.client_id" />
         </FormField>
 
         <FormField>
@@ -252,7 +252,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             <FormControl>
                 <ProjectDepartmentCombobox v-model="form.project_department" />
             </FormControl>
-            <FormError :message="form.errors.project_department" />
+            <FormError :message="form.errors.project_department_id" />
         </FormField>
 
         <FormField>
@@ -263,7 +263,7 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
             </FormLabel>
 
             <DealCombobox v-model="form.parent" />
-            <FormError :message="form.errors.parent" />
+            <FormError :message="form.errors.deal_id" />
         </FormField>
 
         <div class="col-span-full mt-2">

@@ -2,7 +2,11 @@
 
 namespace App\Data\Expense\Charge;
 
+use App\Data\Contractor\ContractorResource;
+use App\Data\Expense\Item\ExpenseItemResource;
 use App\Facades\Services;
+use App\Models\Contractor;
+use App\Models\ExpenseItem;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
@@ -24,6 +28,12 @@ class ContractorExpenseChargeData extends Data
     #[Computed]
     public int $amount_in_cents;
 
+    #[Computed]
+    public ?ExpenseItemResource $expense_item;
+
+    #[Computed]
+    public ?ContractorResource $contractor;
+
     public function __construct(
         public ?int $id,
         public int $expense_item_id,
@@ -32,5 +42,19 @@ class ContractorExpenseChargeData extends Data
         public int $contractor_id,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+
+        if ($expense_item_id) {
+            $expenseItem = ExpenseItem::find($expense_item_id);
+            if ($expenseItem) {
+                $this->expense_item = ExpenseItemResource::from($expenseItem);
+            }
+        }
+
+        if ($contractor_id) {
+            $contractor = Contractor::find($contractor_id);
+            if ($contractor) {
+                $this->contractor = ContractorResource::from($contractor);
+            }
+        }
     }
 }
