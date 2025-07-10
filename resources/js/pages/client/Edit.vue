@@ -4,13 +4,13 @@ import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
 import { useLayout } from '@/composables';
 import { useClientForm } from '@/composables/forms/clients/useClientForm';
-import { AppLayout } from '@/layouts';
+import ClientFormLayout from '@/layouts/client/ClientFormLayout.vue';
 import { ClientFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 
 defineOptions({
-    layout: useLayout(AppLayout, () => ({
+    layout: useLayout(ClientFormLayout, () => ({
         breadcrumbs: [
             {
                 title: trans('pages.clients.index.title'),
