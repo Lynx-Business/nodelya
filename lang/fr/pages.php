@@ -306,6 +306,18 @@ return [
         'update' => [
             'title' => 'Mettre à jour un client',
         ],
+        'comments' => [
+            'title'          => 'Commentaires',
+            'new'            => 'Nouveau commentaire',
+            'add'            => 'Ajouter',
+            'edit'           => 'Modifier le commentaire',
+            'cancel'         => 'Annuler',
+            'save'           => 'Enregistrer',
+            'edited_on'      => 'Modifié le',
+            'created_on'     => 'Créé le',
+            'delete_confirm' => 'Voulez-vous vraiment supprimer ce commentaire ?',
+            'update_error'   => 'Erreur lors de la mise à jour',
+        ],
     ],
 
     'deals' => [

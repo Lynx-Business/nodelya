@@ -10,25 +10,8 @@ import {
 import { TextInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { ClientFormData } from '@/composables';
-import { PlusIcon } from 'lucide-vue-next';
-import { ref } from 'vue';
-import Button from '../ui/button/Button.vue';
-import Textarea from '../ui/textarea/Textarea.vue';
 
 const { form } = injectFormContext<ClientFormData>();
-
-const newComment = ref({ id: 0, message: '' });
-
-function addComment() {
-    // id nullable TODO
-    console.log(form.comments);
-
-    form.comments.push(newComment.value);
-}
-
-function removeComment(index: number) {
-    form.comments.splice(index, 1);
-}
 </script>
 
 <template>
@@ -105,46 +88,6 @@ function removeComment(index: number) {
                 </FormControl>
                 <FormError :message="form.errors['address.country']" />
             </FormField>
-        </div>
-
-        <div class="col-span-full">
-            <h3 class="mb-4 text-lg font-medium">Commentaires</h3>
-
-            <div class="mb-4 flex items-center gap-2 sm:grid-cols-2">
-                <FormField class="col-span-full">
-                    <FormLabel>
-                        <CapitalizeText> Message </CapitalizeText>
-                    </FormLabel>
-                    <FormControl>
-                        <Textarea v-model="newComment.message" />
-                    </FormControl>
-                </FormField>
-
-                <Button type="button" variant="outline" @click="addComment">
-                    <PlusIcon class="mr-2 h-4 w-4" />
-                    Ajouter un commentaire
-                </Button>
-            </div>
-
-            <div v-for="(comment, index) in form.comments" :key="index" class="mb-4 rounded-lg border p-4">
-                <div class="mb-2 flex items-start justify-between">
-                    <FormLabel>Message</FormLabel>
-                    <Button type="button" variant="ghost" size="icon" @click="removeComment(index)">
-                        <Trash2Icon class="h-4 w-4" />
-                    </Button>
-                </div>
-
-                <FormField required>
-                    <FormControl>
-                        <Textarea v-model="comment.message" />
-                    </FormControl>
-                </FormField>
-
-                <div v-if="comment.id" class="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
-                    <Badge variant="secondary"> Modifié </Badge>
-                    <span>ID: {{ comment.id }}</span>
-                </div>
-            </div>
         </div>
     </FormContent>
 </template>

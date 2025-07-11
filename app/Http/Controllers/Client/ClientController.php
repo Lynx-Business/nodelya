@@ -8,6 +8,7 @@ use App\Data\Client\Form\ClientFormProps;
 use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
 use App\Data\Client\Index\ClientIndexRequest;
+use App\Data\Comment\CommentResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -89,7 +90,8 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         return Inertia::render('client/Edit', ClientFormProps::from([
-            'client' => ClientResource::from($client->load('comments')),
+            'client'   => ClientResource::from($client),
+            'comments' => CommentResource::collect($client->comments->load('creator')),
         ]));
     }
 

@@ -11,10 +11,6 @@ export function useClientForm(client?: ClientResource) {
             postal_code: client?.address?.postal_code ?? '',
             country: client?.address?.country ?? '',
         },
-        comments: (client?.comments ?? []).map((comment) => ({
-            id: comment.id,
-            message: comment.message,
-        })),
     });
 
     form.transform(transformClientForm);
@@ -28,9 +24,5 @@ export type ClientFormData = ReturnType<ClientForm['data']>;
 export function transformClientForm(data: ClientFormData): ClientFormRequest {
     return {
         ...data,
-        comments: data.comments.map((comment) => ({
-            id: comment.id,
-            message: comment.message,
-        })),
     };
 }

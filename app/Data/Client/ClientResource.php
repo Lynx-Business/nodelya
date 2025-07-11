@@ -3,10 +3,7 @@
 namespace App\Data\Client;
 
 use App\Data\Address\AddressData;
-use App\Data\Comment\CommentResource;
 use App\Models\Client;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
-use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -23,8 +20,6 @@ class ClientResource extends Resource
         public Lazy|bool $can_trash,
         public Lazy|bool $can_restore,
         public Lazy|bool $can_delete,
-        #[DataCollectionOf(CommentResource::class)]
-        public Lazy|DataCollection $comments,
     ) {}
 
     public static function fromModel(Client $client): static
@@ -38,7 +33,6 @@ class ClientResource extends Resource
             can_trash: Lazy::create(fn () => $client->can_trash),
             can_restore: Lazy::create(fn () => $client->can_restore),
             can_delete: Lazy::create(fn () => $client->can_delete),
-            comments : Lazy::whenLoaded('comments', $client, fn () => CommentResource::collect($client->comments ?? [])),
         );
     }
 }

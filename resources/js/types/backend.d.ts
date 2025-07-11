@@ -184,12 +184,13 @@ export type BillingDealIndexRequest = {
 };
 export type ClientFormProps = {
     client?: ClientResource;
+    comments?: Array<CommentResource>;
 };
 export type ClientFormRequest = {
     client?: any;
     name: string;
     address: AddressData;
-    comments?: Array<any>;
+    comments?: Array<CommentRequestData>;
 };
 export type ClientIndexProps = {
     request: ClientIndexRequest;
@@ -233,7 +234,12 @@ export type ClientResource = {
     can_trash?: boolean;
     can_restore?: boolean;
     can_delete?: boolean;
-    comments?: Array<CommentResource>;
+};
+export type CommentRequestData = {
+    comment?: any;
+    message: string;
+    model_type: string;
+    model_id: number;
 };
 export type CommentResource = {
     id: number;
@@ -241,6 +247,10 @@ export type CommentResource = {
     created_at: string;
     updated_at: string;
     is_edited: boolean;
+    creator_id?: number;
+    model_type?: string;
+    model_id?: number;
+    creator?: UserResource | null;
 };
 export type CommercialDealFormProps = {
     deal?: DealResource;

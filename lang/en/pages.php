@@ -152,4 +152,33 @@ return [
         ],
     ],
 
+    'clients' => [
+        'index' => [
+            'title' => 'Clients',
+        ],
+        'create' => [
+            'title'       => 'New client',
+            'description' => 'Create a new client for your organization',
+        ],
+        'edit' => [
+            'title'       => 'Client details',
+            'description' => "Update a client's details",
+        ],
+        'update' => [
+            'title' => 'Update client',
+        ],
+        'comments' => [
+            'title'          => 'Comments',
+            'new'            => 'New comment',
+            'add'            => 'Add',
+            'edit'           => 'Edit comment',
+            'cancel'         => 'Cancel',
+            'save'           => 'Save',
+            'edited_on'      => 'Edited on',
+            'created_on'     => 'Created on',
+            'delete_confirm' => 'Do you really want to delete this comment?',
+            'update_error'   => 'Error while updating',
+        ],
+    ],
+
 ];
