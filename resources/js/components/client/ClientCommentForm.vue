@@ -14,6 +14,8 @@ import { ref } from 'vue';
 const { isLoading, execute } = useAxios<CommentResource>();
 
 const comments = usePageProp<Array<CommentResource>>('comments');
+console.log('comments => ', comments.value);
+
 const client = usePageProp<ClientResource>('client');
 
 const localComments = ref(
@@ -129,7 +131,7 @@ async function removeComment(comment: any) {
                                 variant="ghost"
                                 size="icon"
                                 @click="comment.isEditing = true"
-                                :disabled="isLoading || disabled"
+                                :disabled="isLoading || disabled || !comment.can_update"
                             >
                                 <EditIcon class="h-4 w-4" />
                             </Button>
@@ -138,7 +140,7 @@ async function removeComment(comment: any) {
                                 variant="ghost"
                                 size="icon"
                                 @click="removeComment(comment)"
-                                :disabled="isLoading || disabled"
+                                :disabled="isLoading || disabled || !comment.can_delete"
                             >
                                 <Trash2Icon class="h-4 w-4" />
                             </Button>
@@ -164,7 +166,7 @@ async function removeComment(comment: any) {
                         <Button
                             type="button"
                             @click="updateComment(comment)"
-                            :disabled="isLoading || !comment.form.message.trim() || disabled"
+                            :disabled="isLoading || !comment.form.message.trim() || disabled || !comment.can_update"
                         >
                             <CheckIcon class="mr-2 h-4 w-4" />
                             {{ $t('pages.clients.comments.save') }}

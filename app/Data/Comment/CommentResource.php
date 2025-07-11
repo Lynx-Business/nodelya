@@ -17,10 +17,15 @@ class CommentResource extends Resource
         public string $created_at,
         public string $updated_at,
         public bool $is_edited,
-        public ?int $creator_id = null,
-        public ?string $model_type = null,
-        public ?int $model_id = null,
+        public ?int $creator_id,
+        public ?string $model_type,
+        public ?int $model_id,
         public Lazy|UserResource|null $creator = null,
+        public Lazy|bool $can_view,
+        public Lazy|bool $can_update,
+        public Lazy|bool $can_trash,
+        public Lazy|bool $can_restore,
+        public Lazy|bool $can_delete,
     ) {}
 
     public static function fromModel(Comment $comment): static
@@ -34,6 +39,11 @@ class CommentResource extends Resource
             creator_id: $comment->creator_id,
             model_type: $comment->model_type,
             model_id: $comment->model_id,
+            can_view: Lazy::create(fn () => $comment->can_view),
+            can_update: Lazy::create(fn () => $comment->can_update),
+            can_trash: Lazy::create(fn () => $comment->can_trash),
+            can_restore: Lazy::create(fn () => $comment->can_restore),
+            can_delete: Lazy::create(fn () => $comment->can_delete),
             creator: Lazy::whenLoaded('creator', $comment, fn () => UserResource::from($comment->creator)),
         );
     }

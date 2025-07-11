@@ -91,7 +91,9 @@ class ClientController extends Controller
     {
         return Inertia::render('client/Edit', ClientFormProps::from([
             'client'   => ClientResource::from($client)->include('can_update'),
-            'comments' => CommentResource::collect($client->comments->load('creator')),
+            'comments' => $client->comments->load('creator')->map(
+                fn ($comment) => CommentResource::from($comment)->include('can_view', 'can_update', 'can_delete'),
+            ),
         ]));
     }
 

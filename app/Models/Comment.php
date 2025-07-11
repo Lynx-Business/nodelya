@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\BelongsToCreator;
+use App\Traits\HasPolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,6 +39,8 @@ class Comment extends Model
 
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
+
+    use HasPolicy;
 
     /**
      * The attributes that are mass assignable.

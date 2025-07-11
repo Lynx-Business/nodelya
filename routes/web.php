@@ -34,6 +34,7 @@ use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
+use App\Models\Comment;
 use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\Employee;
@@ -319,9 +320,9 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
     });
 
     Route::prefix('/comments')->name('comments.')->controller(CommentController::class)->group(function () {
-        Route::post('/', 'store')->name('store');
-        Route::put('/{comment}', 'update')->name('update');
-        Route::delete('/{comment}', 'destroy')->name('destroy');
+        Route::post('/', 'store')->name('store')->can('create', Comment::class);
+        Route::put('/{comment}', 'update')->name('update')->can('update', Comment::class);
+        Route::delete('/{comment}', 'destroy')->name('destroy')->can('delete', Comment::class);
     });
 });
 

@@ -11,6 +11,7 @@ enum PermissionName: string
     case CLIENT = 'client';
     case EXPENSES = 'expenses';
     case DEAL = 'deal';
+    case COMMENT = 'comment';
 
     public function label(): string
     {
