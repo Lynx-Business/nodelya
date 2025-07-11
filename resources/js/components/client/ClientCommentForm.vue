@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { FormContent, FormControl, FormField, FormLabel, injectFormContext } from '@/components/ui/custom/form';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { Textarea } from '@/components/ui/textarea';
-import { usePageProp } from '@/composables';
+import { useAlert, usePageProp } from '@/composables';
 import { CommentFormData, useCommentForm } from '@/composables/forms/comment/useCommentForm';
 import { ClientResource, CommentResource } from '@/types';
 import { useAxios } from '@vueuse/integrations/useAxios.mjs';
@@ -14,7 +14,7 @@ import { ref } from 'vue';
 const { isLoading, execute } = useAxios<CommentResource>();
 
 const comments = usePageProp<Array<CommentResource>>('comments');
-console.log('comments => ', comments.value);
+const alert = useAlert();
 
 const client = usePageProp<ClientResource>('client');
 
@@ -79,15 +79,19 @@ function cancelEdit(comment: any) {
 }
 
 async function removeComment(comment: any) {
-    if (!confirm(trans('pages.clients.comments.delete_confirm'))) return;
+    alert({
+        variant: 'warning',
+        description: trans('components.clients.comments.delete_confirm'),
+        callback: async () => {
+            const { data } = await execute(route('comments.destroy', { comment: comment.id }), {
+                method: 'DELETE',
+            });
 
-    const { data } = await execute(route('comments.destroy', { comment: comment.id }), {
-        method: 'DELETE',
+            if (data) {
+                localComments.value = localComments.value.filter((c) => c !== comment);
+            }
+        },
     });
-
-    if (data) {
-        localComments.value = localComments.value.filter((c) => c !== comment);
-    }
 }
 </script>
 

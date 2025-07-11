@@ -75,7 +75,7 @@ class CommentPolicy
         if ($user->is_admin && Route::is('admin.*')) {
             return true;
         }
-        if (! ($comment->creator && $comment->creator->team_id === $user->team_id)) {
+        if (! ($comment->creator && $comment->creator->id === $user->id)) {
             return false;
         }
 

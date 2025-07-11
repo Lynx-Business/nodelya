@@ -30,7 +30,6 @@ class CommentRequestData extends Data
             'message'    => __('models.comment.fields.message'),
             'model_type' => __('models.comment.fields.model_type'),
             'model_id'   => __('models.comment.fields.model_id'),
-            'creator_id' => __('models.comment.fields.creator_id'),
         ];
     }
 }

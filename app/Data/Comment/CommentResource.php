@@ -33,8 +33,8 @@ class CommentResource extends Resource
         return new static(
             id: $comment->id,
             message: $comment->message,
-            created_at: $comment->created_at->toIso8601String(),
-            updated_at: $comment->updated_at->toIso8601String(),
+            created_at: $comment->created_at,
+            updated_at: $comment->updated_at,
             is_edited: $comment->created_at->ne($comment->updated_at),
             creator_id: $comment->creator_id,
             model_type: $comment->model_type,
