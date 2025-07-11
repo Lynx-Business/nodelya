@@ -32,6 +32,7 @@ import { DealScheduleStatus, ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import ExpenseChargeTable from '../commercial/ExpenseChargeTable.vue';
 import PostponeScheduleDialog from './PostponeScheduleDialog.vue';
 
 const { form, disabled } = injectFormContext<BillingDealFormData>();
@@ -379,6 +380,10 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
                 <FormError class="mt-4" :message="form.errors.schedule_data" />
             </FormField>
         </div>
+
+        <FormField class="col-span-full mt-4">
+            <ExpenseChargeTable v-model:charges="form.expense_charges" v-model:errors="form.errors" />
+        </FormField>
 
         <PostponeScheduleDialog
             v-model:showPostponeDialog="showPostponeDialog"

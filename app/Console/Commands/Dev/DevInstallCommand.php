@@ -7,7 +7,9 @@ use App\Enums\Role\RoleName;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
 use App\Models\Banner;
+use App\Models\Client;
 use App\Models\Contractor;
+use App\Models\Deal;
 use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseCategory;
@@ -104,6 +106,19 @@ class DevInstallCommand extends Command
                         ProjectDepartment::factory()
                             ->count($count)
                             ->recycle($team)
+                            ->create();
+
+                        $clients = Client::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->create();
+
+                        Deal::factory()
+                            ->count($count)
+                            ->recycle($team)
+                            ->state(fn () => [
+                                'client_id' => $clients->random()->id,
+                            ])
                             ->create();
 
                         foreach (ExpenseType::cases() as $type) {
