@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $model_type
  * @property int|null $model_id
  * @property int $amount_in_cents
+ * @property int|null $duration_in_months
+ * @property int|null $monthly_amount_in_cents
  * @property \Illuminate\Support\Carbon $starts_at
  * @property \Illuminate\Support\Carbon $ends_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -41,6 +43,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read Model|\Eloquent|null $model
+ * @property float $monthly_amount
  * @property-read \App\Models\Team $team
  * @property-read ExpenseType $type
  *
@@ -56,12 +59,14 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder<static>|ExpenseBudget whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static Builder<static>|ExpenseBudget whereCreatedAt($value)
  * @method static Builder<static>|ExpenseBudget whereDeletedAt($value)
+ * @method static Builder<static>|ExpenseBudget whereDurationInMonths($value)
  * @method static Builder<static>|ExpenseBudget whereEndsAt($value)
  * @method static Builder<static>|ExpenseBudget whereExpenseItemId($value)
  * @method static Builder<static>|ExpenseBudget whereId($value)
  * @method static Builder<static>|ExpenseBudget whereInAccountingPeriod(\App\Models\AccountingPeriod|int $accountingPeriod)
  * @method static Builder<static>|ExpenseBudget whereModelId($value)
  * @method static Builder<static>|ExpenseBudget whereModelType($value)
+ * @method static Builder<static>|ExpenseBudget whereMonthlyAmountInCents($value)
  * @method static Builder<static>|ExpenseBudget whereStartsAt($value)
  * @method static Builder<static>|ExpenseBudget whereTeamId($value)
  * @method static Builder<static>|ExpenseBudget whereType(\App\Enums\Expense\ExpenseType $type)
@@ -131,8 +136,16 @@ class ExpenseBudget extends Model
     protected function amount(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, array $attributes): float => Services::conversion()->centsToPrice(data_get($attributes, 'amount_in_cents')),
+            get: fn ($value, array $attributes): float => Services::conversion()->centsToPrice(data_get($attributes, 'amount_in_cents', default: 0)),
             set: fn (?float $value) => ['amount_in_cents' => Services::conversion()->priceToCents($value)],
+        );
+    }
+
+    protected function monthlyAmount(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, array $attributes): float => Services::conversion()->centsToPrice(data_get($attributes, 'monthly_amount_in_cents', default: 0)),
+            set: fn (?float $value, array $attributes) => ['amount_in_cents' => Services::conversion()->priceToCents($value * data_get($attributes, 'duration_in_months', default: 0))],
         );
     }
 

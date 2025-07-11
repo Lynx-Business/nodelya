@@ -9,14 +9,14 @@ export function useFormatter() {
     const config = injectConfigProviderContext();
 
     return {
-        date(value?: DateValue | string, options: Intl.DateTimeFormatOptions = {}): string {
+        date(value?: DateValue | string, options?: Intl.DateTimeFormatOptions): string {
             try {
                 const date = typeof value === 'string' ? parse.toDate(value) : value;
                 if (!date) {
                     return '';
                 }
                 const formatter = useDateFormatter(config.locale?.value ?? locale.value);
-                return formatter.custom(date.toDate(getLocalTimeZone()), { dateStyle: 'medium', ...options });
+                return formatter.custom(date.toDate(getLocalTimeZone()), options ?? { dateStyle: 'medium' });
             } catch (error) {
                 console.error(error);
                 return '';

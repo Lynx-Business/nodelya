@@ -163,6 +163,11 @@ return [
                 'description' => 'Mettez à jour les détails du frais ponctuel',
             ],
         ],
+        'management' => [
+            'index' => [
+                'title' => 'Contrôle de gestion',
+            ],
+        ],
     ],
 
     'settings' => [

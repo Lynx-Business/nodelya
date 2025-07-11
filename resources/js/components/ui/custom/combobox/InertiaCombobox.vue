@@ -166,7 +166,7 @@ const placeholder = computed(() => {
                     >
                         <XIcon />
                     </Button>
-                    <Button class="h-full rounded-l-none" size="icon" variant="ghost">
+                    <Button class="text-muted-foreground h-full rounded-l-none opacity-50" size="icon" variant="ghost">
                         <ChevronDownIcon />
                     </Button>
                 </div>

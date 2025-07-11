@@ -20,9 +20,6 @@ class ContractorExpenseChargeFormProps extends Resource
 {
     public function __construct(
         #[AutoInertiaLazy]
-        public Lazy|AccountingPeriodResource $accountingPeriod,
-
-        #[AutoInertiaLazy]
         #[DataCollectionOf(ExpenseCategoryResource::class)]
         public Lazy|DataCollection $expenseCategories,
 
@@ -36,8 +33,11 @@ class ContractorExpenseChargeFormProps extends Resource
 
         public ContractorResource $contractor,
 
+        public AccountingPeriodResource $accountingPeriod,
+
         public ?ExpenseChargeResource $expenseCharge,
     ) {
+        $this->accountingPeriod->include('months');
         $this->expenseCharge?->include('can_update');
     }
 }

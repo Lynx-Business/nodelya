@@ -91,10 +91,6 @@ class ContractorExpenseChargeController extends Controller
     public function create(Contractor $contractor)
     {
         return Inertia::render('contractors/expenses/charges/Create', ContractorExpenseChargeFormProps::from([
-            'contractor'       => $contractor,
-            'accountingPeriod' => Lazy::closure(
-                fn () => Services::accountingPeriod()->current(),
-            ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
@@ -113,6 +109,8 @@ class ContractorExpenseChargeController extends Controller
                         ->whereType($this->type),
                 ),
             ),
+            'accountingPeriod' => Services::accountingPeriod()->current(),
+            'contractor'       => $contractor,
         ]));
     }
 
@@ -139,10 +137,6 @@ class ContractorExpenseChargeController extends Controller
     public function edit(Contractor $contractor, ExpenseCharge $expenseCharge)
     {
         return Inertia::render('contractors/expenses/charges/Edit', ContractorExpenseChargeFormProps::from([
-            'contractor'       => $contractor,
-            'accountingPeriod' => Lazy::closure(
-                fn () => Services::accountingPeriod()->current(),
-            ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
@@ -161,7 +155,9 @@ class ContractorExpenseChargeController extends Controller
                         ->whereType($this->type),
                 ),
             ),
-            'expenseCharge' => $expenseCharge->load([
+            'accountingPeriod' => Services::accountingPeriod()->current(),
+            'contractor'       => $contractor,
+            'expenseCharge'    => $expenseCharge->load([
                 'expenseItem' => [
                     'expenseCategory',
                     'expenseSubCategory',

@@ -51,6 +51,8 @@ class ExpenseChargeFormRequest extends Data
         public Carbon $charged_at,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+
+        $this->charged_at->startOfDay();
     }
 
     public static function attributes(): array
@@ -62,8 +64,12 @@ class ExpenseChargeFormRequest extends Data
         ];
     }
 
-    public static function rules(ValidationContext $context): array
-    {
+    public static function rules(
+        ValidationContext $context,
+
+        #[FromRouteParameter('expenseCharge')]
+        ?ExpenseCharge $expenseCharge = null,
+    ): array {
         $team = Services::team()->current();
         $modelType = data_get($context->payload, 'model_type');
         $expenseType = ExpenseType::fromMorphType($modelType);
@@ -95,6 +101,14 @@ class ExpenseChargeFormRequest extends Data
             ],
             'model_type' => $modelTypeRules,
             'model_id'   => $modelIdRules,
+            'charged_at' => [
+                Rule::unique('expense_charges')
+                    ->where('team_id', $team?->getKey())
+                    ->where('expense_item_id', data_get($context->payload, 'expense_item_id'))
+                    ->where('model_type', $modelType)
+                    ->where('model_id', data_get($context->payload, 'model_id'))
+                    ->ignore($expenseCharge?->id),
+            ],
         ];
     }
 }

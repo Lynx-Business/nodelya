@@ -33,8 +33,6 @@ class ExpenseBudgetResource extends Resource
 
         public ?Carbon $deleted_at,
 
-        public Lazy|ExpenseType $type,
-
         public Lazy|bool $can_view,
 
         public Lazy|bool $can_update,
@@ -44,6 +42,10 @@ class ExpenseBudgetResource extends Resource
         public Lazy|bool $can_restore,
 
         public Lazy|bool $can_delete,
+
+        public Lazy|ExpenseType $type,
+
+        public Lazy|int $monthly_amount,
 
         public Lazy|Optional|ExpenseItemResource $expense_item,
     ) {}
@@ -59,12 +61,13 @@ class ExpenseBudgetResource extends Resource
             starts_at       : $budget->starts_at,
             ends_at         : $budget->ends_at,
             deleted_at      : $budget->deleted_at,
-            type            : Lazy::create(fn () => $budget->type),
             can_view        : Lazy::create(fn () => $budget->can_view),
             can_update      : Lazy::create(fn () => $budget->can_update),
             can_trash       : Lazy::create(fn () => $budget->can_trash),
             can_restore     : Lazy::create(fn () => $budget->can_restore),
             can_delete      : Lazy::create(fn () => $budget->can_delete),
+            type            : Lazy::create(fn () => $budget->type),
+            monthly_amount  : Lazy::create(fn () => $budget->monthly_amount),
             expense_item    : Lazy::whenLoaded('expenseItem', $budget, fn () => ExpenseItemResource::from($budget->expenseItem)),
         );
     }

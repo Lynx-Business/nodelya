@@ -115,7 +115,7 @@ class ExpenseCharge extends Model
     protected function casts(): array
     {
         return [
-            'charged_at' => 'date',
+            'charged_at' => 'datetime',
         ];
     }
 

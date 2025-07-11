@@ -23,8 +23,8 @@ class InCurrentAccountingPeriod extends CustomValidationAttribute
         }
 
         return [
-            Rule::date()->afterOrEqual($period->starts_at),
-            Rule::date()->beforeOrEqual($period->ends_at),
+            Rule::date()->afterOrEqual($period->starts_at->copy()->startOfMonth()),
+            Rule::date()->beforeOrEqual($period->ends_at->copy()->endOfMonth()),
         ];
     }
 }

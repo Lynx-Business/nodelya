@@ -8,8 +8,10 @@ import { useAuth, useRouterComputed } from '@/composables';
 import type { BreadcrumbItemType, NavItem } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
+
 import {
     BanknoteIcon,
+    Columns3CogIcon,
     LayoutGridIcon,
     MonitorCogIcon,
     ReceiptEuroIcon,
@@ -40,6 +42,13 @@ const items = useRouterComputed((): NavItem[] => [
         isActive: route().current('index'),
     },
     {
+        title: trans('layouts.app.sidebar.items.expenses.management'),
+        href: route('expenses.management.index'),
+        icon: Columns3CogIcon,
+        hidden: !user.permissions?.includes('expenses'),
+        isActive: route().current('expenses.management.index'),
+    },
+    {
         title: trans('layouts.app.sidebar.items.expenses'),
         icon: BanknoteIcon,
         hidden: !user.permissions?.includes('expenses'),
@@ -47,7 +56,7 @@ const items = useRouterComputed((): NavItem[] => [
             {
                 title: trans(`enums.expense.type.general`),
                 href: route('expenses.budgets.index'),
-                isActive: route().current('expenses.*'),
+                isActive: route().current('expenses.budgets.*') || route().current('expenses.charges.*'),
             },
             {
                 title: trans(`enums.expense.type.employee`),
@@ -90,7 +99,7 @@ const items = useRouterComputed((): NavItem[] => [
         <SidebarInset>
             <AppBanner class="border-b" />
             <header
-                class="border-sidebar-border/70 bg-background sticky inset-x-0 top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:rounded-t-xl md:px-4"
+                class="border-sidebar-border/70 bg-background sticky inset-x-0 top-0 z-40 flex h-16 shrink-0 items-center gap-2 border-b px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:rounded-t-xl md:px-4"
             >
                 <div class="flex items-center gap-2">
                     <SidebarTrigger class="-ml-1" />

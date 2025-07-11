@@ -35,7 +35,7 @@ class AuthNotReadyMiddleware
             Services::user()->selectTeam->execute($user, $team);
         }
 
-        if ($team->accountingPeriods()->doesntExist()) {
+        if (! $team->currentAccountingPeriod) {
             return $next($request);
         }
 

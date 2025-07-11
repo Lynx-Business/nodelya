@@ -1,32 +1,42 @@
 <?php
 
-namespace App\Data\Expense\Charge\Index;
+namespace App\Data\Expense\Management\Index;
 
+use App\Attributes\EnumArrayOf;
 use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Expense\Category\ExpenseCategoryResource;
 use App\Data\Expense\Item\ExpenseItemResource;
 use App\Data\Expense\SubCategory\ExpenseSubCategoryResource;
-use App\Enums\Trashed\TrashedFilter;
+use App\Enums\Expense\ExpenseType;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
 use App\Models\ExpenseCategory;
 use App\Models\ExpenseItem;
 use App\Models\ExpenseSubCategory;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Attributes\Hidden;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
+use Spatie\TypeScriptTransformer\Attributes\Hidden as TypeScriptHidden;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[MergeValidationRules]
-class ExpenseChargeIndexRequest extends Data
+class ExpenseManagementIndexRequest extends Data
 {
     #[Computed]
-    public ?AccountingPeriodResource $accounting_period;
+    #[Hidden]
+    #[TypeScriptHidden]
+    public AccountingPeriod $accounting_period_model;
+
+    #[Computed]
+    public AccountingPeriodResource $accounting_period;
 
     #[Computed]
     #[DataCollectionOf(ExpenseCategoryResource::class)]
@@ -42,12 +52,14 @@ class ExpenseChargeIndexRequest extends Data
 
     public function __construct(
         public ?string $q = null,
-        public ?int $page = null,
-        public ?int $per_page = null,
-        public string $sort_by = 'charged_at',
-        public string $sort_direction = 'desc',
 
-        public ?TrashedFilter $trashed = null,
+        #[LiteralTypeScriptType("'contractor' | 'employee'")]
+        public ?string $model_type = null,
+
+        public ?int $model_id = null,
+
+        #[EnumArrayOf(ExpenseType::class)]
+        public ?array $expense_types = null,
 
         public ?int $accounting_period_id = null,
 
@@ -60,16 +72,16 @@ class ExpenseChargeIndexRequest extends Data
         /** @var null|array<int> $expense_item_ids */
         public ?array $expense_item_ids = null,
     ) {
-        /** @var ?AccountingPeriod $period */
-        $period = null;
         if ($accounting_period_id) {
-            $period = AccountingPeriod::find($accounting_period_id);
+            $this->accounting_period_model = AccountingPeriod::find($accounting_period_id);
         } else {
-            $period = Services::accountingPeriod()->current();
+            $this->accounting_period_model = Services::accountingPeriod()->current();
             $this->accounting_period_id = Services::accountingPeriod()->currentId();
         }
-        if ($period) {
-            $this->accounting_period = AccountingPeriodResource::from($period);
+        if ($this->accounting_period_model) {
+            $this->accounting_period = AccountingPeriodResource::from($this->accounting_period_model)->include('months');
+        } else {
+            abort(Response::HTTP_BAD_REQUEST);
         }
 
         if ($expense_category_ids) {
@@ -102,11 +114,6 @@ class ExpenseChargeIndexRequest extends Data
     {
         return [
             'q'                        => __('query'),
-            'page'                     => __('page'),
-            'per_page'                 => __('per_page'),
-            'sort_by'                  => __('sort_by'),
-            'sort_direction'           => __('sort_direction'),
-            'trashed'                  => __('trashed'),
             'accounting_period_id'     => __('models.accounting_period.name.one'),
             'expense_category_ids'     => __('models.expense.category.name.many'),
             'expense_sub_category_ids' => __('models.expense.sub_category.name.many'),

@@ -29,8 +29,8 @@ class ExpenseChargeFactory extends Factory
 
     public function forAccountingPeriod(AccountingPeriod $accountingPeriod): static
     {
-        return $this->state(fn (array $attributes) => [
-            'charged_at' => fake()->dateTimeBetween($accountingPeriod->starts_at, $accountingPeriod->ends_at),
+        return $this->state(fn () => [
+            'charged_at' => fake()->randomElement($accountingPeriod->months),
         ]);
     }
 }

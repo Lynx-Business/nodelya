@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('expense_item_id')->constrained();
             $table->nullableMorphs('model');
             $table->unsignedBigInteger('amount_in_cents');
+            $table->unsignedSmallInteger('duration_in_months')->virtualAs('ABS(TIMESTAMPDIFF(MONTH, starts_at, ends_at)) + 1');
+            $table->unsignedBigInteger('monthly_amount_in_cents')->virtualAs('ROUND(amount_in_cents / duration_in_months)');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
             $table->timestamps();

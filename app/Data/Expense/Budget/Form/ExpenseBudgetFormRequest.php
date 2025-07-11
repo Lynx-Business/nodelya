@@ -61,6 +61,9 @@ class ExpenseBudgetFormRequest extends Data
             $this->starts_at = $period->starts_at;
             $this->ends_at = $period->ends_at;
         }
+
+        $this->starts_at->startOfDay();
+        $this->ends_at->endOfDay();
     }
 
     public static function attributes(): array
