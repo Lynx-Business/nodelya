@@ -1,7 +1,7 @@
 import { useComputedForm } from '@/composables';
-import { ClientFormRequest, ClientFormResource } from '@/types';
+import { ClientFormRequest, ClientResource } from '@/types';
 
-export function useClientForm(client?: ClientFormResource) {
+export function useClientForm(client?: ClientResource) {
     const form = useComputedForm({
         name: client?.name ?? '',
         address: {

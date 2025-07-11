@@ -75,4 +75,9 @@ return [
         ],
     ],
 
+    'clients' => [
+        'comments' => [
+            'delete_confirm' => 'Voulez-vous vraiment supprimer ce commentaire ?',
+        ],
+    ],
 ];

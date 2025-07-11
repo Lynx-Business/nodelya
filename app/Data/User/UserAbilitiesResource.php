@@ -2,6 +2,7 @@
 
 namespace App\Data\User;
 
+use App\Models\Client;
 use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\Employee;
@@ -58,6 +59,12 @@ class UserAbilitiesResource extends Resource
             'create'   => 'bool',
         ])]
         public array $users,
+
+        #[TypeScriptType([
+            'view_any' => 'bool',
+            'create'   => 'bool',
+        ])]
+        public array $clients,
     ) {}
 
     public static function fromModel(User $user): self
@@ -92,6 +99,10 @@ class UserAbilitiesResource extends Resource
             'deals' => [
                 'view_any' => $user->can('viewAny', Deal::class),
                 'create'   => $user->can('create', Deal::class),
+            ],
+            'clients' => [
+                'view_any' => $user->can('viewAny', Client::class),
+                'create'   => $user->can('create', Client::class),
             ],
         ]);
     }

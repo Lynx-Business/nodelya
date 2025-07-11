@@ -10,6 +10,7 @@ use App\Traits\Trashable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property int $id
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
+ * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Deal> $deals
  * @property-read int|null $deals_count
  * @property-read true $is_trashable
@@ -100,5 +103,13 @@ class Client extends Model
     public function deals(): HasMany
     {
         return $this->hasMany(Deal::class);
+    }
+
+    /**
+     * Get the comments for the client.
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'model');
     }
 }

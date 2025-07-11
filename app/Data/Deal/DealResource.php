@@ -2,7 +2,7 @@
 
 namespace App\Data\Deal;
 
-use App\Data\Client\ClientListResource;
+use App\Data\Client\ClientResource;
 use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Models\Deal;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -25,7 +25,7 @@ class DealResource extends Resource
         public string $ordered_at,
         public ?int $duration_in_months,
         public ?string $starts_at,
-        public Lazy|ClientListResource $client,
+        public Lazy|ClientResource $client,
         public Lazy|ProjectDepartmentResource $project_department,
         public Lazy|DealResource $parent,
         #[DataCollectionOf(DealScheduleData::class)]
@@ -51,7 +51,7 @@ class DealResource extends Resource
             ordered_at: $deal->ordered_at,
             duration_in_months: $deal->duration_in_months ?? null,
             starts_at: $deal->starts_at ?? null,
-            client: Lazy::whenLoaded('client', $deal, fn () => ClientListResource::from($deal->client)),
+            client: Lazy::whenLoaded('client', $deal, fn () => ClientResource::from($deal->client)),
             project_department: Lazy::whenLoaded('projectDepartment', $deal, fn () => ProjectDepartmentResource::from($deal->projectDepartment)),
             parent: Lazy::whenLoaded('parent', $deal, fn () => DealResource::from($deal->parent)),
             monthly_expenses: Lazy::create(fn () => $deal->monthlyExpenses),

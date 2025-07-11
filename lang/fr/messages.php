@@ -350,4 +350,19 @@ return [
         ],
     ],
 
+    'comments' => [
+        'store' => [
+            'success' => 'Commentaire créé avec succès',
+            'error'   => 'Erreur lors de la création du commentaire',
+        ],
+        'update' => [
+            'success' => 'Commentaire modifié avec succès',
+            'error'   => 'Erreur lors de la modification du commentaire',
+        ],
+        'delete' => [
+            'success' => 'Commentaire supprimé avec succès',
+            'error'   => 'Erreur lors de la suppression du commentaire',
+        ],
+    ],
+
 ];

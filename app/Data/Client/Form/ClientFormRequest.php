@@ -35,7 +35,6 @@ class ClientFormRequest extends Data
             'address.city'               => __('models.address.fields.city'),
             'address.postal_code'        => __('models.address.fields.postal_code'),
             'address.country'            => __('models.address.fields.country'),
-
         ];
     }
 }

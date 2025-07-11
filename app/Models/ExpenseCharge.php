@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $deal_id
  * @property float $amount
  * @property-read bool $can_delete
  * @property-read bool $can_restore
@@ -55,6 +56,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder<static>|ExpenseCharge whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static Builder<static>|ExpenseCharge whereChargedAt($value)
  * @method static Builder<static>|ExpenseCharge whereCreatedAt($value)
+ * @method static Builder<static>|ExpenseCharge whereDealId($value)
  * @method static Builder<static>|ExpenseCharge whereDeletedAt($value)
  * @method static Builder<static>|ExpenseCharge whereExpenseItemId($value)
  * @method static Builder<static>|ExpenseCharge whereId($value)

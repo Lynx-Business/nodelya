@@ -3,7 +3,7 @@
 namespace App\Data\Deal\Commercial\Index;
 
 use App\Data\AccountingPeriod\AccountingPeriodResource;
-use App\Data\Client\ClientListResource;
+use App\Data\Client\ClientResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
@@ -25,7 +25,7 @@ class CommercialDealIndexRequest extends Data
     public ?AccountingPeriodResource $accounting_period;
 
     #[Computed]
-    #[DataCollectionOf(ClientListResource::class)]
+    #[DataCollectionOf(ClientResource::class)]
     public ?DataCollection $clients_items;
 
     public function __construct(
@@ -57,7 +57,7 @@ class CommercialDealIndexRequest extends Data
         }
 
         if ($client_ids) {
-            $this->clients_items = ClientListResource::collect(
+            $this->clients_items = ClientResource::collect(
                 Client::query()
                     ->whereIntegerInRaw('id', $client_ids)
                     ->get(),
