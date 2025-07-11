@@ -90,7 +90,7 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         return Inertia::render('client/Edit', ClientFormProps::from([
-            'client'   => ClientResource::from($client),
+            'client'   => ClientResource::from($client)->include('can_update'),
             'comments' => CommentResource::collect($client->comments->load('creator')),
         ]));
     }

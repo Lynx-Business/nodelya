@@ -24,7 +24,7 @@ const localComments = ref(
     })),
 );
 
-const { form } = injectFormContext<CommentFormData>();
+const { form, disabled } = injectFormContext<CommentFormData>();
 
 async function addComment() {
     if (!form.message.trim()) return;
@@ -100,7 +100,7 @@ async function removeComment(comment: any) {
                         <CapitalizeText> {{ $t('pages.clients.comments.new') }} </CapitalizeText>
                     </FormLabel>
                     <FormControl>
-                        <Textarea v-model="form.message" :disabled="isLoading" />
+                        <Textarea v-model="form.message" :disabled="isLoading || disabled" />
                     </FormControl>
                 </FormField>
 
@@ -108,7 +108,7 @@ async function removeComment(comment: any) {
                     type="button"
                     variant="outline"
                     @click="addComment"
-                    :disabled="isLoading || !form.message.trim()"
+                    :disabled="isLoading || !form.message.trim() || disabled"
                 >
                     <PlusIcon class="mr-2 h-4 w-4" />
                     {{ $t('pages.clients.comments.add') }}
@@ -129,7 +129,7 @@ async function removeComment(comment: any) {
                                 variant="ghost"
                                 size="icon"
                                 @click="comment.isEditing = true"
-                                :disabled="isLoading"
+                                :disabled="isLoading || disabled"
                             >
                                 <EditIcon class="h-4 w-4" />
                             </Button>
@@ -138,7 +138,7 @@ async function removeComment(comment: any) {
                                 variant="ghost"
                                 size="icon"
                                 @click="removeComment(comment)"
-                                :disabled="isLoading"
+                                :disabled="isLoading || disabled"
                             >
                                 <Trash2Icon class="h-4 w-4" />
                             </Button>
@@ -153,7 +153,7 @@ async function removeComment(comment: any) {
                             <CapitalizeText> {{ $t('pages.clients.comments.edit') }} </CapitalizeText>
                         </FormLabel>
                         <FormControl>
-                            <Textarea v-model="comment.form.message" :disabled="isLoading" />
+                            <Textarea v-model="comment.form.message" :disabled="isLoading || disabled" />
                         </FormControl>
                     </FormField>
                     <div class="mt-4 flex justify-end gap-2">
@@ -164,7 +164,7 @@ async function removeComment(comment: any) {
                         <Button
                             type="button"
                             @click="updateComment(comment)"
-                            :disabled="isLoading || !comment.form.message.trim()"
+                            :disabled="isLoading || !comment.form.message.trim() || disabled"
                         >
                             <CheckIcon class="mr-2 h-4 w-4" />
                             {{ $t('pages.clients.comments.save') }}

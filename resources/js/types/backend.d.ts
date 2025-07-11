@@ -1203,6 +1203,7 @@ export type UserAbilitiesResource = {
     deals: { view_any: boolean; create: boolean };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
+    clients: { view_any: boolean; create: boolean };
 };
 export type UserListResource = {
     id: number;

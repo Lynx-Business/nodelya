@@ -42,7 +42,7 @@ function submit() {
 
     <div>
         <Card>
-            <Form :form @submit="submit()">
+            <Form :form :disabled="!client?.can_update" @submit="submit()">
                 <Section>
                     <SectionHeader>
                         <SectionTitle>
@@ -59,7 +59,7 @@ function submit() {
             </Form>
         </Card>
         <Card class="mt-4">
-            <Form :form="commentForm">
+            <Form :form="commentForm" :disabled="!client?.can_update">
                 <Section>
                     <SectionContent>
                         <ClientCommentForm />

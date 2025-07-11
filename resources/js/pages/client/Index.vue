@@ -24,7 +24,7 @@ import { TextInput } from '@/components/ui/custom/input';
 import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useFilters, useLayout } from '@/composables';
+import { useAlert, useAuth, useFilters, useLayout } from '@/composables';
 import { AppLayout } from '@/layouts';
 import type { ClientIndexProps, ClientIndexRequest, ClientOneOrManyRequest, ClientResource } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
@@ -46,6 +46,7 @@ defineOptions({
 const props = defineProps<ClientIndexProps>();
 
 const alert = useAlert();
+const { abilities } = useAuth();
 
 const selectedRows = ref<ClientResource[]>([]);
 
@@ -231,7 +232,7 @@ const filters = useFilters<ClientIndexRequest>(
                         </FiltersSheetContent>
                     </FiltersSheet>
                 </FormContent>
-                <FormContent class="flex items-center justify-between">
+                <FormContent class="flex items-center justify-between" v-if="abilities.clients.create">
                     <Button as-child>
                         <InertiaLink :href="route('clients.create')">
                             <CirclePlusIcon />
