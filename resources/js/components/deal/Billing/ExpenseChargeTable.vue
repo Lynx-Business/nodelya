@@ -17,7 +17,7 @@ import DatePicker from '@/components/ui/custom/date-picker/DatePicker.vue';
 import { FormControl, FormError, FormField, FormLabel } from '@/components/ui/custom/form';
 import { PriceInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { ExpenseChargeResource } from '@/types';
+import { ExpenseChargeResource, PartialNullable } from '@/types';
 import { useForm } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import { PlusIcon, Trash2Icon } from 'lucide-vue-next';
@@ -26,8 +26,10 @@ interface Props {
     errors?: Record<string, string>;
 }
 
+type ChargeType = PartialNullable<ExpenseChargeResource, 'id'>;
+
 const errors = defineModel<Record<string, string>>('errors');
-const charges = defineModel<Array<Omit<ExpenseChargeResource, 'id'> & { id?: number }>>('charges');
+const charges = defineModel<ChargeType[]>('charges');
 
 const newChargeForm = useForm<Omit<ExpenseChargeResource, 'id'> & { id?: number }>({
     id: undefined,
@@ -165,7 +167,7 @@ const rowActions = [
                                 <FormControl>
                                     <ContractorCombobox
                                         :model-value="charge.contractor ?? undefined"
-                                        @update:model-value="(val) => (charge.contractor = val)"
+                                        @update:model-value="newChargeForm.contractor = $event"
                                     />
                                 </FormControl>
                                 <FormError :message="getScheduleError(index, 'contractor')" />

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ExpenseChargeTable from '@/components/deal/billing/ExpenseChargeTable.vue';
 import ProjectDepartmentCombobox from '@/components/project-department/ProjectDepartmentCombobox.vue';
 import {
     FormContent,
@@ -10,7 +11,6 @@ import {
 } from '@/components/ui/custom/form';
 import { TextInput } from '@/components/ui/custom/input';
 import { CommercialDealValidateFormData } from '@/composables';
-import ExpenseChargeTable from './ExpenseChargeTable.vue';
 
 const { form } = injectFormContext<CommercialDealValidateFormData>();
 </script>

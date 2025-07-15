@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ClientCombobox from '@/components/client/ClientCombobox.vue';
+import ExpenseChargeTable from '@/components/deal/billing/ExpenseChargeTable.vue';
 import PostponeScheduleDialog from '@/components/deal/billing/PostponeScheduleDialog.vue';
-import ExpenseChargeTable from '@/components/deal/commercial/ExpenseChargeTable.vue';
 import DealCombobox from '@/components/deal/common/DealCombobox.vue';
 import ProjectDepartmentCombobox from '@/components/project-department/ProjectDepartmentCombobox.vue';
 import { Button } from '@/components/ui/button';
