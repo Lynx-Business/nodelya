@@ -2,7 +2,7 @@ import { useComputedForm } from '@/composables';
 import { CommercialDealFormRequest, DealResource } from '@/types';
 import { reactiveOmit } from '@vueuse/core';
 
-export function useCommercialDealForm(deal?: DealResource) {
+export function useCommercialDealForm(deal?: Partial<DealResource>) {
     const initialSchedule =
         deal?.schedule?.flatMap((yearData) =>
             yearData.data.map((item) => ({

@@ -6,7 +6,7 @@ import { clearSessionFilters, useLayout, usePageProp, useRouterComputed } from '
 import { AppLayout } from '@/layouts';
 import { NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { SquarePenIcon } from 'lucide-vue-next';
+import { ShoppingBagIcon, SquarePenIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -31,6 +31,12 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             icon: SquarePenIcon,
             isActive: route().current('client.edit'),
         },
+        {
+            title: trans('layouts.client.form.commercial'),
+            href: route('clients.commercials.index', { client: route().params.client }),
+            icon: ShoppingBagIcon,
+            isActive: route().current('clients.commercials.*'),
+        },
     ].map((item) =>
         Object.assign(item, {
             options: {
@@ -54,7 +60,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
                 <Separator class="md:hidden" />
 
                 <div class="flex-1">
-                    <section class="space-y-8 *:not-[.w-full]:max-w-xl">
+                    <section class="space-y-8 *:not-[.w-full]:max-w-4xl">
                         <slot />
                     </section>
                 </div>

@@ -23,6 +23,8 @@ class CommercialDealIndexProps extends Resource
 
         public array $accounting_period_months,
 
+        public ?ClientResource $client,
+
         #[AutoInertiaLazy]
         #[DataCollectionOf(DealResource::class)]
         public Lazy|PaginatedDataCollection $commercial_deals,
@@ -37,7 +39,7 @@ class CommercialDealIndexProps extends Resource
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientResource::class)]
-        public Lazy|DataCollection $clients,
+        public Lazy|DataCollection|null $clients,
 
     ) {}
 }

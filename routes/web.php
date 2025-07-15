@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\Setup\AuthSetupStepOneController;
 use App\Http\Controllers\Auth\Setup\AuthSetupStepTwoController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
+use App\Http\Controllers\Client\ClientCommercialController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Contractor\ContractorController;
@@ -285,6 +286,17 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::delete('/trash/{client?}', 'trash')->name('trash');
         Route::patch('/restore/{client?}', 'restore')->name('restore');
         Route::delete('/delete/{client?}', 'destroy')->name('delete');
+
+        Route::prefix('/{client}/commercials')->name('commercials.')->controller(ClientCommercialController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/{deal}/edit', 'edit')->name('edit');
+            Route::put('/{deal}/edit', 'update')->name('update');
+            Route::delete('/trash/{deal?}', 'trash')->name('trash');
+            Route::patch('/restore/{deal?}', 'restore')->name('restore');
+            Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+        });
     });
 
     Route::prefix('deals')->group(function () {
