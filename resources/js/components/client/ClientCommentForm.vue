@@ -31,7 +31,7 @@ const { form, disabled } = injectFormContext<CommentFormData>();
 async function addComment() {
     if (!form.message.trim()) return;
 
-    ((form.model_type = 'Client'), (form.model_id = client.value?.id ?? 0));
+    ((form.model_type = 'client'), (form.model_id = client.value?.id ?? 0));
     const payload = {
         ...form,
     };
