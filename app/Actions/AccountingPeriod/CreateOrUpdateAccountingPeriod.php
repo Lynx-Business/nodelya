@@ -44,24 +44,24 @@ class CreateOrUpdateAccountingPeriod
 
                         if ($data->keep_general_expense_budgets) {
                             $budgets = $team->expenseBudgets()
-                                ->whereInAccountingPeriod($currentAccountingPeriod)
+                                ->whereBelongsToAccountingPeriod($currentAccountingPeriod)
                                 ->whereType(ExpenseType::GENERAL)
                                 ->get();
                             $this->keepExpenseBudgets($team, $accountingPeriod, $budgets);
                         }
                         if ($data->keep_employee_expense_budgets) {
                             $budgets = $team->expenseBudgets()
-                                ->whereInAccountingPeriod($currentAccountingPeriod)
+                                ->whereBelongsToAccountingPeriod($currentAccountingPeriod)
                                 ->whereType(ExpenseType::EMPLOYEE)
-                                ->whereHasMorph('model', [Employee::class], fn (Builder $q) => $q->whereInAccountingPeriod($accountingPeriod))
+                                ->whereHasMorph('model', [Employee::class], fn (Builder $q) => $q->whereBelongsToAccountingPeriod($accountingPeriod))
                                 ->get();
                             $this->keepExpenseBudgets($team, $accountingPeriod, $budgets);
                         }
                         if ($data->keep_contractor_expense_budgets) {
                             $budgets = $team->expenseBudgets()
-                                ->whereInAccountingPeriod($currentAccountingPeriod)
+                                ->whereBelongsToAccountingPeriod($currentAccountingPeriod)
                                 ->whereType(ExpenseType::CONTRACTOR)
-                                ->whereHasMorph('model', [Contractor::class], fn (Builder $q) => $q->whereInAccountingPeriod($accountingPeriod))
+                                ->whereHasMorph('model', [Contractor::class], fn (Builder $q) => $q->whereBelongsToAccountingPeriod($accountingPeriod))
                                 ->get();
                             $this->keepExpenseBudgets($team, $accountingPeriod, $budgets);
                         }

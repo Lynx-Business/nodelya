@@ -48,7 +48,7 @@ class ExpenseChargeController extends Controller
                                         ->when($data->expense_item_ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->expense_item_ids)),
                                 ),
                         )
-                        ->when($data->accounting_period_id, fn (Builder $q) => $q->whereInAccountingPeriod($data->accounting_period_id))
+                        ->when($data->accounting_period_id, fn (Builder $q) => $q->whereBelongsToAccountingPeriod($data->accounting_period_id))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with([
                             'expenseItem' => [
@@ -90,9 +90,6 @@ class ExpenseChargeController extends Controller
     public function create()
     {
         return Inertia::render('expenses/charges/Create', ExpenseChargeFormProps::from([
-            'accountingPeriod' => Lazy::closure(
-                fn () => Services::accountingPeriod()->current(),
-            ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
@@ -111,6 +108,7 @@ class ExpenseChargeController extends Controller
                         ->whereType($this->type),
                 ),
             ),
+            'accountingPeriod' => Services::accountingPeriod()->current(),
         ]));
     }
 
@@ -137,9 +135,6 @@ class ExpenseChargeController extends Controller
     public function edit(ExpenseCharge $expenseCharge)
     {
         return Inertia::render('expenses/charges/Edit', ExpenseChargeFormProps::from([
-            'accountingPeriod' => Lazy::closure(
-                fn () => Services::accountingPeriod()->current(),
-            ),
             'expenseCategories' => Lazy::inertia(
                 fn () => Services::expense()->categoriesList(
                     fn (Builder $q) => $q
@@ -158,7 +153,8 @@ class ExpenseChargeController extends Controller
                         ->whereType($this->type),
                 ),
             ),
-            'expenseCharge' => $expenseCharge->load([
+            'accountingPeriod' => Services::accountingPeriod()->current(),
+            'expenseCharge'    => $expenseCharge->load([
                 'expenseItem' => [
                     'expenseCategory',
                     'expenseSubCategory',

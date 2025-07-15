@@ -20,17 +20,11 @@ class ExpenseChargeFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id'         => Team::factory(),
-            'expense_item_id' => ExpenseItem::factory(),
-            'amount_in_cents' => fake()->randomNumber(9, strict: true),
-            'charged_at'      => fake()->dateTimeBetween('now', '+1 year'),
+            'team_id'              => Team::factory(),
+            'accounting_period_id' => AccountingPeriod::factory(),
+            'expense_item_id'      => ExpenseItem::factory(),
+            'amount_in_cents'      => fake()->randomNumber(9, strict: true),
+            'charged_at'           => fn (array $attributes) => fake()->randomElement(AccountingPeriod::query()->findOrFail(data_get($attributes, 'accounting_period_id'))->months),
         ];
-    }
-
-    public function forAccountingPeriod(AccountingPeriod $accountingPeriod): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'charged_at' => fake()->dateTimeBetween($accountingPeriod->starts_at, $accountingPeriod->ends_at),
-        ]);
     }
 }

@@ -49,7 +49,7 @@ class ContractorExpenseBudgetController extends Controller
                                         ->when($data->expense_item_ids, fn (Builder $q) => $q->whereIntegerInRaw('id', $data->expense_item_ids)),
                                 ),
                         )
-                        ->when($data->accounting_period_id, fn (Builder $q) => $q->whereInAccountingPeriod($data->accounting_period_id))
+                        ->when($data->accounting_period_id, fn (Builder $q) => $q->whereBelongsToAccountingPeriod($data->accounting_period_id))
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with([
                             'expenseItem' => [

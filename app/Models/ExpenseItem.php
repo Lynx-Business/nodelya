@@ -112,12 +112,12 @@ class ExpenseItem extends Model
 
     public function expenseBudgets(): HasMany
     {
-        return $this->hasMany(ExpenseBudget::class);
+        return $this->hasMany(ExpenseBudget::class)->chaperone();
     }
 
     public function expenseCharges(): HasMany
     {
-        return $this->hasMany(ExpenseCharge::class);
+        return $this->hasMany(ExpenseCharge::class)->chaperone();
     }
 
     public function expenseSubCategory(): BelongsTo

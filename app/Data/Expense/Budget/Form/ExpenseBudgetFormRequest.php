@@ -8,7 +8,6 @@ use App\Models\Contractor;
 use App\Models\Employee;
 use App\Models\ExpenseBudget;
 use App\Models\ExpenseItem;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
@@ -32,11 +31,7 @@ class ExpenseBudgetFormRequest extends Data
 
     #[Hidden]
     #[Computed]
-    public Carbon $starts_at;
-
-    #[Hidden]
-    #[Computed]
-    public Carbon $ends_at;
+    public int $accounting_period_id;
 
     public function __construct(
         #[Hidden]
@@ -56,11 +51,7 @@ class ExpenseBudgetFormRequest extends Data
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
 
-        $period = Services::accountingPeriod()->current();
-        if ($period) {
-            $this->starts_at = $period->starts_at;
-            $this->ends_at = $period->ends_at;
-        }
+        $this->accounting_period_id = Services::accountingPeriod()->currentId();
     }
 
     public static function attributes(): array
@@ -71,9 +62,14 @@ class ExpenseBudgetFormRequest extends Data
         ];
     }
 
-    public static function rules(ValidationContext $context): array
-    {
+    public static function rules(
+        ValidationContext $context,
+
+        #[FromRouteParameter('expenseBudget')]
+        ?ExpenseBudget $expenseBudget = null,
+    ): array {
         $team = Services::team()->current();
+        $accountingPeriod = Services::accountingPeriod()->current();
         $modelType = data_get($context->payload, 'model_type');
         $expenseType = ExpenseType::fromMorphType($modelType);
 
@@ -84,14 +80,19 @@ class ExpenseBudgetFormRequest extends Data
         };
 
         $model = $modelClass ? app($modelClass) : null;
+        $modelTypeRules = $model
+            ? [
+                'nullable', Rule::in([
+                    Relation::getMorphAlias(Contractor::class),
+                    Relation::getMorphAlias(Employee::class),
+                ]),
+            ]
+            : ['exclude'];
         $modelIdRules = $model
             ? [
                 Rule::exists($model->getTable(), $model->getKeyName())
                     ->where($model->getQualifiedTeamIdColumn(), $team?->getKey()),
             ]
-            : ['exclude'];
-        $modelTypeRules = $model
-            ? []
             : ['exclude'];
 
         return [
@@ -101,6 +102,12 @@ class ExpenseBudgetFormRequest extends Data
                         ->whereType($expenseType)
                         ->pluck('id'),
                 ),
+                Rule::unique(app(ExpenseBudget::class)->getTable())
+                    ->where('team_id', $team?->getKey())
+                    ->where('accounting_period_id', $accountingPeriod?->id)
+                    ->whereNull('model_type')
+                    ->whereNull('model_id')
+                    ->ignore($expenseBudget?->id),
             ],
             'model_type' => $modelTypeRules,
             'model_id'   => $modelIdRules,

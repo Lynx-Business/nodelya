@@ -55,6 +55,8 @@ export type AccountingPeriodResource = {
     can_trash?: boolean;
     can_restore?: boolean;
     can_delete?: boolean;
+    duration_in_months?: number;
+    months?: Array<string>;
 };
 export type AddressData = {
     address: string;
@@ -385,11 +387,11 @@ export type ContractorExpenseChargeData = {
     contractor_id: number;
 };
 export type ContractorExpenseChargeFormProps = {
-    accountingPeriod?: AccountingPeriodResource;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
     contractor: ContractorResource;
+    accountingPeriod: AccountingPeriodResource;
     expenseCharge?: ExpenseChargeResource;
 };
 export type ContractorExpenseChargeIndexProps = {
@@ -560,11 +562,11 @@ export type EmployeeExpenseBudgetIndexProps = {
     expenseItems?: Array<ExpenseItemResource>;
 };
 export type EmployeeExpenseChargeFormProps = {
-    accountingPeriod?: AccountingPeriodResource;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
     employee: EmployeeResource;
+    accountingPeriod: AccountingPeriodResource;
     expenseCharge?: ExpenseChargeResource;
 };
 export type EmployeeExpenseChargeIndexProps = {
@@ -722,19 +724,22 @@ export type ExpenseBudgetOneOrManyRequest = {
 };
 export type ExpenseBudgetResource = {
     id: number;
+    accounting_period_id: number;
     expense_item_id: number;
     model_type?: 'contractor' | 'employee';
     model_id?: number;
     amount: number;
-    starts_at: string;
-    ends_at: string;
     deleted_at?: string;
-    type?: ExpenseType;
     can_view?: boolean;
     can_update?: boolean;
     can_trash?: boolean;
     can_restore?: boolean;
     can_delete?: boolean;
+    type?: ExpenseType;
+    starts_at?: string;
+    ends_at?: string;
+    monthly_amount?: number;
+    accounting_period?: any;
     expense_item?: ExpenseItemResource;
 };
 export type ExpenseCategoryFormProps = {
@@ -794,10 +799,10 @@ export type ExpenseCategoryResource = {
     expense_sub_categories?: Array<ExpenseSubCategoryResource>;
 };
 export type ExpenseChargeFormProps = {
-    accountingPeriod?: AccountingPeriodResource;
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
+    accountingPeriod: AccountingPeriodResource;
     expenseCharge?: ExpenseChargeResource;
 };
 export type ExpenseChargeFormRequest = {
@@ -855,9 +860,10 @@ export type ExpenseChargeOneOrManyRequest = {
 };
 export type ExpenseChargeResource = {
     id: number;
+    accounting_period_id: number;
+    expense_item_id: number;
     model_type?: 'contractor' | 'employee';
     model_id?: number;
-    expense_item_id: number;
     deal_id?: number;
     amount: number;
     charged_at: string;
@@ -868,6 +874,7 @@ export type ExpenseChargeResource = {
     can_trash?: boolean;
     can_restore?: boolean;
     can_delete?: boolean;
+    accounting_period?: any;
     expense_item?: ExpenseItemResource;
     contractor?: ContractorResource | null;
 };
@@ -939,6 +946,48 @@ export type ExpenseItemResource = {
     can_delete?: boolean;
     expense_category?: ExpenseCategoryResource;
     expense_sub_category?: ExpenseSubCategoryResource;
+};
+export type ExpenseManagementBudgetResource = {
+    expense_item: ExpenseItemResource;
+    cells: Array<ExpenseManagementCellResource>;
+};
+export type ExpenseManagementCellResource = {
+    budget: number;
+    charge: number;
+    can_update?: boolean;
+};
+export type ExpenseManagementIndexProps = {
+    request: ExpenseManagementIndexRequest;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+    expenseTypes?: Array<{ value: ExpenseType; label: string }>;
+    projectDepartments?: Array<ProjectDepartmentResource>;
+    generalRow?: ExpenseManagementTypeResource;
+    employeeRow?: ExpenseManagementTypeResource;
+    contractorRow?: ExpenseManagementTypeResource;
+};
+export type ExpenseManagementIndexRequest = {
+    accounting_period: AccountingPeriodResource;
+    expense_categories?: Array<ExpenseCategoryResource>;
+    expense_sub_categories?: Array<ExpenseSubCategoryResource>;
+    expense_items?: Array<ExpenseItemResource>;
+    q?: string;
+    model_type?: 'contractor' | 'employee';
+    model_id?: number;
+    expense_types?: Array<{ value: ExpenseType; label: string }>;
+    accounting_period_id?: number;
+    expense_category_ids?: null | Array<number>;
+    expense_sub_category_ids?: null | Array<number>;
+    expense_item_ids?: null | Array<number>;
+};
+export type ExpenseManagementModelResource = {
+    model_type: string;
+    model_id: number;
+    label: string;
+    cells: Array<ExpenseManagementCellResource>;
+};
+export type ExpenseManagementTypeResource = {
+    cells: Array<ExpenseManagementCellResource>;
+    type: ExpenseType;
 };
 export type ExpenseSubCategoryFormProps = {
     team: TeamListResource;

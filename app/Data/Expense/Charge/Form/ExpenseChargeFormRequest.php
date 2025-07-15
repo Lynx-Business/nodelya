@@ -54,6 +54,8 @@ class ExpenseChargeFormRequest extends Data
         public Optional|int|null $deal_id = null,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+        $this->charged_at->startOfDay();
+
         if ($deal_id === null) {
             $this->deal_id = Optional::create();
         }
@@ -68,9 +70,14 @@ class ExpenseChargeFormRequest extends Data
         ];
     }
 
-    public static function rules(ValidationContext $context): array
-    {
+    public static function rules(
+        ValidationContext $context,
+
+        #[FromRouteParameter('expenseCharge')]
+        ?ExpenseCharge $expenseCharge = null,
+    ): array {
         $team = Services::team()->current();
+        $accountingPeriod = Services::accountingPeriod()->current();
         $modelType = data_get($context->payload, 'model_type');
         $expenseType = ExpenseType::fromMorphType($modelType);
 
@@ -81,14 +88,19 @@ class ExpenseChargeFormRequest extends Data
         };
 
         $model = $modelClass ? app($modelClass) : null;
+        $modelTypeRules = $model
+            ? [
+                'nullable', Rule::in([
+                    Relation::getMorphAlias(Contractor::class),
+                    Relation::getMorphAlias(Employee::class),
+                ]),
+            ]
+            : ['exclude'];
         $modelIdRules = $model
             ? [
                 Rule::exists($model->getTable(), $model->getKeyName())
                     ->where($model->getQualifiedTeamIdColumn(), $team?->getKey()),
             ]
-            : ['exclude'];
-        $modelTypeRules = $model
-            ? []
             : ['exclude'];
 
         return [
@@ -98,6 +110,13 @@ class ExpenseChargeFormRequest extends Data
                         ->whereType($expenseType)
                         ->pluck('id'),
                 ),
+                Rule::unique('expense_charges')
+                    ->where('team_id', $team?->getKey())
+                    ->where('accounting_period_id', $accountingPeriod?->id)
+                    ->where('model_type', $modelType)
+                    ->where('model_id', data_get($context->payload, 'model_id'))
+                    ->where('charged_at', data_get($context->payload, 'charged_at'))
+                    ->ignore($expenseCharge?->id),
             ],
             'model_type' => $modelTypeRules,
             'model_id'   => $modelIdRules,

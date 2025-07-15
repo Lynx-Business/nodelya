@@ -25,6 +25,7 @@ use App\Http\Controllers\Expense\Budget\ExpenseBudgetController;
 use App\Http\Controllers\Expense\Category\ExpenseCategoryController;
 use App\Http\Controllers\Expense\Charge\ExpenseChargeController;
 use App\Http\Controllers\Expense\Item\ExpenseItemController;
+use App\Http\Controllers\Expense\Management\ExpenseManagementController;
 use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProjectDepartment\ProjectDepartmentController;
@@ -172,6 +173,9 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::delete('/trash/{expenseCharge?}', 'trash')->name('trash');
             Route::patch('/restore/{expenseCharge?}', 'restore')->name('restore');
             Route::delete('/delete/{expenseCharge?}', 'destroy')->name('delete');
+        });
+        Route::prefix('/management')->name('management.')->controller(ExpenseManagementController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
         });
     });
 
@@ -353,3 +357,4 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
 });
 
 require __DIR__.'/admin.php';
+require __DIR__.'/api.php';

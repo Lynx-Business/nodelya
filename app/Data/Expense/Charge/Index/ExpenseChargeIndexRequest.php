@@ -110,6 +110,7 @@ class ExpenseChargeIndexRequest extends Data
             'accounting_period_id'     => __('models.accounting_period.name.one'),
             'expense_category_ids'     => __('models.expense.category.name.many'),
             'expense_sub_category_ids' => __('models.expense.sub_category.name.many'),
+            'expense_item_ids'         => __('models.expense.item.name.many'),
         ];
     }
 

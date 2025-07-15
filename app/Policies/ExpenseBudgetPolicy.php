@@ -34,7 +34,7 @@ class ExpenseBudgetPolicy
 
     public function update(User $user, ExpenseBudget $expenseBudget): bool
     {
-        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+        if (! $expenseBudget->belongsToCurrentAccountingPeriod()) {
             return false;
         }
 
@@ -47,7 +47,7 @@ class ExpenseBudgetPolicy
             return false;
         }
 
-        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+        if (! $expenseBudget->belongsToCurrentAccountingPeriod()) {
             return false;
         }
 
@@ -60,7 +60,7 @@ class ExpenseBudgetPolicy
             return false;
         }
 
-        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+        if (! $expenseBudget->belongsToCurrentAccountingPeriod()) {
             return false;
         }
 
@@ -69,7 +69,7 @@ class ExpenseBudgetPolicy
 
     public function delete(User $user, ExpenseBudget $expenseBudget): bool
     {
-        if (! $expenseBudget->isInCurrentAccountingPeriod()) {
+        if (! $expenseBudget->belongsToCurrentAccountingPeriod()) {
             return false;
         }
 

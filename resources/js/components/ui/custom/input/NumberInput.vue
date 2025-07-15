@@ -6,13 +6,18 @@ import {
     NumberFieldIncrement,
     NumberFieldInput,
 } from '@/components/ui/number-field';
+import { reactiveOmit } from '@vueuse/core';
 import { NumberFieldRootEmits, NumberFieldRootProps, useForwardPropsEmits } from 'reka-ui';
+import { HTMLAttributes } from 'vue';
 
-type Props = NumberFieldRootProps;
+type Props = NumberFieldRootProps & {
+    class?: HTMLAttributes['class'];
+};
 const props = defineProps<Props>();
 const emits = defineEmits<NumberFieldRootEmits>();
+const delegatedProps = reactiveOmit(props, 'class');
 
-const forwarded = useForwardPropsEmits(props, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 <template>
     <NumberField v-bind="forwarded">
@@ -23,7 +28,7 @@ const forwarded = useForwardPropsEmits(props, emits);
             >
                 <slot name="start" />
             </NumberFieldDecrement>
-            <NumberFieldInput />
+            <NumberFieldInput :class="props.class" />
             <NumberFieldIncrement
                 class="text-muted-foreground pointer-events-none text-xs !opacity-100"
                 v-if="$slots.end"

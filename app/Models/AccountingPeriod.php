@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -24,9 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read int $duration_in_months
  * @property-read true $is_trashable
  * @property bool $is_trashed
  * @property-read string $label
+ * @property-read Collection $months
  * @property-read \App\Models\Team $team
  *
  * @method static Builder<static>|AccountingPeriod current()
@@ -101,6 +104,22 @@ class AccountingPeriod extends Model
             fn (): string => $this->starts_at->isSameYear($this->ends_at)
                 ? "{$this->starts_at->year}"
                 : "{$this->starts_at->year}-{$this->ends_at->year}",
+        );
+    }
+
+    protected function durationInMonths(): Attribute
+    {
+        return Attribute::get(
+            fn (): int => ceil($this->starts_at->diffInMonths($this->ends_at, absolute: true)),
+        );
+    }
+
+    protected function months(): Attribute
+    {
+        return Attribute::get(
+            fn (): Collection => collect(range(0, $this->duration_in_months))
+                ->map(fn (int $i) => $this->starts_at->copy()->startOfMonth()->addMonths($i))
+                ->values(),
         );
     }
 

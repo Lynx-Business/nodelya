@@ -136,7 +136,8 @@ class DevInstallCommand extends Command
                                     ->has(
                                         ExpenseItem::factory()
                                             ->count(2)
-                                            ->recycle($team),
+                                            ->recycle($team)
+                                            ->recycle($category),
                                     )->create();
                             }
                         }
@@ -171,54 +172,66 @@ class DevInstallCommand extends Command
                             ExpenseBudget::factory()
                                 ->count($count)
                                 ->recycle($team)
-                                ->forAccountingPeriod($accountingPeriod)
-                                ->state(fn () => [
-                                    'expense_item_id' => ExpenseItem::query()
-                                        ->whereType(ExpenseType::GENERAL)
-                                        ->inRandomOrder()
-                                        ->first()->id,
-                                ])
+                                ->recycle($accountingPeriod)
+                                ->sequence(
+                                    fn (Sequence $sequence) => [
+                                        'expense_item_id' => ExpenseItem::query()
+                                            ->whereType(ExpenseType::GENERAL)
+                                            ->skip($sequence->index)
+                                            ->first()->id,
+                                    ],
+                                )
                                 ->create();
 
                             ExpenseCharge::factory()
                                 ->count($count)
                                 ->recycle($team)
-                                ->forAccountingPeriod($accountingPeriod)
-                                ->state(fn () => [
-                                    'expense_item_id' => ExpenseItem::query()
-                                        ->whereType(ExpenseType::GENERAL)
-                                        ->inRandomOrder()
-                                        ->first()->id,
-                                ])
+                                ->recycle($accountingPeriod)
+                                ->sequence(
+                                    fn (Sequence $sequence) => [
+                                        'expense_item_id' => ExpenseItem::query()
+                                            ->whereType(ExpenseType::GENERAL)
+                                            ->skip($sequence->index)
+                                            ->first()->id,
+                                    ],
+                                )
                                 ->create();
 
                             foreach ($employees as $employee) {
                                 ExpenseBudget::factory()
                                     ->count($count)
                                     ->recycle($team)
-                                    ->forAccountingPeriod($accountingPeriod)
+                                    ->recycle($accountingPeriod)
                                     ->state(fn () => [
-                                        'model_type'      => ExpenseType::EMPLOYEE->toMorphType(),
-                                        'model_id'        => $employee->id,
-                                        'expense_item_id' => ExpenseItem::query()
-                                            ->whereType(ExpenseType::EMPLOYEE)
-                                            ->inRandomOrder()
-                                            ->first()->id,
+                                        'model_type' => ExpenseType::EMPLOYEE->toMorphType(),
+                                        'model_id'   => $employee->id,
                                     ])
+                                    ->sequence(
+                                        fn (Sequence $sequence) => [
+                                            'expense_item_id' => ExpenseItem::query()
+                                                ->whereType(ExpenseType::EMPLOYEE)
+                                                ->skip($sequence->index)
+                                                ->first()->id,
+                                        ],
+                                    )
                                     ->create();
 
                                 ExpenseCharge::factory()
                                     ->count($count)
                                     ->recycle($team)
-                                    ->forAccountingPeriod($accountingPeriod)
+                                    ->recycle($accountingPeriod)
                                     ->state(fn () => [
-                                        'model_type'      => ExpenseType::EMPLOYEE->toMorphType(),
-                                        'model_id'        => $employee->id,
-                                        'expense_item_id' => ExpenseItem::query()
-                                            ->whereType(ExpenseType::EMPLOYEE)
-                                            ->inRandomOrder()
-                                            ->first()->id,
+                                        'model_type' => ExpenseType::EMPLOYEE->toMorphType(),
+                                        'model_id'   => $employee->id,
                                     ])
+                                    ->sequence(
+                                        fn (Sequence $sequence) => [
+                                            'expense_item_id' => ExpenseItem::query()
+                                                ->whereType(ExpenseType::EMPLOYEE)
+                                                ->skip($sequence->index)
+                                                ->first()->id,
+                                        ],
+                                    )
                                     ->create();
                             }
 
@@ -226,29 +239,37 @@ class DevInstallCommand extends Command
                                 ExpenseBudget::factory()
                                     ->count($count)
                                     ->recycle($team)
-                                    ->forAccountingPeriod($accountingPeriod)
+                                    ->recycle($accountingPeriod)
                                     ->state(fn () => [
-                                        'model_type'      => ExpenseType::CONTRACTOR->toMorphType(),
-                                        'model_id'        => $contractor->id,
-                                        'expense_item_id' => ExpenseItem::query()
-                                            ->whereType(ExpenseType::CONTRACTOR)
-                                            ->inRandomOrder()
-                                            ->first()->id,
+                                        'model_type' => ExpenseType::CONTRACTOR->toMorphType(),
+                                        'model_id'   => $contractor->id,
                                     ])
+                                    ->sequence(
+                                        fn (Sequence $sequence) => [
+                                            'expense_item_id' => ExpenseItem::query()
+                                                ->whereType(ExpenseType::CONTRACTOR)
+                                                ->skip($sequence->index)
+                                                ->first()->id,
+                                        ],
+                                    )
                                     ->create();
 
                                 ExpenseCharge::factory()
                                     ->count($count)
                                     ->recycle($team)
-                                    ->forAccountingPeriod($accountingPeriod)
+                                    ->recycle($accountingPeriod)
                                     ->state(fn () => [
-                                        'model_type'      => ExpenseType::CONTRACTOR->toMorphType(),
-                                        'model_id'        => $contractor->id,
-                                        'expense_item_id' => ExpenseItem::query()
-                                            ->whereType(ExpenseType::CONTRACTOR)
-                                            ->inRandomOrder()
-                                            ->first()->id,
+                                        'model_type' => ExpenseType::CONTRACTOR->toMorphType(),
+                                        'model_id'   => $contractor->id,
                                     ])
+                                    ->sequence(
+                                        fn (Sequence $sequence) => [
+                                            'expense_item_id' => ExpenseItem::query()
+                                                ->whereType(ExpenseType::CONTRACTOR)
+                                                ->skip($sequence->index)
+                                                ->first()->id,
+                                        ],
+                                    )
                                     ->create();
                             }
                         }
