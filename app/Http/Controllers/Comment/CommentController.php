@@ -27,7 +27,7 @@ class CommentController extends Controller
         }
 
         return response()->json(
-            CommentResource::from($comment->load('creator'))->include('can_view', 'can_update', 'can_delete'),
+            CommentResource::from($comment->load('creator'))->include('can_update', 'can_delete'),
         );
 
     }
@@ -47,7 +47,7 @@ class CommentController extends Controller
             }
 
             return response()->json(
-                CommentResource::from($comment->load('creator'))->include('can_view', 'can_update', 'can_delete'),
+                CommentResource::from($comment->load('creator'))->include('can_update', 'can_delete'),
             );
         } catch (\Throwable $e) {
             Log::error($e->getMessage(), $e->getTrace());
