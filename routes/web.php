@@ -321,8 +321,8 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
 
     Route::prefix('/comments')->name('comments.')->controller(CommentController::class)->group(function () {
         Route::post('/', 'store')->name('store')->can('create', Comment::class);
-        Route::put('/{comment}', 'update')->name('update')->can('update', Comment::class);
-        Route::delete('/{comment}', 'destroy')->name('destroy');
+        Route::put('/{comment}', 'update')->name('update')->can('update', 'comment');
+        Route::delete('/{comment}', 'destroy')->name('destroy')->can('delete', 'comment');
     });
 });
 

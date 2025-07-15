@@ -26,9 +26,9 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.comments.store.error')], 422);
         }
 
-        Services::toast()->success->execute(__('messages.comments.store.success'));
-
-        return response()->json(CommentResource::from($comment->load('creator')));
+        return response()->json(
+            CommentResource::from($comment->load('creator'))->include('can_view', 'can_update', 'can_delete'),
+        );
 
     }
 
@@ -46,9 +46,9 @@ class CommentController extends Controller
                 return response()->json(['message' => __('messages.comments.update.error')], 422);
             }
 
-            Services::toast()->success->execute(__('messages.comments.update.success'));
-
-            return response()->json(CommentResource::from($updated->load('creator')));
+            return response()->json(
+                CommentResource::from($comment->load('creator'))->include('can_view', 'can_update', 'can_delete'),
+            );
         } catch (\Throwable $e) {
             Log::error($e->getMessage(), $e->getTrace());
 
@@ -65,8 +65,6 @@ class CommentController extends Controller
             DB::beginTransaction();
             $comment->delete();
             DB::commit();
-
-            Services::toast()->success->execute(__('messages.comments.delete.success'));
 
             return response()->json(['message' => __('messages.comments.delete.success')]);
         } catch (\Throwable $e) {

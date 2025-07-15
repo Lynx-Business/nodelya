@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { FormContent, FormControl, FormField, FormLabel, injectFormContext } from '@/components/ui/custom/form';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { Textarea } from '@/components/ui/textarea';
-import { useAlert, usePageProp } from '@/composables';
+import { useAlert, useFormatter, usePageProp } from '@/composables';
 import { CommentFormData, useCommentForm } from '@/composables/forms/comment/useCommentForm';
 import { ClientResource, CommentResource } from '@/types';
 import { useAxios } from '@vueuse/integrations/useAxios.mjs';
@@ -15,6 +15,7 @@ const { isLoading, execute } = useAxios<CommentResource>();
 
 const comments = usePageProp<Array<CommentResource>>('comments');
 const alert = useAlert();
+const format = useFormatter();
 
 const client = usePageProp<ClientResource>('client');
 
@@ -22,7 +23,6 @@ const localComments = ref(
     (comments?.value ?? []).map((comment: CommentResource) => ({
         ...comment,
         isEditing: false,
-        form: useCommentForm(comment),
     })),
 );
 
@@ -45,40 +45,44 @@ async function addComment() {
         localComments.value.push({
             ...data.value,
             isEditing: false,
-            form: useCommentForm(data.value),
         });
         form.reset();
     }
 }
 
-async function updateComment(comment: any) {
-    if (!comment.form.message?.trim()) return;
+async function updateComment(comment: CommentResource) {
+    let commentFrom = useCommentForm(comment);
+    if (!commentFrom.message?.trim()) return;
 
+    ((commentFrom.model_type = 'Client'), (commentFrom.model_id = client.value?.id ?? 0));
     const payload = {
-        ...comment.form,
-        model_type: 'Client',
-        model_id: client.value?.id,
+        ...commentFrom,
     };
-
-    const { data } = await execute(route('comments.update', { comment: comment.id }), {
+    const { data } = await execute(route('comments.update', { comment: comment }), {
         method: 'PUT',
         data: payload,
     });
 
     if (data.value) {
-        comment.message = data.value.message;
-        comment.updated_at = data.value.updated_at;
-        comment.is_edited = true;
-        comment.isEditing = false;
+        const idx = localComments.value.findIndex((c) => c.id === comment.id);
+        if (idx !== -1) {
+            localComments.value[idx] = {
+                ...localComments.value[idx],
+                ...data.value,
+                isEditing: false,
+            };
+        }
     }
 }
 
-function cancelEdit(comment: any) {
-    comment.isEditing = false;
-    comment.form.reset();
+function cancelEdit(comment: CommentResource) {
+    const idx = localComments.value.findIndex((c) => c.id === comment.id);
+    if (idx !== -1) {
+        localComments.value[idx].isEditing = false;
+    }
 }
 
-async function removeComment(comment: any) {
+async function removeComment(comment: CommentResource) {
     alert({
         variant: 'warning',
         description: trans('components.clients.comments.delete_confirm'),
@@ -87,7 +91,7 @@ async function removeComment(comment: any) {
                 method: 'DELETE',
             });
 
-            if (data) {
+            if (data.value) {
                 localComments.value = localComments.value.filter((c) => c !== comment);
             }
         },
@@ -159,7 +163,7 @@ async function removeComment(comment: any) {
                             <CapitalizeText> {{ $t('pages.clients.comments.edit') }} </CapitalizeText>
                         </FormLabel>
                         <FormControl>
-                            <Textarea v-model="comment.form.message" :disabled="isLoading || disabled" />
+                            <Textarea v-model="comment.message" :disabled="isLoading || disabled" />
                         </FormControl>
                     </FormField>
                     <div class="mt-4 flex justify-end gap-2">
@@ -170,7 +174,7 @@ async function removeComment(comment: any) {
                         <Button
                             type="button"
                             @click="updateComment(comment)"
-                            :disabled="isLoading || !comment.form.message.trim() || disabled || !comment.can_update"
+                            :disabled="isLoading || !comment.message.trim() || disabled || !comment.can_update"
                         >
                             <CheckIcon class="mr-2 h-4 w-4" />
                             {{ $t('pages.clients.comments.save') }}
@@ -180,11 +184,11 @@ async function removeComment(comment: any) {
                 <div v-if="comment.id" class="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
                     <span v-if="comment.is_edited">
                         • {{ $t('pages.clients.comments.edited_on') }}
-                        {{ new Date(comment.updated_at).toLocaleString() }}
+                        {{ format.date(comment.updated_at) }}
                     </span>
                     <span v-else>
                         • {{ $t('pages.clients.comments.created_on') }}
-                        {{ new Date(comment.created_at).toLocaleString() }}
+                        {{ format.date(comment.created_at) }}
                     </span>
                 </div>
             </div>

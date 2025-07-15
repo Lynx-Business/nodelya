@@ -40,36 +40,6 @@ class CommentPolicy
         return $comment->creator && $comment->creator->id === $user->id;
     }
 
-    public function trash(User $user, Comment $comment): bool
-    {
-        if (property_exists($comment, 'is_trashed') && $comment->is_trashed) {
-            return false;
-        }
-        if ($user->is_admin && Route::is('admin.*')) {
-            return true;
-        }
-        if (! ($comment->creator && $comment->creator->team_id === $user->team_id)) {
-            return false;
-        }
-
-        return $user->is_owner;
-    }
-
-    public function restore(User $user, Comment $comment): bool
-    {
-        if (! property_exists($comment, 'is_trashed') || ! $comment->is_trashed) {
-            return false;
-        }
-        if ($user->is_admin && Route::is('admin.*')) {
-            return true;
-        }
-        if (! ($comment->creator && $comment->creator->team_id === $user->team_id)) {
-            return false;
-        }
-
-        return $user->is_owner;
-    }
-
     public function delete(User $user, Comment $comment): bool
     {
         if ($user->is_admin && Route::is('admin.*')) {
@@ -79,6 +49,6 @@ class CommentPolicy
             return false;
         }
 
-        return $user->is_owner;
+        return true;
     }
 }
