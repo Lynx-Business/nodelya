@@ -29,7 +29,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             title: trans('layouts.client.form.edit'),
             href: route('clients.edit', { client: route().params.client }),
             icon: SquarePenIcon,
-            isActive: route().current('client.edit'),
+            isActive: route().current('clients.edit'),
         },
         {
             title: trans('layouts.client.form.commercial'),

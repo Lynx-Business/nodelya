@@ -18,7 +18,6 @@ use App\Models\Contractor;
 use App\Models\Deal;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -51,15 +50,7 @@ class CommercialDealController extends Controller
             'request'          => $data,
             'commercial_deals' => Lazy::inertia(
                 function () use ($data, $accountingPeriod) {
-                    $paginatedDeals = Deal::commercial()
-                        ->search($data->q)
-                        ->when($data->client_ids, fn (Builder $q) => $q->whereIntegerInRaw('client_id', $data->client_ids))
-                        ->when($data->name, fn (Builder $q) => $q->where('name', 'like', '%'.$data->name.'%'))
-                        ->when($data->amount, fn (Builder $q) => $q->where('amount_in_cents', Services::conversion()->priceToCents($data->amount)))
-                        ->when($data->success_rate, fn (Builder $q) => $q->where('success_rate', $data->success_rate))
-                        ->when($data->code, fn (Builder $q) => $q->where('code', 'like', '%'.$data->code.'%'))
-                        ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
-                        ->when($accountingPeriod, fn (Builder $query) => $query->whereInAccountingPeriod($accountingPeriod->id))
+                    $paginatedDeals = $data->toQuery()
                         ->orderBy($data->sort_by, $data->sort_direction)
                         ->with(['client'])
                         ->paginate(

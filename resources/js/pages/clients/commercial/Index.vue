@@ -47,7 +47,7 @@ defineOptions({
 });
 
 const props = defineProps<CommercialDealIndexProps>();
-console.log('props => ', props);
+
 const { abilities } = useAuth();
 const format = useFormatter();
 const alert = useAlert();
