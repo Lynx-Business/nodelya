@@ -87,7 +87,7 @@ async function removeComment(comment: CommentResource) {
         variant: 'warning',
         description: trans('components.clients.comments.delete_confirm'),
         callback: async () => {
-            const { data } = await execute(route('comments.destroy', { comment: comment.id }), {
+            const { data } = await execute(route('comments.destroy', { comment: comment }), {
                 method: 'DELETE',
             });
 

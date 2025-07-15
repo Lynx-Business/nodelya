@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Enums\Permission\PermissionName;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 class CommentPolicy
@@ -25,8 +26,7 @@ class CommentPolicy
 
     public function view(User $user, Comment $comment): bool
     {
-
-        return $comment->creator && $comment->creator->team_id === $user->team_id;
+        return Gate::check('view', $comment->model);
     }
 
     public function create(User $user): bool
@@ -37,7 +37,7 @@ class CommentPolicy
     public function update(User $user, Comment $comment): bool
     {
 
-        return $comment->creator && $comment->creator->id === $user->id;
+        return $comment->creator_id === $user->id;
     }
 
     public function delete(User $user, Comment $comment): bool
@@ -45,7 +45,7 @@ class CommentPolicy
         if ($user->is_admin && Route::is('admin.*')) {
             return true;
         }
-        if (! ($comment->creator && $comment->creator->id === $user->id)) {
+        if (! ($comment->creator_id === $user->id)) {
             return false;
         }
 
