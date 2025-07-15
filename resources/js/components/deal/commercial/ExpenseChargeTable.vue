@@ -17,46 +17,42 @@ import DatePicker from '@/components/ui/custom/date-picker/DatePicker.vue';
 import { FormControl, FormError, FormField, FormLabel } from '@/components/ui/custom/form';
 import { PriceInput } from '@/components/ui/custom/input';
 import { CapitalizeText } from '@/components/ui/custom/typography';
+import { ExpenseChargeResource } from '@/types';
+import { useForm } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import { PlusIcon, Trash2Icon } from 'lucide-vue-next';
-import { ref } from 'vue';
 
 interface Props {
     errors?: Record<string, string>;
 }
 
 const errors = defineModel<Record<string, string>>('errors');
-const charges = defineModel<any[]>('charges');
+const charges = defineModel<Array<Omit<ExpenseChargeResource, 'id'> & { id?: number }>>('charges');
 
-const newCharge = ref({
+const newChargeForm = useForm<Omit<ExpenseChargeResource, 'id'> & { id?: number }>({
     id: undefined,
     expense_item: undefined,
+    expense_item_id: 0,
     amount: 0,
-    charged_at: undefined,
+    charged_at: '',
     contractor: undefined,
 });
 
 function addCharge() {
-    if (!newCharge.value.expense_item || !newCharge.value.amount || !newCharge.value.charged_at) {
+    if (!newChargeForm.expense_item || !newChargeForm.amount || !newChargeForm.charged_at) {
         return;
     }
     charges.value?.push({
-        id: newCharge.value.id,
-        expense_item: newCharge.value.expense_item,
-        amount: newCharge.value.amount,
-        charged_at: newCharge.value.charged_at,
-        contractor: newCharge.value.contractor,
+        expense_item: newChargeForm.expense_item,
+        expense_item_id: newChargeForm.expense_item.id,
+        amount: newChargeForm.amount,
+        charged_at: newChargeForm.charged_at,
+        contractor: newChargeForm.contractor,
     });
-    newCharge.value = {
-        id: undefined,
-        expense_item: undefined,
-        amount: 0,
-        charged_at: undefined,
-        contractor: undefined,
-    };
+    newChargeForm.reset();
 }
 
-function removeCharge(item: any) {
+function removeCharge(item: Omit<ExpenseChargeResource, 'id'> & { id?: number }) {
     const idx = charges.value?.indexOf(item);
     if (idx !== -1 && idx !== undefined && charges.value) {
         charges.value.splice(idx, 1);
@@ -73,21 +69,21 @@ const rowActions = [
         type: 'callback' as const,
         label: trans('delete'),
         icon: Trash2Icon,
-        callback: (item: any) => removeCharge(item),
+        callback: (item: Omit<ExpenseChargeResource, 'id'> & { id?: number }) => removeCharge(item),
     },
 ];
 </script>
 
 <template>
     <div>
-        <h4 class="mb-4 text-lg font-medium">{{ $t('components.deal.commercial.subcontracting_expense_title') }}</h4>
+        <h4 class="mb-4 text-lg font-medium">{{ $t('components.deal.billing.subcontracting_expense_title') }}</h4>
         <div class="mb-4 flex items-center gap-2">
             <FormField>
                 <FormLabel>
                     <CapitalizeText> {{ $t('models.expense.budget.fields.expense_item') }} </CapitalizeText>
                 </FormLabel>
                 <FormControl>
-                    <ExpenseItemCombobox v-model="newCharge.expense_item" />
+                    <ExpenseItemCombobox v-model="newChargeForm.expense_item" />
                 </FormControl>
             </FormField>
             <FormField>
@@ -97,15 +93,15 @@ const rowActions = [
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>
-                    <PriceInput v-model="newCharge.amount" :min="0" />
+                    <PriceInput v-model="newChargeForm.amount" :min="0" />
                 </FormControl>
             </FormField>
             <FormField>
                 <FormLabel>
-                    <CapitalizeText> {{ $t('models.deal.commercial.fields.ordered_at') }} </CapitalizeText>
+                    <CapitalizeText> {{ $t('models.deal.billing.fields.ordered_at') }} </CapitalizeText>
                 </FormLabel>
                 <FormControl>
-                    <DatePicker v-model="newCharge.charged_at" />
+                    <DatePicker v-model="newChargeForm.charged_at" />
                 </FormControl>
             </FormField>
             <FormField>
@@ -113,7 +109,10 @@ const rowActions = [
                     <CapitalizeText> {{ $t('models.contractor.name.one') }}</CapitalizeText>
                 </FormLabel>
                 <FormControl>
-                    <ContractorCombobox v-model="newCharge.contractor" />
+                    <ContractorCombobox
+                        :model-value="newChargeForm.contractor ?? undefined"
+                        @update:model-value="(val) => (newChargeForm.contractor = val)"
+                    />
                 </FormControl>
             </FormField>
             <div class="flex items-center">
@@ -127,8 +126,8 @@ const rowActions = [
                 <DataTableHeader>
                     <DataTableRow>
                         <DataTableHead>{{ $t('models.expense.budget.fields.expense_item') }}</DataTableHead>
-                        <DataTableHead>{{ $t('models.deal.commercial.fields.amount') }}</DataTableHead>
-                        <DataTableHead>{{ $t('models.deal.commercial.fields.ordered_at') }}</DataTableHead>
+                        <DataTableHead>{{ $t('models.deal.billing.fields.amount') }}</DataTableHead>
+                        <DataTableHead>{{ $t('models.deal.billing.fields.ordered_at') }}</DataTableHead>
                         <DataTableHead>{{ $t('models.contractor.name.one') }}</DataTableHead>
                         <DataTableHead>
                             <DataTableHeadActions />
@@ -164,7 +163,10 @@ const rowActions = [
                         <DataTableCell>
                             <FormField required>
                                 <FormControl>
-                                    <ContractorCombobox v-model="charge.contractor" />
+                                    <ContractorCombobox
+                                        :model-value="charge.contractor ?? undefined"
+                                        @update:model-value="(val) => (charge.contractor = val)"
+                                    />
                                 </FormControl>
                                 <FormError :message="getScheduleError(index, 'contractor')" />
                             </FormField>

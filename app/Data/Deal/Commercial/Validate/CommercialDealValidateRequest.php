@@ -58,11 +58,6 @@ class CommercialDealValidateRequest extends Data
                 Rule::exists($projectDepartment->getTable(), $projectDepartment->getKeyName())
                     ->where($projectDepartment->getQualifiedTeamIdColumn(), $team?->getKey()),
             ],
-            'expense_charges'                   => ['array'],
-            'expense_charges.*.expense_item_id' => ['required', 'integer', 'exists:expense_items,id'],
-            'expense_charges.*.amount'          => ['required', 'numeric', 'min:0'],
-            'expense_charges.*.charged_at'      => ['required', 'date'],
-            'expense_charges.*.contractor_id'   => ['nullable', 'integer', 'exists:contractors,id'],
         ];
     }
 }

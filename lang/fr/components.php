@@ -96,7 +96,7 @@ return [
     ],
 
     'deal' => [
-        'commercial' => [
+        'billing' => [
             'subcontracting_expense_title' => 'Dépense de sous traitance',
         ],
     ],

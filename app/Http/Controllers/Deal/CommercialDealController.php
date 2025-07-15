@@ -260,7 +260,7 @@ class CommercialDealController extends Controller
                     'expense_item_id' => $charge->expense_item_id,
                     'amount_in_cents' => $charge->amount_in_cents,
                     'charged_at'      => $charge->charged_at,
-                    'model_type'      => Contractor::class,
+                    'model_type'      => app(Contractor::class)->getMorphClass(),
                     'model_id'        => $charge->contractor_id ?? null,
                 ]);
             }
