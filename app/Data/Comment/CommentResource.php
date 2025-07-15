@@ -4,6 +4,7 @@ namespace App\Data\Comment;
 
 use App\Data\User\UserResource;
 use App\Models\Comment;
+use Carbon\Carbon;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -14,8 +15,8 @@ class CommentResource extends Resource
     public function __construct(
         public int $id,
         public string $message,
-        public string $created_at,
-        public string $updated_at,
+        public Carbon $created_at,
+        public Carbon $updated_at,
         public bool $is_edited,
         public ?int $creator_id,
         public ?string $model_type,
