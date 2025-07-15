@@ -103,4 +103,11 @@ class ServicesManager
     {
         return $this->billingDeal ??= app(BillingDealService::class);
     }
+
+    protected ?CommentService $comment = null;
+
+    public function comment(): CommentService
+    {
+        return $this->comment ??= app(CommentService::class);
+    }
 }

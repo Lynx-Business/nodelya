@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\BelongsToCreator;
+use App\Traits\HasPolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $message
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
  * @property-read \App\Models\User|null $creator
+ * @property-read Model|\Eloquent $model
  *
  * @method static \Database\Factories\CommentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
@@ -38,6 +45,8 @@ class Comment extends Model
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
 
+    use HasPolicy;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -60,5 +69,10 @@ class Comment extends Model
         return [
             //
         ];
+    }
+
+    public function model()
+    {
+        return $this->morphTo();
     }
 }

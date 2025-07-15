@@ -123,7 +123,7 @@ export type BannerOneOrManyRequest = {
 };
 export type BillingDealFormProps = {
     deal?: DealResource;
-    clients?: Array<ClientListResource>;
+    clients?: Array<ClientResource>;
     deals?: Array<DealResource>;
     schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
     projectDepartments?: Array<ProjectDepartmentResource>;
@@ -165,11 +165,11 @@ export type BillingDealIndexProps = {
     };
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
     accountingPeriods?: Array<AccountingPeriodResource>;
-    clients?: Array<ClientListResource>;
+    clients?: Array<ClientResource>;
 };
 export type BillingDealIndexRequest = {
     accounting_period?: AccountingPeriodResource;
-    clients_items?: Array<ClientListResource>;
+    clients_items?: Array<ClientResource>;
     q?: string;
     page?: number;
     per_page?: number;
@@ -183,22 +183,18 @@ export type BillingDealIndexRequest = {
     trashed?: TrashedFilter;
 };
 export type ClientFormProps = {
-    client?: ClientFormResource;
+    client?: ClientResource;
+    comments?: Array<CommentResource>;
 };
 export type ClientFormRequest = {
     client?: any;
     name: string;
     address: AddressData;
 };
-export type ClientFormResource = {
-    id: number;
-    name: string;
-    address: AddressData;
-};
 export type ClientIndexProps = {
     request: ClientIndexRequest;
     clients?: {
-        data: Array<ClientIndexResource>;
+        data: Array<ClientResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
         meta: {
             current_page: number;
@@ -224,26 +220,45 @@ export type ClientIndexRequest = {
     sort_direction: string;
     trashed?: TrashedFilter;
 };
-export type ClientIndexResource = {
-    id: number;
-    name: string;
-    can_view: boolean;
-    can_update: boolean;
-    can_trash: boolean;
-    can_restore: boolean;
-    can_delete: boolean;
-};
-export type ClientListResource = {
-    id: number;
-    name: string;
-};
 export type ClientOneOrManyRequest = {
     client?: number;
     ids?: Array<number>;
 };
+export type ClientResource = {
+    id: number;
+    name: string;
+    address: AddressData;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
+export type CommentRequestData = {
+    comment?: any;
+    message: string;
+    model_type: string;
+    model_id: number;
+};
+export type CommentResource = {
+    id: number;
+    message: string;
+    created_at: string;
+    updated_at: string;
+    is_edited: boolean;
+    creator_id?: number;
+    model_type?: string;
+    model_id?: number;
+    creator?: UserResource | null;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
 export type CommercialDealFormProps = {
     deal?: DealResource;
-    clients?: Array<ClientListResource>;
+    clients?: Array<ClientResource>;
     deals?: Array<DealResource>;
 };
 export type CommercialDealFormRequest = {
@@ -283,11 +298,11 @@ export type CommercialDealIndexProps = {
     };
     trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
     accountingPeriods?: Array<AccountingPeriodResource>;
-    clients?: Array<ClientListResource>;
+    clients?: Array<ClientResource>;
 };
 export type CommercialDealIndexRequest = {
     accounting_period?: AccountingPeriodResource;
-    clients_items?: Array<ClientListResource>;
+    clients_items?: Array<ClientResource>;
     q?: string;
     page?: number;
     per_page?: number;
@@ -467,7 +482,7 @@ export type DealResource = {
     ordered_at: string;
     duration_in_months?: number;
     starts_at?: string;
-    client?: ClientListResource;
+    client?: ClientResource;
     project_department?: ProjectDepartmentResource;
     parent?: DealResource;
     schedule?: Array<DealScheduleData>;
@@ -998,7 +1013,7 @@ export type MonthlyExpenseData = {
     status: string;
     date: string;
 };
-export type PermissionName = 'client' | 'expenses' | 'deal';
+export type PermissionName = 'client' | 'expenses' | 'deal' | 'comment';
 export type PermissionResource = {
     id: number;
     name: string;
@@ -1192,6 +1207,7 @@ export type UserAbilitiesResource = {
     deals: { view_any: boolean; create: boolean };
     teams: { view_any: boolean; create: boolean };
     users: { view_any: boolean; create: boolean };
+    clients: { view_any: boolean; create: boolean };
 };
 export type UserListResource = {
     id: number;

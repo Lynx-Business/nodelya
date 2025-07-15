@@ -295,4 +295,21 @@ return [
         ],
     ],
 
+    'comment' => [
+        'name' => [
+            'one'  => 'commentaire',
+            'many' => 'commentaires',
+        ],
+        'fields' => [
+            'id'         => 'ID',
+            'message'    => 'message',
+            'model_type' => 'type de modèle',
+            'model_id'   => 'ID du modèle',
+            'creator_id' => 'créateur',
+            'created_at' => 'créé le',
+            'updated_at' => 'modifié le',
+            'is_edited'  => 'modifié',
+        ],
+    ],
+
 ];

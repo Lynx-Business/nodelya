@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\Setup\AuthSetupStepTwoController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Contractor\ContractorController;
 use App\Http\Controllers\Contractor\ContractorEndsAtController;
 use App\Http\Controllers\Contractor\Expense\Budget\ContractorExpenseBudgetController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
+use App\Models\Comment;
 use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\Employee;
@@ -315,6 +317,12 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::get('/validate/{deal}', 'validateDeal')->name('validate');
             Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
         });
+    });
+
+    Route::prefix('/comments')->name('comments.')->controller(CommentController::class)->group(function () {
+        Route::post('/', 'store')->name('store')->can('create', Comment::class);
+        Route::put('/{comment}', 'update')->name('update')->can('update', 'comment');
+        Route::delete('/{comment}', 'destroy')->name('destroy')->can('delete', 'comment');
     });
 });
 

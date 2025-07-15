@@ -75,4 +75,23 @@ return [
         ],
     ],
 
+    'clients' => [
+        'comments' => [
+            'delete_confirm' => 'Voulez-vous vraiment supprimer ce commentaire ?',
+        ],
+    ],
+
+    'comments' => [
+        'fields' => [
+            'title'        => 'Commentaires',
+            'new'          => 'Nouveau commentaire',
+            'add'          => 'Ajouter',
+            'edit'         => 'Modifier le commentaire',
+            'cancel'       => 'Annuler',
+            'save'         => 'Enregistrer',
+            'edited_on'    => 'Modifié le',
+            'created_on'   => 'Créé le',
+            'update_error' => 'Erreur lors de la mise à jour',
+        ],
+    ],
 ];

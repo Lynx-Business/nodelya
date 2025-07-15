@@ -71,5 +71,10 @@ return [
             'expenses'            => 'Dépenses',
         ],
     ],
+    'client' => [
+        'form' => [
+            'edit' => 'Détails',
+        ],
+    ],
 
 ];

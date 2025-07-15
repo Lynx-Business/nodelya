@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Data\Client\ClientOneOrManyRequest;
+use App\Data\Client\ClientResource;
 use App\Data\Client\Form\ClientFormProps;
 use App\Data\Client\Form\ClientFormRequest;
 use App\Data\Client\Index\ClientIndexProps;
 use App\Data\Client\Index\ClientIndexRequest;
-use App\Data\Client\Index\ClientIndexResource;
+use App\Data\Comment\CommentResource;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -30,7 +31,7 @@ class ClientController extends Controller
         return Inertia::render('client/Index', ClientIndexProps::from([
             'request' => $data,
             'clients' => Lazy::inertia(
-                fn () => ClientIndexResource::collect(
+                fn () => ClientResource::collect(
                     Client::query()
                         ->search($data->q)
                         ->when($data->trashed, fn (Builder $q) => $q->filterTrashed($data->trashed))
@@ -41,7 +42,7 @@ class ClientController extends Controller
                         )
                         ->withQueryString(),
                     PaginatedDataCollection::class,
-                ),
+                )->include('can_view', 'can_update', 'can_trash', 'can_restore', 'can_delete'),
             ),
 
             'trashedFilters' => Lazy::inertia(fn () => TrashedFilter::labels()),
@@ -89,7 +90,10 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         return Inertia::render('client/Edit', ClientFormProps::from([
-            'client' => $client,
+            'client'   => ClientResource::from($client)->include('can_update'),
+            'comments' => $client->comments->load('creator')->map(
+                fn ($comment) => CommentResource::from($comment)->include('can_update', 'can_delete'),
+            ),
         ]));
     }
 
