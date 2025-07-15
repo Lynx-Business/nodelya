@@ -289,13 +289,18 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
 
         Route::prefix('/{client}/commercials')->name('commercials.')->controller(ClientCommercialController::class)->group(function () {
             Route::get('/', 'index')->name('index');
+
             Route::get('/create', 'create')->name('create');
             Route::post('/create', 'store')->name('store');
             Route::get('/{deal}/edit', 'edit')->name('edit');
             Route::put('/{deal}/edit', 'update')->name('update');
+
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
             Route::patch('/restore/{deal?}', 'restore')->name('restore');
             Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+
+            Route::get('/validate/{deal}', 'validateDeal')->name('validate');
+            Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
         });
     });
 

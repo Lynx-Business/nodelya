@@ -48,7 +48,10 @@ function submit() {
                         {{ $t('pages.deals.commercials.edit.title') }}
                     </span>
                     <Button class="text-right" v-if="deal?.can_update">
-                        <InertiaLink method="get" :href="route('deals.commercials.validate', { deal: deal! })">
+                        <InertiaLink
+                            method="get"
+                            :href="route('clients.commercials.validate', { deal: deal!, client: client! })"
+                        >
                             {{ $t('pages.deals.commercials.edit.validate_button') }}
                         </InertiaLink>
                     </Button>

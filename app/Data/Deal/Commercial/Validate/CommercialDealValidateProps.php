@@ -2,6 +2,7 @@
 
 namespace App\Data\Deal\Commercial\Validate;
 
+use App\Data\Client\ClientResource;
 use App\Data\Contractor\ContractorResource;
 use App\Data\Deal\DealResource;
 use App\Data\Expense\Item\ExpenseItemResource;
@@ -34,5 +35,6 @@ class CommercialDealValidateProps extends Resource
         #[DataCollectionOf(ExpenseItemResource::class)]
         public Lazy|DataCollection $expenseItems,
 
+        public ?ClientResource $client,
     ) {}
 }

@@ -6,8 +6,11 @@ use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexRequest;
+use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
+use App\Data\Deal\Commercial\Validate\CommercialDealValidateRequest;
 use App\Data\Deal\DealOneOrManyRequest;
 use App\Data\Deal\DealResource;
+use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -17,6 +20,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -220,5 +224,61 @@ class ClientCommercialController extends Controller
         }
 
         return back();
+    }
+
+    public function validateDeal(Client $client, Deal $deal)
+    {
+        $reference = $this->generateReference($deal);
+
+        return Inertia::render('deals/commercial/Validate', CommercialDealValidateProps::from([
+            'deal'               => DealResource::from($deal),
+            'client'             => $client,
+            'reference'          => $reference,
+            'projectDepartments' => Lazy::inertia(
+                fn () => Services::projectDepartment()->list(),
+            ),
+        ]));
+    }
+
+    public function processValidation(CommercialDealValidateRequest $data, Deal $deal)
+    {
+
+        DB::transaction(function () use ($data, $deal) {
+
+            $deal->update([
+                'project_department_id' => $data->project_department_id,
+                'reference'             => $data->reference,
+                'status'                => DealStatus::VALIDATED,
+            ]);
+
+        });
+
+        Services::toast()->success->execute(__('messages.deals.commercials.validate.success'));
+
+        return to_route('deals.billings.index');
+    }
+
+    private function generateReference(Deal $deal): string
+    {
+        $year = now()->format('Y');
+        $letter = '';
+
+        if ($deal->deal_id) {
+            $parentDeal = Deal::findOrFail($deal->deal_id);
+
+            $childCount = Deal::where('deal_id', $parentDeal->id)
+                ->whereNotNull('reference')
+                ->count();
+
+            while ($childCount > 0) {
+                $remainder = ($childCount - 1) % 26;
+                $letter = chr(65 + $remainder).$letter;
+                $childCount = intval(($childCount - 1) / 26);
+            }
+        }
+
+        $increment = Deal::count();
+
+        return sprintf('%sN%d%s', $year, $increment, $letter ? $letter : '');
     }
 }

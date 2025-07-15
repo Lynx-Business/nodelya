@@ -327,6 +327,7 @@ export type CommercialDealValidateProps = {
     projectDepartments?: Array<ProjectDepartmentResource>;
     contractors?: Array<ContractorResource>;
     expenseItems?: Array<ExpenseItemResource>;
+    client?: ClientResource;
 };
 export type CommercialDealValidateRequest = {
     project_department?: ProjectDepartmentResource;
