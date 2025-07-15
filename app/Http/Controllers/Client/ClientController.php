@@ -28,7 +28,7 @@ class ClientController extends Controller
     public function index(ClientIndexRequest $data)
     {
 
-        return Inertia::render('client/Index', ClientIndexProps::from([
+        return Inertia::render('clients/Index', ClientIndexProps::from([
             'request' => $data,
             'clients' => Lazy::inertia(
                 fn () => ClientResource::collect(
@@ -54,7 +54,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return Inertia::render('client/Create', ClientFormProps::from([]));
+        return Inertia::render('clients/Create', ClientFormProps::from([]));
     }
 
     /**
@@ -89,7 +89,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        return Inertia::render('client/Edit', ClientFormProps::from([
+        return Inertia::render('clients/Edit', ClientFormProps::from([
             'client'   => ClientResource::from($client)->include('can_update'),
             'comments' => $client->comments->load('creator')->map(
                 fn ($comment) => CommentResource::from($comment)->include('can_update', 'can_delete'),
