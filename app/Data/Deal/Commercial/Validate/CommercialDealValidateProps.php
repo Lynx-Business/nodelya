@@ -23,6 +23,8 @@ class CommercialDealValidateProps extends Resource
 
         public string $reference,
 
+        public ?ClientResource $client,
+
         #[AutoInertiaLazy]
         #[DataCollectionOf(ProjectDepartmentResource::class)]
         public Lazy|DataCollection $projectDepartments,
@@ -35,6 +37,5 @@ class CommercialDealValidateProps extends Resource
         #[DataCollectionOf(ExpenseItemResource::class)]
         public Lazy|DataCollection $expenseItems,
 
-        public ?ClientResource $client,
     ) {}
 }

@@ -326,10 +326,10 @@ export type CommercialDealIndexRequest = {
 export type CommercialDealValidateProps = {
     deal: DealResource;
     reference: string;
+    client?: ClientResource;
     projectDepartments?: Array<ProjectDepartmentResource>;
     contractors?: Array<ContractorResource>;
     expenseItems?: Array<ExpenseItemResource>;
-    client?: ClientResource;
 };
 export type CommercialDealValidateRequest = {
     project_department?: ProjectDepartmentResource;

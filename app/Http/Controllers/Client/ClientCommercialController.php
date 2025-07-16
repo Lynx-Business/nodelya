@@ -223,16 +223,22 @@ class ClientCommercialController extends Controller
         $reference = $this->generateReference($deal);
 
         return Inertia::render('deals/commercial/Validate', CommercialDealValidateProps::from([
-            'deal'               => DealResource::from($deal),
-            'client'             => ClientResource::from($client),
-            'reference'          => $reference,
+            'deal'         => DealResource::from($deal),
+            'client'       => ClientResource::from($client),
+            'reference'    => $reference,
+            'expenseItems' => Lazy::inertia(
+                fn () => Services::expense()->itemsList(),
+            ),
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),
+            ),
+            'contractors' => Lazy::inertia(
+                fn () => Services::contractor()->list(),
             ),
         ]));
     }
 
-    public function processValidation(CommercialDealValidateRequest $data, Deal $deal)
+    public function processValidation(CommercialDealValidateRequest $data, Client $client, Deal $deal)
     {
 
         DB::transaction(function () use ($data, $deal) {
@@ -247,7 +253,7 @@ class ClientCommercialController extends Controller
 
         Services::toast()->success->execute(__('messages.deals.commercials.validate.success'));
 
-        return to_route('deals.billings.index');
+        return to_route('clients.billings.index', ['client' => $client]);
     }
 
     private function generateReference(Deal $deal): string
