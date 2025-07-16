@@ -31,7 +31,7 @@ type ChargeType = PartialNullable<ExpenseChargeResource, 'id'>;
 const errors = defineModel<Record<string, string>>('errors');
 const charges = defineModel<ChargeType[]>('charges');
 
-const newChargeForm = useForm<Omit<ExpenseChargeResource, 'id'> & { id?: number }>({
+const newChargeForm = useForm<ChargeType>({
     id: undefined,
     expense_item: undefined,
     expense_item_id: 0,
@@ -54,7 +54,7 @@ function addCharge() {
     newChargeForm.reset();
 }
 
-function removeCharge(item: Omit<ExpenseChargeResource, 'id'> & { id?: number }) {
+function removeCharge(item: ChargeType) {
     const idx = charges.value?.indexOf(item);
     if (idx !== -1 && idx !== undefined && charges.value) {
         charges.value.splice(idx, 1);
@@ -71,7 +71,7 @@ const rowActions = [
         type: 'callback' as const,
         label: trans('delete'),
         icon: Trash2Icon,
-        callback: (item: Omit<ExpenseChargeResource, 'id'> & { id?: number }) => removeCharge(item),
+        callback: (item: ChargeType) => removeCharge(item),
     },
 ];
 </script>
