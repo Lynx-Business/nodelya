@@ -103,15 +103,4 @@ class ExpenseChargeFormRequest extends Data
             'model_id'   => $modelIdRules,
         ];
     }
-
-    public function toArray(array $only = [], array $except = [], bool $withComputed = true): array
-    {
-        $data = parent::toArray($only, $except, $withComputed);
-
-        if (array_key_exists('deal_id', $data) && $data['deal_id'] === null) {
-            unset($data['deal_id']);
-        }
-
-        return $data;
-    }
 }
