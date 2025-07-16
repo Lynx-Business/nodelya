@@ -801,6 +801,7 @@ export type ExpenseChargeFormRequest = {
     expense_item_id: number;
     amount: number;
     charged_at: string;
+    deal_id?: number;
 };
 export type ExpenseChargeIndexProps = {
     request: ExpenseChargeIndexRequest;

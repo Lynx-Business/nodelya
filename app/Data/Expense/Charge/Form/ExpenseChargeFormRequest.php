@@ -49,8 +49,14 @@ class ExpenseChargeFormRequest extends Data
 
         #[InCurrentAccountingPeriod]
         public Carbon $charged_at,
+
+        public ?int $deal_id = null,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+
+        if ($deal_id === null) {
+            unset($deal_id);
+        }
     }
 
     public static function attributes(): array
@@ -96,5 +102,16 @@ class ExpenseChargeFormRequest extends Data
             'model_type' => $modelTypeRules,
             'model_id'   => $modelIdRules,
         ];
+    }
+
+    public function toArray(array $only = [], array $except = [], bool $withComputed = true): array
+    {
+        $data = parent::toArray($only, $except, $withComputed);
+
+        if (array_key_exists('deal_id', $data) && $data['deal_id'] === null) {
+            unset($data['deal_id']);
+        }
+
+        return $data;
     }
 }

@@ -10,6 +10,7 @@ use App\Data\Deal\Commercial\Validate\CommercialDealValidateProps;
 use App\Data\Deal\Commercial\Validate\CommercialDealValidateRequest;
 use App\Data\Deal\DealOneOrManyRequest;
 use App\Data\Deal\DealResource;
+use App\Data\Expense\Charge\Form\ExpenseChargeFormRequest;
 use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
@@ -256,13 +257,17 @@ class CommercialDealController extends Controller
             $deal->expenseCharges()->delete();
 
             foreach ($data->expense_charges as $charge) {
-                $deal->expenseCharges()->create([
-                    'expense_item_id' => $charge->expense_item_id,
-                    'amount_in_cents' => $charge->amount_in_cents,
-                    'charged_at'      => $charge->charged_at,
-                    'model_type'      => app(Contractor::class)->getMorphClass(),
-                    'model_id'        => $charge->contractor_id ?? null,
-                ]);
+                $expenseChargeFormRequest = new ExpenseChargeFormRequest(
+                    deal_id: $deal->id,
+                    expense_charge: null,
+                    model_type: app(Contractor::class)->getMorphClass(),
+                    model_id: $charge->contractor_id ?? null,
+                    expense_item_id: $charge->expense_item_id,
+                    amount: $charge->amount,
+                    charged_at: $charge->charged_at,
+                );
+
+                Services::expense()->createOrUpdateCharge->execute($expenseChargeFormRequest);
             }
         });
 
