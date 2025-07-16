@@ -46,7 +46,6 @@ defineOptions({
 });
 
 const props = defineProps<BillingDealIndexProps>();
-// console.log('props => ', props);
 
 const format = useFormatter();
 const alert = useAlert();
