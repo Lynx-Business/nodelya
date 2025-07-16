@@ -15,15 +15,15 @@ defineOptions({
         breadcrumbs: [
             {
                 title: trans('pages.deals.commercials.index.title'),
-                href: route('deals.commercials.index'),
+                href: route('clients.commercials.index', { client: route().params.client }),
             },
             {
                 title: trans('pages.deals.commercials.edit.title'),
-                href: route('deals.commercials.edit', { deal: route().params.deal }),
+                href: route('clients.commercials.edit', { deal: route().params.deal, client: route().params.client }),
             },
             {
                 title: route().params.deal,
-                href: route('deals.commercials.edit', { deal: route().params.deal }),
+                href: route('clients.commercials.edit', { deal: route().params.deal, client: route().params.client }),
             },
         ],
     })),
@@ -33,7 +33,8 @@ const props = defineProps<CommercialDealValidateProps>();
 const form = useCommercialDealValidateFrom(props.deal, props.reference);
 
 function submit() {
-    form.post(route('deals.commercials.validate.process', { deal: props.deal.id }));
+    const { deal, client } = props;
+    form.post(route('clients.commercials.validate.process', { deal: deal, client: client! }));
 }
 </script>
 
