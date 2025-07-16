@@ -224,7 +224,7 @@ class ClientCommercialController extends Controller
 
         return Inertia::render('deals/commercial/Validate', CommercialDealValidateProps::from([
             'deal'               => DealResource::from($deal),
-            'client'             => $client,
+            'client'             => ClientResource::from($client),
             'reference'          => $reference,
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),
