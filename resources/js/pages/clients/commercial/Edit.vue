@@ -32,8 +32,8 @@ const form = useCommercialDealForm(props.deal);
 const deal = computed(() => props.deal);
 
 function submit() {
-    const { deal } = props;
-    form.put(route('clients.commercials.edit', { deal: deal!, client: props.client! }));
+    const { deal, client } = props;
+    form.put(route('clients.commercials.edit', { deal: deal!, client: client! }));
 }
 </script>
 

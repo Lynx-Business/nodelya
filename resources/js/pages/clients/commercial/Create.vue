@@ -27,7 +27,8 @@ const props = defineProps<CommercialDealFormProps>();
 const form = useCommercialDealForm({ client: props.client });
 
 function submit() {
-    form.post(route('clients.commercials.store', { client: props.client! }));
+    const { client } = props;
+    form.post(route('clients.commercials.store', { client: client! }));
 }
 </script>
 
