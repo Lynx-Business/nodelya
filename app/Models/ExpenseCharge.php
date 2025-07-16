@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read bool $can_trash
  * @property-read bool $can_update
  * @property-read bool $can_view
+ * @property-read \App\Models\Deal|null $deal
  * @property-read \App\Models\ExpenseItem $expenseItem
  * @property-read true $is_trashable
  * @property bool $is_trashed
@@ -92,6 +93,7 @@ class ExpenseCharge extends Model
     protected $fillable = [
         'team_id',
         'expense_item_id',
+        'deal_id',
         'model_type',
         'model_id',
         'amount_in_cents',
@@ -172,5 +174,10 @@ class ExpenseCharge extends Model
                 ->whereColumn($accountingPeriodModel->qualifyColumn('starts_at'), '<=', $this->qualifyColumn('charged_at'))
                 ->whereColumn($accountingPeriodModel->qualifyColumn('ends_at'), '>=', $this->qualifyColumn('charged_at')),
         );
+    }
+
+    public function deal()
+    {
+        return $this->belongsTo(Deal::class);
     }
 }

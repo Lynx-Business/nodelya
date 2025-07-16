@@ -4,7 +4,9 @@ namespace App\Data\Deal\Billing\Form;
 
 use App\Attributes\EnumArrayOf;
 use App\Data\Client\ClientResource;
+use App\Data\Contractor\ContractorResource;
 use App\Data\Deal\DealResource;
+use App\Data\Expense\Item\ExpenseItemResource;
 use App\Data\ProjectDepartment\ProjectDepartmentResource;
 use App\Enums\Deal\DealScheduleStatus;
 use Spatie\LaravelData\Attributes\AutoInertiaLazy;
@@ -35,5 +37,13 @@ class BillingDealFormProps extends Resource
         #[AutoInertiaLazy]
         #[DataCollectionOf(ProjectDepartmentResource::class)]
         public Lazy|DataCollection $projectDepartments,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(ExpenseItemResource::class)]
+        public Lazy|DataCollection $expenseItems,
+
+        #[AutoInertiaLazy]
+        #[DataCollectionOf(ContractorResource::class)]
+        public Lazy|DataCollection $contractors,
     ) {}
 }

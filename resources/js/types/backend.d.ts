@@ -127,6 +127,8 @@ export type BillingDealFormProps = {
     deals?: Array<DealResource>;
     schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
     projectDepartments?: Array<ProjectDepartmentResource>;
+    expenseItems?: Array<ExpenseItemResource>;
+    contractors?: Array<ContractorResource>;
 };
 export type BillingDealFormRequest = {
     deal?: any;
@@ -142,6 +144,7 @@ export type BillingDealFormRequest = {
     project_department_id?: number;
     schedule_data: Array<ScheduleItemData>;
     schedule?: Array<DealScheduleData>;
+    expense_charges?: Array<ContractorExpenseChargeData>;
 };
 export type BillingDealIndexProps = {
     request: BillingDealIndexRequest;
@@ -317,14 +320,17 @@ export type CommercialDealIndexRequest = {
     trashed?: TrashedFilter;
 };
 export type CommercialDealValidateProps = {
-    projectDepartments?: Array<ProjectDepartmentResource>;
     deal: DealResource;
     reference: string;
+    projectDepartments?: Array<ProjectDepartmentResource>;
+    contractors?: Array<ContractorResource>;
+    expenseItems?: Array<ExpenseItemResource>;
 };
 export type CommercialDealValidateRequest = {
     project_department?: ProjectDepartmentResource;
     project_department_id?: number;
     reference: string;
+    expense_charges?: Array<ContractorExpenseChargeData>;
 };
 export type ConfirmPasswordProps = {};
 export type ConfirmPasswordRequest = {
@@ -363,6 +369,15 @@ export type ContractorExpenseBudgetIndexProps = {
     expenseCategories?: Array<ExpenseCategoryResource>;
     expenseSubCategories?: Array<ExpenseSubCategoryResource>;
     expenseItems?: Array<ExpenseItemResource>;
+};
+export type ContractorExpenseChargeData = {
+    expense_item?: ExpenseItemResource;
+    contractor?: ContractorResource;
+    id?: number;
+    expense_item_id: number;
+    amount: number;
+    charged_at: string;
+    contractor_id: number;
 };
 export type ContractorExpenseChargeFormProps = {
     accountingPeriod?: AccountingPeriodResource;
@@ -486,6 +501,7 @@ export type DealResource = {
     project_department?: ProjectDepartmentResource;
     parent?: DealResource;
     schedule?: Array<DealScheduleData>;
+    expenseCharges?: Array<ExpenseChargeResource>;
     monthly_expenses?: Record<string, MonthlyExpenseData>;
     can_view?: boolean;
     can_update?: boolean;
@@ -836,6 +852,7 @@ export type ExpenseChargeResource = {
     model_type?: 'contractor' | 'employee';
     model_id?: number;
     expense_item_id: number;
+    deal_id?: number;
     amount: number;
     charged_at: string;
     deleted_at?: string;
@@ -846,6 +863,7 @@ export type ExpenseChargeResource = {
     can_restore?: boolean;
     can_delete?: boolean;
     expense_item?: ExpenseItemResource;
+    contractor?: ContractorResource | null;
 };
 export type ExpenseItemFormProps = {
     team: TeamListResource;

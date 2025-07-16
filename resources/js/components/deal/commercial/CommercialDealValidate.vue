@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ExpenseChargeTable from '@/components/deal/billing/ExpenseChargeTable.vue';
 import ProjectDepartmentCombobox from '@/components/project-department/ProjectDepartmentCombobox.vue';
 import {
     FormContent,
@@ -23,7 +24,7 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
             </FormControl>
         </FormField>
 
-        <FormField required>
+        <FormField>
             <FormLabel>
                 <CapitalizeText>
                     {{ $t('models.project_department.name.one') }}
@@ -33,6 +34,10 @@ const { form } = injectFormContext<CommercialDealValidateFormData>();
                 <ProjectDepartmentCombobox v-model="form.project_department" />
             </FormControl>
             <FormError :message="form.errors.project_department" />
+        </FormField>
+
+        <FormField class="col-span-2 mt-4">
+            <ExpenseChargeTable v-model:charges="form.expense_charges" v-model:errors="form.errors" />
         </FormField>
     </FormContent>
 </template>

@@ -21,7 +21,13 @@ class ClientFactory extends Factory
         return [
             'team_id' => Team::factory(),
             'name'    => fake()->company(),
-            'address' => AddressData::from([]),
+            'address' => AddressData::from([
+                'address'            => fake()->streetAddress(),
+                'address_complement' => fake()->optional()->secondaryAddress(),
+                'city'               => fake()->city(),
+                'postal_code'        => fake()->postcode(),
+                'country'            => fake()->country(),
+            ]),
         ];
     }
 }

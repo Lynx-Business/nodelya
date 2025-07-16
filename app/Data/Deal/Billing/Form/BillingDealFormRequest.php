@@ -4,6 +4,7 @@ namespace App\Data\Deal\Billing\Form;
 
 use App\Data\Deal\DealScheduleData;
 use App\Data\Deal\ScheduleItemData;
+use App\Data\Expense\Charge\ContractorExpenseChargeData;
 use App\Models\Deal;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
@@ -50,7 +51,10 @@ class BillingDealFormRequest extends Data
         public array $schedule_data,
 
         #[DataCollectionOf(DealScheduleData::class)]
-        public ?DataCollection $schedule = null,
+        public ?DataCollection $schedule,
+
+        #[DataCollectionOf(ContractorExpenseChargeData::class)]
+        public ?DataCollection $expense_charges,
 
     ) {
 

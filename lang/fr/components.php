@@ -94,4 +94,11 @@ return [
             'update_error' => 'Erreur lors de la mise à jour',
         ],
     ],
+
+    'deal' => [
+        'billing' => [
+            'subcontracting_expense_title' => 'Dépense de sous traitance',
+        ],
+    ],
+
 ];

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ClientCombobox from '@/components/client/ClientCombobox.vue';
+import ExpenseChargeTable from '@/components/deal/billing/ExpenseChargeTable.vue';
+import PostponeScheduleDialog from '@/components/deal/billing/PostponeScheduleDialog.vue';
 import DealCombobox from '@/components/deal/common/DealCombobox.vue';
 import ProjectDepartmentCombobox from '@/components/project-department/ProjectDepartmentCombobox.vue';
 import { Button } from '@/components/ui/button';
@@ -32,7 +34,6 @@ import { DealScheduleStatus, ScheduleItemData } from '@/types';
 import { trans } from 'laravel-vue-i18n';
 import { ClockArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import PostponeScheduleDialog from './PostponeScheduleDialog.vue';
 
 const { form, disabled } = injectFormContext<BillingDealFormData>();
 const defaultStatus: DealScheduleStatus = 'uncertain';
@@ -379,6 +380,10 @@ const rowActions: DataTableRowCallbackAction<ScheduleItemData>[] = [
                 <FormError class="mt-4" :message="form.errors.schedule_data" />
             </FormField>
         </div>
+
+        <FormField class="col-span-full mt-4">
+            <ExpenseChargeTable v-model:charges="form.expense_charges" v-model:errors="form.errors" />
+        </FormField>
 
         <PostponeScheduleDialog
             v-model:showPostponeDialog="showPostponeDialog"
