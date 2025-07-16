@@ -33,7 +33,7 @@ const props = defineProps<CommercialDealValidateProps>();
 const form = useCommercialDealValidateFrom(props.deal, props.reference);
 
 function submit() {
-    form.post(route('clients.commercials.validate.process', { deal: props.deal!, client: props.client! }));
+    form.post(route('clients.commercials.validate.process', { deal: props.deal, client: props.client! }));
 }
 </script>
 

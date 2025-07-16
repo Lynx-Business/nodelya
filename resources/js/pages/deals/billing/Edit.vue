@@ -8,7 +8,6 @@ import { BillingDealFormProps } from '@/types';
 
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { computed } from 'vue';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -28,7 +27,6 @@ defineOptions({
 const props = defineProps<BillingDealFormProps>();
 const form = useBillingDealForm(props.deal);
 
-const deal = computed(() => props.deal);
 function submit() {
     const { deal } = props;
     form.put(route('deals.billings.edit', { deal: deal! }));

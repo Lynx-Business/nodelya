@@ -9,7 +9,6 @@ import ClientFormLayout from '@/layouts/client/ClientFormLayout.vue';
 import type { CommercialDealFormProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { computed } from 'vue';
 
 defineOptions({
     layout: useLayout(ClientFormLayout, () => ({
@@ -28,8 +27,6 @@ defineOptions({
 
 const props = defineProps<CommercialDealFormProps>();
 const form = useCommercialDealForm(props.deal);
-
-const deal = computed(() => props.deal);
 
 function submit() {
     const { deal, client } = props;

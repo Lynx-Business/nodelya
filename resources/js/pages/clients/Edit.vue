@@ -3,7 +3,7 @@ import ClientCommentForm from '@/components/client/ClientCommentForm.vue';
 import ClientForm from '@/components/client/ClientForm.vue';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
-import { Section } from '@/components/ui/custom/section';
+import { Section, SectionContent } from '@/components/ui/custom/section';
 import { useLayout } from '@/composables';
 import { useClientForm } from '@/composables/forms/clients/useClientForm';
 import { useCommentForm } from '@/composables/forms/comment/useCommentForm';
@@ -40,8 +40,8 @@ function submit() {
 <template>
     <Head :title="$t('pages.clients.update.title')" />
 
-    <div>
-        <section>
+    <Section>
+        <SectionContent>
             <Form :form :disabled="!client?.can_update" @submit="submit()">
                 <Card>
                     <CardHeader>
@@ -57,8 +57,8 @@ function submit() {
                     </CardFooter>
                 </Card>
             </Form>
-        </section>
-        <Section class="mt-4">
+        </SectionContent>
+        <SectionContent class="mt-4">
             <Form :form="commentForm" :disabled="!client?.can_update">
                 <Card>
                     <CardContent>
@@ -66,6 +66,6 @@ function submit() {
                     </CardContent>
                 </Card>
             </Form>
-        </Section>
-    </div>
+        </SectionContent>
+    </Section>
 </template>
