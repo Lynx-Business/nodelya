@@ -6,7 +6,7 @@ import { clearSessionFilters, useLayout, usePageProp, useRouterComputed } from '
 import { AppLayout } from '@/layouts';
 import { NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { ShoppingBagIcon, SquarePenIcon } from 'lucide-vue-next';
+import { ReceiptEuroIcon, ShoppingBagIcon, SquarePenIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -40,7 +40,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
         {
             title: trans('layouts.client.form.billing'),
             href: route('clients.billings.index', { client: route().params.client }),
-            icon: ShoppingBagIcon,
+            icon: ReceiptEuroIcon,
             isActive: route().current('clients.billings.*'),
         },
     ].map((item) =>
