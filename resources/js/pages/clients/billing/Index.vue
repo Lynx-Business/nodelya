@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
-import { Button } from '@/components/ui/button';
+import ClientCombobox from '@/components/client/ClientCombobox.vue';
 import { EnumCombobox } from '@/components/ui/custom/combobox';
 import {
     DataTable,
@@ -21,34 +21,33 @@ import {
 } from '@/components/ui/custom/data-table';
 import { FiltersSheet, FiltersSheetContent, FiltersSheetTrigger } from '@/components/ui/custom/filters';
 import { FormContent, FormControl, FormField, FormLabel } from '@/components/ui/custom/form';
-import { NumberInput, PriceInput, TextInput } from '@/components/ui/custom/input';
-import { InertiaLink } from '@/components/ui/custom/link';
+import { PriceInput, TextInput } from '@/components/ui/custom/input';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { useAlert, useAuth, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
+import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
 import ClientFormLayout from '@/layouts/client/ClientFormLayout.vue';
-import { CommercialDealIndexProps, CommercialDealIndexRequest, DealResource, MonthlyExpenseData } from '@/types';
+import { BillingDealIndexProps, BillingDealIndexRequest, DealResource, MonthlyExpenseData } from '@/types';
 
 import { Head, router } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
 import { trans, transChoice } from 'laravel-vue-i18n';
-import { ArchiveIcon, ArchiveRestoreIcon, CirclePlusIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
+import { ArchiveIcon, ArchiveRestoreIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 defineOptions({
     layout: useLayout(ClientFormLayout, () => ({
         breadcrumbs: [
             {
-                title: trans('pages.deals.commercials.index.title'),
-                href: route('index'),
+                title: trans('pages.deals.billings.index.title'),
+                href: route('deals.billings.index'),
             },
         ],
     })),
 });
 
-const props = defineProps<CommercialDealIndexProps>();
+const props = defineProps<BillingDealIndexProps>();
+// console.log('props => ', props);
 
-const { abilities } = useAuth();
 const format = useFormatter();
 const alert = useAlert();
 const { locale } = useLocale();
@@ -56,11 +55,11 @@ const { locale } = useLocale();
 const dynamicMonths = computed(() => {
     if (!props.accounting_period_months) return [];
 
-    const months: { key: string; lettre: string }[] = [];
+    const months: { key: string; label: string }[] = [];
     props.accounting_period_months.forEach((month) => {
         months.push({
             key: month,
-            lettre: formatMonth(month),
+            label: formatMonth(month),
         });
     });
 
@@ -76,7 +75,10 @@ function formatMonth(monthString: string): string {
     }).format(date);
 }
 
-function findExpenseForMonth(expenses: Record<string, MonthlyExpenseData> | undefined, monthKey: string) {
+function findExpenseForMonth(
+    expenses: Record<string, MonthlyExpenseData> | undefined | null,
+    monthKey: string,
+): MonthlyExpenseData | undefined {
     if (!expenses) return undefined;
     return expenses[monthKey];
 }
@@ -91,11 +93,11 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
         callback: (items) =>
             alert({
                 variant: 'warning',
-                description: transChoice('messages.deals.commercials.trash.confirm', items.length),
+                description: transChoice('messages.deals.billings.trash.confirm', items.length),
                 callback: () =>
-                    router.delete(route('clients.commercials.trash', { client: props.client! }), {
+                    router.delete(route('clients.billings.trash', { client: props.client! }), {
                         data: { ids: items.map(({ id }) => id) },
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                         onSuccess: () => {
                             selectedRows.value = [];
                         },
@@ -109,13 +111,13 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
         callback: (items) =>
             alert({
                 variant: 'success',
-                description: transChoice('messages.deals.commercials.restore.confirm', items.length),
+                description: transChoice('messages.deals.billings.restore.confirm', items.length),
                 callback: () =>
                     router.patch(
-                        route('clients.commercials.restore', { client: props.client! }),
+                        route('clients.billings.restore', { client: props.client! }),
                         { ids: items.map(({ id }) => id) },
                         {
-                            only: ['commercial_deals'],
+                            only: ['billing_deals'],
                             onSuccess: () => {
                                 selectedRows.value = [];
                             },
@@ -130,11 +132,11 @@ const rowsActions: DataTableRowsAction<DealResource>[] = [
         callback: (items) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.deals.commercials.delete.confirm', items.length),
+                description: transChoice('messages.deals.billings.delete.confirm', items.length),
                 callback: () =>
-                    router.delete(route('clients.commercials.delete', { client: props.client! }), {
+                    router.delete(route('clients.billings.delete', { client: props.client! }), {
                         data: { ids: items.map(({ id }) => id) },
-                        only: ['commercial_deals'],
+                        only: ['billing_deals'],
                         onSuccess: () => {
                             selectedRows.value = [];
                         },
@@ -150,14 +152,14 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         hidden: (deal) => deal.can_update || false,
         disabled: (deal) => !deal.can_view,
         icon: EyeIcon,
-        href: (deal) => route('clients.commercials.edit', { deal, client: props.client! }),
+        href: (deal) => route('clients.billings.edit', { deal, client: props.client! }),
     },
     {
         type: 'href',
         label: trans('edit'),
         icon: PencilIcon,
-        disabled: (deal) => !deal.can_update && !deal.can_restore,
-        href: (deal) => route('clients.commercials.edit', { deal, client: props.client! }),
+        disabled: (deal) => !deal.can_update,
+        href: (deal) => route('clients.billings.edit', { deal, client: props.client! }),
     },
     {
         type: 'callback',
@@ -167,10 +169,10 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         callback: (deal) =>
             alert({
                 variant: 'warning',
-                description: transChoice('messages.deals.commercials.trash.confirm', 1),
+                description: transChoice('messages.deals.billings.trash.confirm', 1),
                 callback: () =>
-                    router.delete(route('clients.commercials.trash', { deal, client: props.client! }), {
-                        only: ['commercial_deals'],
+                    router.delete(route('clients.billings.trash', { deal, client: props.client! }), {
+                        only: ['billing_deals'],
                     }),
             }),
     },
@@ -182,10 +184,10 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         callback: (deal) =>
             alert({
                 variant: 'success',
-                description: transChoice('messages.deals.commercials.restore.confirm', 1),
+                description: transChoice('messages.deals.billings.restore.confirm', 1),
                 callback: () =>
-                    router.patch(route('clients.commercials.restore', { deal, client: props.client! }), undefined, {
-                        only: ['commercial_deals'],
+                    router.patch(route('clients.billings.restore', { deal, client: props.client! }), undefined, {
+                        only: ['billing_deals'],
                     }),
             }),
     },
@@ -197,32 +199,31 @@ const rowActions: DataTableRowAction<DealResource>[] = [
         callback: (deal) =>
             alert({
                 variant: 'destructive',
-                description: transChoice('messages.deals.commercials.delete.confirm', 1),
+                description: transChoice('messages.deals.billings.delete.confirm', 1),
                 callback: () =>
-                    router.delete(route('clients.commercials.delete', { deal, client: props.client! }), {
-                        only: ['commercial_deals'],
+                    router.delete(route('clients.billings.delete', { deal, client: props.client! }), {
+                        only: ['billing_deals'],
                     }),
             }),
     },
 ];
 
-const filters = useFilters<CommercialDealIndexRequest>(
-    route('deals.commercials.index'),
+const filters = useFilters<BillingDealIndexRequest>(
+    route('deals.billings.index'),
     {
         q: props.request.q ?? '',
         name: props.request.name ?? '',
         amount: props.request.amount,
-        success_rate: props.request.success_rate,
         code: props.request.name,
-        page: props.commercial_deals?.meta.current_page,
-        per_page: props.commercial_deals?.meta.per_page,
+        page: props.billing_deals?.meta.current_page,
+        per_page: props.billing_deals?.meta.per_page,
         sort_by: props.request.sort_by,
         sort_direction: props.request.sort_direction,
         trashed: props.request.trashed,
         accounting_period: props.request.accounting_period,
     },
     {
-        only: ['commercial_deals'],
+        only: ['billing_deals'],
         immediate: true,
         debounceReload(keys) {
             return !keys.includes('page') && !keys.includes('per_page');
@@ -240,10 +241,29 @@ const filters = useFilters<CommercialDealIndexRequest>(
         },
     },
 );
+
+function statusClass(status: string | undefined, expense?: MonthlyExpenseData) {
+    if (!status) return 'bg-[var(--status-uncertain)]/50';
+
+    if (status === 'invoiced' && expense?.date) {
+        const now = new Date();
+        const expenseDate = new Date(expense.date);
+        const diffDays = Math.floor((now.getTime() - expenseDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (diffDays >= 60) {
+            return 'bg-[var(--status-invoiced-red)]';
+        }
+        if (diffDays >= 45) {
+            return 'bg-[var(--status-invoiced-orange)]';
+        }
+    }
+
+    return `bg-[var(--status-${status})]/50`;
+}
 </script>
 
 <template>
-    <Head :title="trans('pages.deals.commercials.title')" />
+    <Head :title="trans('pages.deals.billings.title')" />
 
     <Section>
         <SectionContent>
@@ -252,11 +272,11 @@ const filters = useFilters<CommercialDealIndexRequest>(
                 v-model:selected-rows="selectedRows"
                 v-model:sort-by="filters.sort_by"
                 v-model:sort-direction="filters.sort_direction"
-                :data="commercial_deals"
+                :data="billing_deals"
                 :rows-actions
                 :row-actions
             >
-                <FormContent class="flex items-center">
+                <FormContent class="flex items-center sm:flex">
                     <TextInput v-model="filters.q" type="search" />
                     <AccountingPeriodCombobox v-model="filters.accounting_period" required />
                     <FiltersSheet
@@ -277,10 +297,21 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 </FormControl>
                             </FormField>
                             <FormField>
+                                <FormLabel>
+                                    <CapitalizeText>
+                                        {{ $t('models.deal.billing.fields.client_id') }}
+                                    </CapitalizeText>
+                                </FormLabel>
+                                <FormControl>
+                                    <ClientCombobox v-model="filters.clients_items" multiple />
+                                </FormControl>
+                            </FormField>
+
+                            <FormField>
                                 <FormField>
                                     <FormLabel>
                                         <CapitalizeText>
-                                            {{ $t('models.deal.commercial.fields.name') }}
+                                            {{ $t('models.deal.billing.fields.name') }}
                                         </CapitalizeText>
                                     </FormLabel>
                                     <FormControl>
@@ -289,7 +320,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 </FormField>
                                 <FormLabel>
                                     <CapitalizeText>
-                                        {{ $t('models.deal.commercial.fields.amount') }}
+                                        {{ $t('models.deal.billing.fields.amount') }}
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
@@ -299,17 +330,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                             <FormField>
                                 <FormLabel>
                                     <CapitalizeText>
-                                        {{ $t('models.deal.commercial.fields.success_rate') }}
-                                    </CapitalizeText>
-                                </FormLabel>
-                                <FormControl>
-                                    <NumberInput v-model="filters.success_rate" :min="0" :max="100" />
-                                </FormControl>
-                            </FormField>
-                            <FormField>
-                                <FormLabel>
-                                    <CapitalizeText>
-                                        {{ $t('models.deal.commercial.fields.code') }}
+                                        {{ $t('models.deal.billing.fields.code') }}
                                     </CapitalizeText>
                                 </FormLabel>
                                 <FormControl>
@@ -319,16 +340,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                         </FiltersSheetContent>
                     </FiltersSheet>
                 </FormContent>
-                <FormContent class="flex items-center justify-between" v-if="abilities.deals.create">
-                    <Button as-child>
-                        <InertiaLink :href="route('clients.commercials.create', { client: client! })">
-                            <CirclePlusIcon />
-                            <CapitalizeText>
-                                {{ $t('pages.deals.commercials.create.title') }}
-                            </CapitalizeText>
-                        </InertiaLink>
-                    </Button>
-                </FormContent>
+
                 <DataTableContent tab="table">
                     <DataTableHeader>
                         <DataTableRow>
@@ -336,29 +348,29 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 <DataTableRowsCheckbox />
                             </DataTableHead>
                             <DataTableSortableHead value="name">
-                                {{ $t('models.deal.commercial.fields.name') }}
+                                {{ $t('models.deal.billing.fields.name') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
-                                {{ $t('models.deal.commercial.fields.amount') }}
+                                {{ $t('models.deal.billing.fields.amount') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="code">
-                                {{ $t('models.deal.commercial.fields.code') }}
+                                {{ $t('models.deal.billing.fields.code') }}
                             </DataTableSortableHead>
-                            <DataTableSortableHead value="success_rate">
-                                {{ $t('models.deal.billing.fields.success_rate') }}
+                            <DataTableSortableHead value="starts_at">
+                                {{ $t('models.deal.billing.fields.starts_at') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="ordered_at">
-                                {{ $t('models.deal.commercial.fields.ordered_at') }}
+                                {{ $t('models.deal.billing.fields.ordered_at') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="duration_in_months">
-                                {{ $t('models.deal.commercial.fields.duration_in_months') }}
+                                {{ $t('models.deal.billing.fields.duration_in_months') }}
                             </DataTableSortableHead>
                             <DataTableSortableHead value="amount_in_cents">
-                                {{ $t('models.deal.commercial.fields.total_sales') }}
+                                {{ $t('models.deal.billing.fields.total_sales') }}
                             </DataTableSortableHead>
 
                             <DataTableHead v-for="(month, index) in dynamicMonths" :key="index">
-                                {{ month.lettre }}
+                                {{ month.label }}
                             </DataTableHead>
                             <DataTableHead>
                                 <DataTableHeadActions />
@@ -382,7 +394,7 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 {{ deal.code }}
                             </DataTableCell>
                             <DataTableCell>
-                                {{ deal.success_rate + ' %' }}
+                                {{ format.date(deal.starts_at) }}
                             </DataTableCell>
                             <DataTableCell>
                                 {{ format.date(deal.ordered_at) }}
@@ -391,12 +403,23 @@ const filters = useFilters<CommercialDealIndexRequest>(
                                 {{ deal.duration_in_months }}
                             </DataTableCell>
                             <DataTableCell class="bg-gray-300/30">
-                                {{ format.price((deal.amount * deal.success_rate) / 100) }}
+                                {{ format.price(deal.amount) }}
                             </DataTableCell>
 
-                            <DataTableCell v-for="(month, index) in dynamicMonths" :key="index" class="min-w-30">
+                            <DataTableCell
+                                v-for="(month, index) in dynamicMonths"
+                                :key="index"
+                                :class="[
+                                    statusClass(
+                                        findExpenseForMonth(deal.monthly_expenses, month.key)?.status,
+                                        findExpenseForMonth(deal.monthly_expenses, month.key),
+                                    ),
+                                    'min-w-30',
+                                ]"
+                            >
                                 {{ format.price(findExpenseForMonth(deal.monthly_expenses, month.key)?.amount ?? 0) }}
                             </DataTableCell>
+
                             <DataTableCell>
                                 <DataTableRowActions />
                             </DataTableCell>

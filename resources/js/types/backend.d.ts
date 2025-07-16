@@ -123,6 +123,7 @@ export type BannerOneOrManyRequest = {
 };
 export type BillingDealFormProps = {
     deal?: DealResource;
+    client?: ClientResource;
     clients?: Array<ClientResource>;
     deals?: Array<DealResource>;
     schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
@@ -148,6 +149,7 @@ export type BillingDealFormRequest = {
 };
 export type BillingDealIndexProps = {
     request: BillingDealIndexRequest;
+    client?: ClientResource;
     accounting_period_months: Array<any>;
     billing_deals?: {
         data: Array<DealResource>;

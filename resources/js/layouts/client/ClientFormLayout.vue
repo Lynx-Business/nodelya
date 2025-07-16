@@ -37,6 +37,12 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             icon: ShoppingBagIcon,
             isActive: route().current('clients.commercials.*'),
         },
+        {
+            title: trans('layouts.client.form.billing'),
+            href: route('clients.billings.index', { client: route().params.client }),
+            icon: ShoppingBagIcon,
+            isActive: route().current('clients.billings.*'),
+        },
     ].map((item) =>
         Object.assign(item, {
             options: {

@@ -75,6 +75,7 @@ return [
         'form' => [
             'edit'       => 'Détails',
             'commercial' => 'Commerce',
+            'billing'    => 'Facturation',
         ],
     ],
 

@@ -21,6 +21,8 @@ class BillingDealIndexProps extends Resource
     public function __construct(
         public BillingDealIndexRequest $request,
 
+        public ?ClientResource $client,
+
         public array $accounting_period_months,
 
         #[AutoInertiaLazy]
@@ -37,6 +39,6 @@ class BillingDealIndexProps extends Resource
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientResource::class)]
-        public Lazy|DataCollection $clients,
+        public Lazy|DataCollection|null $clients,
     ) {}
 }

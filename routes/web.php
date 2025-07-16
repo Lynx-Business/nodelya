@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\Setup\AuthSetupStepOneController;
 use App\Http\Controllers\Auth\Setup\AuthSetupStepTwoController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
+use App\Http\Controllers\Client\ClientBillingController;
 use App\Http\Controllers\Client\ClientCommercialController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Comment\CommentController;
@@ -302,6 +303,17 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::get('/validate/{deal}', 'validateDeal')->name('validate');
             Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
         });
+
+        Route::prefix('/{client}/billings')->name('billings.')->controller(ClientBillingController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+
+            Route::get('/{deal}/edit', 'edit')->name('edit');
+            Route::put('/{deal}/edit', 'update')->name('update');
+
+            Route::delete('/trash/{deal?}', 'trash')->name('trash');
+            Route::patch('/restore/{deal?}', 'restore')->name('restore');
+            Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+        });
     });
 
     Route::prefix('deals')->group(function () {
@@ -330,9 +342,6 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
             Route::patch('/restore/{deal?}', 'restore')->name('restore');
             Route::delete('/delete/{deal?}', 'destroy')->name('delete');
-
-            Route::get('/validate/{deal}', 'validateDeal')->name('validate');
-            Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
         });
     });
 

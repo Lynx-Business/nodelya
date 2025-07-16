@@ -22,6 +22,8 @@ class BillingDealFormProps extends Resource
     public function __construct(
         public ?DealResource $deal,
 
+        public ?ClientResource $client,
+
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientResource::class)]
         public Lazy|DataCollection $clients,

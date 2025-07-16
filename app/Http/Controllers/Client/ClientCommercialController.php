@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Data\Client\ClientResource;
 use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
@@ -49,7 +50,7 @@ class ClientCommercialController extends Controller
 
         return Inertia::render('clients/commercial/Index', CommercialDealIndexProps::from([
             'request'                  => $data,
-            'client'                   => $client,
+            'client'                   => ClientResource::from($client),
             'accounting_period_months' => $months,
             'commercial_deals'         => Lazy::inertia(
                 function () use ($data, $accountingPeriod) {
@@ -95,7 +96,7 @@ class ClientCommercialController extends Controller
     public function create(Client $client)
     {
         return Inertia::render('clients/commercial/Create', CommercialDealFormProps::from([
-            'client'  => $client,
+            'client'  => ClientResource::from($client),
             'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::all())),
         ]));
@@ -130,7 +131,7 @@ class ClientCommercialController extends Controller
             'deal' => DealResource::from(
                 $deal->load('client', 'parent'),
             )->include('schedule', 'can_update'),
-            'client'  => $client,
+            'client'  => ClientResource::from($client),
             'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
         ]));

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Deal;
+namespace App\Http\Controllers\Client;
 
+use App\Data\Client\ClientResource;
 use App\Data\Deal\Billing\Form\BillingDealFormProps;
 use App\Data\Deal\Billing\Form\BillingDealFormRequest;
 use App\Data\Deal\Billing\Index\BillingDealIndexProps;
@@ -12,6 +13,7 @@ use App\Enums\Deal\DealScheduleStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\Deal;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Config;
@@ -19,15 +21,16 @@ use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
 
-class BillingDealController extends Controller
+class ClientBillingController extends Controller
 {
     /**
      * Display a listing of the resource
      */
-    public function index(BillingDealIndexRequest $data)
+    public function index(BillingDealIndexRequest $data, Client $client)
     {
         $months = [];
 
+        $data->client_ids = [$client->id];
         $accountingPeriod = $data->accounting_period;
 
         $months = [];
@@ -38,8 +41,9 @@ class BillingDealController extends Controller
             }
         }
 
-        return Inertia::render('deals/billing/Index', BillingDealIndexProps::from([
+        return Inertia::render('clients/billing/Index', BillingDealIndexProps::from([
             'request'       => $data,
+            'client'        => ClientResource::from($client),
             'billing_deals' => Lazy::inertia(
                 function () use ($data, $accountingPeriod) {
                     $paginatedDeals = $data->toQuery()
@@ -76,36 +80,22 @@ class BillingDealController extends Controller
             'accounting_period_months' => $months,
             'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
             'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
-            'clients'                  => Lazy::inertia(fn () => Services::client()->list()),
         ]));
     }
 
-    public function edit(Deal $deal)
+    public function edit(Client $client, Deal $deal)
     {
 
-        return Inertia::render('deals/billing/Edit', BillingDealFormProps::from([
+        return Inertia::render('clients/billing/Edit', BillingDealFormProps::from([
             'deal' => DealResource::from(
-                $deal->load([
-                    'client',
-                    'parent',
-                    'projectDepartment',
-                    'expenseCharges' => [
-                        'model',
-                        'expenseItem',
-                    ],
-                ]),
+                $deal->load('client', 'parent', 'projectDepartment'),
             )->include('schedule', 'can_update'),
+            'client'             => $client,
             'clients'            => Lazy::inertia(fn () => Services::client()->list()),
             'deals'              => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
             'schedule_status'    => Lazy::inertia(fn () => DealScheduleStatus::labels()),
             'projectDepartments' => Lazy::inertia(
                 fn () => Services::projectDepartment()->list(),
-            ),
-            'contractors' => Lazy::inertia(
-                fn () => Services::contractor()->list(),
-            ),
-            'expenseItems' => Lazy::inertia(
-                fn () => Services::expense()->itemsList(),
             ),
         ]));
     }
@@ -113,7 +103,7 @@ class BillingDealController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BillingDealFormRequest $data, Deal $deal)
+    public function update(BillingDealFormRequest $data, Client $client, Deal $deal)
     {
         /** @var ?Deal $deal */
         $newDeal = Services::billingDeal()->update->execute($data);
@@ -126,7 +116,7 @@ class BillingDealController extends Controller
 
         Services::toast()->success->execute(__('messages.deals.billings.update.success'));
 
-        return to_route('deals.billings.index');
+        return to_route('clients.billings.index', ['client' => $client]);
     }
 
     public function trash(DealOneOrManyRequest $data)
