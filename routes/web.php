@@ -293,7 +293,7 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
 
             Route::get('/create', 'create')->name('create');
             Route::post('/create', 'store')->name('store');
-            Route::get('/{deal}/edit', 'edit')->name('edit');
+            Route::get('/{deal}/edit', 'edit')->withTrashed()->name('edit');
             Route::put('/{deal}/edit', 'update')->name('update');
 
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
@@ -307,7 +307,7 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::prefix('/{client}/billings')->name('billings.')->controller(ClientBillingController::class)->group(function () {
             Route::get('/', 'index')->name('index');
 
-            Route::get('/{deal}/edit', 'edit')->name('edit');
+            Route::get('/{deal}/edit', 'edit')->withTrashed()->name('edit');
             Route::put('/{deal}/edit', 'update')->name('update');
 
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
@@ -322,7 +322,7 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::get('/create', 'create')->name('create')->can('create', Deal::class);
             Route::post('/create', 'store')->name('store')->can('create', Deal::class);
 
-            Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+            Route::get('/edit/{deal}', 'edit')->name('edit')->withTrashed()->can('view', 'deal');
             Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
 
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
@@ -336,7 +336,7 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::prefix('billing')->name('deals.billings.')->controller(BillingDealController::class)->group(function () {
             Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
 
-            Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+            Route::get('/edit/{deal}', 'edit')->name('edit')->withTrashed()->can('view', 'deal');
             Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
 
             Route::delete('/trash/{deal?}', 'trash')->name('trash');

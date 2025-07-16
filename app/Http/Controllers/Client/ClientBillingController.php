@@ -90,7 +90,7 @@ class ClientBillingController extends Controller
             'deal' => DealResource::from(
                 $deal->load('client', 'parent', 'projectDepartment'),
             )->include('schedule', 'can_update'),
-            'client'             => $client,
+            'client'             => ClientResource::from($client),
             'clients'            => Lazy::inertia(fn () => Services::client()->list()),
             'deals'              => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
             'schedule_status'    => Lazy::inertia(fn () => DealScheduleStatus::labels()),
