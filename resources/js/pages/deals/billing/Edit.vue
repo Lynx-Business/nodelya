@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BillingDealForm from '@/components/deal/Billing/BillingDealForm.vue';
+import BillingDealForm from '@/components/deal/billing/BillingDealForm.vue';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
 import { useBillingDealForm, useLayout } from '@/composables';
