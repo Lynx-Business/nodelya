@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('flow_categories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

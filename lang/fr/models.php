@@ -139,6 +139,7 @@ return [
             ],
         ],
     ],
+
     'client' => [
         'name' => [
             'one'  => 'client',
@@ -313,34 +314,23 @@ return [
     ],
 
     'flow' => [
-        'name'     => 'Contrôle de flux',
-        'category' => [
-            'name' => [
-                'one'  => 'catégorie de flux',
-                'many' => 'catégories de flux',
-            ],
-            'fields' => [
-                'name'       => 'nom',
-                'team_id'    => 'société',
-                'created_at' => 'créé le',
-                'updated_at' => 'modifié le',
-            ],
+        'name'   => 'Contrôle de flux',
+        'fields' => [
+            'category' => 'Désignation',
+            'amount'   => 'montant',
+            'date'     => 'date',
+
+            'team_id'          => 'société',
+            'flow_category_id' => 'catégorie de flux',
+            'category_id'      => 'catégorie de flux',
+            'category_name'    => 'catégorie de flux',
+            'amount_in_cents'  => 'montant (centimes)',
+            'charged_at'       => 'date du mouvement',
+            'created_at'       => 'créé le',
+            'updated_at'       => 'modifié le',
+            'charges'          => 'mouvements de flux',
         ],
-        'charge' => [
-            'name' => [
-                'one'  => 'mouvement de flux',
-                'many' => 'mouvements de flux',
-            ],
-            'fields' => [
-                'team_id'          => 'société',
-                'flow_category_id' => 'catégorie de flux',
-                'amount_in_cents'  => 'montant (centimes)',
-                'amount'           => 'montant',
-                'charged_at'       => 'date du mouvement',
-                'created_at'       => 'créé le',
-                'updated_at'       => 'modifié le',
-            ],
-        ],
+
     ],
 
 ];

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Flow;
 
+use App\Data\Flow\Form\FlowFormProps;
+use App\Data\Flow\Form\FlowFormRequest;
 use App\Data\Flow\Index\FlowIndexProps;
 use App\Data\Flow\Index\FlowIndexRequest;
 use App\Enums\Trashed\TrashedFilter;
@@ -77,15 +79,23 @@ class FlowController extends Controller
      */
     public function create()
     {
-        //
+
+        return Inertia::render('flows/Create', FlowFormProps::from([
+            'flowCategories' => Lazy::inertia(
+                fn () => Services::flow()->categoriesList(),
+            ),
+        ]));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FlowFormRequest $data)
     {
-        //
+
+        Services::flow()->createOrUpdateCharge->excute($data);
+
+        return redirect()->route('flows.index')->with('success', __('messages.created'));
     }
 
     /**

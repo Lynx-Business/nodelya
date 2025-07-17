@@ -360,4 +360,16 @@ return [
 
     ],
 
+    'flows' => [
+        'index' => [
+            'title' => 'Controle des flux',
+        ],
+        'create' => [
+            'title' => 'Ajouter une recette ou dépense',
+        ],
+        'edit' => [
+            'title' => 'Ajouter une recette ou dépense',
+        ],
+    ],
+
 ];

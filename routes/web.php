@@ -358,6 +358,8 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
 
     Route::prefix('/flows')->name('flows.')->controller(FlowController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/create', 'store')->name('store');
     });
 });
 

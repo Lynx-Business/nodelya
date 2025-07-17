@@ -1054,6 +1054,43 @@ export type ExpenseSubCategoryResource = {
     expense_items?: Array<ExpenseItemResource>;
 };
 export type ExpenseType = 'general' | 'employee' | 'contractor';
+export type FlowCategoryResource = {
+    id: number;
+    name: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
+export type FlowChargeData = {
+    category_id?: number;
+    category_name?: string;
+    date: string;
+    amount: number;
+};
+export type FlowChargeResource = {
+    id: number;
+    team_id: number;
+    flow_category_id: number;
+    amount_in_cents: number;
+    amount: number;
+    charged_at: string;
+    created_at?: string;
+    updated_at?: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
+export type FlowFormProps = {
+    flowCategories?: Array<FlowCategoryResource>;
+    flowCharges?: Array<FlowChargeResource>;
+};
+export type FlowFormRequest = {
+    charges: Array<FlowChargeData>;
+};
 export type FlowIndexProps = {
     request: FlowIndexRequest;
     accounting_period_months: Array<any>;

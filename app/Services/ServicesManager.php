@@ -110,4 +110,11 @@ class ServicesManager
     {
         return $this->comment ??= app(CommentService::class);
     }
+
+    protected ?FlowService $flow = null;
+
+    public function flow(): FlowService
+    {
+        return $this->flow ??= app(FlowService::class);
+    }
 }

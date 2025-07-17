@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\BelongsToTeam;
+use App\Traits\HasPolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read bool $can_delete
+ * @property-read bool $can_restore
+ * @property-read bool $can_trash
+ * @property-read bool $can_update
+ * @property-read bool $can_view
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlowCharge> $flowCharges
  * @property-read int|null $flow_charges_count
  * @property-read \App\Models\Team|null $team
@@ -32,6 +38,8 @@ class FlowCategory extends Model
 
     /** @use HasFactory<\Database\Factories\FlowCategoryFactory> */
     use HasFactory;
+
+    use HasPolicy;
 
     /**
      * The attributes that are mass assignable.

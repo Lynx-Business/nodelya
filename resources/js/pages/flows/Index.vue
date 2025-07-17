@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AccountingPeriodCombobox from '@/components/accounting-period/AccountingPeriodCombobox.vue';
+import { Button } from '@/components/ui/button';
 import {
     DataTable,
     DataTableBody,
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/custom/data-table';
 import { FormContent } from '@/components/ui/custom/form';
 import { TextInput } from '@/components/ui/custom/input';
+import { InertiaLink } from '@/components/ui/custom/link';
 import { Section, SectionContent } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useAlert, useFilters, useFormatter, useLayout, useLocale } from '@/composables';
@@ -21,6 +23,7 @@ import { FlowIndexProps, FlowIndexRequest, MonthlyExpenseData } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { reactiveOmit } from '@vueuse/core';
 import { trans } from 'laravel-vue-i18n';
+import { CirclePlusIcon } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 defineOptions({
@@ -110,6 +113,16 @@ const filters = useFilters<FlowIndexRequest>(
                 <FormContent class="flex items-center sm:flex">
                     <TextInput v-model="filters.q" type="search" />
                     <AccountingPeriodCombobox v-model="filters.accounting_period" required />
+                </FormContent>
+                <FormContent class="flex items-center justify-between">
+                    <Button as-child>
+                        <InertiaLink :href="route('flows.create')">
+                            <CirclePlusIcon />
+                            <CapitalizeText>
+                                {{ $t('pages.flows.create.title') }}
+                            </CapitalizeText>
+                        </InertiaLink>
+                    </Button>
                 </FormContent>
 
                 <DataTableContent tab="table">
