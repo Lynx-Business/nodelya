@@ -166,6 +166,8 @@ return [
         'management' => [
             'index' => [
                 'title' => 'Contrôle de gestion',
+                'real'  => 'réel',
+                'delta' => 'écart',
             ],
         ],
     ],

@@ -25,7 +25,7 @@ defineProps<Props>();
 <template>
     <Collapsible class="group/collapsible" as-child>
         <DataTableRow>
-            <DataTableCell class="bg-background sticky left-0 z-20 border-r p-0.5">
+            <DataTableCell class="p-0.5">
                 <CollapsibleTrigger as-child>
                     <Button class="w-full" variant="ghost" size="lg">
                         <Badge variant="secondary">

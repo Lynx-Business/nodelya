@@ -4,7 +4,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { DataTableCell, DataTableRow } from '@/components/ui/custom/data-table';
 import { LoadingIcon } from '@/components/ui/custom/loading';
 import { CapitalizeText } from '@/components/ui/custom/typography';
-import { AccountingPeriodResource, ExpenseManagementModelResource } from '@/types';
+import { AccountingPeriodResource, ExpenseManagementBudgetResource, ExpenseManagementModelResource } from '@/types';
+import { computedWithControl } from '@vueuse/core';
 import { useAxios } from '@vueuse/integrations/useAxios.mjs';
 import { ChevronRightIcon, ExternalLinkIcon } from 'lucide-vue-next';
 import ExpenseManagementBudgetRows from './ExpenseManagementBudgetRows.vue';
@@ -28,6 +29,15 @@ const { data, isLoading } = useAxios<ExpenseManagementModelResource[]>(
         },
     },
 );
+const models = computedWithControl(isLoading, () => data.value);
+
+function onUpdateBudgets(index: number, budgets: ExpenseManagementBudgetResource[]) {
+    data.value[index].cells = data.value[index].cells.map((cell, cellIndex) => ({
+        ...cell,
+        charge: budgets.reduce((total, budget) => total + budget.cells[cellIndex].charge, 0),
+    }));
+    models.trigger();
+}
 </script>
 
 <template>
@@ -40,9 +50,9 @@ const { data, isLoading } = useAxios<ExpenseManagementModelResource[]>(
         <DataTableCell colspan="100"> </DataTableCell>
     </DataTableRow>
     <template v-else>
-        <Collapsible class="group/collapsible" v-for="model in data" :key="model.model_id" as-child>
+        <Collapsible class="group/collapsible" v-for="(model, index) in models" :key="model.model_id" as-child>
             <DataTableRow>
-                <DataTableCell class="bg-background sticky left-0 z-10 border-r p-0.5">
+                <DataTableCell class="p-0.5">
                     <CollapsibleTrigger as-child>
                         <Button class="w-full" variant="ghost" size="lg">
                             <CapitalizeText>
@@ -66,7 +76,12 @@ const { data, isLoading } = useAxios<ExpenseManagementModelResource[]>(
                 <ExpenseManagementCells :accounting-period :cells="model.cells" disabled />
             </DataTableRow>
             <CollapsibleContent as-child>
-                <ExpenseManagementBudgetRows :accounting-period :model-type :model-id="model.model_id" />
+                <ExpenseManagementBudgetRows
+                    :accounting-period
+                    :model-type
+                    :model-id="model.model_id"
+                    @update:budgets="onUpdateBudgets(index, $event)"
+                />
             </CollapsibleContent>
         </Collapsible>
     </template>

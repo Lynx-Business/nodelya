@@ -13,6 +13,8 @@ class ExpenseManagementCellResource extends Resource
 
         public float $charge,
 
+        public ?int $charge_id = null,
+
         public ?bool $can_update = null,
     ) {
         $this->budget = round($budget, 2);

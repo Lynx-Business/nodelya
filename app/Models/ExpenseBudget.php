@@ -64,7 +64,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @method static Builder<static>|ExpenseBudget whereDeletedAt($value)
  * @method static Builder<static>|ExpenseBudget whereExpenseItemId($value)
  * @method static Builder<static>|ExpenseBudget whereId($value)
- * @method static Builder<static>|ExpenseBudget whereInAccountingPeriod(\App\Models\AccountingPeriod|int $accountingPeriod)
  * @method static Builder<static>|ExpenseBudget whereModelId($value)
  * @method static Builder<static>|ExpenseBudget whereModelType($value)
  * @method static Builder<static>|ExpenseBudget whereTeamId($value)

@@ -47,6 +47,7 @@ class ExpenseManagementBudgetResource extends Resource
                 return [
                     'budget'     => $expenseBudget->monthly_amount ?? 0,
                     'charge'     => $expenseCharge?->amount ?? 0,
+                    'charge_id'  => $expenseCharge?->getKey(),
                     'can_update' => $expenseCharge?->can_update ?? Gate::check('create', ExpenseCharge::class),
                 ];
             }),

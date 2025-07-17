@@ -954,6 +954,7 @@ export type ExpenseManagementBudgetResource = {
 export type ExpenseManagementCellResource = {
     budget: number;
     charge: number;
+    charge_id?: number;
     can_update?: boolean;
 };
 export type ExpenseManagementIndexProps = {

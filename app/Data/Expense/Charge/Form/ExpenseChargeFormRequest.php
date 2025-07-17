@@ -32,6 +32,10 @@ class ExpenseChargeFormRequest extends Data
     #[Computed]
     public int $amount_in_cents;
 
+    #[Hidden]
+    #[Computed]
+    public int $accounting_period_id;
+
     public function __construct(
         #[Hidden]
         #[FromRouteParameter('expenseCharge')]
@@ -54,6 +58,7 @@ class ExpenseChargeFormRequest extends Data
         public Optional|int|null $deal_id = null,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+        $this->accounting_period_id = Services::accountingPeriod()->currentId();
         $this->charged_at->startOfDay();
 
         if ($deal_id === null) {
