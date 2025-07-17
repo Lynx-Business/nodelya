@@ -33,6 +33,7 @@ return [
                 'client'              => 'Client',
                 'commercial_deals'    => 'Commerce',
                 'billing_deals'       => 'Facturation',
+                'flow'                => 'Controle des flux',
             ],
         ],
     ],

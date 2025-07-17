@@ -27,6 +27,7 @@ use App\Http\Controllers\Expense\Charge\ExpenseChargeController;
 use App\Http\Controllers\Expense\Item\ExpenseItemController;
 use App\Http\Controllers\Expense\Management\ExpenseManagementController;
 use App\Http\Controllers\Expense\SubCategory\ExpenseSubCategoryController;
+use App\Http\Controllers\Flow\FlowController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProjectDepartment\ProjectDepartmentController;
 use App\Http\Controllers\Settings\AppearanceSettingsController;
@@ -353,6 +354,10 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::post('/', 'store')->name('store')->can('create', Comment::class);
         Route::put('/{comment}', 'update')->name('update')->can('update', 'comment');
         Route::delete('/{comment}', 'destroy')->name('destroy')->can('delete', 'comment');
+    });
+
+    Route::prefix('/flows')->name('flows.')->controller(FlowController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 });
 

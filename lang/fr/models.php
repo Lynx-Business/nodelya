@@ -312,4 +312,35 @@ return [
         ],
     ],
 
+    'flow' => [
+        'name'     => 'Contrôle de flux',
+        'category' => [
+            'name' => [
+                'one'  => 'catégorie de flux',
+                'many' => 'catégories de flux',
+            ],
+            'fields' => [
+                'name'       => 'nom',
+                'team_id'    => 'société',
+                'created_at' => 'créé le',
+                'updated_at' => 'modifié le',
+            ],
+        ],
+        'charge' => [
+            'name' => [
+                'one'  => 'mouvement de flux',
+                'many' => 'mouvements de flux',
+            ],
+            'fields' => [
+                'team_id'          => 'société',
+                'flow_category_id' => 'catégorie de flux',
+                'amount_in_cents'  => 'montant (centimes)',
+                'amount'           => 'montant',
+                'charged_at'       => 'date du mouvement',
+                'created_at'       => 'créé le',
+                'updated_at'       => 'modifié le',
+            ],
+        ],
+    ],
+
 ];

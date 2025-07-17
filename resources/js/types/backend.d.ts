@@ -1054,6 +1054,24 @@ export type ExpenseSubCategoryResource = {
     expense_items?: Array<ExpenseItemResource>;
 };
 export type ExpenseType = 'general' | 'employee' | 'contractor';
+export type FlowIndexProps = {
+    request: FlowIndexRequest;
+    accounting_period_months: Array<any>;
+    table_data?: Array<any>;
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+};
+export type FlowIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
+    clients_items?: Array<ClientResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    accounting_period_id?: number;
+    trashed?: TrashedFilter;
+};
 export type ForgotPasswordProps = {
     status?: string;
 };

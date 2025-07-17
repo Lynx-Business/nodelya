@@ -90,6 +90,12 @@ const items = useRouterComputed((): NavItem[] => [
         icon: ReceiptEuroIcon,
         isActive: route().current('deals.billings.*'),
     },
+    {
+        title: trans('layouts.app.sidebar.items.flow'),
+        href: route('flows.index'),
+        icon: ReceiptEuroIcon,
+        isActive: route().current('flows.*'),
+    },
 ]);
 </script>
 

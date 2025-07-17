@@ -1,0 +1,122 @@
+<?php
+
+namespace App\Http\Controllers\Flow;
+
+use App\Data\Flow\Index\FlowIndexProps;
+use App\Data\Flow\Index\FlowIndexRequest;
+use App\Enums\Trashed\TrashedFilter;
+use App\Facades\Services;
+use App\Http\Controllers\Controller;
+use App\Models\Deal;
+use Carbon\CarbonPeriod;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Spatie\LaravelData\Lazy;
+
+class FlowController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(FlowIndexRequest $data)
+    {
+        $accountingPeriod = $data->accounting_period;
+        $months = [];
+
+        if ($accountingPeriod) {
+            $period = CarbonPeriod::create($accountingPeriod->starts_at, '1 month', $accountingPeriod->ends_at);
+            foreach ($period as $date) {
+                $months[] = $date->format('Y-m');
+            }
+        }
+
+        $tableData = [
+            [
+                'name'   => __('models.flow.name'),
+                'values' => [],
+            ],
+        ];
+
+        if ($accountingPeriod) {
+            $deals = Deal::billing()
+                ->whereInAccountingPeriod($accountingPeriod->id)
+                ->get();
+
+            $billingTotals = array_fill_keys($months, 0);
+
+            foreach ($deals as $deal) {
+                $schedules = $deal->schedule;
+
+                if ($schedules) {
+                    foreach ($schedules as $schedule) {
+                        foreach ($schedule->data as $item) {
+                            $monthKey = $item->date->format('Y-m');
+
+                            if (isset($billingTotals[$monthKey])) {
+                                $billingTotals[$monthKey] += $item->amount;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $tableData[0]['values'] = $billingTotals;
+        }
+
+        return Inertia::render('flows/Index', FlowIndexProps::from([
+            'request'                  => $data,
+            'table_data'               => Lazy::inertia(fn () => $tableData),
+            'accounting_period_months' => $months,
+            'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
+        ]));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+}
