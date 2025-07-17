@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Deal;
+namespace App\Http\Controllers\Client;
 
+use App\Data\Client\ClientResource;
 use App\Data\Deal\Commercial\Form\CommercialDealFormProps;
 use App\Data\Deal\Commercial\Form\CommercialDealFormRequest;
 use App\Data\Deal\Commercial\Index\CommercialDealIndexProps;
@@ -14,7 +15,7 @@ use App\Enums\Deal\DealStatus;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
-use App\Models\Contractor;
+use App\Models\Client;
 use App\Models\Deal;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -24,15 +25,16 @@ use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
 use Spatie\LaravelData\PaginatedDataCollection;
 
-class CommercialDealController extends Controller
+class ClientCommercialController extends Controller
 {
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      */
-    public function index(CommercialDealIndexRequest $data)
+    public function index(CommercialDealIndexRequest $data, Client $client)
     {
         $months = [];
 
+        $data->client_ids = [$client->id];
         $accountingPeriod = $data->accounting_period;
 
         $months = [];
@@ -46,9 +48,11 @@ class CommercialDealController extends Controller
             }
         }
 
-        return Inertia::render('deals/commercial/Index', CommercialDealIndexProps::from([
-            'request'          => $data,
-            'commercial_deals' => Lazy::inertia(
+        return Inertia::render('clients/commercial/Index', CommercialDealIndexProps::from([
+            'request'                  => $data,
+            'client'                   => ClientResource::from($client),
+            'accounting_period_months' => $months,
+            'commercial_deals'         => Lazy::inertia(
                 function () use ($data, $accountingPeriod) {
                     $paginatedDeals = $data->toQuery()
                         ->orderBy($data->sort_by, $data->sort_direction)
@@ -81,20 +85,18 @@ class CommercialDealController extends Controller
                     return $resources;
                 },
             ),
-            'accounting_period_months' => $months,
-            'trashed_filters'          => Lazy::inertia(fn () => TrashedFilter::labels()),
-            'accountingPeriods'        => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
-            'clients'                  => Lazy::inertia(fn () => Services::client()->list()),
+            'trashed_filters'   => Lazy::inertia(fn () => TrashedFilter::labels()),
+            'accountingPeriods' => Lazy::inertia(fn () => Services::accountingPeriod()->list()),
         ]));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Client $client)
     {
-
-        return Inertia::render('deals/commercial/Create', CommercialDealFormProps::from([
+        return Inertia::render('clients/commercial/Create', CommercialDealFormProps::from([
+            'client'  => ClientResource::from($client),
             'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::all())),
         ]));
@@ -103,7 +105,7 @@ class CommercialDealController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CommercialDealFormRequest $data)
+    public function store(CommercialDealFormRequest $data, Client $client)
     {
         /** @var ?Deal $deal */
         $deal = Services::commercialDeal()->createOrUpdate->execute($data);
@@ -116,19 +118,20 @@ class CommercialDealController extends Controller
 
         Services::toast()->success->execute(__('messages.deals.commercials.store.success'));
 
-        return to_route('deals.commercials.index');
+        return to_route('clients.commercials.index', ['client' => $client]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Deal $deal)
+    public function edit(Client $client, Deal $deal)
     {
 
-        return Inertia::render('deals/commercial/Edit', CommercialDealFormProps::from([
+        return Inertia::render('clients/commercial/Edit', CommercialDealFormProps::from([
             'deal' => DealResource::from(
                 $deal->load('client', 'parent'),
             )->include('schedule', 'can_update'),
+            'client'  => ClientResource::from($client),
             'clients' => Lazy::inertia(fn () => Services::client()->list()),
             'deals'   => Lazy::inertia(fn () => DealResource::collect(Deal::where('id', '!=', $deal->id)->get())),
         ]));
@@ -137,7 +140,7 @@ class CommercialDealController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CommercialDealFormRequest $data, Deal $deal)
+    public function update(CommercialDealFormRequest $data, Client $client, Deal $deal)
     {
         /** @var ?Deal $deal */
         $newDeal = Services::commercialDeal()->createOrUpdate->execute($data);
@@ -150,7 +153,7 @@ class CommercialDealController extends Controller
 
         Services::toast()->success->execute(__('messages.deals.commercials.update.success'));
 
-        return to_route('deals.commercials.index');
+        return to_route('clients.commercials.index', ['client' => $client]);
     }
 
     public function trash(DealOneOrManyRequest $data)
@@ -215,12 +218,13 @@ class CommercialDealController extends Controller
         return back();
     }
 
-    public function validateDeal(Deal $deal)
+    public function validateDeal(Client $client, Deal $deal)
     {
         $reference = $this->generateReference($deal);
 
         return Inertia::render('deals/commercial/Validate', CommercialDealValidateProps::from([
             'deal'         => DealResource::from($deal),
+            'client'       => ClientResource::from($client),
             'reference'    => $reference,
             'expenseItems' => Lazy::inertia(
                 fn () => Services::expense()->itemsList(),
@@ -234,8 +238,9 @@ class CommercialDealController extends Controller
         ]));
     }
 
-    public function processValidation(CommercialDealValidateRequest $data, Deal $deal)
+    public function processValidation(CommercialDealValidateRequest $data, Client $client, Deal $deal)
     {
+
         DB::transaction(function () use ($data, $deal) {
 
             $deal->update([
@@ -244,22 +249,11 @@ class CommercialDealController extends Controller
                 'status'                => DealStatus::VALIDATED,
             ]);
 
-            $deal->expenseCharges()->delete();
-
-            foreach ($data->expense_charges as $charge) {
-                $deal->expenseCharges()->create([
-                    'expense_item_id' => $charge->expense_item_id,
-                    'amount_in_cents' => $charge->amount_in_cents,
-                    'charged_at'      => $charge->charged_at,
-                    'model_type'      => app(Contractor::class)->getMorphClass(),
-                    'model_id'        => $charge->contractor_id ?? null,
-                ]);
-            }
         });
 
         Services::toast()->success->execute(__('messages.deals.commercials.validate.success'));
 
-        return to_route('deals.billings.index');
+        return to_route('clients.billings.index', ['client' => $client]);
     }
 
     private function generateReference(Deal $deal): string

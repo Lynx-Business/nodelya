@@ -11,6 +11,7 @@ use Spatie\LaravelData\Attributes\AutoInertiaLazy;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
+use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -22,6 +23,8 @@ class CommercialDealIndexProps extends Resource
         public CommercialDealIndexRequest $request,
 
         public array $accounting_period_months,
+
+        public ?ClientResource $client,
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(DealResource::class)]
@@ -37,7 +40,7 @@ class CommercialDealIndexProps extends Resource
 
         #[AutoInertiaLazy]
         #[DataCollectionOf(ClientResource::class)]
-        public Lazy|DataCollection $clients,
+        public Lazy|DataCollection|Optional $clients,
 
     ) {}
 }

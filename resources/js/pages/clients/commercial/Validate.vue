@@ -4,18 +4,18 @@ import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter, SectionHeader } from '@/components/ui/custom/section';
 import { CapitalizeText } from '@/components/ui/custom/typography';
 import { useCommercialDealValidateFrom, useLayout } from '@/composables';
-import { AppLayout } from '@/layouts';
+import ClientFormLayout from '@/layouts/client/ClientFormLayout.vue';
 import type { CommercialDealValidateProps } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import { SaveIcon } from 'lucide-vue-next';
 
 defineOptions({
-    layout: useLayout(AppLayout, () => ({
+    layout: useLayout(ClientFormLayout, () => ({
         breadcrumbs: [
             {
                 title: trans('pages.deals.commercials.index.title'),
-                href: route('clients.commercials.index', { client: route().params.client }),
+                href: route('clients.commercials.index'),
             },
             {
                 title: trans('pages.deals.commercials.edit.title'),
@@ -33,8 +33,7 @@ const props = defineProps<CommercialDealValidateProps>();
 const form = useCommercialDealValidateFrom(props.deal, props.reference);
 
 function submit() {
-    const { deal, client } = props;
-    form.post(route('clients.commercials.validate.process', { deal: deal, client: client! }));
+    form.post(route('clients.commercials.validate.process', { deal: props.deal, client: props.client! }));
 }
 </script>
 

@@ -6,7 +6,7 @@ import { clearSessionFilters, useLayout, usePageProp, useRouterComputed } from '
 import { AppLayout } from '@/layouts';
 import { NavItemHref } from '@/types';
 import { trans } from 'laravel-vue-i18n';
-import { SquarePenIcon } from 'lucide-vue-next';
+import { ReceiptEuroIcon, ShoppingBagIcon, SquarePenIcon } from 'lucide-vue-next';
 
 defineOptions({
     layout: useLayout(AppLayout, () => ({
@@ -29,7 +29,19 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
             title: trans('layouts.client.form.edit'),
             href: route('clients.edit', { client: route().params.client }),
             icon: SquarePenIcon,
-            isActive: route().current('client.edit'),
+            isActive: route().current('clients.edit'),
+        },
+        {
+            title: trans('layouts.client.form.commercial'),
+            href: route('clients.commercials.index', { client: route().params.client }),
+            icon: ShoppingBagIcon,
+            isActive: route().current('clients.commercials.*'),
+        },
+        {
+            title: trans('layouts.client.form.billing'),
+            href: route('clients.billings.index', { client: route().params.client }),
+            icon: ReceiptEuroIcon,
+            isActive: route().current('clients.billings.*'),
         },
     ].map((item) =>
         Object.assign(item, {
@@ -54,7 +66,7 @@ const sidebarNavItems = useRouterComputed((): NavItemHref[] =>
                 <Separator class="md:hidden" />
 
                 <div class="flex-1">
-                    <section class="space-y-8 *:not-[.w-full]:max-w-xl">
+                    <section class="space-y-8 *:not-[.w-full]:max-w-4xl">
                         <slot />
                     </section>
                 </div>

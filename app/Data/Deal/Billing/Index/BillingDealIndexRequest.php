@@ -8,6 +8,8 @@ use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
+use App\Models\Deal;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -76,5 +78,19 @@ class BillingDealIndexRequest extends Data
                     ->where($accountingPeriod->getQualifiedTeamIdColumn(), $team?->getKey()),
             ],
         ];
+    }
+
+    public function toQuery(?Builder $query = null): Builder
+    {
+        $query = $query ?? Deal::commercial();
+
+        return $query
+            ->search($this->q)
+            ->when($this->client_ids, fn (Builder $q) => $q->whereIntegerInRaw('client_id', $this->client_ids))
+            ->when($this->name, fn (Builder $q) => $q->where('name', 'like', '%'.$this->name.'%'))
+            ->when($this->amount, fn (Builder $q) => $q->where('amount_in_cents', Services::conversion()->priceToCents($this->amount)))
+            ->when($this->code, fn (Builder $q) => $q->where('code', 'like', '%'.$this->code.'%'))
+            ->when($this->trashed, fn (Builder $q) => $q->filterTrashed($this->trashed))
+            ->when($this->accounting_period, fn (Builder $q) => $q->whereInAccountingPeriod($this->accounting_period->id));
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\Setup\AuthSetupStepOneController;
 use App\Http\Controllers\Auth\Setup\AuthSetupStepTwoController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Banner\BannerDissmissController;
+use App\Http\Controllers\Client\ClientBillingController;
+use App\Http\Controllers\Client\ClientCommercialController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Contractor\ContractorController;
@@ -285,6 +287,33 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::delete('/trash/{client?}', 'trash')->name('trash');
         Route::patch('/restore/{client?}', 'restore')->name('restore');
         Route::delete('/delete/{client?}', 'destroy')->name('delete');
+
+        Route::prefix('/{client}/commercials')->name('commercials.')->controller(ClientCommercialController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+
+            Route::get('/create', 'create')->name('create');
+            Route::post('/create', 'store')->name('store');
+            Route::get('/{deal}/edit', 'edit')->withTrashed()->name('edit');
+            Route::put('/{deal}/edit', 'update')->name('update');
+
+            Route::delete('/trash/{deal?}', 'trash')->name('trash');
+            Route::patch('/restore/{deal?}', 'restore')->name('restore');
+            Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+
+            Route::get('/validate/{deal}', 'validateDeal')->name('validate');
+            Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
+        });
+
+        Route::prefix('/{client}/billings')->name('billings.')->controller(ClientBillingController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+
+            Route::get('/{deal}/edit', 'edit')->withTrashed()->name('edit');
+            Route::put('/{deal}/edit', 'update')->name('update');
+
+            Route::delete('/trash/{deal?}', 'trash')->name('trash');
+            Route::patch('/restore/{deal?}', 'restore')->name('restore');
+            Route::delete('/delete/{deal?}', 'destroy')->name('delete');
+        });
     });
 
     Route::prefix('deals')->group(function () {
@@ -293,7 +322,7 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
             Route::get('/create', 'create')->name('create')->can('create', Deal::class);
             Route::post('/create', 'store')->name('store')->can('create', Deal::class);
 
-            Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+            Route::get('/edit/{deal}', 'edit')->name('edit')->withTrashed()->can('view', 'deal');
             Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
 
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
@@ -307,15 +336,12 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::prefix('billing')->name('deals.billings.')->controller(BillingDealController::class)->group(function () {
             Route::get('/', 'index')->name('index')->can('viewAny', Deal::class);
 
-            Route::get('/edit/{deal}', 'edit')->name('edit')->can('view', 'deal');
+            Route::get('/edit/{deal}', 'edit')->name('edit')->withTrashed()->can('view', 'deal');
             Route::put('/edit/{deal}', 'update')->name('update')->can('update', 'deal');
 
             Route::delete('/trash/{deal?}', 'trash')->name('trash');
             Route::patch('/restore/{deal?}', 'restore')->name('restore');
             Route::delete('/delete/{deal?}', 'destroy')->name('delete');
-
-            Route::get('/validate/{deal}', 'validateDeal')->name('validate');
-            Route::post('/validate/{deal}', 'processValidation')->name('validate.process');
         });
     });
 

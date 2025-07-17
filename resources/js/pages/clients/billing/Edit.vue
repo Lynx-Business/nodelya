@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import BillingDealForm from '@/components/deal/Billing/BillingDealForm.vue';
+import BillingDealForm from '@/components/deal/billing/BillingDealForm.vue';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
 import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
 import { useBillingDealForm, useLayout } from '@/composables';
-import { AppLayout } from '@/layouts';
+import ClientFormLayout from '@/layouts/client/ClientFormLayout.vue';
 import { BillingDealFormProps } from '@/types';
 
 import { Head } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 
 defineOptions({
-    layout: useLayout(AppLayout, () => ({
+    layout: useLayout(ClientFormLayout, () => ({
         breadcrumbs: [
             {
                 title: trans('pages.deals.billings.index.title'),
@@ -18,7 +18,7 @@ defineOptions({
             },
             {
                 title: trans('pages.deals.billings.edit.title'),
-                href: route('deals.billings.edit', { deal: route().params.deal }),
+                href: route('clients.billings.edit', { deal: route().params.deal, client: route().params.client }),
             },
         ],
     })),
@@ -28,8 +28,8 @@ const props = defineProps<BillingDealFormProps>();
 const form = useBillingDealForm(props.deal);
 
 function submit() {
-    const { deal } = props;
-    form.put(route('deals.billings.edit', { deal: deal! }));
+    const { deal, client } = props;
+    form.put(route('clients.billings.edit', { deal: deal!, client: client! }));
 }
 </script>
 

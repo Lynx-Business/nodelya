@@ -35,6 +35,10 @@ class DealPolicy
 
     public function update(User $user, Deal $deal): bool
     {
+        if ($deal->is_trashed) {
+            return false;
+        }
+
         return $deal->isSameTeam($user->team_id);
     }
 

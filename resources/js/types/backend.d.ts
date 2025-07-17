@@ -123,6 +123,7 @@ export type BannerOneOrManyRequest = {
 };
 export type BillingDealFormProps = {
     deal?: DealResource;
+    client?: ClientResource;
     clients?: Array<ClientResource>;
     deals?: Array<DealResource>;
     schedule_status?: Array<{ value: DealScheduleStatus; label: string }>;
@@ -148,6 +149,7 @@ export type BillingDealFormRequest = {
 };
 export type BillingDealIndexProps = {
     request: BillingDealIndexRequest;
+    client?: ClientResource;
     accounting_period_months: Array<any>;
     billing_deals?: {
         data: Array<DealResource>;
@@ -261,6 +263,7 @@ export type CommentResource = {
 };
 export type CommercialDealFormProps = {
     deal?: DealResource;
+    client?: ClientResource;
     clients?: Array<ClientResource>;
     deals?: Array<DealResource>;
 };
@@ -282,6 +285,7 @@ export type CommercialDealFormRequest = {
 export type CommercialDealIndexProps = {
     request: CommercialDealIndexRequest;
     accounting_period_months: Array<any>;
+    client?: ClientResource;
     commercial_deals?: {
         data: Array<DealResource>;
         links: Array<{ url: string; label: string; active: boolean }>;
@@ -322,6 +326,7 @@ export type CommercialDealIndexRequest = {
 export type CommercialDealValidateProps = {
     deal: DealResource;
     reference: string;
+    client?: ClientResource;
     projectDepartments?: Array<ProjectDepartmentResource>;
     contractors?: Array<ContractorResource>;
     expenseItems?: Array<ExpenseItemResource>;

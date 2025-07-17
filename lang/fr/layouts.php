@@ -73,7 +73,9 @@ return [
     ],
     'client' => [
         'form' => [
-            'edit' => 'Détails',
+            'edit'       => 'Détails',
+            'commercial' => 'Commerce',
+            'billing'    => 'Facturation',
         ],
     ],
 

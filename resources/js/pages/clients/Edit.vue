@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import ClientCommentForm from '@/components/client/ClientCommentForm.vue';
 import ClientForm from '@/components/client/ClientForm.vue';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormSubmitButton } from '@/components/ui/custom/form';
-import { Section, SectionContent, SectionFooter, SectionHeader, SectionTitle } from '@/components/ui/custom/section';
+import { Section, SectionContent } from '@/components/ui/custom/section';
 import { useLayout } from '@/composables';
 import { useClientForm } from '@/composables/forms/clients/useClientForm';
 import { useCommentForm } from '@/composables/forms/comment/useCommentForm';
@@ -40,32 +40,32 @@ function submit() {
 <template>
     <Head :title="$t('pages.clients.update.title')" />
 
-    <div>
-        <Card>
+    <Section>
+        <SectionContent>
             <Form :form :disabled="!client?.can_update" @submit="submit()">
-                <Section>
-                    <SectionHeader>
-                        <SectionTitle>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
                             {{ $t('pages.clients.update.title') }}
-                        </SectionTitle>
-                    </SectionHeader>
-                    <SectionContent>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
                         <ClientForm />
-                    </SectionContent>
-                    <SectionFooter>
+                    </CardContent>
+                    <CardFooter>
                         <FormSubmitButton />
-                    </SectionFooter>
-                </Section>
+                    </CardFooter>
+                </Card>
             </Form>
-        </Card>
-        <Card class="mt-4">
+        </SectionContent>
+        <SectionContent class="mt-4">
             <Form :form="commentForm" :disabled="!client?.can_update">
-                <Section>
-                    <SectionContent>
+                <Card>
+                    <CardContent>
                         <ClientCommentForm />
-                    </SectionContent>
-                </Section>
+                    </CardContent>
+                </Card>
             </Form>
-        </Card>
-    </div>
+        </SectionContent>
+    </Section>
 </template>
