@@ -18,6 +18,7 @@ use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\RequiredWith;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 use Spatie\TypeScriptTransformer\Attributes\Hidden;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
@@ -49,8 +50,13 @@ class ExpenseChargeFormRequest extends Data
 
         #[InCurrentAccountingPeriod]
         public Carbon $charged_at,
+
+        public Optional|int|null $deal_id = null,
     ) {
         $this->amount_in_cents = Services::conversion()->priceToCents($amount);
+        if ($deal_id === null) {
+            $this->deal_id = Optional::create();
+        }
     }
 
     public static function attributes(): array

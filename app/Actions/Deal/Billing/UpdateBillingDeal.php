@@ -3,8 +3,11 @@
 namespace App\Actions\Deal\Billing;
 
 use App\Data\Deal\Billing\Form\BillingDealFormRequest;
+use App\Data\Expense\Charge\Form\ExpenseChargeFormRequest;
+use App\Facades\Services;
 use App\Models\Contractor;
 use App\Models\Deal;
+use App\Models\ExpenseCharge;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueueableAction\QueueableAction;
@@ -34,16 +37,18 @@ class UpdateBillingDeal
                 })->delete();
 
                 foreach ($data->expense_charges as $charge) {
-                    $deal->expenseCharges()->updateOrCreate(
-                        ['id' => $charge->id],
-                        [
-                            'expense_item_id' => $charge->expense_item_id,
-                            'amount_in_cents' => $charge->amount_in_cents,
-                            'charged_at'      => $charge->charged_at,
-                            'model_type'      => app(Contractor::class)->getMorphClass(),
-                            'model_id'        => $charge->contractor_id,
-                        ],
+                    $expenseCharge = isset($charge->id) ? ExpenseCharge::find($charge->id) : null;
+                    $expenseChargeFormRequest = new ExpenseChargeFormRequest(
+                        deal_id: $deal->id,
+                        expense_charge: $expenseCharge,
+                        model_type: app(Contractor::class)->getMorphClass(),
+                        model_id: $charge->contractor_id ?? null,
+                        expense_item_id: $charge->expense_item_id,
+                        amount: $charge->amount,
+                        charged_at: $charge->charged_at,
                     );
+
+                    Services::expense()->createOrUpdateCharge->execute($expenseChargeFormRequest);
                 }
             }
 
