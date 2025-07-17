@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->prependToPriorityList(
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\Auth\AuthTeamMiddleware::class,
+            \App\Http\Middleware\Auth\AuthSetupMiddleware::class,
         );
 
         $middleware->alias([

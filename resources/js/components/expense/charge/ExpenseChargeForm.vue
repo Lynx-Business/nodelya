@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import AccountingPeriodMonthSelect from '@/components/accounting-period/AccountingPeriodMonthSelect.vue';
 import ExpenseCategoryCombobox from '@/components/expense/category/ExpenseCategoryCombobox.vue';
 import ExpenseItemCombobox from '@/components/expense/item/ExpenseItemCombobox.vue';
 import ExpenseSubCategoryCombobox from '@/components/expense/sub-category/ExpenseSubCategoryCombobox.vue';
-import { DatePicker } from '@/components/ui/custom/date-picker';
 import {
     FormContent,
     FormControl,
@@ -99,11 +99,7 @@ function onItemChange() {
                     </CapitalizeText>
                 </FormLabel>
                 <FormControl>
-                    <DatePicker
-                        v-model="form.charged_at"
-                        :min-value="accountingPeriod?.starts_at"
-                        :max-value="accountingPeriod?.ends_at"
-                    />
+                    <AccountingPeriodMonthSelect v-model="form.charged_at" :accounting-period="accountingPeriod" />
                 </FormControl>
                 <FormError :message="form.errors.charged_at" />
             </FormField>

@@ -1,7 +1,7 @@
 import { usePage } from '@inertiajs/vue3';
 import { computed, ComputedRef, MaybeRefOrGetter, toValue } from 'vue';
 
-export function usePageProp<T>(data: MaybeRefOrGetter<string | undefined>): ComputedRef<T | undefined>;
+export function usePageProp<T>(data: MaybeRefOrGetter<string | undefined>): ComputedRef<T>;
 export function usePageProp<T>(
     data: MaybeRefOrGetter<string | undefined>,
     defaultValue: T,

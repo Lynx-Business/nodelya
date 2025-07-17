@@ -380,7 +380,9 @@ const format = useFormatter();
                                 {{ expenseCharge.expense_item?.name }}
                             </DataTableCell>
                             <DataTableCell>
-                                {{ format.date(expenseCharge.charged_at) }}
+                                <CapitalizeText>
+                                    {{ format.date(expenseCharge.charged_at, { month: 'long', year: '2-digit' }) }}
+                                </CapitalizeText>
                             </DataTableCell>
                             <DataTableCell>
                                 {{ format.price(expenseCharge.amount) }}

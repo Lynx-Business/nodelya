@@ -1,3 +1,13 @@
+<script lang="ts">
+export type NumberInputProps = NumberFieldRootProps & {
+    class?: HTMLAttributes['class'];
+};
+export type NumberInputEmits = NumberFieldRootEmits & {
+    blur: [];
+    focus: [];
+};
+</script>
+
 <script setup lang="ts">
 import {
     NumberField,
@@ -6,14 +16,18 @@ import {
     NumberFieldIncrement,
     NumberFieldInput,
 } from '@/components/ui/number-field';
+import { reactiveOmit } from '@vueuse/core';
 import { NumberFieldRootEmits, NumberFieldRootProps, useForwardPropsEmits } from 'reka-ui';
+import { HTMLAttributes } from 'vue';
 
-type Props = NumberFieldRootProps;
-const props = defineProps<Props>();
-const emits = defineEmits<NumberFieldRootEmits>();
+const props = defineProps<NumberInputProps>();
 
-const forwarded = useForwardPropsEmits(props, emits);
+const emits = defineEmits<NumberInputEmits>();
+
+const delegatedProps = reactiveOmit(props, 'class');
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
+
 <template>
     <NumberField v-bind="forwarded">
         <NumberFieldContent>
@@ -23,7 +37,7 @@ const forwarded = useForwardPropsEmits(props, emits);
             >
                 <slot name="start" />
             </NumberFieldDecrement>
-            <NumberFieldInput />
+            <NumberFieldInput :class="props.class" @focus="$emit('focus')" @blur="$emit('blur')" />
             <NumberFieldIncrement
                 class="text-muted-foreground pointer-events-none text-xs !opacity-100"
                 v-if="$slots.end"

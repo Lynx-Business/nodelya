@@ -20,19 +20,10 @@ class ExpenseBudgetFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_id'         => Team::factory(),
-            'expense_item_id' => ExpenseItem::factory(),
-            'amount_in_cents' => fake()->randomNumber(9, strict: true),
-            'starts_at'       => fake()->dateTimeBetween('now', '+1 year'),
-            'ends_at'         => fn (array $attributes) => fake()->dateTimeBetween(data_get($attributes, 'starts_at'), '+3 years'),
+            'team_id'              => Team::factory(),
+            'accounting_period_id' => AccountingPeriod::factory(),
+            'expense_item_id'      => ExpenseItem::factory(),
+            'amount_in_cents'      => fake()->randomNumber(9, strict: true),
         ];
-    }
-
-    public function forAccountingPeriod(AccountingPeriod $accountingPeriod): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'starts_at' => $accountingPeriod->starts_at,
-            'ends_at'   => $accountingPeriod->ends_at,
-        ]);
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('creator_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('name');
+            $table->json('settings')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
