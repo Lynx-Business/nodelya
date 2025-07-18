@@ -286,6 +286,15 @@ return [
         ],
     ],
 
+    'treasury' => [
+        'index' => [
+            'title'          => 'Trésorerie',
+            'real_amount'    => 'Trésorerie',
+            'planned_amount' => 'Cible',
+            'base_amount'    => 'Montant initial',
+        ],
+    ],
+
     'users' => [
         'members' => [
             'index' => [

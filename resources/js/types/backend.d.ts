@@ -1087,7 +1087,7 @@ export type MonthlyExpenseData = {
     status: string;
     date: string;
 };
-export type PermissionName = 'client' | 'expenses' | 'deal' | 'comment';
+export type PermissionName = 'client' | 'expenses' | 'deal' | 'comment' | 'treasury';
 export type PermissionResource = {
     id: number;
     name: string;
@@ -1259,6 +1259,19 @@ export type ToastMessagesData = {
     error?: string;
 };
 export type TrashedFilter = 'only' | 'with';
+export type TreasuryIndexProps = {
+    request: TreasuryIndexRequest;
+    months?: Array<TreasuryMonthResource>;
+};
+export type TreasuryIndexRequest = {
+    starts_at?: string;
+    ends_at?: string;
+};
+export type TreasuryMonthResource = {
+    date: string;
+    real_amount: number;
+    planned_amount: number;
+};
 export type UpdateEmployeeEndsAtRequest = {
     ends_at: string;
 };

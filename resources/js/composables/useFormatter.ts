@@ -1,12 +1,12 @@
 import { DateValue, getLocalTimeZone } from '@internationalized/date';
-import { injectConfigProviderContext, useDateFormatter } from 'reka-ui';
+import { useDateFormatter } from 'reka-ui';
 import { useLocale } from './useLocale';
 import { useParser } from './useParser';
+
 export function useFormatter() {
     const parse = useParser();
 
     const { locale } = useLocale();
-    const config = injectConfigProviderContext();
 
     return {
         date(value?: DateValue | string, options?: Intl.DateTimeFormatOptions): string {
@@ -15,7 +15,7 @@ export function useFormatter() {
                 if (!date) {
                     return '';
                 }
-                const formatter = useDateFormatter(config.locale?.value ?? locale.value);
+                const formatter = useDateFormatter(locale.value);
                 return formatter.custom(date.toDate(getLocalTimeZone()), options ?? { dateStyle: 'medium' });
             } catch (error) {
                 console.error(error);
@@ -29,6 +29,15 @@ export function useFormatter() {
             } catch (error) {
                 console.error(error);
                 return '';
+            }
+        },
+        unix(value?: DateValue | string): number {
+            try {
+                const date = parse.toDateTime(value);
+                return date?.toDate(getLocalTimeZone()).getTime() ?? 0;
+            } catch (error) {
+                console.error(error);
+                return 0;
             }
         },
         price(value?: number | string): string {

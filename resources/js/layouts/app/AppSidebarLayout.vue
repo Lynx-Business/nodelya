@@ -11,6 +11,7 @@ import { trans } from 'laravel-vue-i18n';
 
 import {
     BanknoteIcon,
+    ChartLineIcon,
     Columns3CogIcon,
     LayoutGridIcon,
     MonitorCogIcon,
@@ -89,6 +90,13 @@ const items = useRouterComputed((): NavItem[] => [
         href: route('deals.billings.index'),
         icon: ReceiptEuroIcon,
         isActive: route().current('deals.billings.*'),
+    },
+    {
+        title: trans('layouts.app.sidebar.items.treasury'),
+        href: route('treasury.index'),
+        icon: ChartLineIcon,
+        hidden: !user.permissions?.includes('treasury'),
+        isActive: route().current('treasury.*'),
     },
 ]);
 </script>

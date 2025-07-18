@@ -24,6 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.not_ready' => \App\Http\Middleware\Auth\AuthNotReadyMiddleware::class,
             'auth.owner'     => \App\Http\Middleware\Auth\AuthOwnerMiddleware::class,
             'auth.setup'     => \App\Http\Middleware\Auth\AuthSetupMiddleware::class,
+
+            'role'               => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission'         => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
         $middleware->web(append: [
             \App\Http\Middleware\HandleLocale::class,

@@ -40,6 +40,7 @@ return [
             'client'   => 'clients',
             'expenses' => 'dépenses',
             'deal'     => 'Commerces / Facturations',
+            'treasury' => 'Trésorerie',
         ],
     ],
 

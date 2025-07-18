@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Permission\PermissionName;
 use App\Http\Controllers\AccountingPeriod\AccountingPeriodController;
 use App\Http\Controllers\Auth\Setup\AuthSetupNotReadyController;
 use App\Http\Controllers\Auth\Setup\AuthSetupStepOneController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Settings\PasswordSettingsController;
 use App\Http\Controllers\Settings\ProfileSettingsController;
 use App\Http\Controllers\Settings\SecuritySettingsController;
 use App\Http\Controllers\Team\TeamController;
+use App\Http\Controllers\Treasury\TreasuryController;
 use App\Http\Controllers\User\UserMemberController;
 use App\Models\AccountingPeriod;
 use App\Models\Client;
@@ -50,6 +52,7 @@ use App\Models\ProjectDepartment;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Middleware\PermissionMiddleware;
 
 Route::post('/verification/code', [VerifyEmailController::class, 'code'])->name('verification.code')->middleware(['auth']);
 
@@ -353,6 +356,10 @@ Route::middleware(['auth', 'auth.setup', 'auth.include', 'banner.include'])->gro
         Route::post('/', 'store')->name('store')->can('create', Comment::class);
         Route::put('/{comment}', 'update')->name('update')->can('update', 'comment');
         Route::delete('/{comment}', 'destroy')->name('destroy')->can('delete', 'comment');
+    });
+
+    Route::prefix('/treasury')->name('treasury.')->controller(TreasuryController::class)->middleware([PermissionMiddleware::using(PermissionName::TREASURY)])->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 });
 

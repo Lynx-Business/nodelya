@@ -36,6 +36,7 @@
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
     --radius: 0.5rem;
+
     --sidebar: var(--primary);
     --sidebar-background: var(--sidebar);
     --sidebar-foreground: var(--primary-foreground);
@@ -45,6 +46,16 @@
     --sidebar-accent-foreground: var(--accent-foreground);
     --sidebar-border: var(--sidebar-foreground);
     --sidebar-ring: var(--ring);
+
+    --vis-tooltip-background-color: none !important;
+    --vis-tooltip-border-color: none !important;
+    --vis-tooltip-text-color: none !important;
+    --vis-tooltip-shadow-color: none !important;
+    --vis-tooltip-backdrop-filter: none !important;
+    --vis-tooltip-padding: none !important;
+    --vis-primary-color: 212 65% 19%;
+    --vis-secondary-color: 359 74% 46%;
+    --vis-text-color: 222.2 84% 4.9%;
 
     --status-uncertain: var(--color-violet-500);
     --status-pending_invoicing: var(--color-yellow-500);
