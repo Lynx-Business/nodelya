@@ -5,9 +5,9 @@ namespace App\Data\Flow;
 use App\Facades\Services;
 use App\Models\FlowCategory;
 use Spatie\LaravelData\Attributes\Computed;
-use Spatie\LaravelData\Attributes\Hidden;
 use Spatie\LaravelData\Attributes\MergeValidationRules;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\Hidden;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]

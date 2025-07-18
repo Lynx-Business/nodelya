@@ -1065,7 +1065,6 @@ export type FlowCategoryResource = {
     can_delete?: boolean;
 };
 export type FlowChargeData = {
-    amount_in_cents: number;
     category?: FlowCategoryResource;
     id?: number;
     category_id: number;
