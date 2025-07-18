@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Flow;
 
+use App\Data\Flow\FlowResource;
 use App\Data\Flow\Form\FlowFormProps;
 use App\Data\Flow\Form\FlowFormRequest;
 use App\Data\Flow\Index\FlowIndexProps;
@@ -10,9 +11,7 @@ use App\Enums\Charge\ChargeFrequency;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
-use App\Models\Deal;
 use App\Models\FlowCategory;
-use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\LaravelData\Lazy;
@@ -25,67 +24,22 @@ class FlowController extends Controller
     public function index(FlowIndexRequest $data)
     {
         $accountingPeriod = $data->accounting_period;
-        $months = [];
+        $months = $accountingPeriod?->months->map(fn ($m) => $m->format('Y-m'))->toArray() ?? [];
+        $tableData = [];
 
         if ($accountingPeriod) {
-            $period = CarbonPeriod::create($accountingPeriod->starts_at, '1 month', $accountingPeriod->ends_at);
-            foreach ($period as $date) {
-                $months[] = $date->format('Y-m');
-            }
-        }
 
-        $tableData = [
-            [
-                'name'   => __('models.flow.name'),
-                'values' => [],
-            ],
-        ];
+            $tableData[] = FlowResource::billing($accountingPeriod);
+            $tableData[] = FlowResource::expenseCharges($accountingPeriod);
 
-        if ($accountingPeriod) {
-            $deals = Deal::billing()
-                ->whereInAccountingPeriod($accountingPeriod->id)
-                ->get();
-
-            $billingTotals = array_fill_keys($months, 0);
-
-            foreach ($deals as $deal) {
-                $schedules = $deal->schedule;
-
-                if ($schedules) {
-                    foreach ($schedules as $schedule) {
-                        foreach ($schedule->data as $item) {
-                            $monthKey = $item->date->format('Y-m');
-
-                            if (isset($billingTotals[$monthKey])) {
-                                $billingTotals[$monthKey] += $item->amount;
-                            }
-                        }
-                    }
-                }
-            }
-
-            $tableData[0]['values'] = $billingTotals;
-
-            $categories = FlowCategory::with(['flowCharges' => function ($query) use ($accountingPeriod) {
-                $query->whereInAccountingPeriod($accountingPeriod->id);
-            }])->get();
-
-            foreach ($categories as $category) {
-                $categoryTotals = array_fill_keys($months, 0);
-
-                foreach ($category->flowCharges as $charge) {
-                    $monthKey = $charge->charged_at->format('Y-m');
-
-                    if (isset($categoryTotals[$monthKey])) {
-                        $categoryTotals[$monthKey] += $charge->amount;
-                    }
-                }
-
-                $tableData[] = [
-                    'name'   => $category->name,
-                    'values' => $categoryTotals,
-                ];
-            }
+            FlowCategory::with(['flowCharges' => function ($query) use ($accountingPeriod) {
+                $query->whereBetween('charged_at', [
+                    $accountingPeriod->starts_at,
+                    $accountingPeriod->ends_at,
+                ]);
+            }])->get()->each(function ($category) use (&$tableData, $accountingPeriod) {
+                $tableData[] = FlowResource::flowCategory($category, $accountingPeriod);
+            });
         }
 
         return Inertia::render('flows/Index', FlowIndexProps::from([

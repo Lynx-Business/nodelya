@@ -25,18 +25,19 @@ use Illuminate\Support\Facades\DB;
  * @property-read \App\Models\Team $team
  *
  * @method static \Database\Factories\FlowChargeFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereAmountInCents($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereBelongsToFlowCategory(\App\Models\FlowCategory|int $flowCategory)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereBelongsToTeam(\App\Models\Team|int $team)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereChargedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereFlowCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereTeamId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCharge whereUpdatedAt($value)
+ * @method static Builder<static>|FlowCharge newModelQuery()
+ * @method static Builder<static>|FlowCharge newQuery()
+ * @method static Builder<static>|FlowCharge query()
+ * @method static Builder<static>|FlowCharge whereAmountInCents($value)
+ * @method static Builder<static>|FlowCharge whereBelongsToFlowCategory(\App\Models\FlowCategory|int $flowCategory)
+ * @method static Builder<static>|FlowCharge whereBelongsToTeam(\App\Models\Team|int $team)
+ * @method static Builder<static>|FlowCharge whereChargedAt($value)
+ * @method static Builder<static>|FlowCharge whereCreatedAt($value)
+ * @method static Builder<static>|FlowCharge whereFlowCategoryId($value)
+ * @method static Builder<static>|FlowCharge whereId($value)
+ * @method static Builder<static>|FlowCharge whereInAccountingPeriod(\App\Models\AccountingPeriod|int $accountingPeriod)
+ * @method static Builder<static>|FlowCharge whereTeamId($value)
+ * @method static Builder<static>|FlowCharge whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

@@ -1065,6 +1065,7 @@ export type FlowCategoryResource = {
     can_delete?: boolean;
 };
 export type FlowChargeData = {
+    amount_in_cents: number;
     category?: FlowCategoryResource;
     id?: number;
     category_id: number;
@@ -1112,6 +1113,13 @@ export type FlowIndexRequest = {
     accounting_period_id?: number;
     trashed?: TrashedFilter;
 };
+export type FlowResource = {
+    type: FlowRowType;
+    name: string;
+    values: Array<any>;
+    categoryId?: number;
+};
+export type FlowRowType = 'billing' | 'flow_categories' | 'expense_charge';
 export type ForgotPasswordProps = {
     status?: string;
 };

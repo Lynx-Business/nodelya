@@ -46,7 +46,7 @@ class FlowIndexRequest extends Data
         }
 
         if ($period) {
-            $this->accounting_period = AccountingPeriodResource::from($period);
+            $this->accounting_period = AccountingPeriodResource::from($period)->include('months');
         }
     }
 
