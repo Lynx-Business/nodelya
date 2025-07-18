@@ -5,8 +5,6 @@ namespace App\Data\Expense\Charge;
 use App\Data\AccountingPeriod\AccountingPeriodResource;
 use App\Data\Contractor\ContractorResource;
 use App\Data\Expense\Item\ExpenseItemResource;
-use App\Data\Expense\Item\ExpenseItemResource;
-use App\Enums\Expense\ExpenseType;
 use App\Enums\Expense\ExpenseType;
 use App\Models\AccountingPeriod;
 use App\Models\Contractor;
