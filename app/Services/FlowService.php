@@ -13,8 +13,8 @@ use Closure;
 class FlowService
 {
     public function __construct(
-        public CreateOrUpdateFlowCategory $createOrUpdateCategory,
         public CreateOrUpdateFlowCharge $createOrUpdateCharge,
+        public CreateOrUpdateFlowCategory $createOrUpdateCategory,
     ) {}
 
     /**

@@ -189,6 +189,7 @@ export type BillingDealIndexRequest = {
     client_ids?: null | Array<number>;
     trashed?: TrashedFilter;
 };
+export type ChargeFrequency = 'month' | 'semester' | 'quarter';
 export type ClientFormProps = {
     client?: ClientResource;
     comments?: Array<CommentResource>;
@@ -1064,8 +1065,9 @@ export type FlowCategoryResource = {
     can_delete?: boolean;
 };
 export type FlowChargeData = {
-    category_id?: number;
-    category_name?: string;
+    category?: FlowCategoryResource;
+    id?: number;
+    category_id: number;
     date: string;
     amount: number;
 };
@@ -1087,6 +1089,7 @@ export type FlowChargeResource = {
 export type FlowFormProps = {
     flowCategories?: Array<FlowCategoryResource>;
     flowCharges?: Array<FlowChargeResource>;
+    charge_frequency?: Array<{ value: ChargeFrequency; label: string }>;
 };
 export type FlowFormRequest = {
     charges: Array<FlowChargeData>;

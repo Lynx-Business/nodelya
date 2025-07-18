@@ -4,37 +4,40 @@ namespace App\Actions\Flow;
 
 use App\Data\Flow\Form\FlowFormRequest;
 use App\Models\FlowCharge;
-use App\Services\FlowService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueueableAction\QueueableAction;
 
 class CreateOrUpdateFlowCharge
 {
-    public function execute(FlowFormRequest $data): ?FlowCharge
+    use QueueableAction;
+
+    public function execute(FlowFormRequest $data): ?bool
     {
         DB::beginTransaction();
         try {
-            $flowService = app(FlowService::class);
             foreach ($data->charges as $charge) {
                 $categoryId = $charge->category_id;
-                if (! $categoryId && $charge->category_name) {
-                    $category = $flowService->createOrUpdateCategory->execute([
-                        'name' => $charge->category_name,
+                if ($charge->id) {
+                    FlowCharge::where('id', $charge->id)
+                        ->update([
+                            'flow_category_id' => $categoryId,
+                            'amount_in_cents'  => $charge->amount_in_cents,
+                            'charged_at'       => $charge->date,
+                        ]);
+                } else {
+                    FlowCharge::create([
+                        'flow_category_id' => $categoryId,
+                        'amount_in_cents'  => $charge->amount_in_cents,
+                        'charged_at'       => $charge->date,
                     ]);
-                    $categoryId = $category?->id;
                 }
-                FlowCharge::create([
-                    'flow_category_id' => $categoryId,
-                    'amount'           => $charge->amount,
-                    'amount_in_cents'  => (int) ($charge->amount * 100),
-                    'charged_at'       => $charge->date,
-                ]);
             }
             DB::commit();
 
-            return $charge;
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage(), $th->getTrace());
+            return true;
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage(), $e->getTrace());
             DB::rollBack();
 
             return null;

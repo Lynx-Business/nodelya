@@ -59,4 +59,12 @@ return [
         ],
     ],
 
+    'charge' => [
+        'frequency' => [
+            'month'    => 'Mensuelle',
+            'semester' => 'Semestrielle',
+            'quarter'  => 'Trimestrielle',
+        ],
+    ],
+
 ];

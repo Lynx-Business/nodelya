@@ -2,8 +2,8 @@ import { useComputedForm } from '@/composables';
 import type { FlowChargeData, FlowFormRequest } from '@/types/backend';
 
 export function useFlowForm() {
-    const form = useComputedForm<FlowFormRequest>({
-        charges: [],
+    const form = useComputedForm({
+        charges: [] as FlowChargeData[],
     });
 
     form.transform(transformFlowForm);
@@ -14,15 +14,14 @@ export function useFlowForm() {
 export type FlowForm = ReturnType<typeof useFlowForm>;
 export type FlowFormData = ReturnType<FlowForm['data']>;
 
-function transformFlowForm(data: FlowFormRequest): FlowFormRequest {
+function transformFlowForm(data: FlowFormData): FlowFormRequest {
     return {
-        charges: Array.isArray(data.charges)
-            ? data.charges.map((item: FlowChargeData) => ({
-                  category_id: item.category_id,
-                  category_name: item.category_name,
-                  date: item.date,
-                  amount: item.amount,
-              }))
-            : [],
+        charges: data.charges
+            .filter((item) => item.category?.id != null)
+            .map((item: FlowChargeData) => ({
+                category_id: item.category!.id,
+                date: item.date,
+                amount: item.amount,
+            })),
     };
 }

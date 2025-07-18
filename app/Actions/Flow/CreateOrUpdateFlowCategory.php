@@ -5,9 +5,12 @@ namespace App\Actions\Flow;
 use App\Models\FlowCategory;
 use DB;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueueableAction\QueueableAction;
 
 class CreateOrUpdateFlowCategory
 {
+    use QueueableAction;
+
     public function execute(array $data): ?FlowCategory
     {
         DB::beginTransaction();

@@ -101,4 +101,10 @@ return [
         ],
     ],
 
+    'flow' => [
+        'list' => [
+            'title' => 'Dépenses / Recettes rattechées',
+        ],
+        'recurrent_charge' => 'Dépenses / Recettes Récurrentes',
+    ],
 ];

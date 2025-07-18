@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
+ * @property string $name
+ * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read bool $can_delete
@@ -19,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read bool $can_view
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlowCharge> $flowCharges
  * @property-read int|null $flow_charges_count
- * @property-read \App\Models\Team|null $team
+ * @property-read \App\Models\Team $team
  *
  * @method static \Database\Factories\FlowCategoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory newModelQuery()
@@ -28,6 +30,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory whereBelongsToTeam(\App\Models\Team|int $team)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FlowCategory whereUpdatedAt($value)
  *
  * @mixin \Eloquent

@@ -6,6 +6,7 @@ use App\Data\Flow\Form\FlowFormProps;
 use App\Data\Flow\Form\FlowFormRequest;
 use App\Data\Flow\Index\FlowIndexProps;
 use App\Data\Flow\Index\FlowIndexRequest;
+use App\Enums\Charge\ChargeFrequency;
 use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
@@ -79,9 +80,9 @@ class FlowController extends Controller
      */
     public function create()
     {
-
         return Inertia::render('flows/Create', FlowFormProps::from([
-            'flowCategories' => Lazy::inertia(
+            'charge_frequency' => Lazy::inertia(fn () => ChargeFrequency::labels()),
+            'flowCategories'   => Lazy::inertia(
                 fn () => Services::flow()->categoriesList(),
             ),
         ]));
@@ -93,9 +94,17 @@ class FlowController extends Controller
     public function store(FlowFormRequest $data)
     {
 
-        Services::flow()->createOrUpdateCharge->excute($data);
+        $charges = Services::flow()->createOrUpdateCharge->execute($data);
 
-        return redirect()->route('flows.index')->with('success', __('messages.created'));
+        if (is_null($charges)) {
+            Services::toast()->error->execute();
+
+            return back();
+        }
+
+        Services::toast()->success->execute(__('messages.flows.store.success'));
+
+        return to_route('flows.index');
     }
 
     /**
