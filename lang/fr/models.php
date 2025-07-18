@@ -139,6 +139,7 @@ return [
             ],
         ],
     ],
+
     'client' => [
         'name' => [
             'one'  => 'client',
@@ -310,6 +311,26 @@ return [
             'updated_at' => 'modifié le',
             'is_edited'  => 'modifié',
         ],
+    ],
+
+    'flow' => [
+        'name'   => 'Contrôle de flux',
+        'fields' => [
+            'category' => 'Désignation',
+            'amount'   => 'montant',
+            'date'     => 'date',
+
+            'team_id'          => 'société',
+            'flow_category_id' => 'catégorie de flux',
+            'category_id'      => 'catégorie de flux',
+            'category_name'    => 'catégorie de flux',
+            'amount_in_cents'  => 'montant (centimes)',
+            'charged_at'       => 'date du mouvement',
+            'created_at'       => 'créé le',
+            'updated_at'       => 'modifié le',
+            'charges'          => 'mouvements de flux',
+        ],
+
     ],
 
 ];

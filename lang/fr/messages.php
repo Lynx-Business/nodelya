@@ -365,4 +365,24 @@ return [
         ],
     ],
 
+    'flows' => [
+        'store' => [
+            'success' => 'Dépenses / Recettes créées avec succès',
+        ],
+        'update' => [
+            'success' => 'Dépenses / Recettes mises à jour avec succès',
+        ],
+        'trash' => [
+            'confirm' => 'Êtes-vous sûr de vouloir archiver les dépenses / les recettes ?',
+            'success' => 'Dépenses / Recettes archivées avec succès',
+        ],
+        'restore' => [
+            'confirm' => 'Êtes-vous sûr de vouloir restaurer les dépenses / les recettes ?',
+            'success' => 'Dépenses / Recettes restaurées avec succès',
+        ],
+        'delete' => [
+            'confirm' => 'Êtes-vous sûr de vouloir supprimer les dépenses / les recettes ?',
+            'success' => 'Dépenses / Recettes supprimées avec succès',
+        ],
+    ],
 ];

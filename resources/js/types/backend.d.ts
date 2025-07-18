@@ -189,6 +189,7 @@ export type BillingDealIndexRequest = {
     client_ids?: null | Array<number>;
     trashed?: TrashedFilter;
 };
+export type ChargeFrequency = 'month' | 'semester' | 'quarter';
 export type ClientFormProps = {
     client?: ClientResource;
     comments?: Array<CommentResource>;
@@ -1054,6 +1055,70 @@ export type ExpenseSubCategoryResource = {
     expense_items?: Array<ExpenseItemResource>;
 };
 export type ExpenseType = 'general' | 'employee' | 'contractor';
+export type FlowCategoryResource = {
+    id: number;
+    name: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
+export type FlowChargeData = {
+    category?: FlowCategoryResource;
+    id?: number;
+    category_id: number;
+    date: string;
+    amount: number;
+};
+export type FlowChargeResource = {
+    id: number;
+    team_id: number;
+    flow_category_id: number;
+    amount_in_cents: number;
+    amount: number;
+    charged_at: string;
+    created_at?: string;
+    updated_at?: string;
+    can_view?: boolean;
+    can_update?: boolean;
+    can_trash?: boolean;
+    can_restore?: boolean;
+    can_delete?: boolean;
+};
+export type FlowFormProps = {
+    flowCategories?: Array<FlowCategoryResource>;
+    flowCharges?: Array<FlowChargeResource>;
+    charge_frequency?: Array<{ value: ChargeFrequency; label: string }>;
+};
+export type FlowFormRequest = {
+    charges: Array<FlowChargeData>;
+};
+export type FlowIndexProps = {
+    request: FlowIndexRequest;
+    accounting_period_months: Array<any>;
+    table_data?: Array<any>;
+    trashed_filters?: Array<{ value: TrashedFilter; label: string }>;
+    accountingPeriods?: Array<AccountingPeriodResource>;
+};
+export type FlowIndexRequest = {
+    accounting_period?: AccountingPeriodResource;
+    clients_items?: Array<ClientResource>;
+    q?: string;
+    page?: number;
+    per_page?: number;
+    sort_by: string;
+    sort_direction: string;
+    accounting_period_id?: number;
+    trashed?: TrashedFilter;
+};
+export type FlowResource = {
+    type: FlowRowType;
+    name: string;
+    values: Array<any>;
+    categoryId?: number;
+};
+export type FlowRowType = 'billing' | 'flow_categories' | 'expense_charge';
 export type ForgotPasswordProps = {
     status?: string;
 };
