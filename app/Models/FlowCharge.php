@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Facades\Services;
 use App\Traits\BelongsToFlowCategory;
 use App\Traits\BelongsToTeam;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -74,6 +77,21 @@ class FlowCharge extends Model
         return Attribute::make(
             get: fn ($value, array $attributes): float => Services::conversion()->centsToPrice(data_get($attributes, 'amount_in_cents')),
             set: fn (?float $value) => ['amount_in_cents' => Services::conversion()->priceToCents($value)],
+        );
+    }
+
+    public function scopeWhereInAccountingPeriod(Builder $query, AccountingPeriod|int $accountingPeriod): Builder
+    {
+        $accountingPeriodModel = app(AccountingPeriod::class);
+        $id = is_int($accountingPeriod) ? $accountingPeriod : $accountingPeriod->getKey();
+
+        return $query->whereExists(
+            fn (QueryBuilder $q) => $q
+                ->select(DB::raw(1))
+                ->from($accountingPeriodModel->getTable())
+                ->where($accountingPeriodModel->getQualifiedKeyName(), $id)
+                ->whereColumn($this->qualifyColumn('charged_at'), '>=', $accountingPeriodModel->qualifyColumn('starts_at'))
+                ->whereColumn($this->qualifyColumn('charged_at'), '<=', $accountingPeriodModel->qualifyColumn('ends_at')),
         );
     }
 }

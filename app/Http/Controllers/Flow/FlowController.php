@@ -11,6 +11,7 @@ use App\Enums\Trashed\TrashedFilter;
 use App\Facades\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
+use App\Models\FlowCategory;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -64,6 +65,27 @@ class FlowController extends Controller
             }
 
             $tableData[0]['values'] = $billingTotals;
+
+            $categories = FlowCategory::with(['flowCharges' => function ($query) use ($accountingPeriod) {
+                $query->whereInAccountingPeriod($accountingPeriod->id);
+            }])->get();
+
+            foreach ($categories as $category) {
+                $categoryTotals = array_fill_keys($months, 0);
+
+                foreach ($category->flowCharges as $charge) {
+                    $monthKey = $charge->charged_at->format('Y-m');
+
+                    if (isset($categoryTotals[$monthKey])) {
+                        $categoryTotals[$monthKey] += $charge->amount;
+                    }
+                }
+
+                $tableData[] = [
+                    'name'   => $category->name,
+                    'values' => $categoryTotals,
+                ];
+            }
         }
 
         return Inertia::render('flows/Index', FlowIndexProps::from([
